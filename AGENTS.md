@@ -6,30 +6,17 @@
 
 ## 🎯 当前迭代目标 | Current Iteration
 
-**Version 0.7 - i18n国际化完成 ✅**
+**Version 0.8 - Lint清理 + 功能增强 (规划中)**
 
 ### 已完成 ✅
-- [x] Dashboard i18n - 仪表盘
-- [x] Trading i18n - 交易系统
-- [x] Terminal i18n - 终端
-- [x] Missions i18n - 任务系统
-- [x] AIAssistant i18n - ARIA助手
-- [x] Quantum i18n - 量子计算
-- [x] SatelliteControl i18n - 卫星控制
-- [x] HackerGame i18n - 黑客游戏
-- [x] AIAgentsPanel i18n - AI代理面板
-- [x] CityPreview3D i18n - 3D城市
-- [x] DataAnalytics i18n - 数据分析
-- [x] EmergencyResponse i18n - 应急响应
-- [x] WeatherPanel i18n - 天气监控
-- [x] NewsPanel i18n - 新闻面板
-- [x] SettingsPanel i18n - 设置面板
-- [x] Fix duplicate keys in translations.ts
+- [x] v0.7 i18n国际化 - 17个组件全部完成
 
-### 进行中 🔄
-- [ ] Lint errors - 清理未使用的导入和impure function调用
+### 待处理 🔴 Lint清理
+- [ ] 清理未使用的 imports (Terminal, Hacker, Settings, etc.)
+- [ ] 修复 imp ure function 调用 (Math.random, Date.now in render)
+- [ ] 修复 useEffect 依赖缺失警告
 
-### 待处理 📋
+### 待处理 📋 功能增强
 - [ ] Resource Management Panel - 资源管理
 - [ ] Social Features - 社交功能
 - [ ] More mini-games - 更多小游戏
@@ -245,17 +232,11 @@ Zustand更轻量，API更简洁，适合本项目的状态复杂度。
 
 ## 🚀 下一步迭代建议 | Next Steps
 
-### v0.7 - i18n完整化
-1. [ ] Dashboard i18n
-2. [ ] Trading i18n
-3. [ ] Terminal i18n
-4. [ ] Missions i18n
-5. [ ] AIAssistant i18n
-
-### v0.8 - 功能增强
-1. [ ] Resource Management Panel
-2. [ ] Social Features
-3. [ ] Plugin System
+### v0.8 - Lint清理 + 功能增强
+1. [ ] 清理未使用的 imports
+2. [ ] 修复 impure function 调用
+3. [ ] Resource Management Panel
+4. [ ] Social Features
 
 ---
 
