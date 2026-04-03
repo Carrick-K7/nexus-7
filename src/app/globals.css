@@ -1,26 +1,92 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --cyber-black: #0a0a0f;
+  --cyber-dark: #12121a;
+  --cyber-darker: #08080c;
+  --cyber-blue: #00f0ff;
+  --cyber-blue-dim: #00a0aa;
+  --cyber-purple: #b829ff;
+  --cyber-pink: #ff2d95;
+  --cyber-yellow: #ffe82d;
+  --cyber-green: #00ff88;
+  --cyber-red: #ff3333;
+  --cyber-orange: #ff8c00;
+  --cyber-gray: #1a1a2e;
+  --cyber-gray-light: #2a2a3e;
+  --cyber-text: #e0e0e0;
+  --cyber-text-dim: #888899;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-cyber-black: var(--cyber-black);
+  --color-cyber-dark: var(--cyber-dark);
+  --color-cyber-darker: var(--cyber-darker);
+  --color-cyber-blue: var(--cyber-blue);
+  --color-cyber-blue-dim: var(--cyber-blue-dim);
+  --color-cyber-purple: var(--cyber-purple);
+  --color-cyber-pink: var(--cyber-pink);
+  --color-cyber-yellow: var(--cyber-yellow);
+  --color-cyber-green: var(--cyber-green);
+  --color-cyber-red: var(--cyber-red);
+  --color-cyber-orange: var(--cyber-orange);
+  --color-cyber-gray: var(--cyber-gray);
+  --color-cyber-gray-light: var(--cyber-gray-light);
+  --color-cyber-text: var(--cyber-text);
+  --color-cyber-text-dim: var(--cyber-text-dim);
+  --font-orbitron: 'Orbitron', sans-serif;
+  --font-rajdhani: 'Rajdhani', sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--cyber-blue) var(--cyber-dark);
+}
+
+*::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+*::-webkit-scrollbar-track {
+  background: var(--cyber-dark);
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--cyber-blue);
+  border-radius: 3px;
+}
+
+::selection {
+  background: var(--cyber-purple);
+  color: white;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--cyber-black);
+  color: var(--cyber-text);
+  font-family: 'Rajdhani', sans-serif;
+  overflow-x: hidden;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(0, 240, 255, 0.5); }
+  50% { box-shadow: 0 0 30px rgba(0, 240, 255, 0.8); }
+}
+
+@keyframes scan-line {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100vh); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes data-flow {
+  0% { stroke-dashoffset: 100; }
+  100% { stroke-dashoffset: 0; }
 }
