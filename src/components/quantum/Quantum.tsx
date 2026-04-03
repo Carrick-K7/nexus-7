@@ -2,28 +2,27 @@
 
 import { useNexusStore } from "@/stores/nexus-store";
 import { motion } from "framer-motion";
-import { useState, useEffect, useMemo } from "react";
+import { useMemo } from "react";
 import { Atom, Lock, Activity, Circle } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 
 export default function Quantum() {
   const { qubits, setQubits } = useNexusStore();
   const { t } = useTranslation();
-  const [entanglements, setEntanglements] = useState<[number, number][]>([]);
 
-  const superpositionCount = useMemo(() => 
-    qubits.filter(q => q.state === "superposition").length,
-  [qubits]);
-
-  useEffect(() => {
+  const entanglements = useMemo(() => {
     const newEntanglements: [number, number][] = [];
     qubits.forEach(q => {
       q.entangled.forEach(e => {
         if (q.id < e) newEntanglements.push([q.id, e]);
       });
     });
-    setEntanglements(newEntanglements);
+    return newEntanglements;
   }, [qubits]);
+
+  const superpositionCount = useMemo(() => 
+    qubits.filter(q => q.state === "superposition").length,
+  [qubits]);
 
   const toggleQubit = (id: number) => {
     setQubits(qubits.map(q => {

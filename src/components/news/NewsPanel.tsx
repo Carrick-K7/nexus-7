@@ -25,15 +25,23 @@ const mockNews: NewsItem[] = [
 
 export default function NewsPanel() {
   const { t } = useTranslation();
-  const [news, setNews] = useState<NewsItem[]>(mockNews);
+  const [news] = useState<NewsItem[]>(mockNews);
   const [filter, setFilter] = useState<"all" | "news" | "alert" | "update">("all");
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(Date.now());
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const filteredNews = filter === "all" 
     ? news 
     : news.filter(n => n.category === filter);
 
   const getTimeAgo = (timestamp: number) => {
-    const seconds = Math.floor((Date.now() - timestamp) / 1000);
+    const seconds = Math.floor((now - timestamp) / 1000);
     if (seconds < 60) return `${seconds}s ago`;
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60) return `${minutes}m ago`;

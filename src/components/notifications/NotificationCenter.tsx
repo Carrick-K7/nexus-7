@@ -2,8 +2,8 @@
 
 import { useNexusStore } from '@/stores/nexus-store';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Bell, AlertTriangle, Info, CheckCircle, XCircle, Trash2, Filter } from 'lucide-react';
-import { useState } from 'react';
+import { AlertTriangle, Info, CheckCircle, XCircle } from 'lucide-react';
+import { useState, useEffect } from 'react';
 
 const initialNotifications = [
   { id: 'n1', type: 'error' as const, title: 'Power Grid Failure', message: 'Iron Works district experiencing 40% power reduction', timestamp: Date.now() - 300000, read: false, source: 'GRID_MGMT' },
@@ -16,9 +16,17 @@ const initialNotifications = [
 ];
 
 export default function NotificationCenter() {
-  const { notifications, addNotification, markAsRead, clearNotifications } = useNexusStore();
+  const { notifications, markAsRead, clearNotifications } = useNexusStore();
   const [filter, setFilter] = useState<'all' | 'unread'>('all');
   const [selectedType, setSelectedType] = useState<'all' | 'error' | 'warning' | 'info' | 'success'>('all');
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(Date.now());
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const allNotifications = notifications.length > 0 ? notifications : initialNotifications;
   const filteredNotifications = allNotifications
@@ -35,7 +43,7 @@ export default function NotificationCenter() {
   };
 
   const getTimeAgo = (timestamp: number) => {
-    const seconds = Math.floor((Date.now() - timestamp) / 1000);
+    const seconds = Math.floor((now - timestamp) / 1000);
     if (seconds < 60) return `${seconds}s ago`;
     const minutes = Math.floor(seconds / 60);
     if (minutes < 60) return `${minutes}m ago`;

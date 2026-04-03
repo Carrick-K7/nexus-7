@@ -37,10 +37,11 @@ export default function AIAssistant() {
         "Threat assessment updated. Iron Works district shows elevated risk.",
         "Processing your request... The city is operating at 87% efficiency.",
       ];
-      const response = responses[Math.floor(Math.random() * responses.length)];
+      const responseIndex = text.length % responses.length;
+      const response = responses[responseIndex];
       addAriaMessage({ role: "aria", content: response });
       setIsTyping(false);
-    }, 1500 + Math.random() * 1000);
+    }, 1500);
   };
 
   return (

@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { TrendingUp, TrendingDown, ArrowUpRight, ArrowDownRight } from "lucide-react";
 import { AreaChart, Area, XAxis, YAxis, ResponsiveContainer } from "recharts";
 import { useTranslation } from "@/hooks/useTranslation";
+import type { TranslationKey } from "@/i18n/translations";
 
 const priceHistory = Array.from({ length: 30 }, (_, i) => ({
   day: i + 1,
@@ -32,15 +33,15 @@ export default function Trading() {
       </motion.div>
 
       <div className="grid grid-cols-4 gap-4">
-        {[
-          { labelKey: "portfolioValue", value: "$2.84M", color: "cyber-blue" },
-          { labelKey: "totalProfit", value: "+$12.4K", color: "cyber-green" },
-          { labelKey: "profitPercent", value: "+4.37%", color: "cyber-green" },
-          { labelKey: "dayChange", value: "+2.34%", color: "cyber-green" },
-        ].map((stat, i) => (
+        {([
+          { labelKey: "portfolioValue" as TranslationKey, value: "$2.84M", color: "cyber-blue" },
+          { labelKey: "totalProfit" as TranslationKey, value: "+$12.4K", color: "cyber-green" },
+          { labelKey: "profitPercent" as TranslationKey, value: "+4.37%", color: "cyber-green" },
+          { labelKey: "dayChange" as TranslationKey, value: "+2.34%", color: "cyber-green" },
+        ]).map((stat, i) => (
           <motion.div key={stat.labelKey} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-4">
-            <span className="text-xs text-cyber-text-dim">{t(stat.labelKey as any)}</span>
+            <span className="text-xs text-cyber-text-dim">{t(stat.labelKey)}</span>
             <div className={`text-xl font-bold text-${stat.color}`}>{stat.value}</div>
           </motion.div>
         ))}

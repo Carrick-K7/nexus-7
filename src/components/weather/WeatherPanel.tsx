@@ -210,10 +210,10 @@ export default function WeatherPanel() {
                  <Sun className="w-5 h-5 text-cyber-yellow" />}
               </div>
               <div className="text-sm font-orbitron text-cyber-text mt-2">
-                {20 + Math.floor(Math.random() * 8)}°
+                {22 + i}°
               </div>
               <div className="text-xs text-cyber-text-dim">
-                {15 + Math.floor(Math.random() * 5)}°
+                {17 + i}°
               </div>
             </div>
           ))}
@@ -240,7 +240,7 @@ export default function WeatherPanel() {
             <Cloud className="w-6 h-6 text-cyber-gray" />
             <div>
               <div className="text-sm text-cyber-text-dim">{t('cloudCover')}</div>
-              <div className="text-xl font-orbitron text-cyber-text">{Math.floor(Math.random() * 50)}%</div>
+              <div className="text-xl font-orbitron text-cyber-text">32%</div>
             </div>
           </div>
         </div>

@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
-import { Terminal, Shield, Lock, Unlock, Zap, Cpu, Wifi, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { Shield, Lock, Unlock, Zap, AlertTriangle, CheckCircle } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
 
 interface FirewallNode {
@@ -184,7 +184,7 @@ export default function HackerGame() {
                           className="h-full bg-cyber-red" />
                       </div>
                       <div className="mt-2 flex gap-1">
-                        {activeTarget.nodes.map((node, i) => (
+                        {activeTarget.nodes.map((node) => (
                           <div key={node.id} className={`flex-1 h-1 rounded ${node.compromised ? "bg-cyber-green" : "bg-cyber-gray"}`} />
                         ))}
                       </div>

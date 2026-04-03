@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { Terminal as TerminalIcon, ChevronRight, AlertTriangle, Cpu, HardDrive, Wifi, Shield } from 'lucide-react';
+import { Cpu, HardDrive, Wifi, Shield } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 
 interface HistoryEntry {

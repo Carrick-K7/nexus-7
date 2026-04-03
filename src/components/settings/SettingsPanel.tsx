@@ -6,7 +6,7 @@ import { useNexusStore } from "@/stores/nexus-store";
 import { useState } from "react";
 import { 
   Settings, Monitor, Volume2, VolumeX, Bell, BellOff,
-  Keyboard, Palette, Globe, Shield, Info, Save, RotateCcw
+  Keyboard, Palette, Globe, Info, Save, RotateCcw
 } from "lucide-react";
 
 interface SettingsState {
@@ -20,7 +20,7 @@ interface SettingsState {
 
 export default function SettingsPanel() {
   const { t } = useTranslation();
-  const { theme, setTheme, language, setLanguage } = useNexusStore();
+  const { setTheme, language, setLanguage } = useNexusStore();
   const [settings, setSettings] = useState<SettingsState>({
     theme: "dark",
     soundEnabled: true,

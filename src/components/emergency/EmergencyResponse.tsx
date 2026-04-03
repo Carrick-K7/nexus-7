@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { 
   AlertTriangle, Siren, MapPin, Users, Shield, 
   Truck, Heart, Zap, Phone, Clock, CheckCircle
@@ -75,9 +75,17 @@ const mockTeams: ResponseTeam[] = [
 
 export default function EmergencyResponse() {
   const { t } = useTranslation();
-  const [emergencies, setEmergencies] = useState<Emergency[]>(mockEmergencies);
+  const [emergencies] = useState<Emergency[]>(mockEmergencies);
   const [teams] = useState<ResponseTeam[]>(mockTeams);
   const [selectedEmergency, setSelectedEmergency] = useState<Emergency | null>(null);
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setNow(Date.now());
+    }, 60000);
+    return () => clearInterval(interval);
+  }, []);
 
   const getSeverityColor = (severity: Emergency["severity"]) => {
     switch (severity) {
@@ -117,7 +125,7 @@ export default function EmergencyResponse() {
   };
 
   const getTimeAgo = (timestamp: number) => {
-    const minutes = Math.floor((Date.now() - timestamp) / 60000);
+    const minutes = Math.floor((now - timestamp) / 60000);
     if (minutes < 60) return `${minutes}m ago`;
     const hours = Math.floor(minutes / 60);
     return `${hours}h ago`;
