@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { ScrollText, AlertTriangle, Clock, CheckCircle2, Lock, ChevronRight, Trophy } from "lucide-react";
 import type { Mission } from "@/types";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const initialMissions: Mission[] = [
   { id: "m1", title: "Critical Infrastructure Repair", description: "Power grid in Iron Works district is failing.", type: "urgent", difficulty: 4, reward: { type: "credits", amount: 5000 }, progress: 65, deadline: Date.now() + 86400000, status: "in_progress", assigned: true },
@@ -15,6 +16,7 @@ const initialMissions: Mission[] = [
 
 export default function Missions() {
   const { missions, addMission } = useNexusStore();
+  const { t } = useTranslation();
   const [filter, setFilter] = useState<"all" | "available" | "in_progress" | "completed">("all");
   const [selectedMission, setSelectedMission] = useState<Mission | null>(null);
 
@@ -34,16 +36,16 @@ export default function Missions() {
   return (
     <div className="p-6 space-y-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-3xl font-orbitron font-bold text-cyber-purple cyber-text-glow">MISSIONS</h1>
-        <p className="text-cyber-text-dim mt-1">Tasks and operations for NEXUS operators</p>
+        <h1 className="text-3xl font-orbitron font-bold text-cyber-purple cyber-text-glow">{t('missions_title')}</h1>
+        <p className="text-cyber-text-dim mt-1">{t('missions_desc')}</p>
       </motion.div>
 
       <div className="grid grid-cols-4 gap-4">
         {[
-          { label: "Available", value: availableCount, icon: ScrollText, color: "cyber-blue" },
-          { label: "In Progress", value: inProgressCount, icon: Clock, color: "cyber-yellow" },
-          { label: "Completed", value: completedCount, icon: CheckCircle2, color: "cyber-green" },
-          { label: "Total Rewards", value: "$1.2K", icon: Trophy, color: "cyber-purple" },
+          { label: t('available'), value: availableCount, icon: ScrollText, color: "cyber-blue" },
+          { label: t('inProgress'), value: inProgressCount, icon: Clock, color: "cyber-yellow" },
+          { label: t('completed'), value: completedCount, icon: CheckCircle2, color: "cyber-green" },
+          { label: t('totalRewards'), value: "$1.2K", icon: Trophy, color: "cyber-purple" },
         ].map((stat, i) => (
           <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-4 flex items-center gap-3">
@@ -60,7 +62,7 @@ export default function Missions() {
         {(["all", "available", "in_progress", "completed"] as const).map((f) => (
           <button key={f} onClick={() => setFilter(f)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all capitalize ${filter === f ? "bg-cyber-purple text-white" : "bg-cyber-gray text-cyber-text-dim hover:bg-cyber-gray-light"}`}>
-            {f.replace("_", " ")}
+            {f === 'all' ? t('all') : f === 'available' ? t('available') : f === 'in_progress' ? t('inProgress') : t('completed')}
           </button>
         ))}
       </div>
@@ -97,7 +99,7 @@ export default function Missions() {
               <div className="mt-3 flex items-center gap-4">
                 <div className="flex-1">
                   <div className="flex justify-between text-xs text-cyber-text-dim mb-1">
-                    <span>Progress</span>
+                    <span>{t('progress')}</span>
                     <span>{mission.progress}%</span>
                   </div>
                   <div className="h-1.5 bg-cyber-gray rounded-full overflow-hidden">
@@ -105,7 +107,7 @@ export default function Missions() {
                   </div>
                 </div>
                 <div className="text-right">
-                  <div className="text-xs text-cyber-text-dim">Reward</div>
+                  <div className="text-xs text-cyber-text-dim">{t('reward')}</div>
                   <div className="text-sm font-bold text-cyber-yellow">${mission.reward.amount.toLocaleString()}</div>
                 </div>
               </div>
@@ -123,13 +125,13 @@ export default function Missions() {
             </div>
             <p className="text-sm text-cyber-text-dim mb-4">{selectedMission.description}</p>
             <div className="space-y-2 text-sm">
-              <div className="flex justify-between"><span className="text-cyber-text-dim">Status</span><span className="text-cyber-text capitalize">{selectedMission.status.replace("_", " ")}</span></div>
-              <div className="flex justify-between"><span className="text-cyber-text-dim">Difficulty</span><span className="text-cyber-text">{selectedMission.difficulty}/5</span></div>
-              <div className="flex justify-between"><span className="text-cyber-text-dim">Reward</span><span className="text-cyber-yellow font-bold">${selectedMission.reward.amount.toLocaleString()}</span></div>
+              <div className="flex justify-between"><span className="text-cyber-text-dim">{t('status')}</span><span className="text-cyber-text capitalize">{selectedMission.status.replace("_", " ")}</span></div>
+              <div className="flex justify-between"><span className="text-cyber-text-dim">{t('difficulty')}</span><span className="text-cyber-text">{selectedMission.difficulty}/5</span></div>
+              <div className="flex justify-between"><span className="text-cyber-text-dim">{t('reward')}</span><span className="text-cyber-yellow font-bold">${selectedMission.reward.amount.toLocaleString()}</span></div>
             </div>
             {selectedMission.status !== "completed" && (
               <button className="w-full mt-4 py-3 bg-cyber-purple hover:bg-cyber-purple/80 rounded-lg font-medium text-white transition-colors">
-                {selectedMission.status === "available" ? "Accept Mission" : "Continue Mission"}
+                {selectedMission.status === "available" ? t('acceptMission') : t('continueMission')}
               </button>
             )}
           </motion.div>

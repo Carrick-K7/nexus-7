@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Terminal as TerminalIcon, ChevronRight, AlertTriangle, Cpu, HardDrive, Wifi, Shield } from 'lucide-react';
+import { useTranslation } from '@/hooks/useTranslation';
 
 interface HistoryEntry {
   type: 'input' | 'output' | 'error' | 'success';
@@ -26,9 +27,10 @@ const commands: Record<string, { description: string; execute: () => string }> =
 };
 
 export default function Terminal() {
+  const { t } = useTranslation();
   const [history, setHistory] = useState<HistoryEntry[]>([
     { type: 'output', content: 'NEXUS TERMINAL v3.7.1 - CYBERDYNE SYSTEMS', timestamp: new Date() },
-    { type: 'output', content: 'Type "help" for available commands', timestamp: new Date() },
+    { type: 'output', content: t('typeHelp'), timestamp: new Date() },
     { type: 'output', content: '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━', timestamp: new Date() },
   ]);
   const [input, setInput] = useState('');
@@ -100,8 +102,8 @@ export default function Terminal() {
   return (
     <div className="p-6 space-y-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-3xl font-orbitron font-bold text-cyber-green cyber-text-glow">TERMINAL</h1>
-        <p className="text-cyber-text-dim mt-1">Command-line interface for NEXUS operations</p>
+        <h1 className="text-3xl font-orbitron font-bold text-cyber-green cyber-text-glow">{t('terminal_title')}</h1>
+        <p className="text-cyber-text-dim mt-1">{t('terminal_desc')}</p>
       </motion.div>
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
@@ -112,7 +114,7 @@ export default function Terminal() {
           <div className="w-3 h-3 rounded-full bg-cyber-red" />
           <div className="w-3 h-3 rounded-full bg-cyber-yellow" />
           <div className="w-3 h-3 rounded-full bg-cyber-green" />
-          <span className="ml-2 text-xs text-cyber-text-dim font-mono">operator@nexus:~</span>
+          <span className="ml-2 text-xs text-cyber-text-dim font-mono">{t('operator')}@nexus:~</span>
         </div>
         <div className="p-4 font-mono text-sm space-y-1">
           {history.map((entry, i) => (
@@ -134,10 +136,10 @@ export default function Terminal() {
 
       <div className="grid grid-cols-4 gap-4">
         {[
-          { icon: Cpu, label: 'CPU', value: '47%', color: 'cyber-blue' },
-          { icon: HardDrive, label: 'RAM', value: '12.4 GB', color: 'cyber-purple' },
-          { icon: Wifi, label: 'Network', value: '1.2 Gbps', color: 'cyber-green' },
-          { icon: Shield, label: 'Firewall', value: 'ACTIVE', color: 'cyber-yellow' },
+          { icon: Cpu, label: t('cpu'), value: '47%', color: 'cyber-blue' },
+          { icon: HardDrive, label: t('ram'), value: '12.4 GB', color: 'cyber-purple' },
+          { icon: Wifi, label: t('networkConn'), value: '1.2 Gbps', color: 'cyber-green' },
+          { icon: Shield, label: t('firewall'), value: t('activeStatus'), color: 'cyber-yellow' },
         ].map((sys, i) => (
           <motion.div key={sys.label} initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 + i * 0.1 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-4 flex items-center gap-3">

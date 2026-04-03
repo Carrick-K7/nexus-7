@@ -3,6 +3,7 @@
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useMemo } from "react";
 import { Building2, Users, Zap, Shield } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface District {
   name: string;
@@ -94,6 +95,7 @@ const districtGrid: (string | null)[][] = [
 ];
 
 export default function CityPreview3D() {
+  const { t } = useTranslation();
   const [selectedBlock, setSelectedBlock] = useState<Block | null>(null);
   const [hoveredBlock, setHoveredBlock] = useState<Block | null>(null);
 
@@ -132,10 +134,10 @@ export default function CityPreview3D() {
         animate={{ opacity: 1, y: 0 }}
       >
         <h1 className="text-3xl font-orbitron font-bold text-cyber-blue cyber-text-glow">
-          CITY OVERVIEW
+          {t('city3d_title')}
         </h1>
         <p className="text-cyber-text-dim mt-1">
-          NEXUS City Grid — Real-time district monitoring
+          {t('city3d_desc')}
         </p>
       </motion.div>
 
@@ -174,7 +176,7 @@ export default function CityPreview3D() {
         className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-6 overflow-hidden"
       >
         <h3 className="text-lg font-orbitron text-cyber-text mb-4">
-          Isometric City Grid
+          {t('isometricGrid')}
         </h3>
         <div className="relative h-[500px] flex items-center justify-center">
           <div
@@ -370,7 +372,7 @@ export default function CityPreview3D() {
               <div className="bg-cyber-darker/50 rounded-lg p-3 border border-cyber-gray/30">
                 <div className="flex items-center gap-2 mb-1">
                   <Users className="w-4 h-4 text-cyber-purple" />
-                  <span className="text-xs text-cyber-text-dim">Population</span>
+                  <span className="text-xs text-cyber-text-dim">{t('population')}</span>
                 </div>
                 <div className="text-lg font-bold text-cyber-text">
                   {selectedBlock.district.population}
@@ -380,7 +382,7 @@ export default function CityPreview3D() {
               <div className="bg-cyber-darker/50 rounded-lg p-3 border border-cyber-gray/30">
                 <div className="flex items-center gap-2 mb-1">
                   <Zap className="w-4 h-4 text-cyber-yellow" />
-                  <span className="text-xs text-cyber-text-dim">Power</span>
+                  <span className="text-xs text-cyber-text-dim">{t('power')}</span>
                 </div>
                 <div className="text-lg font-bold text-cyber-text">
                   {selectedBlock.district.power}
@@ -426,13 +428,13 @@ export default function CityPreview3D() {
 
             <div className="mt-4 flex gap-2">
               <button className="flex-1 py-2 bg-cyber-blue/20 border border-cyber-blue/30 rounded text-sm text-cyber-blue hover:bg-cyber-blue/30 transition-colors">
-                View Cameras
+                {t('city3d_title')}
               </button>
               <button className="flex-1 py-2 bg-cyber-purple/20 border border-cyber-purple/30 rounded text-sm text-cyber-purple hover:bg-cyber-purple/30 transition-colors">
-                Access Systems
+                {t('settings')}
               </button>
               <button className="flex-1 py-2 bg-cyber-orange/20 border border-cyber-orange/30 rounded text-sm text-cyber-orange hover:bg-cyber-orange/30 transition-colors">
-                Emergency Protocol
+                {t('emergency')}
               </button>
             </div>
           </motion.div>

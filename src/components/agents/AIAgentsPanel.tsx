@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, BarChart3, Building2, Eye, X, Activity, Clock, Zap, AlertTriangle, CheckCircle2, Loader2 } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface AgentLog {
   id: string;
@@ -172,6 +173,7 @@ interface AgentCardProps {
 }
 
 const AgentCard = ({ agent, onClick, index }: AgentCardProps) => {
+  const { t } = useTranslation();
   const Icon = agent.icon;
   
   return (
@@ -215,7 +217,7 @@ const AgentCard = ({ agent, onClick, index }: AgentCardProps) => {
 
         <div className="mt-5 space-y-3">
           <div className="flex items-center justify-between">
-            <span className="text-xs text-cyber-text-dim uppercase tracking-wider">Efficiency</span>
+            <span className="text-xs text-cyber-text-dim uppercase tracking-wider">{t('efficiency')}</span>
             <span className="text-sm font-mono font-bold" style={{ color: agent.color }}>{agent.efficiency}%</span>
           </div>
           <div className="h-1.5 bg-cyber-dark rounded-full overflow-hidden">
@@ -248,6 +250,7 @@ interface AgentModalProps {
 }
 
 const AgentModal = ({ agent, onClose }: AgentModalProps) => {
+  const { t } = useTranslation();
   const Icon = agent.icon;
   
   return (
@@ -304,19 +307,19 @@ const AgentModal = ({ agent, onClose }: AgentModalProps) => {
           
           <div className="grid grid-cols-3 gap-4 mt-6">
             <div className="bg-cyber-dark/50 rounded-lg p-3 border border-cyber-gray/20">
-              <div className="text-xs text-cyber-text-dim uppercase tracking-wider mb-1">Status</div>
+              <div className="text-xs text-cyber-text-dim uppercase tracking-wider mb-1">{t('status')}</div>
               <div className={`text-lg font-bold ${getStatusColor(agent.status)}`}>
                 {agent.status.toUpperCase()}
               </div>
             </div>
             <div className="bg-cyber-dark/50 rounded-lg p-3 border border-cyber-gray/20">
-              <div className="text-xs text-cyber-text-dim uppercase tracking-wider mb-1">Efficiency</div>
+              <div className="text-xs text-cyber-text-dim uppercase tracking-wider mb-1">{t('efficiency')}</div>
               <div className="text-lg font-bold" style={{ color: agent.color }}>
                 {agent.efficiency}%
               </div>
             </div>
             <div className="bg-cyber-dark/50 rounded-lg p-3 border border-cyber-gray/20">
-              <div className="text-xs text-cyber-text-dim uppercase tracking-wider mb-1">Tasks</div>
+              <div className="text-xs text-cyber-text-dim uppercase tracking-wider mb-1">{t('tasks')}</div>
               <div className="text-lg font-bold text-cyber-text">
                 {agent.tasks.length}
               </div>
@@ -327,7 +330,7 @@ const AgentModal = ({ agent, onClose }: AgentModalProps) => {
         <div className="p-6 overflow-y-auto max-h-[50vh]">
           <div className="flex items-center gap-2 mb-4">
             <Clock className="w-4 h-4 text-cyber-blue" />
-            <h3 className="text-sm font-orbitron text-cyber-text uppercase tracking-wider">Activity Logs</h3>
+            <h3 className="text-sm font-orbitron text-cyber-text uppercase tracking-wider">{t('activityLogs')}</h3>
           </div>
           
           <div className="space-y-2">
@@ -356,6 +359,7 @@ const AgentModal = ({ agent, onClose }: AgentModalProps) => {
 };
 
 export default function AIAgentsPanel() {
+  const { t } = useTranslation();
   const [agents, setAgents] = useState<Agent[]>(INITIAL_AGENTS);
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
 
@@ -397,9 +401,9 @@ export default function AIAgentsPanel() {
           </div>
           <div>
             <h1 className="text-3xl font-orbitron font-bold text-cyber-purple cyber-text-glow">
-              AI AGENTS
+              {t('agents_title')}
             </h1>
-            <p className="text-cyber-text-dim mt-1">Autonomous intelligence network</p>
+            <p className="text-cyber-text-dim mt-1">{t('agents_desc')}</p>
           </div>
         </div>
       </motion.div>
@@ -425,13 +429,13 @@ export default function AIAgentsPanel() {
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1.5">
               <div className="w-2 h-2 rounded-full bg-cyber-green animate-pulse" />
-              <span className="text-sm text-cyber-text">Network Status: OPERATIONAL</span>
+              <span className="text-sm text-cyber-text">{t('networkStatus')}</span>
             </div>
           </div>
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2 text-xs text-cyber-text-dim">
               <Loader2 className="w-3 h-3 animate-spin" />
-              <span>Tasks cycling every 4s</span>
+              <span>{t('tasksCycling')}</span>
             </div>
             <div className="text-xs font-mono text-cyber-text-dim">
               {agents.filter(a => a.status === "active").length}/{agents.length} ACTIVE

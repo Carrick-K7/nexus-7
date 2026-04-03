@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { Terminal, Shield, Lock, Unlock, Zap, Cpu, Wifi, AlertTriangle, CheckCircle, XCircle } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface FirewallNode {
   id: string;
@@ -43,11 +44,12 @@ const initialTargets: HackTarget[] = [
 ];
 
 export default function HackerGame() {
+  const { t } = useTranslation();
   const [targets, setTargets] = useState<HackTarget[]>(initialTargets);
   const [activeTarget, setActiveTarget] = useState<HackTarget | null>(null);
   const [hackPower, setHackPower] = useState(10);
   const [resources, setResources] = useState({ money: 1000, exp: 0, level: 1 });
-  const [log, setLog] = useState<string[]>(["Initializing hack toolkit...", "WARNING: Unauthorized access detected", " countermeasures active"]);
+  const [log, setLog] = useState<string[]>([t('initializingHack'), t('unauthorizedWarning'), t('countermeasuresActive')]);
   const [isHacking, setIsHacking] = useState(false);
   const logRef = useRef<HTMLDivElement>(null);
 
@@ -120,16 +122,16 @@ export default function HackerGame() {
   return (
     <div className="p-6 space-y-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-3xl font-orbitron font-bold text-cyber-green cyber-text-glow">HACKING INTERFACE</h1>
-        <p className="text-cyber-text-dim mt-1">Breach security systems and extract data</p>
+        <h1 className="text-3xl font-orbitron font-bold text-cyber-green cyber-text-glow">{t('hacker_title')}</h1>
+        <p className="text-cyber-text-dim mt-1">{t('hacker_desc')}</p>
       </motion.div>
 
       <div className="grid grid-cols-4 gap-4">
         {[
-          { label: "Hack Power", value: hackPower, color: "cyber-green" },
-          { label: "Credits", value: `$${resources.money.toLocaleString()}`, color: "cyber-yellow" },
-          { label: "Experience", value: resources.exp, color: "cyber-purple" },
-          { label: "Level", value: resources.level, color: "cyber-blue" },
+          { label: t('hackPower'), value: hackPower, color: "cyber-green" },
+          { label: t('credits'), value: `$${resources.money.toLocaleString()}`, color: "cyber-yellow" },
+          { label: t('experience'), value: resources.exp, color: "cyber-purple" },
+          { label: t('level'), value: resources.level, color: "cyber-blue" },
         ].map((stat, i) => (
           <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-4">
@@ -144,9 +146,9 @@ export default function HackerGame() {
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-4">
             <div className="flex items-center justify-between mb-4">
-              <h3 className="text-sm font-orbitron text-cyber-text">Target Systems</h3>
+              <h3 className="text-sm font-orbitron text-cyber-text">{t('targetSystems')}</h3>
               <button onClick={upgradePower} className="px-3 py-1 bg-cyber-green/20 border border-cyber-green/30 rounded text-xs text-cyber-green hover:bg-cyber-green/30">
-                Upgrade Power (${hackPower * 500})
+                {t('upgradePower')} (${hackPower * 500})
               </button>
             </div>
             <div className="space-y-2">
@@ -168,13 +170,13 @@ export default function HackerGame() {
                   {target.status === "locked" && (
                     <button onClick={() => startHack(target)}
                       className="w-full py-2 bg-cyber-red/20 border border-cyber-red/50 rounded text-sm text-cyber-red hover:bg-cyber-red/30">
-                      BREACH SECURITY ({target.security}%)
+                      {t('breachSecurity')} ({target.security}%)
                     </button>
                   )}
                   {target.status === "in_progress" && activeTarget?.id === target.id && (
                     <div>
                       <div className="flex justify-between text-xs text-cyber-text-dim mb-1">
-                        <span>Breach Progress</span>
+                        <span>{t('progress')}</span>
                         <span>{Math.round(activeTarget.progress)}%</span>
                       </div>
                       <div className="h-2 bg-cyber-gray rounded-full overflow-hidden">
@@ -189,7 +191,7 @@ export default function HackerGame() {
                     </div>
                   )}
                   {target.status === "compromised" && (
-                    <div className="text-sm text-cyber-green">System compromised - Reward claimed</div>
+                    <div className="text-sm text-cyber-green">{t('completed')}</div>
                   )}
                 </div>
               ))}
@@ -212,7 +214,7 @@ export default function HackerGame() {
         <div className="space-y-4">
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.4 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-4">
-            <h3 className="text-sm font-orbitron text-cyber-text mb-3">Active Target</h3>
+            <h3 className="text-sm font-orbitron text-cyber-text mb-3">{t('activeTarget')}</h3>
             {activeTarget ? (
               <div className="space-y-3">
                 <div className="text-lg font-bold text-cyber-red">{activeTarget.name}</div>
@@ -241,17 +243,17 @@ export default function HackerGame() {
                 </div>
               </div>
             ) : (
-              <div className="text-center text-cyber-text-dim py-4">No active target</div>
+              <div className="text-center text-cyber-text-dim py-4">{t('noActiveTarget')}</div>
             )}
           </motion.div>
 
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.5 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-4">
-            <h3 className="text-sm font-orbitron text-cyber-text mb-3">System Stats</h3>
+            <h3 className="text-sm font-orbitron text-cyber-text mb-3">{t('systemStats')}</h3>
             <div className="space-y-2 text-xs">
-              <div className="flex justify-between"><span className="text-cyber-text-dim">Bots Online</span><span className="text-cyber-green">12</span></div>
-              <div className="flex justify-between"><span className="text-cyber-text-dim">IP Trace</span><span className="text-cyber-yellow">37%</span></div>
-              <div className="flex justify-between"><span className="text-cyber-text-dim">Detection</span><span className="text-cyber-red">LOW</span></div>
+              <div className="flex justify-between"><span className="text-cyber-text-dim">{t('botsOnline')}</span><span className="text-cyber-green">12</span></div>
+              <div className="flex justify-between"><span className="text-cyber-text-dim">{t('ipTrace')}</span><span className="text-cyber-yellow">37%</span></div>
+              <div className="flex justify-between"><span className="text-cyber-text-dim">{t('detection')}</span><span className="text-cyber-red">LOW</span></div>
             </div>
           </motion.div>
         </div>

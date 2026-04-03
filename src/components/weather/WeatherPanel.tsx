@@ -114,11 +114,11 @@ export default function WeatherPanel() {
               </div>
             </div>
             <div className="text-right">
-              <div className="text-sm text-cyber-text-dim">Feels like</div>
+              <div className="text-sm text-cyber-text-dim">{t('feelsLike')}</div>
               <div className="text-2xl font-orbitron text-cyber-blue">{weather.feelsLike}°</div>
               <div className="text-sm text-cyber-text-dim mt-1">
                 <MapPin className="w-3 h-3 inline mr-1" />
-                Neo Angeles
+                {t('neoAngeles')}
               </div>
             </div>
           </div>
@@ -137,12 +137,12 @@ export default function WeatherPanel() {
             <div className="bg-cyber-dark/50 rounded-lg p-3 text-center">
               <Eye className="w-5 h-5 text-cyber-purple mx-auto mb-1" />
               <div className="text-xl font-orbitron text-cyber-text">{weather.visibility} km</div>
-              <div className="text-xs text-cyber-text-dim">Visibility</div>
+              <div className="text-xs text-cyber-text-dim">{t('visibility')}</div>
             </div>
             <div className="bg-cyber-dark/50 rounded-lg p-3 text-center">
               <Thermometer className="w-5 h-5 text-cyber-orange mx-auto mb-1" />
               <div className="text-xl font-orbitron text-cyber-text">{weather.pressure} hPa</div>
-              <div className="text-xs text-cyber-text-dim">Pressure</div>
+              <div className="text-xs text-cyber-text-dim">{t('pressure')}</div>
             </div>
           </div>
         </motion.div>
@@ -185,7 +185,7 @@ export default function WeatherPanel() {
               <span className="text-xl font-orbitron text-cyber-yellow">{weather.uv}</span>
             </div>
             <div className="text-xs text-cyber-text-dim mt-1">
-              {weather.uv <= 2 ? "Low" : weather.uv <= 5 ? "Moderate" : weather.uv <= 7 ? "High" : "Very High"}
+              {weather.uv <= 2 ? t('uvLow') : weather.uv <= 5 ? t('uvModerate') : weather.uv <= 7 ? t('uvHigh') : t('uvVeryHigh')}
             </div>
           </div>
         </motion.div>
@@ -197,7 +197,7 @@ export default function WeatherPanel() {
         transition={{ delay: 0.3 }}
         className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-6"
       >
-        <h3 className="text-lg font-orbitron font-bold text-cyber-text mb-4">7-Day Forecast</h3>
+        <h3 className="text-lg font-orbitron font-bold text-cyber-text mb-4">{t('sevenDayForecast')}</h3>
         <div className="grid grid-cols-7 gap-4">
           {["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"].map((day, i) => (
             <div key={day} className="text-center">
@@ -230,7 +230,7 @@ export default function WeatherPanel() {
           <div className="flex items-center gap-3">
             <Sun className="w-6 h-6 text-cyber-yellow" />
             <div>
-              <div className="text-sm text-cyber-text-dim">UV Index</div>
+              <div className="text-sm text-cyber-text-dim">{t('uvIndex')}</div>
               <div className="text-xl font-orbitron text-cyber-text">{weather.uv}</div>
             </div>
           </div>
@@ -239,7 +239,7 @@ export default function WeatherPanel() {
           <div className="flex items-center gap-3">
             <Cloud className="w-6 h-6 text-cyber-gray" />
             <div>
-              <div className="text-sm text-cyber-text-dim">Cloud Cover</div>
+              <div className="text-sm text-cyber-text-dim">{t('cloudCover')}</div>
               <div className="text-xl font-orbitron text-cyber-text">{Math.floor(Math.random() * 50)}%</div>
             </div>
           </div>
@@ -248,7 +248,7 @@ export default function WeatherPanel() {
           <div className="flex items-center gap-3">
             <Clock className="w-6 h-6 text-cyber-purple" />
             <div>
-              <div className="text-sm text-cyber-text-dim">Sunrise</div>
+              <div className="text-sm text-cyber-text-dim">{t('sunrise')}</div>
               <div className="text-xl font-orbitron text-cyber-text">06:23</div>
             </div>
           </div>

@@ -71,7 +71,7 @@ export default function SettingsPanel() {
             <h1 className="text-3xl font-orbitron font-bold text-cyber-purple cyber-text-glow">
               {t("settings_title")}
             </h1>
-            <p className="text-cyber-text-dim mt-1">Customize your NEXUS experience</p>
+            <p className="text-cyber-text-dim mt-1">{t('customizeNexus')}</p>
           </div>
         </div>
       </motion.div>
@@ -90,9 +90,9 @@ export default function SettingsPanel() {
           
           <div className="space-y-3">
             {[
-              { id: "dark", label: "Dark Mode", color: "from-cyber-dark to-cyber-dark-light" },
-              { id: "hacker", label: "Hacker", color: "from-cyber-green to-cyber-dark" },
-              { id: "matrix", label: "Matrix", color: "from-cyber-green/50 to-cyber-dark" },
+              { id: "dark", label: t('darkModeTheme'), color: "from-cyber-dark to-cyber-dark-light" },
+              { id: "hacker", label: t('hackerTheme'), color: "from-cyber-green to-cyber-dark" },
+              { id: "matrix", label: t('matrixTheme'), color: "from-cyber-green/50 to-cyber-dark" },
             ].map((item) => (
               <button
                 key={item.id}
@@ -166,7 +166,7 @@ export default function SettingsPanel() {
                 ) : (
                   <BellOff className="w-5 h-5 text-cyber-gray" />
                 )}
-                <span className="text-cyber-text">Enable notifications</span>
+                <span className="text-cyber-text">{t("enableNotifications")}</span>
               </div>
               <button
                 onClick={() => setSettings(s => ({ ...s, notificationsEnabled: !s.notificationsEnabled }))}
@@ -204,7 +204,7 @@ export default function SettingsPanel() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-3">
                 <Monitor className="w-5 h-5 text-cyber-purple" />
-                <span className="text-cyber-text">Animations</span>
+                <span className="text-cyber-text">{t("animations")}</span>
               </div>
               <button
                 onClick={() => setSettings(s => ({ ...s, animationsEnabled: !s.animationsEnabled }))}
@@ -259,14 +259,14 @@ export default function SettingsPanel() {
           }`}
         >
           <Save className="w-5 h-5" />
-          {saved ? "Saved!" : "Save Settings"}
+          {saved ? "Saved!" : t("saveSettings")}
         </button>
         <button
           onClick={handleReset}
           className="flex items-center justify-center gap-2 px-6 py-4 rounded-lg font-medium bg-cyber-gray text-cyber-text hover:bg-cyber-gray-light transition-all"
         >
           <RotateCcw className="w-5 h-5" />
-          Reset
+          {t("reset")}
         </button>
       </motion.div>
 
@@ -278,7 +278,7 @@ export default function SettingsPanel() {
       >
         <div className="flex items-center gap-3 mb-4">
           <Info className="w-5 h-5 text-cyber-purple" />
-          <h2 className="text-lg font-orbitron font-bold text-cyber-text">System Information</h2>
+          <h2 className="text-lg font-orbitron font-bold text-cyber-text">{t("systemInformation")}</h2>
         </div>
         <div className="grid grid-cols-3 gap-4 text-sm">
           <div>

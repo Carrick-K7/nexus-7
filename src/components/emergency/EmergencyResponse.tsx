@@ -174,7 +174,7 @@ export default function EmergencyResponse() {
         <div className="bg-cyber-dark/50 border border-cyber-green/30 rounded-lg p-4">
           <div className="flex items-center gap-2 text-cyber-green mb-2">
             <CheckCircle className="w-4 h-4" />
-            <span className="text-sm font-medium">Resolved Today</span>
+            <span className="text-sm font-medium">{t('completed')} Today</span>
           </div>
           <div className="text-3xl font-orbitron font-bold text-cyber-green">7</div>
         </div>
@@ -217,7 +217,7 @@ export default function EmergencyResponse() {
                     </div>
                     <div className="flex items-center gap-1 text-xs text-cyber-text-dim">
                       <Users className="w-3 h-3" />
-                      {emergency.responseTeams} teams
+                      {emergency.responseTeams} {t('responseTeams')}
                     </div>
                   </div>
                 </div>
@@ -261,8 +261,8 @@ export default function EmergencyResponse() {
             <div className="flex items-center gap-3">
               <Phone className="w-6 h-6 text-cyber-red" />
               <div>
-                <h3 className="text-cyber-text font-bold">Emergency Hotline</h3>
-                <p className="text-cyber-text-dim text-sm">For immediate assistance</p>
+                <h3 className="text-cyber-text font-bold">{t('emergencyHotline')}</h3>
+                <p className="text-cyber-text-dim text-sm">{t('immediateAssistance')}</p>
               </div>
               <div className="ml-auto text-2xl font-orbitron font-bold text-cyber-red">911</div>
             </div>

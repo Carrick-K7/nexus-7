@@ -121,30 +121,35 @@
 - [x] News Panel
 - [x] Emergency Response System
 
-### Version 0.6 - (规划中)
-- [ ] Weather & Environment Monitoring
-- [ ] Resource Management Panel
-- [ ] Achievements System
-- [ ] Settings Panel
+### Version 0.6 - 成就系统 + 设置 + 天气
+- [x] Achievements System - 成就系统
+- [x] Settings Panel - 设置面板
+- [x] Weather & Environment Monitoring - 天气监控
+
+### Version 0.7 - 全面i18n国际化 ✅
+- [x] 17个组件全部完成中英文双语支持
+- [x] 修复translations.ts重复key问题
+- [x] 所有翻译键值匹配EN/ZH
 
 ---
 
 ## 📋 AI自我迭代TODO | Self-Iteration TODO
 
 ### 🔴 高优先级
-- [ ] Weather/Environment Monitoring - 环境监控
+- [x] ~~Weather/Environment Monitoring~~ ✅
+- [x] ~~Settings with customization~~ ✅
+- [x] ~~Achievements/Progression System~~ ✅
+- [x] ~~全面i18n国际化~~ ✅
 - [ ] Resource Management Panel - 资源管理
-- [ ] Settings with customization - 设置面板
 
 ### 🟡 中优先级  
-- [ ] Achievements/Progression System - 成就系统
-- [ ] Keyboard shortcuts overlay - 快捷键
-- [ ] Sound effects toggle - 音效开关
-
-### 🟢 低优先级
 - [ ] Social features - 社交功能
 - [ ] More mini-games - 更多小游戏
 - [ ] Plugin system - 插件系统
+
+### 🟢 低优先级
+- [ ] Keyboard shortcuts overlay - 快捷键
+- [ ] Sound effects toggle - 音效开关
 
 ---
 

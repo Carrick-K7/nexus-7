@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
 import { Activity, AlertTriangle, BarChart3, TrendingUp } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface ResourceData {
   time: string;
@@ -136,6 +137,7 @@ const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
 };
 
 export default function DataAnalytics() {
+  const { t } = useTranslation();
   const [resourceData, setResourceData] = useState<ResourceData[]>(generateResourceData());
   const [events] = useState<CityEvent[]>(INITIAL_EVENTS);
   const [tasks] = useState<AgentTask[]>(INITIAL_TASKS);
@@ -166,9 +168,9 @@ export default function DataAnalytics() {
           </div>
           <div>
             <h1 className="text-3xl font-orbitron font-bold text-cyber-blue cyber-text-glow">
-              DATA ANALYTICS
+              {t('analytics_title')}
             </h1>
-            <p className="text-cyber-text-dim mt-1">Real-time city metrics and analytics</p>
+            <p className="text-cyber-text-dim mt-1">{t('analytics_desc')}</p>
           </div>
         </div>
       </motion.div>
@@ -182,7 +184,7 @@ export default function DataAnalytics() {
         >
           <div className="flex items-center gap-2 mb-4">
             <Activity className="w-5 h-5 text-cyber-blue" />
-            <h3 className="text-lg font-orbitron text-cyber-text">Resource Consumption</h3>
+            <h3 className="text-lg font-orbitron text-cyber-text">{t('resourceConsumption')}</h3>
           </div>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -213,15 +215,15 @@ export default function DataAnalytics() {
           <div className="flex items-center justify-center gap-6 mt-4">
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-cyber-blue" />
-              <span className="text-xs text-cyber-text-dim">Power</span>
+              <span className="text-xs text-cyber-text-dim">{t('power')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-cyber-green" />
-              <span className="text-xs text-cyber-text-dim">Water</span>
+              <span className="text-xs text-cyber-text-dim">{t('water')}</span>
             </div>
             <div className="flex items-center gap-2">
               <div className="w-3 h-3 rounded-full bg-cyber-purple" />
-              <span className="text-xs text-cyber-text-dim">Bandwidth</span>
+              <span className="text-xs text-cyber-text-dim">{t('bandwidth')}</span>
             </div>
           </div>
         </motion.div>
@@ -234,7 +236,7 @@ export default function DataAnalytics() {
         >
           <div className="flex items-center gap-2 mb-4">
             <AlertTriangle className="w-5 h-5 text-cyber-orange" />
-            <h3 className="text-lg font-orbitron text-cyber-text">City Event Timeline</h3>
+            <h3 className="text-lg font-orbitron text-cyber-text">{t('cityEventTimeline')}</h3>
           </div>
           <div className="space-y-3 h-72 overflow-y-auto pr-2">
             {events.map((event, index) => (
@@ -269,7 +271,7 @@ export default function DataAnalytics() {
         >
           <div className="flex items-center gap-2 mb-4">
             <BarChart3 className="w-5 h-5 text-cyber-purple" />
-            <h3 className="text-lg font-orbitron text-cyber-text">AI Agent Activity</h3>
+            <h3 className="text-lg font-orbitron text-cyber-text">{t('aiAgentActivity')}</h3>
           </div>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
@@ -294,7 +296,7 @@ export default function DataAnalytics() {
         >
           <div className="flex items-center gap-2 mb-4">
             <TrendingUp className="w-5 h-5 text-cyber-red" />
-            <h3 className="text-lg font-orbitron text-cyber-text">Threat Level Indicators</h3>
+            <h3 className="text-lg font-orbitron text-cyber-text">{t('threatLevelIndicators')}</h3>
           </div>
           <div className="space-y-5">
             {threats.map((threat, index) => (
@@ -338,7 +340,7 @@ export default function DataAnalytics() {
       >
         <div className="flex items-center gap-2 mb-4">
           <Activity className="w-5 h-5 text-cyber-green" />
-          <h3 className="text-lg font-orbitron text-cyber-text">Live City Metrics</h3>
+          <h3 className="text-lg font-orbitron text-cyber-text">{t('liveCityMetrics')}</h3>
         </div>
         <div className="grid grid-cols-6 gap-4">
           {METRICS.map((metric, index) => (

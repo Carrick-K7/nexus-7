@@ -4,6 +4,7 @@ import { useNexusStore } from "@/stores/nexus-store";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useRef, useEffect } from "react";
 import { Bot, Send, Sparkles, User, Volume2 } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 const quickQuestions = [
   "Show city status report",
@@ -13,6 +14,7 @@ const quickQuestions = [
 
 export default function AIAssistant() {
   const { ariaMessages, addAriaMessage, aiAgents } = useNexusStore();
+  const { t } = useTranslation();
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
   const messagesRef = useRef<HTMLDivElement>(null);
@@ -44,8 +46,8 @@ export default function AIAssistant() {
   return (
     <div className="p-6 space-y-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-3xl font-orbitron font-bold text-cyber-pink cyber-text-glow">ARIA</h1>
-        <p className="text-cyber-text-dim mt-1">Advanced Reasoning and Intelligence Assistant</p>
+        <h1 className="text-3xl font-orbitron font-bold text-cyber-pink cyber-text-glow">{t('aria_title')}</h1>
+        <p className="text-cyber-text-dim mt-1">{t('aria_desc')}</p>
       </motion.div>
 
       <div className="grid grid-cols-4 gap-6">
@@ -62,7 +64,7 @@ export default function AIAssistant() {
                 </div>
                 <div>
                   <div className="font-medium text-cyber-text">ARIA</div>
-                  <div className="text-xs text-cyber-text-dim">Active | Mood: {aria.mood}%</div>
+                  <div className="text-xs text-cyber-text-dim">{t('ariaActive')} {aria.mood}%</div>
                 </div>
               </div>
               <button className="p-2 rounded hover:bg-cyber-gray transition-colors">
@@ -75,7 +77,7 @@ export default function AIAssistant() {
                 {ariaMessages.length === 0 && (
                   <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-8">
                     <Sparkles className="w-12 h-12 text-cyber-pink mx-auto mb-3" />
-                    <p className="text-cyber-text-dim">ARIA is ready to assist you.</p>
+                    <p className="text-cyber-text-dim">{t('ariaReady')}</p>
                   </motion.div>
                 )}
                 {ariaMessages.map((msg) => (
@@ -128,7 +130,7 @@ export default function AIAssistant() {
               <div className="flex gap-2">
                 <input type="text" value={input} onChange={(e) => setInput(e.target.value)}
                   onKeyDown={(e) => e.key === "Enter" && handleSend(input)}
-                  placeholder="Ask ARIA anything..."
+                  placeholder={t('askAria')}
                   className="flex-1 px-4 py-2 bg-cyber-gray border border-cyber-blue/20 rounded-lg text-sm text-cyber-text placeholder-cyber-text-dim focus:outline-none focus:border-cyber-blue/50" />
                 <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
                   onClick={() => handleSend(input)}
@@ -143,10 +145,10 @@ export default function AIAssistant() {
         <div className="space-y-4">
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.2 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-4">
-            <h3 className="text-sm font-orbitron text-cyber-text mb-3">ARIA Status</h3>
+            <h3 className="text-sm font-orbitron text-cyber-text mb-3">{t('aria_title')} Status</h3>
             <div className="space-y-3">
               <div className="flex items-center justify-between">
-                <span className="text-xs text-cyber-text-dim">Mood</span>
+                <span className="text-xs text-cyber-text-dim">{t('ariaMood')}</span>
                 <span className="text-sm text-cyber-pink">{aria.mood}%</span>
               </div>
               <div className="h-1.5 bg-cyber-gray rounded-full overflow-hidden">

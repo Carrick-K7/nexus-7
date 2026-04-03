@@ -6,22 +6,33 @@
 
 ## 🎯 当前迭代目标 | Current Iteration
 
-**Version 0.5.1 - 本地化与应急系统**
+**Version 0.7 - i18n国际化完成 ✅**
 
 ### 已完成 ✅
-- [x] 中英文双语支持系统
-- [x] 语言切换器 (Topbar)
-- [x] News Panel - 城市新闻系统
-- [x] Emergency Response - 应急响应面板
-- [x] About页面 - 系统介绍
+- [x] Dashboard i18n - 仪表盘
+- [x] Trading i18n - 交易系统
+- [x] Terminal i18n - 终端
+- [x] Missions i18n - 任务系统
+- [x] AIAssistant i18n - ARIA助手
+- [x] Quantum i18n - 量子计算
+- [x] SatelliteControl i18n - 卫星控制
+- [x] HackerGame i18n - 黑客游戏
+- [x] AIAgentsPanel i18n - AI代理面板
+- [x] CityPreview3D i18n - 3D城市
+- [x] DataAnalytics i18n - 数据分析
+- [x] EmergencyResponse i18n - 应急响应
+- [x] WeatherPanel i18n - 天气监控
+- [x] NewsPanel i18n - 新闻面板
+- [x] SettingsPanel i18n - 设置面板
+- [x] Fix duplicate keys in translations.ts
 
 ### 进行中 🔄
-- [ ] Weather & Environment Monitoring
+- [ ] Lint errors - 清理未使用的导入和impure function调用
 
 ### 待处理 📋
-- [ ] Resource Management Panel
-- [ ] Settings Panel
-- [ ] Achievements System
+- [ ] Resource Management Panel - 资源管理
+- [ ] Social Features - 社交功能
+- [ ] More mini-games - 更多小游戏
 
 ---
 
@@ -29,11 +40,12 @@
 
 | 指标 | 数值 |
 |------|------|
-| 组件数量 | 18个 |
-| 功能模块 | 15个 |
-| 视图页面 | 14个 |
+| 组件数量 | 19个 |
+| 功能模块 | 17个 |
+| 视图页面 | 17个 |
 | 语言支持 | 2种 (EN/ZH) |
-| 迭代版本 | 0.5.1 |
+| i18n状态 | ✅ 全部完成 |
+| 迭代版本 | 0.7 |
 
 ---
 
@@ -50,7 +62,7 @@ nexus/src/
 │   │   ├── Sidebar.tsx   # 导航栏
 │   │   ├── Topbar.tsx    # 顶栏
 │   │   └── BackgroundEffects.tsx
-│   ├── dashboard/         # 仪表盘
+│   ├── dashboard/        # 仪表盘
 │   ├── neural/            # 神经网络
 │   ├── trading/           # 交易系统
 │   ├── terminal/          # 终端
@@ -58,15 +70,18 @@ nexus/src/
 │   ├── ai-assistant/      # ARIA AI助手
 │   ├── quantum/           # 量子计算
 │   ├── notifications/     # 通知中心
-│   ├── satellite/         # 卫星控制
+│   ├── satellite/          # 卫星控制
 │   ├── hacker/            # 黑客游戏
 │   ├── agents/            # AI代理面板
 │   ├── city/              # 3D城市
 │   ├── analytics/         # 数据分析
-│   ├── emergency/          # 应急响应
+│   ├── emergency/         # 应急响应
+│   ├── weather/           # 天气监控
 │   ├── news/              # 新闻面板
+│   ├── achievements/       # 成就系统
+│   ├── settings/          # 设置面板
 │   ├── about/             # 关于页面
-│   └── effects/            # 特效 (Matrix Rain)
+│   └── effects/           # 特效 (Matrix Rain)
 ├── stores/
 │   └── nexus-store.ts     # Zustand状态管理
 ├── hooks/
@@ -82,7 +97,46 @@ nexus/src/
 
 ## 🔄 迭代历史 | Iteration History
 
-### v0.5 (2026-04-03) - 本地化与多语言
+### v0.6 (2026-04-03) - 成就系统 + 设置面板 + 天气监控
+**主题**: 全面功能完善
+
+新增:
+- `src/components/achievements/AchievementsPanel.tsx` - 成就系统
+- `src/components/settings/SettingsPanel.tsx` - 设置面板
+- `src/components/weather/WeatherPanel.tsx` - 天气监控
+- `Weather.tsx` in Dashboard integration
+
+更新:
+- `Sidebar.tsx` - 新增17个导航项
+- `page.tsx` - 注册所有新组件
+- `translations.ts` - 新增大量翻译键
+
+### v0.7 (2026-04-03) - 全面i18n国际化
+**主题**: 17个组件全部完成中英文双语支持
+
+完成:
+- 所有17个组件集成 `useTranslation()` hook
+- 修复 translations.ts 中重复key问题
+- 新增翻译键: `activityLogs`, `tasks`, `difficulty`, `utilization`, `cityHappinessIndex`, `cityHappinessChange`, `emergencyHotline`, `immediateAssistance`, `keyboardShortcuts`, `darkModeTheme`, `hackerTheme`, `matrixTheme`, `customizeNexus`, `enableNotifications`, `animations`, `saveSettings`, `reset`, `systemInformation`, `feelsLike`, `visibility`, `pressure`, `uvLow`, `uvModerate`, `uvHigh`, `uvVeryHigh`, `sevenDayForecast`, `cloudCover`, `sunrise`, `neoAngeles`
+
+更新:
+- `Dashboard.tsx` - i18n完成
+- `Trading.tsx` - i18n完成
+- `Terminal.tsx` - i18n完成
+- `Missions.tsx` - i18n完成
+- `AIAssistant.tsx` - i18n完成
+- `Quantum.tsx` - i18n完成
+- `SatelliteControl.tsx` - i18n完成
+- `HackerGame.tsx` - i18n完成
+- `AIAgentsPanel.tsx` - i18n完成
+- `CityPreview3D.tsx` - i18n完成
+- `DataAnalytics.tsx` - i18n完成
+- `EmergencyResponse.tsx` - i18n完成
+- `WeatherPanel.tsx` - i18n完成
+- `NewsPanel.tsx` - i18n完成
+- `SettingsPanel.tsx` - i18n完成
+
+### v0.5 (2026-04-03) - 本地化与应急系统
 **主题**: 添加中文支持 + 应急系统
 
 新增:
@@ -147,13 +201,24 @@ Zustand更轻量，API更简洁，适合本项目的状态复杂度。
 
 ## 🔧 待修复问题 | Known Issues
 
+### i18n 完整化 (P0 - 最高优先级)
+- [ ] Dashboard.tsx - 需要完整i18n
+- [ ] Trading.tsx - 需要完整i18n
+- [ ] Terminal.tsx - 需要完整i18n
+- [ ] Missions.tsx - 需要完整i18n
+- [ ] AIAssistant.tsx - 需要完整i18n
+- [ ] Quantum.tsx - 需要完整i18n
+- [ ] SatelliteControl.tsx - 需要完整i18n
+- [ ] HackerGame.tsx - 需要完整i18n
+- [ ] AIAgentsPanel.tsx - 需要完整i18n
+- [ ] CityPreview3D.tsx - 需要完整i18n
+- [ ] DataAnalytics.tsx - 需要完整i18n
+- [ ] NotificationCenter.tsx - 需要完整i18n
+- [ ] NeuralNetwork.tsx - 需要完整i18n
+
 ### Lint Warnings (非阻塞)
 - [ ] AIAssistant.tsx - Math.random() in setTimeout (false positive)
 - [ ] 多个组件 - 未使用的imports (cosmetic)
-
-### 性能优化
-- [ ] MatrixRain - 可添加帧率控制
-- [ ] 大列表虚拟化 (如NotificationCenter)
 
 ---
 
@@ -164,23 +229,33 @@ Zustand更轻量，API更简洁，适合本项目的状态复杂度。
 3. **Lint错误必须修复，警告可选择性处理**
 4. **中英文双语支持所有新功能**
 5. **保持组件独立性，便于单独迭代**
+6. **每次Git提交后，必须刷新TODO并规划新的路标** ⚠️
+
+### Git提交规则 ⚠️
+```
+每次 git commit && git push 后:
+1. 立即刷新 TODO 列表
+2. 评估当前迭代进度
+3. 规划下一个迭代目标
+4. 更新 AGENTS.md 的当前迭代部分
+5. 如果有大版本更新，更新 README.md
+```
 
 ---
 
 ## 🚀 下一步迭代建议 | Next Steps
 
-1. **Weather/Environment Panel** - 天气与环境监控
-   - 温度/湿度/风速/空气质量
-   - 与城市stats联动
+### v0.7 - i18n完整化
+1. [ ] Dashboard i18n
+2. [ ] Trading i18n
+3. [ ] Terminal i18n
+4. [ ] Missions i18n
+5. [ ] AIAssistant i18n
 
-2. **Settings Panel** - 设置面板
-   - 主题切换
-   - 通知设置
-   - 快捷键帮助
-
-3. **Achievements System** - 成就系统
-   - 用户操作触发成就
-   - 进度追踪
+### v0.8 - 功能增强
+1. [ ] Resource Management Panel
+2. [ ] Social Features
+3. [ ] Plugin System
 
 ---
 

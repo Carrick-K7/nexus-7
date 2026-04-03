@@ -126,8 +126,8 @@ export default function NewsPanel() {
         <div className="flex items-center gap-3">
           <TrendingUp className="w-5 h-5 text-cyber-green" />
           <div>
-            <p className="text-cyber-text font-medium">City Happiness Index</p>
-            <p className="text-cyber-text-dim text-sm">+5% from last week</p>
+            <p className="text-cyber-text font-medium">{t('cityHappinessIndex')}</p>
+            <p className="text-cyber-text-dim text-sm">{t('cityHappinessChange')}</p>
           </div>
           <div className="ml-auto text-2xl font-orbitron font-bold text-cyber-green">72%</div>
         </div>

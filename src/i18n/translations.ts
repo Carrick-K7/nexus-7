@@ -36,6 +36,12 @@ export const translations = {
     districtStatus: "District Status",
     systemHealth: "System Health",
     citizens: "Citizens",
+    systemUpdate: "System Update",
+    cityMetricsRefreshed: "City metrics refreshed",
+    sysNeuralNetwork: "Neural Network",
+    sysQuantumCore: "Quantum Core",
+    sysDefenseGrid: "Defense Grid",
+    sysCommsArray: "Comms Array",
     
     // Trading
     marketTrading: "MARKET TRADING",
@@ -55,6 +61,12 @@ export const translations = {
     terminal_title: "TERMINAL",
     terminal_desc: "Command-line interface for NEXUS operations",
     typeHelp: 'Type "help" for available commands',
+    operator: "operator",
+    cpu: "CPU",
+    ram: "RAM",
+    networkConn: "Network",
+    firewall: "Firewall",
+    activeStatus: "Active",
     
     // Missions
     missions_title: "MISSIONS",
@@ -64,6 +76,11 @@ export const translations = {
     completed: "Completed",
     totalRewards: "Total Rewards",
     all: "All",
+    progress: "Progress",
+    reward: "Reward",
+    acceptMission: "Accept Mission",
+    continueMission: "Continue Mission",
+    difficulty: "Difficulty",
     
     // ARIA
     aria_title: "ARIA",
@@ -73,6 +90,8 @@ export const translations = {
     showCityStatus: "Show city status report",
     analyzeTraffic: "Analyze traffic patterns",
     recommendEnergy: "Recommend optimal energy distribution",
+    ariaMood: "Mood",
+    ariaActive: "Active | Mood:",
     
     // Quantum
     quantum_title: "QUANTUM CORE",
@@ -84,10 +103,12 @@ export const translations = {
     quantumGates: "Quantum Gates",
     processingPower: "Processing Power",
     possibleStates: "possible states",
+    utilization: "utilization",
     toggleAll: "Toggle All",
     createEntanglements: "Create Entanglements",
     state0: "State |0",
     state1: "State |1",
+    quantumBitViz: "Quantum Bit Visualization",
     
     // Satellite
     satellite_title: "SATELLITE CONTROL",
@@ -136,6 +157,8 @@ export const translations = {
     efficiency: "EFFICIENCY",
     networkStatus: "Network Status: OPERATIONAL",
     tasksCycling: "Tasks cycling every 4s",
+    activityLogs: "Activity Logs",
+    tasks: "Tasks",
     
     // City 3D
     city3d_title: "CITY OVERVIEW",
@@ -181,6 +204,8 @@ export const translations = {
     news_title: "CITY NEWS",
     breakingNews: "Breaking News",
     latestUpdates: "Latest Updates",
+    cityHappinessIndex: "City Happiness Index",
+    cityHappinessChange: "+5% from last week",
     
     // Emergency
     emergency_title: "EMERGENCY RESPONSE",
@@ -189,6 +214,8 @@ export const translations = {
     responseTeams: "Response Teams",
     evacShelters: "Evacuation Shelters",
     emergencyResources: "Emergency Resources",
+    emergencyHotline: "Emergency Hotline",
+    immediateAssistance: "For immediate assistance",
     
     // Weather
     weather_title: "ENVIRONMENT",
@@ -198,14 +225,34 @@ export const translations = {
     airQuality: "Air Quality",
     uvIndex: "UV Index",
     wind: "Wind",
+    feelsLike: "Feels like",
+    visibility: "Visibility",
+    pressure: "Pressure",
+    uvLow: "Low",
+    uvModerate: "Moderate",
+    uvHigh: "High",
+    uvVeryHigh: "Very High",
+    sevenDayForecast: "7-Day Forecast",
+    cloudCover: "Cloud Cover",
+    sunrise: "Sunrise",
+    neoAngeles: "Neo Angeles",
     
     // Settings
     settings_title: "SETTINGS",
+    customizeNexus: "Customize your NEXUS experience",
     language: "Language",
     theme: "Theme",
+    darkModeTheme: "Dark Mode",
+    hackerTheme: "Hacker",
+    matrixTheme: "Matrix",
     notifications: "Notifications",
     soundEffects: "Sound Effects",
+    enableNotifications: "Enable notifications",
+    animations: "Animations",
     keyboardShortcuts: "Keyboard Shortcuts",
+    saveSettings: "Save Settings",
+    reset: "Reset",
+    systemInformation: "System Information",
     
     // Time
     day: "DAY",
@@ -249,6 +296,12 @@ export const translations = {
     districtStatus: "区域状态",
     systemHealth: "系统健康",
     citizens: "市民",
+    systemUpdate: "系统更新",
+    cityMetricsRefreshed: "城市指标已刷新",
+    sysNeuralNetwork: "神经网络",
+    sysQuantumCore: "量子核心",
+    sysDefenseGrid: "防御网格",
+    sysCommsArray: "通讯阵列",
     
     // 交易
     marketTrading: "市场交易",
@@ -268,6 +321,12 @@ export const translations = {
     terminal_title: "终端",
     terminal_desc: "NEXUS 操作命令行界面",
     typeHelp: '输入 "help" 查看可用命令',
+    operator: "操作员",
+    cpu: "CPU",
+    ram: "RAM",
+    networkConn: "网络",
+    firewall: "防火墙",
+    activeStatus: "活跃",
     
     // 任务
     missions_title: "任务",
@@ -277,6 +336,11 @@ export const translations = {
     completed: "已完成",
     totalRewards: "总奖励",
     all: "全部",
+    progress: "进度",
+    reward: "奖励",
+    acceptMission: "接受任务",
+    continueMission: "继续任务",
+    difficulty: "难度",
     
     // ARIA
     aria_title: "ARIA",
@@ -286,6 +350,8 @@ export const translations = {
     showCityStatus: "显示城市状态报告",
     analyzeTraffic: "分析交通模式",
     recommendEnergy: "推荐最佳能源分配",
+    ariaMood: "情绪",
+    ariaActive: "活跃 | 情绪:",
     
     // 量子
     quantum_title: "量子核心",
@@ -297,10 +363,12 @@ export const translations = {
     quantumGates: "量子门",
     processingPower: "处理能力",
     possibleStates: "可能状态",
+    utilization: "利用率",
     toggleAll: "切换全部",
     createEntanglements: "创建纠缠",
     state0: "态 |0",
     state1: "态 |1",
+    quantumBitViz: "量子位可视化",
     
     // 卫星
     satellite_title: "卫星控制",
@@ -349,6 +417,8 @@ export const translations = {
     efficiency: "效率",
     networkStatus: "网络状态：运行中",
     tasksCycling: "任务每4秒循环",
+    activityLogs: "活动日志",
+    tasks: "任务",
     
     // 3D城市
     city3d_title: "城市概览",
@@ -394,6 +464,8 @@ export const translations = {
     news_title: "城市新闻",
     breakingNews: "突发新闻",
     latestUpdates: "最新更新",
+    cityHappinessIndex: "城市幸福指数",
+    cityHappinessChange: "较上周上涨5%",
     
     // 紧急响应
     emergency_title: "紧急响应",
@@ -402,6 +474,8 @@ export const translations = {
     responseTeams: "响应团队",
     evacShelters: "疏散避难所",
     emergencyResources: "紧急资源",
+    emergencyHotline: "紧急热线",
+    immediateAssistance: "立即协助",
     
     // 天气
     weather_title: "环境",
@@ -411,14 +485,34 @@ export const translations = {
     airQuality: "空气质量",
     uvIndex: "紫外线指数",
     wind: "风速",
+    feelsLike: "体感温度",
+    visibility: "能见度",
+    pressure: "气压",
+    uvLow: "低",
+    uvModerate: "中等",
+    uvHigh: "高",
+    uvVeryHigh: "极高",
+    sevenDayForecast: "7天预报",
+    cloudCover: "云量",
+    sunrise: "日出",
+    neoAngeles: "新洛杉矶",
     
     // 设置
     settings_title: "设置",
+    customizeNexus: "自定义您的 NEXUS 体验",
     language: "语言",
     theme: "主题",
+    darkModeTheme: "深色模式",
+    hackerTheme: "黑客",
+    matrixTheme: "矩阵",
     notifications: "通知",
     soundEffects: "音效",
+    enableNotifications: "启用通知",
+    animations: "动画",
     keyboardShortcuts: "快捷键",
+    saveSettings: "保存设置",
+    reset: "重置",
+    systemInformation: "系统信息",
     
     // 时间
     day: "第",

@@ -3,6 +3,7 @@
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { Satellite, Signal, Radio, MapPin, Battery, Thermometer, AlertTriangle } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
 
 interface Satellite {
   id: string;
@@ -26,6 +27,7 @@ const initialSatellites: Satellite[] = [
 ];
 
 export default function SatelliteControl() {
+  const { t } = useTranslation();
   const [satellites] = useState<Satellite[]>(initialSatellites);
   const [selectedSat, setSelectedSat] = useState<Satellite | null>(satellites[0]);
 
@@ -41,17 +43,17 @@ export default function SatelliteControl() {
   return (
     <div className="p-6 space-y-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
-        <h1 className="text-3xl font-orbitron font-bold text-cyber-blue cyber-text-glow">SATELLITE CONTROL</h1>
-        <p className="text-cyber-text-dim mt-1">Orbital surveillance and communication network</p>
+        <h1 className="text-3xl font-orbitron font-bold text-cyber-blue cyber-text-glow">{t('satellite_title')}</h1>
+        <p className="text-cyber-text-dim mt-1">{t('satellite_desc')}</p>
       </motion.div>
 
       <div className="grid grid-cols-5 gap-4">
         {[
-          { label: "Total Satellites", value: satellites.length, icon: Satellite, color: "cyber-blue" },
-          { label: "Active", value: satellites.filter(s => s.status === "active").length, icon: Signal, color: "cyber-green" },
-          { label: "Signal Quality", value: `${Math.round(satellites.reduce((a, s) => a + s.signal, 0) / satellites.length)}%`, icon: Radio, color: "cyber-purple" },
-          { label: "Coverage", value: "73%", icon: MapPin, color: "cyber-yellow" },
-          { label: "Alerts", value: 1, icon: AlertTriangle, color: "cyber-red" },
+          { label: t('totalSatellites'), value: satellites.length, icon: Satellite, color: "cyber-blue" },
+          { label: t('satActive'), value: satellites.filter(s => s.status === "active").length, icon: Signal, color: "cyber-green" },
+          { label: t('signalQuality'), value: `${Math.round(satellites.reduce((a, s) => a + s.signal, 0) / satellites.length)}%`, icon: Radio, color: "cyber-purple" },
+          { label: t('coverage'), value: "73%", icon: MapPin, color: "cyber-yellow" },
+          { label: t('alerts'), value: 1, icon: AlertTriangle, color: "cyber-red" },
         ].map((stat, i) => (
           <motion.div key={stat.label} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.1 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-4">
@@ -68,7 +70,7 @@ export default function SatelliteControl() {
         <div className="col-span-2">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-6">
-            <h3 className="text-lg font-orbitron text-cyber-text mb-4">Orbital Map</h3>
+            <h3 className="text-lg font-orbitron text-cyber-text mb-4">{t('orbitalMap')}</h3>
             <div className="relative h-96 bg-cyber-darker/50 rounded-lg overflow-hidden">
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="w-32 h-32 rounded-full border-2 border-cyber-blue/30 relative">
@@ -111,7 +113,7 @@ export default function SatelliteControl() {
         <div className="space-y-4">
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-4">
-            <h3 className="text-sm font-orbitron text-cyber-text mb-3">Satellite Fleet</h3>
+            <h3 className="text-sm font-orbitron text-cyber-text mb-3">{t('satelliteFleet')}</h3>
             <div className="space-y-2">
               {satellites.map((sat) => (
                 <button key={sat.id} onClick={() => setSelectedSat(sat)}
@@ -134,31 +136,31 @@ export default function SatelliteControl() {
                 <span className="font-orbitron text-cyber-text">{selectedSat.name}</span>
               </div>
               <div className="space-y-2 text-xs">
-                <div className="flex justify-between"><span className="text-cyber-text-dim">Status</span><span className={`capitalize ${getStatusColor(selectedSat.status)}`}>{selectedSat.status}</span></div>
-                <div className="flex justify-between"><span className="text-cyber-text-dim">Altitude</span><span className="text-cyber-text">{selectedSat.altitude.toLocaleString()} km</span></div>
-                <div className="flex justify-between"><span className="text-cyber-text-dim">Velocity</span><span className="text-cyber-text">{selectedSat.velocity} km/s</span></div>
-                <div className="flex justify-between"><span className="text-cyber-text-dim">Orbit</span><span className="text-cyber-text uppercase">{selectedSat.orbit}</span></div>
-                <div className="flex justify-between"><span className="text-cyber-text-dim">Position</span><span className="text-cyber-text">{selectedSat.position.lat.toFixed(2)}°, {selectedSat.position.lng.toFixed(2)}°</span></div>
+                <div className="flex justify-between"><span className="text-cyber-text-dim">{t('status')}</span><span className={`capitalize ${getStatusColor(selectedSat.status)}`}>{selectedSat.status}</span></div>
+                <div className="flex justify-between"><span className="text-cyber-text-dim">{t('altitude')}</span><span className="text-cyber-text">{selectedSat.altitude.toLocaleString()} km</span></div>
+                <div className="flex justify-between"><span className="text-cyber-text-dim">{t('velocity')}</span><span className="text-cyber-text">{selectedSat.velocity} km/s</span></div>
+                <div className="flex justify-between"><span className="text-cyber-text-dim">{t('orbit')}</span><span className="text-cyber-text uppercase">{selectedSat.orbit}</span></div>
+                <div className="flex justify-between"><span className="text-cyber-text-dim">{t('position')}</span><span className="text-cyber-text">{selectedSat.position.lat.toFixed(2)}°, {selectedSat.position.lng.toFixed(2)}°</span></div>
               </div>
               <div className="mt-3 pt-3 border-t border-cyber-blue/20 space-y-2">
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1"><Signal className="w-3 h-3 text-cyber-green" /><span className="text-xs text-cyber-text-dim">Signal</span></div>
+                  <div className="flex items-center gap-1"><Signal className="w-3 h-3 text-cyber-green" /><span className="text-xs text-cyber-text-dim">{t('signal')}</span></div>
                   <span className="text-sm text-cyber-green">{selectedSat.signal}%</span>
                 </div>
                 <div className="h-1.5 bg-cyber-gray rounded-full overflow-hidden"><div className="h-full bg-cyber-green" style={{ width: `${selectedSat.signal}%` }} /></div>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1"><Battery className="w-3 h-3 text-cyber-blue" /><span className="text-xs text-cyber-text-dim">Battery</span></div>
+                  <div className="flex items-center gap-1"><Battery className="w-3 h-3 text-cyber-blue" /><span className="text-xs text-cyber-text-dim">{t('battery')}</span></div>
                   <span className="text-sm text-cyber-blue">{selectedSat.battery}%</span>
                 </div>
                 <div className="h-1.5 bg-cyber-gray rounded-full overflow-hidden"><div className="h-full bg-cyber-blue" style={{ width: `${selectedSat.battery}%` }} /></div>
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1"><Thermometer className="w-3 h-3 text-cyber-orange" /><span className="text-xs text-cyber-text-dim">Temp</span></div>
+                  <div className="flex items-center gap-1"><Thermometer className="w-3 h-3 text-cyber-orange" /><span className="text-xs text-cyber-text-dim">{t('temp')}</span></div>
                   <span className="text-sm text-cyber-orange">{selectedSat.temp}°C</span>
                 </div>
               </div>
               <div className="mt-3 flex gap-2">
-                <button className="flex-1 py-1.5 bg-cyber-blue/20 border border-cyber-blue/30 rounded text-xs text-cyber-blue hover:bg-cyber-blue/30">Realign</button>
-                <button className="flex-1 py-1.5 bg-cyber-purple/20 border border-cyber-purple/30 rounded text-xs text-cyber-purple hover:bg-cyber-purple/30">Transfer</button>
+                <button className="flex-1 py-1.5 bg-cyber-blue/20 border border-cyber-blue/30 rounded text-xs text-cyber-blue hover:bg-cyber-blue/30">{t('realign')}</button>
+                <button className="flex-1 py-1.5 bg-cyber-purple/20 border border-cyber-purple/30 rounded text-xs text-cyber-purple hover:bg-cyber-purple/30">{t('transfer')}</button>
               </div>
             </motion.div>
           )}
