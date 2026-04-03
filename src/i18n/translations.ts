@@ -252,6 +252,14 @@ export const translations = {
     sunrise: "Sunrise",
     neoAngeles: "Neo Angeles",
     
+    // Social
+    socialHub: "SOCIAL HUB",
+    socialHubDesc: "Community connect and city announcements",
+    communityFeed: "Community Feed",
+    events: "Events",
+    announcements: "Announcements",
+    rsvp: "RSVP",
+    
     // Settings
     settings_title: "SETTINGS",
     customizeNexus: "Customize your NEXUS experience",
@@ -526,6 +534,14 @@ export const translations = {
     cloudCover: "云量",
     sunrise: "日出",
     neoAngeles: "新洛杉矶",
+    
+    // 社交
+    socialHub: "社交中心",
+    socialHubDesc: "社区连接与城市公告",
+    communityFeed: "社区动态",
+    events: "活动",
+    announcements: "公告",
+    rsvp: "回复",
     
     // 设置
     settings_title: "设置",

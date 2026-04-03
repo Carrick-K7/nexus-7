@@ -26,6 +26,7 @@ import WeatherPanel from "@/components/weather/WeatherPanel";
 import SettingsPanel from "@/components/settings/SettingsPanel";
 import AchievementsPanel from "@/components/achievements/AchievementsPanel";
 import ResourceManagement from "@/components/resource/ResourceManagement";
+import SocialHub from "@/components/social/SocialHub";
 
 const viewComponents: Record<string, React.ComponentType> = {
   dashboard: Dashboard,
@@ -48,6 +49,7 @@ const viewComponents: Record<string, React.ComponentType> = {
   settings: SettingsPanel,
   about: About,
   resource: ResourceManagement,
+  social: SocialHub,
 };
 
 export default function Home() {
