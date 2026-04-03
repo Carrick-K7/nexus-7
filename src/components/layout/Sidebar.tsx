@@ -6,7 +6,7 @@ import {
   LayoutDashboard, Brain, LineChart, Terminal, 
   ScrollText, Bot, Atom, Satellite, Zap, TerminalSquare,
   Users, Box, BarChart3, Info, Newspaper, Siren, Cloud,
-  Settings, Trophy
+  Settings, Trophy, Factory
 } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { TranslationKey } from '@/i18n/translations';
@@ -26,6 +26,7 @@ const navItems = [
   { id: 'analytics', labelKey: 'analytics', icon: BarChart3 },
   { id: 'emergency', labelKey: 'emergency', icon: Siren },
   { id: 'weather', labelKey: 'weather', icon: Cloud },
+  { id: 'resource', labelKey: 'resource', icon: Factory },
   { id: 'news', labelKey: 'news', icon: Newspaper },
   { id: 'achievements', labelKey: 'achievements', icon: Trophy },
   { id: 'settings', labelKey: 'settings', icon: Settings },

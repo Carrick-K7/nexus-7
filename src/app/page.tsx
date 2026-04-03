@@ -25,6 +25,7 @@ import EmergencyResponse from "@/components/emergency/EmergencyResponse";
 import WeatherPanel from "@/components/weather/WeatherPanel";
 import SettingsPanel from "@/components/settings/SettingsPanel";
 import AchievementsPanel from "@/components/achievements/AchievementsPanel";
+import ResourceManagement from "@/components/resource/ResourceManagement";
 
 const viewComponents: Record<string, React.ComponentType> = {
   dashboard: Dashboard,
@@ -46,6 +47,7 @@ const viewComponents: Record<string, React.ComponentType> = {
   achievements: AchievementsPanel,
   settings: SettingsPanel,
   about: About,
+  resource: ResourceManagement,
 };
 
 export default function Home() {

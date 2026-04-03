@@ -13,6 +13,7 @@ export const translations = {
     agents: "AI Agents",
     city3d: "City 3D",
     analytics: "Analytics",
+    resource: "Resource",
     
     // Common
     status: "Status",
@@ -217,6 +218,20 @@ export const translations = {
     emergencyHotline: "Emergency Hotline",
     immediateAssistance: "For immediate assistance",
     
+    // Resource
+    resourceManagement: "RESOURCE MANAGEMENT",
+    resourceManagementDesc: "City resources monitoring and distribution",
+    storage: "Storage",
+    capacity: "Capacity",
+    resourceDistribution: "Resource Distribution",
+    residential: "Residential",
+    industrial: "Industrial",
+    commercial: "Commercial",
+    infraDistribution: "Infrastructure",
+    supplyConvoys: "Supply Convoys",
+    citizenSatisfaction: "Citizen Satisfaction",
+    resourceSecurity: "Resource Security",
+    
     // Weather
     weather_title: "ENVIRONMENT",
     weather_desc: "Weather and environmental monitoring",
@@ -273,6 +288,7 @@ export const translations = {
     agents: "AI代理",
     city3d: "3D城市",
     analytics: "数据分析",
+    resource: "资源",
     
     // 通用
     status: "状态",
@@ -476,6 +492,20 @@ export const translations = {
     emergencyResources: "紧急资源",
     emergencyHotline: "紧急热线",
     immediateAssistance: "立即协助",
+    
+    // 资源
+    resourceManagement: "资源管理",
+    resourceManagementDesc: "城市资源监控与分配",
+    storage: "存储",
+    capacity: "容量",
+    resourceDistribution: "资源分配",
+    residential: "住宅",
+    industrial: "工业",
+    commercial: "商业",
+    infraDistribution: "基础设施",
+    supplyConvoys: "补给车队",
+    citizenSatisfaction: "市民满意度",
+    resourceSecurity: "资源安全",
     
     // 天气
     weather_title: "环境",
