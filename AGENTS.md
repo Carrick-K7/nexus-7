@@ -6,18 +6,16 @@
 
 ## 🎯 当前迭代目标 | Current Iteration
 
-**Version 0.8 - Lint清理 + 功能增强 (规划中)**
+**Version 0.8 - Lint清理完成 ✅, 下一步: 资源管理面板**
 
 ### 已完成 ✅
 - [x] v0.7 i18n国际化 - 17个组件全部完成
+- [x] Lint清理 - 修复 impure functions, unused imports, useState lazy init
 
-### 待处理 🔴 Lint清理
-- [ ] 清理未使用的 imports (Terminal, Hacker, Settings, etc.)
-- [ ] 修复 imp ure function 调用 (Math.random, Date.now in render)
-- [ ] 修复 useEffect 依赖缺失警告
+### 进行中 🔄
+- [ ] Resource Management Panel - 资源管理面板
 
-### 待处理 📋 功能增强
-- [ ] Resource Management Panel - 资源管理
+### 待处理 📋
 - [ ] Social Features - 社交功能
 - [ ] More mini-games - 更多小游戏
 
