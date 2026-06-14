@@ -17,6 +17,9 @@ interface NexusStore {
   cityStats: CityStats;
   updateCityStats: (stats: Partial<CityStats>) => void;
 
+  cityStatsHistory: { tick: number; stats: CityStats }[];
+  recordCityStats: () => void;
+
   weather: Weather;
   setWeather: (weather: Partial<Weather>) => void;
 
@@ -63,7 +66,7 @@ const STORAGE_KEY = 'nexus-store';
 
 export const useNexusStore = create<NexusStore>()(
   persist(
-    (set, get) => ({
+    (set) => ({
       theme: 'dark',
       setTheme: (theme) => set({ theme }),
 
@@ -84,6 +87,11 @@ export const useNexusStore = create<NexusStore>()(
       },
       updateCityStats: (stats) => set((state) => ({
         cityStats: { ...state.cityStats, ...stats }
+      })),
+
+      cityStatsHistory: [],
+      recordCityStats: () => set((state) => ({
+        cityStatsHistory: [...state.cityStatsHistory, { tick: Date.now(), stats: { ...state.cityStats } }].slice(-60),
       })),
 
       weather: {
@@ -187,6 +195,26 @@ export const useNexusStore = create<NexusStore>()(
         updates.aiAgents = state.aiAgents.map(a =>
           a.id === agentId ? { ...a, currentTask: newTask, lastAction: Date.now() } : a
         );
+        // Auto-write agent log
+        const agentName = state.aiAgents.find(a => a.id === agentId)?.name || agentId;
+        const impactDesc = impact ? Object.entries(impact).map(([k, v]) => `${k}: ${v}`).join(', ') : 'no direct impact';
+        updates.agentLogs = [...state.agentLogs, {
+          id: `log-${Date.now()}`,
+          timestamp: Date.now(),
+          type: 'info' as const,
+          message: `${agentName} executed: ${newTask} (${impactDesc})`,
+          agentId,
+        }].slice(-100);
+        // Auto-trigger notification
+        updates.notifications = [{
+          id: `notif-${Date.now()}`,
+          timestamp: Date.now(),
+          read: false,
+          type: 'info' as const,
+          title: `${agentName} Action`,
+          message: newTask,
+          source: agentId.toUpperCase(),
+        }, ...state.notifications].slice(0, 50);
         return updates;
       }),
 

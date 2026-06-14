@@ -6,14 +6,14 @@
 
 ## 🎯 当前迭代目标 | Current Iteration
 
-**Version 0.2.0 - AI Agent Realization | AI 代理真实化**
+**Version 0.3.0 - Feedback Loop | 反馈循环系统**
 
-- [x] AI Agents 真实化 — agents 实际影响 cityStats via dispatchAgentAction
-- [x] EvolutionLog 接入 git 历史（build 时生成 public/data/git-log.json）
-- [x] Zustand store localStorage 持久化（persist middleware）
-- [x] 替换 Dashboard/AIAgentsPanel 占位符测试为真实组件测试
-- [x] AgentLog 类型统一到 types/index.ts，AGENT_TASKS 移到 data/agent-tasks.ts
-- [x] 22/22 tests passing, 0 lint errors
+- [x] ECONOMICA/SPECTRE 真实影响 — GDP/happiness/internet/crime 全部参与模拟
+- [x] Agent 行动自动写入 agentLogs + 触发 Notification
+- [x] 城市事件阈值系统 — crime>70/traffic>80/energy<40/pollution>75 自动触发 agent 响应
+- [x] Dashboard 实时趋势图 — recharts LineChart 展示 cityStats 历史变化
+- [x] package.json 版本同步为 0.2.0
+- [x] Lint warnings 从 6 降至 4，22/22 tests passing
 
 ### 本次迭代重点 📋
 - 新增 EvolutionLog 组件 - 让人类理解AI自我迭代的"思考过程"
@@ -31,7 +31,7 @@
 | 视图页面 | 21个 |
 | 语言支持 | 2种 (EN/ZH) |
 | i18n状态 | ✅ 全部完成 |
-| 迭代版本 | 0.2.0 |
+| 迭代版本 | 0.3.0 |
 | 测试通过率 | 22/22 ✅ |
 | Lint错误 | 0 |
 
@@ -120,6 +120,29 @@ nexus/src/
 ---
 
 ## 🔄 迭代历史 | Iteration History
+### v0.3.0 (2026-06-14) - Feedback Loop | 反馈循环系统
+**主题**: 让AI代理与城市模拟形成真正的双向反馈闭环
+
+新增:
+- ECONOMICA 影响 GDP + happiness，SPECTRE 影响 crime detection + internet
+- `dispatchAgentAction` 自动写入 `agentLogs` 并触发 `addNotification`
+- 城市事件阈值系统：crime>70→ATLAS, traffic>80→CIVITAS, energy<40→CIVITAS, pollution>75→CIVITAS
+- Dashboard recharts LineChart 实时展示 energy/crime/traffic/pollution 趋势
+- `cityStatsHistory` ring buffer（60 snapshots）记录城市状态变化
+- package.json version 同步为 0.2.0
+
+修复:
+- SocialHub.tsx 移除未使用的 useMemo import
+- nexus-store.ts 移除未使用的 get 参数
+- Lint warnings 从 6 降至 4
+
+意义:
+- 4个AI代理全部参与城市模拟，不再只有ATLAS/CIVITAS
+- 人类通过NotificationCenter实时看到AI在做什么
+- Dashboard趋势图让反馈循环效果可视化
+- 阈值触发机制让系统具备初步的"自主响应"能力
+
+
 ### v0.2.0 (2026-06-14) - AI Agent Realization | AI 代理真实化
 **主题**: 让AI代理从假数据变为真实行为
 

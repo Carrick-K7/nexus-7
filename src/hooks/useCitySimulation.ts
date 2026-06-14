@@ -73,11 +73,30 @@ export function useCitySimulation() {
           const impactMap: Record<string, Partial<typeof store.cityStats> | null> = {
             atlas: { crime: Math.max(0, store.cityStats.crime - 1 - Math.floor(Math.random() * 2)) },
             civitas: { traffic: Math.max(0, store.cityStats.traffic - 1 - Math.floor(Math.random() * 2)) },
-            economica: null,
-            spectre: null,
+            economica: { gdp: store.cityStats.gdp + Math.floor(Math.random() * 5), happiness: Math.min(100, store.cityStats.happiness + Math.floor(Math.random() * 2)) },
+            spectre: { crime: Math.max(0, store.cityStats.crime - Math.floor(Math.random() * 2)), internet: Math.min(100, store.cityStats.internet + Math.floor(Math.random() * 2)) },
           };
           store.dispatchAgentAction(agent.id, impactMap[agent.id] || null);
         }
+      }
+
+      // City event thresholds — trigger automatic agent responses
+      const stats = store.cityStats;
+      if (stats.crime > 70 && Math.random() < 0.3 * baseMultiplier) {
+        addNotification({ type: 'warning', title: 'Crime Surge', message: `Crime index at ${stats.crime}. ATLAS deploying countermeasures.`, source: 'ATLAS' });
+        store.dispatchAgentAction('atlas', { crime: Math.max(0, stats.crime - 5) });
+      }
+      if (stats.traffic > 80 && Math.random() < 0.3 * baseMultiplier) {
+        addNotification({ type: 'warning', title: 'Traffic Gridlock', message: `Traffic at ${stats.traffic}. CIVITAS rerouting.`, source: 'CIVITAS' });
+        store.dispatchAgentAction('civitas', { traffic: Math.max(0, stats.traffic - 5) });
+      }
+      if (stats.energy < 40 && Math.random() < 0.2 * baseMultiplier) {
+        addNotification({ type: 'warning', title: 'Power Critical', message: `Energy at ${stats.energy}%. CIVITAS load-balancing grid.`, source: 'CIVITAS' });
+        store.dispatchAgentAction('civitas', { energy: Math.min(100, stats.energy + 8) });
+      }
+      if (stats.pollution > 75 && Math.random() < 0.2 * baseMultiplier) {
+        addNotification({ type: 'warning', title: 'Pollution Alert', message: `AQI critical at ${stats.pollution}. CIVITAS activating filters.`, source: 'CIVITAS' });
+        store.dispatchAgentAction('civitas', { pollution: Math.max(0, stats.pollution - 5) });
       }
 
 
@@ -99,6 +118,9 @@ export function useCitySimulation() {
           });
         }
       }
+
+      // Record stats snapshot for trend chart (every tick)
+      useNexusStore.getState().recordCityStats();
 
       setGameTime({ hour: newHour, minute: newMinute, day: newDay });
     };

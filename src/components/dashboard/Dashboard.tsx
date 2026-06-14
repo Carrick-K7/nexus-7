@@ -5,6 +5,7 @@ import { useTranslation } from "@/hooks/useTranslation";
 import { motion } from "framer-motion";
 import { useEffect } from "react";
 import { Users, Zap, Car, Shield, Cloud, Droplets, Wifi, Heart, TrendingUp } from "lucide-react";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts";
 import { TranslationKey } from "@/i18n/translations";
 
 const cardData = [
@@ -37,7 +38,7 @@ const systemHealthData = [
 ];
 
 export default function Dashboard() {
-  const { cityStats, districts, addNotification } = useNexusStore();
+  const { cityStats, districts, cityStatsHistory, addNotification } = useNexusStore();
   const { t } = useTranslation();
 
   useEffect(() => {
@@ -73,6 +74,35 @@ export default function Dashboard() {
           );
         })}
       </div>
+
+      {/* Real-time City Stats Trend Chart */}
+      <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.4 }}
+        className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-6">
+        <h3 className="text-lg font-orbitron text-cyber-text mb-4">{t("liveCityMetrics")}</h3>
+        <div className="h-64">
+          {cityStatsHistory.length > 1 ? (
+            <ResponsiveContainer width="100%" height="100%">
+              <LineChart data={cityStatsHistory}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#334155" />
+                <XAxis dataKey="tick" tick={false} />
+                <YAxis domain={[0, 100]} stroke="#94a3b8" fontSize={10} />
+                <Tooltip
+                  contentStyle={{ backgroundColor: '#0f172a', borderColor: '#334155', color: '#e2e8f0' }}
+                  labelFormatter={() => ''}
+                />
+                <Line type="monotone" dataKey={(d: { stats: typeof cityStats }) => d.stats.energy} name="Energy" stroke="#22d3ee" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey={(d: { stats: typeof cityStats }) => d.stats.crime} name="Crime" stroke="#f43f5e" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey={(d: { stats: typeof cityStats }) => d.stats.traffic} name="Traffic" stroke="#facc15" strokeWidth={2} dot={false} />
+                <Line type="monotone" dataKey={(d: { stats: typeof cityStats }) => d.stats.pollution} name="Pollution" stroke="#a78bfa" strokeWidth={2} dot={false} />
+              </LineChart>
+            </ResponsiveContainer>
+          ) : (
+            <div className="flex items-center justify-center h-full text-cyber-text-dim text-sm">
+              Collecting data... ({cityStatsHistory.length}/2 snapshots)
+            </div>
+          )}
+        </div>
+      </motion.div>
 
       <div className="grid grid-cols-2 gap-6">
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.5 }}
