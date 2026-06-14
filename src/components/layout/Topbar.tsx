@@ -4,11 +4,9 @@ import { useNexusStore } from '@/stores/nexus-store';
 import { motion } from 'framer-motion';
 import { Bell, Search, Clock, User, ChevronDown, Globe } from 'lucide-react';
 import { useState } from 'react';
-import { useTranslation } from '@/hooks/useTranslation';
 
 export default function Topbar() {
   const { gameTime, setGameTime, notifications, markAsRead, cityStats, language, setLanguage } = useNexusStore();
-  const { t } = useTranslation();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
 

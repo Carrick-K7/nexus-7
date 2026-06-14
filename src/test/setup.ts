@@ -3,17 +3,17 @@ import '@testing-library/jest-dom';
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children, ...props }: any) => children,
-    button: ({ children, ...props }: any) => children,
-    aside: ({ children, ...props }: any) => children,
-    header: ({ children, ...props }: any) => children,
-    main: ({ children, ...props }: any) => children,
-    nav: ({ children, ...props }: any) => children,
-    h1: ({ children, ...props }: any) => children,
-    h2: ({ children, ...props }: any) => children,
-    h3: ({ children, ...props }: any) => children,
-    p: ({ children, ...props }: any) => children,
-    span: ({ children, ...props }: any) => children,
+    div: ({ children }: { children: React.ReactNode }) => children,
+    button: ({ children }: { children: React.ReactNode }) => children,
+    aside: ({ children }: { children: React.ReactNode }) => children,
+    header: ({ children }: { children: React.ReactNode }) => children,
+    main: ({ children }: { children: React.ReactNode }) => children,
+    nav: ({ children }: { children: React.ReactNode }) => children,
+    h1: ({ children }: { children: React.ReactNode }) => children,
+    h2: ({ children }: { children: React.ReactNode }) => children,
+    h3: ({ children }: { children: React.ReactNode }) => children,
+    p: ({ children }: { children: React.ReactNode }) => children,
+    span: ({ children }: { children: React.ReactNode }) => children,
   },
   useAnimation: () => ({
     start: vi.fn(),

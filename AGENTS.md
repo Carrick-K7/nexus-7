@@ -6,13 +6,14 @@
 
 ## 🎯 当前迭代目标 | Current Iteration
 
-**Version 0.1.0 - Initial Release | 首个正式版本**
+**Version 0.2.0 - AI Agent Realization | AI 代理真实化**
 
-- [x] 20 components, 18 modules
-- [x] Zustand store (cityStats, agents, districts, trade, missions, notifications)
-- [x] EN/ZH i18n, 127 translation keys
-- [x] EvolutionLog scaffold
-- [x] 15/15 tests, 0 lint errors
+- [x] AI Agents 真实化 — agents 实际影响 cityStats via dispatchAgentAction
+- [x] EvolutionLog 接入 git 历史（build 时生成 public/data/git-log.json）
+- [x] Zustand store localStorage 持久化（persist middleware）
+- [x] 替换 Dashboard/AIAgentsPanel 占位符测试为真实组件测试
+- [x] AgentLog 类型统一到 types/index.ts，AGENT_TASKS 移到 data/agent-tasks.ts
+- [x] 22/22 tests passing, 0 lint errors
 
 ### 本次迭代重点 📋
 - 新增 EvolutionLog 组件 - 让人类理解AI自我迭代的"思考过程"
@@ -30,8 +31,8 @@
 | 视图页面 | 21个 |
 | 语言支持 | 2种 (EN/ZH) |
 | i18n状态 | ✅ 全部完成 |
-| 迭代版本 | 0.1.0 |
-| 测试通过率 | 100% |
+| 迭代版本 | 0.2.0 |
+| 测试通过率 | 22/22 ✅ |
 | Lint错误 | 0 |
 
 ---
@@ -119,6 +120,33 @@ nexus/src/
 ---
 
 ## 🔄 迭代历史 | Iteration History
+### v0.2.0 (2026-06-14) - AI Agent Realization | AI 代理真实化
+**主题**: 让AI代理从假数据变为真实行为
+
+新增:
+- `dispatchAgentAction` — agents 实际影响 cityStats（ATLAS降crime, CIVITAS降traffic）
+- `agentLogs` — store 中的 agent 日志数组
+- `AGENT_TASKS` 移到 `src/data/agent-tasks.ts`
+- `AgentLog` + `AgentTaskMap` 类型统一到 `src/types/index.ts`
+- `scripts/inject-git-log.js` — build 时从 git log 生成 EvolutionLog 数据
+- `public/data/git-log.json` — EvolutionLog 运行时读取的真实迭代历史
+- Zustand store `persist` middleware — localStorage 持久化
+- `AIAgentsPanel.test.tsx` — 4个真实组件测试
+- Dashboard 测试重写为真实渲染测试
+
+修复:
+- `SocialHub.tsx` — 删除重复的 `getTimeAgo` 函数声明
+- `EvolutionLog.tsx` — 修复 `getTriggerLabel` 类型签名
+- `AIAgentsPanel.tsx` — 移除假数据，改从 store 读取，添加本地 config map
+- 所有 TS 编译错误清零
+
+意义:
+- AI agents 不再是纯UI展示，而是真正参与城市模拟循环
+- EvolutionLog 显示真实 git 提交历史而非硬编码数据
+- 状态刷新后保持（cityStats, districts, aiAgents, theme, language）
+- 测试覆盖从15个增加到22个，全部通过
+
+
 
 ### v0.9 (2026-06-14) - 观测增强 | Observation Enhancement
 **主题**: 让人类能更好理解AI自演进的意义

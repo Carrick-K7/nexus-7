@@ -1,7 +1,6 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { useTranslation } from "@/hooks/useTranslation";
 import { useState } from "react";
 import { 
   Trophy, Medal, Star, Award, Zap, Shield, 
@@ -32,7 +31,6 @@ const achievementsList: Achievement[] = [
 ];
 
 export default function AchievementsPanel() {
-  const { t } = useTranslation();
   const [achievements] = useState<Achievement[]>(achievementsList);
   const [selectedTab, setSelectedTab] = useState<"all" | "unlocked" | "locked">("all");
 

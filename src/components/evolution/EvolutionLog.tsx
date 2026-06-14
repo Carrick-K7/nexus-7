@@ -2,9 +2,10 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
+import type { TranslationKey } from "@/i18n/translations";
 import { useState, useEffect, useRef } from "react";
-import { 
-  GitCommit, Brain, TrendingUp, Target, Lightbulb, 
+import {
+  GitCommit, Brain, TrendingUp, Target, Lightbulb,
   CheckCircle2, Clock, Zap, BarChart2, Eye
 } from "lucide-react";
 
@@ -58,7 +59,7 @@ const getTriggerColor = (trigger: IterationEntry["trigger"]) => {
   }
 };
 
-const getTriggerLabel = (trigger: IterationEntry["trigger"], t: (key: string) => string) => {
+const getTriggerLabel = (trigger: IterationEntry["trigger"], t: (key: TranslationKey) => string) => {
   switch (trigger) {
     case "observation": return t("trigger_observation");
     case "bug": return t("trigger_bug");
@@ -72,6 +73,8 @@ export default function EvolutionLog() {
   const [selectedEntry, setSelectedEntry] = useState<IterationEntry | null>(null);
   const [autoPlay, setAutoPlay] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [entries, setEntries] = useState<IterationEntry[]>([]);
+  const [loading, setLoading] = useState(true);
   const autoPlayRef = useRef(autoPlay);
 
   useEffect(() => {
@@ -79,17 +82,27 @@ export default function EvolutionLog() {
   }, [autoPlay]);
 
   useEffect(() => {
+    fetch("/data/git-log.json")
+      .then(r => { if (!r.ok) throw new Error("not found"); return r.json(); })
+      .then(data => { setEntries(data); setLoading(false); })
+      .catch(() => { setEntries(evolutionLog); setLoading(false); });
+  }, []);
+
+  useEffect(() => {
     if (!autoPlay) return;
     const interval = setInterval(() => {
       setCurrentIndex(prev => {
-        const next = (prev + 1) % evolutionLog.length;
+        const len = entries.length > 0 ? entries.length : evolutionLog.length;
+        const next = (prev + 1) % len;
         return next;
       });
     }, 3000);
     return () => clearInterval(interval);
-  }, [autoPlay]);
+  }, [autoPlay, entries.length]);
 
-  const displayEntry = autoPlay ? evolutionLog[currentIndex] : selectedEntry;
+  const displayEntry = autoPlay
+    ? (entries.length > 0 ? entries[currentIndex] : evolutionLog[0])
+    : selectedEntry;
 
   return (
     <div className="p-6 space-y-6">
@@ -111,14 +124,16 @@ export default function EvolutionLog() {
         <div className="flex items-center gap-2">
           <BarChart2 className="w-5 h-5 text-cyber-blue" />
           <span className="text-sm text-cyber-text">{t("totalIterations")}:</span>
-          <span className="text-lg font-orbitron font-bold text-cyber-blue">{evolutionLog.length}</span>
+          <span className="text-lg font-orbitron font-bold text-cyber-blue">
+            {loading ? "..." : entries.length}
+          </span>
         </div>
         <div className="ml-auto flex items-center gap-2">
           <button
             onClick={() => setAutoPlay(!autoPlay)}
             className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all ${
-              autoPlay 
-                ? "bg-cyber-red/20 text-cyber-red border border-cyber-red/50" 
+              autoPlay
+                ? "bg-cyber-red/20 text-cyber-red border border-cyber-red/50"
                 : "bg-cyber-gray/50 text-cyber-text-dim hover:bg-cyber-gray"
             }`}
           >
@@ -130,13 +145,13 @@ export default function EvolutionLog() {
 
       <div className="relative">
         <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-cyber-purple via-cyber-blue to-cyber-gray/30" />
-        
+
         <div className="space-y-4">
-          {evolutionLog.map((entry, index) => {
+          {(loading ? evolutionLog : entries).map((entry, index) => {
             const TriggerIcon = getTriggerIcon(entry.trigger);
             const colorClass = getTriggerColor(entry.trigger);
             const isSelected = selectedEntry?.id === entry.id;
-            
+
             return (
               <motion.div
                 key={entry.id}
@@ -149,25 +164,25 @@ export default function EvolutionLog() {
                   className={`w-full text-left relative`}
                 >
                   <div className={`absolute -left-6 top-1/2 -translate-y-1/2 w-12 h-12 rounded-full flex items-center justify-center border-2 transition-all ${
-                    isSelected 
-                      ? `bg-cyber-dark border-${colorClass} shadow-[0_0_20px_var(--tw-shadow-color)]` 
+                    isSelected
+                      ? `bg-cyber-dark border-${colorClass} shadow-[0_0_20px_var(--tw-shadow-color)]`
                       : "bg-cyber-dark border-cyber-gray/30 hover:border-cyber-gray"
                   }`}
-                  style={{ 
+                  style={{
                     borderColor: isSelected ? `var(--tw-shadow-color)` : undefined,
                     boxShadow: isSelected ? `0 0 20px rgba(168, 85, 247, 0.5)` : undefined,
                   }}
                 >
                     <GitCommit className={`w-5 h-5 ${isSelected ? `text-${colorClass}` : "text-cyber-text-dim"}`} />
                   </div>
-                  
+
                   <div className={`ml-8 p-4 rounded-xl border transition-all ${
-                    isSelected 
-                      ? `bg-cyber-dark/80 border-${colorClass}/50` 
+                    isSelected
+                      ? `bg-cyber-dark/80 border-${colorClass}/50`
                       : "bg-cyber-dark/50 border-cyber-gray/30 hover:border-cyber-gray"
                   }`}>
                     <div className="flex items-center gap-3 mb-2">
-                      <span className="px-2 py-1 rounded bg-cyber-purple/20 text-cyber-purple text-xs font-mono">
+                      <span className={`px-2 py-1 rounded bg-cyber-purple/20 text-cyber-purple text-xs font-mono`}>
                         v{entry.version}
                       </span>
                       <span className={`flex items-center gap-1 px-2 py-1 rounded text-xs ${
@@ -191,7 +206,7 @@ export default function EvolutionLog() {
       </div>
 
       {displayEntry && (
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           className="bg-cyber-dark/50 border border-cyber-purple/30 rounded-xl p-6"
@@ -220,16 +235,16 @@ export default function EvolutionLog() {
               </div>
             </div>
           </div>
-          
+
           {displayEntry.metrics.some(m => m.before !== m.after) && (
             <div className="mt-4 pt-4 border-t border-cyber-gray/30">
               <div className="text-xs text-cyber-text-dim uppercase tracking-wider mb-3">{t("metricsImpact")}</div>
               <div className="grid grid-cols-2 gap-3">
-                {displayEntry.metrics.filter(m => m.before !== m.after || m.label.includes("Coverage") || m.label.includes("Errors")).map((metric) => (
+                {displayEntry.metrics.filter(m => m.before !== m.after).map((metric) => (
                   <div key={metric.label} className="flex items-center gap-3">
                     <span className="text-xs text-cyber-text-dim w-24 truncate">{metric.label}</span>
                     <div className="flex-1 h-2 bg-cyber-gray rounded-full overflow-hidden">
-                      <motion.div 
+                      <motion.div
                         initial={{ width: `${(metric.before / (metric.after || 1)) * 100}%` }}
                         animate={{ width: `${(metric.after / (metric.after || 1)) * 100}%` }}
                         transition={{ duration: 1 }}
@@ -251,7 +266,7 @@ export default function EvolutionLog() {
         </motion.div>
       )}
 
-      <motion.div 
+      <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.5 }}

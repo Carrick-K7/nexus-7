@@ -280,6 +280,29 @@ export const translations = {
     // Time
     day: "DAY",
     speed: "Speed",
+
+    // Evolution
+    evolutionLog: "EVOLUTION LOG",
+    evolutionLogDesc: "AI self-iteration history and decision patterns",
+    totalIterations: "Total Iterations",
+    autoPlay: "Auto Play",
+    pauseAutoPlay: "Pause",
+    decisionProcess: "Decision Process",
+    whatTriggered: "What Triggered",
+    whatWasDone: "What Was Done",
+    whatResult: "What Result",
+    metricsImpact: "Metrics Impact",
+    howToObserve: "How to Observe",
+    observeSystem: "Observe System",
+    observeSystemDesc: "Watch real-time city simulation with traffic, energy, crime patterns",
+    observeAgents: "Observe Agents",
+    observeAgentsDesc: "Monitor AI agents (ATLAS, ECONOMICA, CIVITAS, SPECTRE) behavior logs",
+    observeEvolution: "Observe Evolution",
+    observeEvolutionDesc: "Track AI self-iteration decisions and their impact on the system",
+    trigger_observation: "Observation",
+    trigger_bug: "Bug",
+    trigger_enhancement: "Enhancement",
+    trigger_test: "Test",
   },
   
   zh: {
@@ -563,6 +586,29 @@ export const translations = {
     // 时间
     day: "第",
     speed: "速度",
+
+    // 演进
+    evolutionLog: "演进日志",
+    evolutionLogDesc: "AI自我迭代历史与决策模式",
+    totalIterations: "总迭代次数",
+    autoPlay: "自动播放",
+    pauseAutoPlay: "暂停",
+    decisionProcess: "决策过程",
+    whatTriggered: "触发因素",
+    whatWasDone: "所做行动",
+    whatResult: "达成结果",
+    metricsImpact: "指标影响",
+    howToObserve: "如何观察",
+    observeSystem: "观察系统",
+    observeSystemDesc: "观察实时城市模拟：交通、能源、犯罪模式",
+    observeAgents: "观察代理",
+    observeAgentsDesc: "监控AI代理(ATLAS, ECONOMICA, CIVITAS, SPECTRE)行为日志",
+    observeEvolution: "观察演进",
+    observeEvolutionDesc: "追踪AI自我迭代决策及其对系统的影响",
+    trigger_observation: "观察",
+    trigger_bug: "缺陷",
+    trigger_enhancement: "增强",
+    trigger_test: "测试",
   }
 } as const;
 

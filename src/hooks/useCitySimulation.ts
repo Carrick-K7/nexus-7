@@ -64,6 +64,23 @@ export function useCitySimulation() {
         updateAgent(update.id, { mood: update.mood });
       }
 
+      // Agent action dispatch (Step 1d)
+      const store = useNexusStore.getState();
+      if (Math.random() < 0.15 * baseMultiplier) {
+        const activeAgents = store.aiAgents.filter(a => a.status === 'active');
+        if (activeAgents.length > 0) {
+          const agent = activeAgents[Math.floor(Math.random() * activeAgents.length)];
+          const impactMap: Record<string, Partial<typeof store.cityStats> | null> = {
+            atlas: { crime: Math.max(0, store.cityStats.crime - 1 - Math.floor(Math.random() * 2)) },
+            civitas: { traffic: Math.max(0, store.cityStats.traffic - 1 - Math.floor(Math.random() * 2)) },
+            economica: null,
+            spectre: null,
+          };
+          store.dispatchAgentAction(agent.id, impactMap[agent.id] || null);
+        }
+      }
+
+
       let newMinute = gameTime.minute + 1;
       let newHour = gameTime.hour;
       let newDay = gameTime.day;

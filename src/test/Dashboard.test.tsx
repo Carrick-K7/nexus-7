@@ -1,68 +1,52 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { render, screen } from '@testing-library/react';
+import Dashboard from '@/components/dashboard/Dashboard';
 import { useNexusStore } from '@/stores/nexus-store';
-
-// Create a test wrapper
-function createWrapper() {
-  return function TestWrapper({ children }: { children: React.ReactNode }) {
-    return <>{children}</>;
-  };
-}
-
-// Mock the store
-const mockStore = {
-  theme: 'dark' as const,
-  setTheme: vi.fn(),
-  language: 'en' as const,
-  setLanguage: vi.fn(),
-  cityStats: {
-    population: 8472934,
-    gdp: 2847,
-    happiness: 72,
-    pollution: 34,
-    crime: 23,
-    traffic: 56,
-    energy: 78,
-    water: 91,
-    internet: 94,
-    medical: 85,
-  },
-  districts: [
-    { id: 'd1', name: 'Neo Downtown', type: 'commercial' as const, population: 420000, development: 95, status: 'normal' as const },
-    { id: 'd2', name: 'Chrome Heights', type: 'residential' as const, population: 890000, development: 78, status: 'normal' as const },
-  ],
-  addNotification: vi.fn(),
-};
 
 describe('Dashboard Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-  });
-
-  it('should render city overview title', async () => {
-    // This test would need proper component import and store setup
-    // For now, just verify the test setup works
-    expect(true).toBe(true);
-  });
-
-  it('should have correct initial city stats', () => {
-    expect(mockStore.cityStats.population).toBe(8472934);
-    expect(mockStore.cityStats.energy).toBe(78);
-  });
-
-  it('should have districts with required properties', () => {
-    mockStore.districts.forEach(district => {
-      expect(district.id).toBeDefined();
-      expect(district.name).toBeDefined();
-      expect(district.development).toBeGreaterThanOrEqual(0);
-      expect(district.development).toBeLessThanOrEqual(100);
+    const store = useNexusStore.getState();
+    store.updateCityStats({
+      population: 8472934,
+      energy: 78,
+      traffic: 56,
+      crime: 23,
+      pollution: 34,
+      medical: 85,
+      internet: 94,
+      water: 91,
     });
+  });
+
+  it('renders city overview heading', () => {
+    render(<Dashboard />);
+    expect(screen.getByText(/CITY OVERVIEW/i)).toBeInTheDocument();
+  });
+
+  it('renders population stat', () => {
+    render(<Dashboard />);
+    const popElement = screen.getByText(/8\.47M|8,472,934/);
+    expect(popElement).toBeInTheDocument();
+  });
+
+  it('renders energy percentage', () => {
+    render(<Dashboard />);
+    const energyElements = screen.getAllByText(/78%/);
+    expect(energyElements.length).toBeGreaterThanOrEqual(1);
+  });
+
+  it('renders district cards', () => {
+    render(<Dashboard />);
+    expect(screen.getByText('Neo Downtown')).toBeInTheDocument();
+    expect(screen.getByText('Chrome Heights')).toBeInTheDocument();
   });
 });
 
 describe('useNexusStore', () => {
   it('should have required state properties', () => {
     const store = useNexusStore.getState();
-    
+
     expect(store.theme).toBeDefined();
     expect(store.language).toBeDefined();
     expect(store.cityStats).toBeDefined();
@@ -73,19 +57,37 @@ describe('useNexusStore', () => {
   it('should update city stats', () => {
     const store = useNexusStore.getState();
     const initialEnergy = store.cityStats.energy;
-    
+
     store.updateCityStats({ energy: initialEnergy + 10 });
-    
+
     expect(useNexusStore.getState().cityStats.energy).toBe(initialEnergy + 10);
   });
 
   it('should change language', () => {
     const store = useNexusStore.getState();
-    
+
     expect(store.language).toBe('en');
-    
+
     store.setLanguage('zh');
-    
+
     expect(useNexusStore.getState().language).toBe('zh');
+  });
+
+  it('should dispatch agent action and update cityStats', () => {
+    const store = useNexusStore.getState();
+    const initialCrime = store.cityStats.crime;
+
+    store.dispatchAgentAction('atlas', { crime: Math.max(0, initialCrime - 2) });
+
+    expect(useNexusStore.getState().cityStats.crime).toBeLessThanOrEqual(initialCrime);
+  });
+
+  it('should add agent logs', () => {
+    const store = useNexusStore.getState();
+    const initialLogCount = store.agentLogs.length;
+
+    store.addAgentLog({ type: 'info', message: 'Test log', agentId: 'atlas' });
+
+    expect(useNexusStore.getState().agentLogs.length).toBe(initialLogCount + 1);
   });
 });

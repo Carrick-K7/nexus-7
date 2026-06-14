@@ -27,6 +27,7 @@ import SettingsPanel from "@/components/settings/SettingsPanel";
 import AchievementsPanel from "@/components/achievements/AchievementsPanel";
 import ResourceManagement from "@/components/resource/ResourceManagement";
 import SocialHub from "@/components/social/SocialHub";
+import EvolutionLog from "@/components/evolution/EvolutionLog";
 
 const viewComponents: Record<string, React.ComponentType> = {
   dashboard: Dashboard,
@@ -50,6 +51,7 @@ const viewComponents: Record<string, React.ComponentType> = {
   about: About,
   resource: ResourceManagement,
   social: SocialHub,
+  evolution: EvolutionLog,
 };
 
 export default function Home() {

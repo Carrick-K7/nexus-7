@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
-import { useState } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { 
   Users, MessageSquare, Calendar, Megaphone,
   Heart, Share2, Bookmark, Clock
@@ -28,12 +28,24 @@ interface Event {
   category: "community" | "official" | "cultural" | "market";
 }
 
-const now = Date.now();
-
 export default function SocialHub() {
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<"feed" | "events" | "announcements">("feed");
   const [likedPosts, setLikedPosts] = useState<Set<string>>(new Set());
+  const [now, setNow] = useState(() => Date.now());
+
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 60000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const getTimeAgo = (timestamp: number) => {
+    const hours = Math.floor((now - timestamp) / 3600000);
+    if (hours < 1) return "Just now";
+    if (hours < 24) return `${hours}h ago`;
+    const days = Math.floor(hours / 24);
+    return `${days}d ago`;
+  };
 
   const posts: Post[] = [
     { id: "1", author: "Mayor Chen", avatar: "MC", content: "The new hyperloop connecting Chrome Heights to Silicon Valley II will open next week! This will reduce commute times by 40%.", timestamp: now - 3600000, likes: 234, comments: 45, category: "announcement" },
@@ -56,13 +68,6 @@ export default function SocialHub() {
     { id: "3", title: "New Trading Regulations", priority: "low", content: "Updated guidelines for resource trading now in effect." },
   ];
 
-  const getTimeAgo = (timestamp: number) => {
-    const hours = Math.floor((Date.now() - timestamp) / 3600000);
-    if (hours < 1) return "Just now";
-    if (hours < 24) return `${hours}h ago`;
-    const days = Math.floor(hours / 24);
-    return `${days}d ago`;
-  };
 
   const toggleLike = (postId: string) => {
     setLikedPosts(prev => {

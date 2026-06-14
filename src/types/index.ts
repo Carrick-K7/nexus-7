@@ -85,10 +85,12 @@ export interface AIAgent {
   id: string;
   name: string;
   role: string;
-  status: 'active' | 'idle' | 'error';
+  status: 'active' | 'idle' | 'warning';
   mood: number;
   specialty: string[];
   avatar: string;
+  currentTask?: string;
+  lastAction?: number;
 }
 
 export interface Qubit {
@@ -111,3 +113,13 @@ export interface GameTime {
   day: number;
   speed: 1 | 2 | 5 | 10;
 }
+
+export interface AgentLog {
+  id: string;
+  timestamp: number;
+  type: 'info' | 'warning' | 'success' | 'error';
+  message: string;
+  agentId: string;
+}
+
+export type AgentTaskMap = Record<string, string[]>;

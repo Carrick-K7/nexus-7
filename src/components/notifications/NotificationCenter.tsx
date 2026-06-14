@@ -99,7 +99,7 @@ export default function NotificationCenter() {
 
       <div className="space-y-2">
         <AnimatePresence>
-          {filteredNotifications.map((notif, i) => (
+          {filteredNotifications.map((notif) => (
             <motion.div key={notif.id} initial={{ opacity: 0, x: -20 }} animate={{ opacity: 1, x: 0 }} exit={{ opacity: 0, x: 20 }}
               onClick={() => markAsRead(notif.id)}
               className={`bg-cyber-dark/50 border rounded-xl p-4 cursor-pointer transition-all ${
