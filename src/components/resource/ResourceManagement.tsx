@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
-import { useState, useEffect } from "react";
+import { useNexusStore } from "@/stores/nexus-store";
 import { 
   Zap, Droplets, Wheat, Coins, Factory, 
   Truck, Heart, Shield, TrendingUp, TrendingDown
@@ -20,27 +20,76 @@ interface Resource {
 
 export default function ResourceManagement() {
   const { t } = useTranslation();
-  const [resources, setResources] = useState<Resource[]>([
-    { id: "power", name: "Power Grid", icon: Zap, current: 8472, max: 10000, rate: 12, color: "cyber-yellow" },
-    { id: "water", name: "Water Supply", icon: Droplets, current: 7823, max: 10000, rate: -5, color: "cyber-blue" },
-    { id: "food", name: "Food Reserves", icon: Wheat, current: 5234, max: 8000, rate: 8, color: "cyber-green" },
-    { id: "credits", name: "City Credits", icon: Coins, current: 2.4, max: 10, rate: 0.3, color: "cyber-purple" },
-    { id: "energy", name: "Energy Cells", icon: Zap, current: 3456, max: 5000, rate: -2, color: "cyber-orange" },
-    { id: "materials", name: "Raw Materials", icon: Factory, current: 6789, max: 10000, rate: 15, color: "cyber-gray" },
-  ]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setResources(prev => prev.map(r => ({
-        ...r,
-        current: Math.max(0, Math.min(r.max, r.current + r.rate * 0.1)),
-      })));
-    }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+  const cityStats = useNexusStore((state) => state.cityStats);
+  const history = useNexusStore((state) => state.cityStatsHistory);
+  const previousStats =
+    history.length > 1 ? history[history.length - 2].stats : cityStats;
+  const resources: Resource[] = [
+    {
+      id: "power",
+      name: "Power Grid",
+      icon: Zap,
+      current: cityStats.energy * 100,
+      max: 10000,
+      rate: Math.round((cityStats.energy - previousStats.energy) * 10),
+      color: "cyber-yellow",
+    },
+    {
+      id: "water",
+      name: "Water Supply",
+      icon: Droplets,
+      current: cityStats.water * 100,
+      max: 10000,
+      rate: Math.round((cityStats.water - previousStats.water) * 10),
+      color: "cyber-blue",
+    },
+    {
+      id: "food",
+      name: "Food Reserves",
+      icon: Wheat,
+      current: ((cityStats.happiness + cityStats.medical) / 200) * 8000,
+      max: 8000,
+      rate: Math.round(cityStats.happiness - previousStats.happiness),
+      color: "cyber-green",
+    },
+    {
+      id: "credits",
+      name: "City Credits",
+      icon: Coins,
+      current: cityStats.gdp / 1000,
+      max: 10,
+      rate: Math.round((cityStats.gdp - previousStats.gdp) * 100) / 100,
+      color: "cyber-purple",
+    },
+    {
+      id: "energy",
+      name: "Energy Cells",
+      icon: Zap,
+      current: cityStats.energy * 50,
+      max: 5000,
+      rate: Math.round((cityStats.energy - previousStats.energy) * 5),
+      color: "cyber-orange",
+    },
+    {
+      id: "materials",
+      name: "Raw Materials",
+      icon: Factory,
+      current: (100 - cityStats.pollution) * 100,
+      max: 10000,
+      rate: Math.round((previousStats.pollution - cityStats.pollution) * 10),
+      color: "cyber-gray",
+    },
+  ];
+  const efficiency = Math.round(
+    (cityStats.energy +
+      cityStats.water +
+      cityStats.internet +
+      cityStats.medical) /
+      4,
+  );
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -58,7 +107,7 @@ export default function ResourceManagement() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
         {resources.map((resource, index) => {
           const Icon = resource.icon;
           const percentage = (resource.current / resource.max) * 100;
@@ -157,14 +206,16 @@ export default function ResourceManagement() {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.8 }}
-        className="grid grid-cols-4 gap-4"
+        className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
       >
         <div className="bg-gradient-to-r from-cyber-yellow/10 to-transparent border border-cyber-yellow/20 rounded-lg p-4">
           <div className="flex items-center gap-2 mb-2">
             <Truck className="w-5 h-5 text-cyber-yellow" />
             <span className="text-sm text-cyber-text-dim">{t("supplyConvoys")}</span>
           </div>
-          <div className="text-2xl font-orbitron font-bold text-cyber-yellow">12</div>
+          <div className="text-2xl font-orbitron font-bold text-cyber-yellow">
+            {Math.max(1, Math.round(cityStats.gdp / 250))}
+          </div>
         </div>
 
         <div className="bg-gradient-to-r from-cyber-green/10 to-transparent border border-cyber-green/20 rounded-lg p-4">
@@ -172,7 +223,7 @@ export default function ResourceManagement() {
             <Heart className="w-5 h-5 text-cyber-green" />
             <span className="text-sm text-cyber-text-dim">{t("citizenSatisfaction")}</span>
           </div>
-          <div className="text-2xl font-orbitron font-bold text-cyber-green">78%</div>
+          <div className="text-2xl font-orbitron font-bold text-cyber-green">{Math.round(cityStats.happiness)}%</div>
         </div>
 
         <div className="bg-gradient-to-r from-cyber-blue/10 to-transparent border border-cyber-blue/20 rounded-lg p-4">
@@ -180,7 +231,7 @@ export default function ResourceManagement() {
             <Shield className="w-5 h-5 text-cyber-blue" />
             <span className="text-sm text-cyber-text-dim">{t("resourceSecurity")}</span>
           </div>
-          <div className="text-2xl font-orbitron font-bold text-cyber-blue">94%</div>
+          <div className="text-2xl font-orbitron font-bold text-cyber-blue">{Math.round(100 - cityStats.crime)}%</div>
         </div>
 
         <div className="bg-gradient-to-r from-cyber-purple/10 to-transparent border border-cyber-purple/20 rounded-lg p-4">
@@ -188,7 +239,7 @@ export default function ResourceManagement() {
             <Zap className="w-5 h-5 text-cyber-purple" />
             <span className="text-sm text-cyber-text-dim">{t("efficiency")}</span>
           </div>
-          <div className="text-2xl font-orbitron font-bold text-cyber-purple">87%</div>
+          <div className="text-2xl font-orbitron font-bold text-cyber-purple">{efficiency}%</div>
         </div>
       </motion.div>
     </div>

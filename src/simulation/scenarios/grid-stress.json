@@ -1,0 +1,56 @@
+{
+  "id": "neo-angeles-grid-stress",
+  "seed": "nexus-7-grid-stress",
+  "policyVersion": "policy-1.0.0",
+  "configuration": {
+    "minutesPerTick": 1,
+    "backgroundActionProbability": 0.15,
+    "ambientEventProbability": 0.08,
+    "agentRuntime": {
+      "globalCommandBudget": 2,
+      "agents": {
+        "atlas": { "commandBudget": 1, "cooldownTicks": 5, "priority": 90, "maxRiskTier": "high" },
+        "economica": { "commandBudget": 1, "cooldownTicks": 5, "priority": 60, "maxRiskTier": "medium" },
+        "civitas": { "commandBudget": 1, "cooldownTicks": 5, "priority": 80, "maxRiskTier": "high" },
+        "spectre": { "commandBudget": 1, "cooldownTicks": 5, "priority": 70, "maxRiskTier": "medium" }
+      }
+    },
+    "thresholds": {
+      "crimeHigh": 70,
+      "trafficHigh": 80,
+      "energyLow": 40,
+      "pollutionHigh": 75
+    }
+  },
+  "world": {
+    "schemaVersion": 1,
+    "scenarioId": "neo-angeles-grid-stress",
+    "tick": 0,
+    "clock": { "day": 1, "hour": 17, "minute": 30, "totalMinutes": 1050 },
+    "city": { "population": 8472934, "happiness": 61 },
+    "weather": {
+      "temp": 28,
+      "humidity": 72,
+      "wind": 9,
+      "condition": "cloudy",
+      "aqi": 118,
+      "pollution": 70
+    },
+    "economy": { "gdp": 2788 },
+    "infrastructure": {
+      "traffic": 88,
+      "energy": 36,
+      "water": 73,
+      "internet": 82,
+      "medical": 76
+    },
+    "security": { "crime": 46 },
+    "agents": {
+      "aria": { "status": "active", "mood": 78 },
+      "atlas": { "status": "active", "mood": 68 },
+      "economica": { "status": "warning", "mood": 64 },
+      "civitas": { "status": "warning", "mood": 52 },
+      "spectre": { "status": "active", "mood": 61 }
+    }
+  }
+}

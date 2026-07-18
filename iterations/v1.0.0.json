@@ -1,0 +1,35 @@
+{
+  "id": "iteration-v1.0.0",
+  "version": "1.0.0",
+  "date": "2026-07-16",
+  "trigger": "test",
+  "triggerReason": "The autonomy lab had all control-plane capabilities but needed an explicit, machine-audited definition of verified action evidence and reproducible release thresholds.",
+  "action": "Added replay and rollback metadata to accepted actions, three public versioned scenarios, a canonical readiness audit, a Verification view/API, extension contracts, and mobile Observer/Verification accessibility gates.",
+  "outcome": "NEXUS-7 now meets its v1 north-star thresholds and exposes the supporting scenario results, fingerprints, evidence requirements, and extension boundaries to humans and machines.",
+  "metrics": [
+    { "label": "Public scenarios", "before": 1, "after": 3 },
+    { "label": "Standard tests", "before": 53, "after": 56 },
+    { "label": "Primary views", "before": 24, "after": 25 },
+    { "label": "Browser tests", "before": 10, "after": 12 }
+  ],
+  "evidence": [
+    "Three scenarios replay twice for 250 ticks each with canonical equality",
+    "Verified autonomy loop rate meets or exceeds 90%",
+    "Deterministic replay success meets or exceeds 99%",
+    "Accepted actions reach 100% causal trace completeness and rollback coverage",
+    "Every scenario finishes with zero invariant violations",
+    "Observer and Verification pass mobile WCAG A/AA regression",
+    "Agent, ModelProvider, Scenario, and Repository extension contracts are documented"
+  ],
+  "artifacts": [
+    "src/verification/",
+    "src/app/api/verification/route.ts",
+    "src/components/verification/VerificationCenter.tsx",
+    "public/data/v1-readiness.json",
+    "src/simulation/scenarios/",
+    "docs/VERIFICATION.md",
+    "docs/SCENARIOS.md",
+    "docs/EXTENSIONS.md",
+    "docs/adr/0007-verified-autonomy-contract.md"
+  ]
+}

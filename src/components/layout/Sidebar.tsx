@@ -6,7 +6,8 @@ import {
   LayoutDashboard, Brain, LineChart, Terminal, 
   ScrollText, Bot, Atom, Satellite, Zap, TerminalSquare,
   Users, Box, BarChart3, Info, Newspaper, Siren, Cloud,
-  Settings, Trophy, Factory, MessageSquare, GitCommit
+  Settings, Trophy, Factory, MessageSquare, GitCommit, X, Microscope, Database,
+  GitPullRequestArrow, BadgeCheck, ActivitySquare, Vote
 } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { TranslationKey } from '@/i18n/translations';
@@ -27,29 +28,37 @@ const navItems = [
   { id: 'emergency', labelKey: 'emergency', icon: Siren },
   { id: 'weather', labelKey: 'weather', icon: Cloud },
   { id: 'resource', labelKey: 'resource', icon: Factory },
-  { id: 'social', labelKey: 'social', icon: MessageSquare },
+  { id: 'social', labelKey: 'socialHub', icon: MessageSquare },
   { id: 'evolution', labelKey: 'evolutionLog', icon: GitCommit },
+  { id: 'observer', labelKey: 'observer', icon: Microscope },
+  { id: 'experiments', labelKey: 'experiments', icon: Database },
+  { id: 'iteration', labelKey: 'iterationLabNav', icon: GitPullRequestArrow },
+  { id: 'verification', labelKey: 'verificationNav', icon: BadgeCheck },
+  { id: 'operations', labelKey: 'operationsNav', icon: ActivitySquare },
+  { id: 'participation', labelKey: 'participationNav', icon: Vote },
   { id: 'news', labelKey: 'news', icon: Newspaper },
   { id: 'achievements', labelKey: 'achievements', icon: Trophy },
   { id: 'settings', labelKey: 'settings', icon: Settings },
   { id: 'about', labelKey: 'about', icon: Info },
 ];
 
-export default function Sidebar() {
+interface SidebarProps {
+  mobileOpen: boolean;
+  onClose: () => void;
+}
+
+export default function Sidebar({ mobileOpen, onClose }: SidebarProps) {
   const { activeView, setActiveView, theme, setTheme, aiAgents } = useNexusStore();
   const { t } = useTranslation();
 
   return (
-    <motion.aside 
-      initial={{ x: -280 }}
-      animate={{ x: 0 }}
-      className="fixed left-0 top-0 h-full w-64 bg-cyber-darker/95 border-r border-cyber-blue/20 flex flex-col z-50"
+    <aside
+      className={`fixed left-0 top-0 z-50 flex h-full w-64 flex-col border-r border-cyber-blue/20 bg-cyber-darker/95 transition-transform duration-300 lg:translate-x-0 ${
+        mobileOpen ? 'translate-x-0' : '-translate-x-full'
+      }`}
     >
       <div className="p-6 border-b border-cyber-blue/20">
-        <motion.div 
-          className="flex items-center gap-3"
-          whileHover={{ scale: 1.02 }}
-        >
+        <motion.div className="flex items-center gap-3" whileHover={{ scale: 1.02 }}>
           <div className="w-10 h-10 rounded-lg bg-gradient-to-br from-cyber-blue to-cyber-purple flex items-center justify-center">
             <Zap className="w-6 h-6 text-white" />
           </div>
@@ -59,6 +68,14 @@ export default function Sidebar() {
             </h1>
             <p className="text-xs text-cyber-text-dim">OMNIScient Control</p>
           </div>
+          <button
+            type="button"
+            onClick={onClose}
+            aria-label="Close navigation"
+            className="ml-auto rounded-lg p-2 text-cyber-text-dim hover:bg-cyber-gray hover:text-cyber-text lg:hidden"
+          >
+            <X className="h-5 w-5" />
+          </button>
         </motion.div>
       </div>
 
@@ -69,7 +86,10 @@ export default function Sidebar() {
           return (
             <motion.button
               key={item.id}
-              onClick={() => setActiveView(item.id)}
+              onClick={() => {
+                setActiveView(item.id);
+                onClose();
+              }}
               whileHover={{ x: 4 }}
               whileTap={{ scale: 0.98 }}
               className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-all duration-200 ${
@@ -115,7 +135,7 @@ export default function Sidebar() {
               onClick={() => setTheme(t)}
               className={`flex-1 py-2 px-3 rounded text-xs font-medium transition-all ${
                 theme === t 
-                  ? 'bg-cyber-purple text-white' 
+                  ? 'bg-cyber-purple text-cyber-black font-bold'
                   : 'bg-cyber-gray text-cyber-text-dim hover:bg-cyber-gray-light'
               }`}
             >
@@ -124,6 +144,6 @@ export default function Sidebar() {
           ))}
         </div>
       </div>
-    </motion.aside>
+    </aside>
   );
 }

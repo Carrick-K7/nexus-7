@@ -7,7 +7,8 @@
   --cyber-darker: #08080c;
   --cyber-blue: #00f0ff;
   --cyber-blue-dim: #00a0aa;
-  --cyber-purple: #b829ff;
+  --cyber-cyan: #22d3ee;
+  --cyber-purple: #c04cff;
   --cyber-pink: #ff2d95;
   --cyber-yellow: #ffe82d;
   --cyber-green: #00ff88;
@@ -25,6 +26,7 @@
   --color-cyber-darker: var(--cyber-darker);
   --color-cyber-blue: var(--cyber-blue);
   --color-cyber-blue-dim: var(--cyber-blue-dim);
+  --color-cyber-cyan: var(--cyber-cyan);
   --color-cyber-purple: var(--cyber-purple);
   --color-cyber-pink: var(--cyber-pink);
   --color-cyber-yellow: var(--cyber-yellow);
@@ -69,6 +71,23 @@ body {
   color: var(--cyber-text);
   font-family: 'Rajdhani', sans-serif;
   overflow-x: hidden;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--cyber-blue);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @keyframes pulse-glow {

@@ -1,0 +1,34 @@
+{
+  "id": "iteration-v0.8.0",
+  "version": "0.8.0",
+  "date": "2026-07-16",
+  "trigger": "enhancement",
+  "triggerReason": "Deterministic runs and human approvals still lived in one browser, preventing shared observation, durable evidence, concurrent mutation safety, and trustworthy experiment recovery.",
+  "action": "Added a server-owned experiment service, memory and PostgreSQL repositories, optimistic concurrency, append-only event cursors, periodic snapshots, scheduler-driven ticks, historical forks, SSE streaming, roles, audit records, and verified report bundles.",
+  "outcome": "Experiments can now survive the browser, be replayed or branched from historical ticks, reject stale writers, stream evidence to observers, and export a self-contained verification report.",
+  "metrics": [
+    { "label": "Primary views", "before": 22, "after": 23 },
+    { "label": "Standard unit tests", "before": 39, "after": 48 },
+    { "label": "PostgreSQL integration tests", "before": 0, "after": 1 },
+    { "label": "Browser tests", "before": 8, "after": 9 }
+  ],
+  "evidence": [
+    "Real PostgreSQL 17 migration and repository integration test passes",
+    "The same browser workflow passes with memory and PostgreSQL backends",
+    "Stale expected versions are rejected instead of overwriting newer runs",
+    "Snapshots are stored at tick 0 and every five ticks",
+    "Historical forks pass deterministic report replay verification",
+    "Viewer role cannot mutate and every accepted mutation records actor and role",
+    "SSE and cursor APIs expose append-only event updates"
+  ],
+  "artifacts": [
+    "src/experiments/",
+    "src/app/api/experiments/",
+    "src/components/experiments/ExperimentPlatform.tsx",
+    "migrations/0001_experiment_platform.sql",
+    "src/experiments/experiment-service.test.ts",
+    "src/experiments/postgres-repository.test.ts",
+    "docs/adr/0005-persistent-experiment-platform.md",
+    "docs/EXPERIMENTS.md"
+  ]
+}

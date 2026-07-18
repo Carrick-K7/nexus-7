@@ -1,0 +1,145 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: nexus
+          POSTGRES_PASSWORD: nexus
+          POSTGRES_DB: nexus
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U nexus -d nexus"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Dependency audit
+        run: npm audit --audit-level=moderate
+
+      - name: Lint
+        run: npm run lint -- --max-warnings=0
+
+      - name: Unit tests
+        run: npm run test:run
+
+      - name: Create PostgreSQL recovery target
+        env:
+          PGPASSWORD: nexus
+        run: >-
+          psql -h 127.0.0.1 -U nexus -d nexus
+          -c "CREATE DATABASE nexus_restore"
+
+      - name: PostgreSQL repository and recovery integration
+        env:
+          TEST_DATABASE_URL: postgresql://nexus:nexus@127.0.0.1:5432/nexus
+          TEST_RESTORE_DATABASE_URL: postgresql://nexus:nexus@127.0.0.1:5432/nexus_restore
+        run: npm run test:integration
+
+      - name: Deterministic model regression gate
+        run: npm run verify:model
+
+      - name: Deployment controller contract gate
+        run: npm run verify:deployment-contract
+
+      - name: Operational intelligence acceptance gate
+        run: npm run verify:operations
+
+      - name: Coherent city model acceptance gate
+        run: npm run verify:city
+
+      - name: Causal diagnosis acceptance gate
+        run: npm run verify:diagnosis
+
+      - name: Goal-constrained planning acceptance gate
+        run: npm run verify:planning
+
+      - name: Outcome learning acceptance gate
+        run: npm run verify:outcomes
+
+      - name: Participatory governance acceptance gate
+        run: npm run verify:participation
+
+      - name: Closed-loop v2 certification gate
+        run: npm run verify:closure
+
+      - name: Live model regression gate
+        if: github.event_name == 'push'
+        env:
+          NEXUS_MODEL_PROVIDER: openai
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: gpt-5.6-luna
+        run: npm run verify:model:live
+
+      - name: End-to-end and accessibility tests
+        run: npm run test:e2e
+
+      - name: Long-horizon stability audit
+        run: npm run verify:stress
+
+      - name: Isolated quality evaluation
+        run: npm run evaluate:isolated -- quality
+
+      - name: Generate evidence manifest
+        env:
+          NEXUS_REQUIRE_LIVE_MODEL_EVIDENCE: ${{ github.event_name == 'push' }}
+        run: npm run evidence:generate
+
+      - name: Bind closed-loop certification to evidence manifest
+        run: npm run verify:closure
+
+      - name: Upload verification evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexus-verification-evidence
+          include-hidden-files: true
+          path: |
+            public/data/ci-evidence.json
+            public/data/v1-readiness.json
+            public/data/v1-1-stress.json
+            .artifacts/deployment-controller-conformance.json
+            .artifacts/operational-acceptance.json
+            .artifacts/city-model-acceptance.json
+            .artifacts/diagnosis-acceptance.json
+            .artifacts/planning-acceptance.json
+            .artifacts/outcome-learning-acceptance.json
+            .artifacts/participation-acceptance.json
+            .artifacts/closed-loop-certification.json
+            public/data/model-regression.json
+            .artifacts/isolated-evaluation.json
+
+      - name: Attest evidence provenance
+        if: github.event_name == 'push'
+        uses: actions/attest@v4
+        with:
+          subject-path: public/data/ci-evidence.json

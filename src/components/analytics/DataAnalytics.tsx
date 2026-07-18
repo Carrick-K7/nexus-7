@@ -1,10 +1,31 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useMemo } from "react";
 import { motion } from "framer-motion";
-import { AreaChart, Area, BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from "recharts";
-import { Activity, AlertTriangle, BarChart3, TrendingUp } from "lucide-react";
+import {
+  Activity,
+  AlertTriangle,
+  BarChart3,
+  TrendingUp,
+} from "lucide-react";
+import {
+  Area,
+  AreaChart,
+  Bar,
+  BarChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { useTranslation } from "@/hooks/useTranslation";
+import { useNexusStore } from "@/stores/nexus-store";
+import {
+  advanceClock,
+  buildActionTraces,
+  getTraceMetric,
+} from "@/simulation";
+import type { DomainEvent, SimulationMetric } from "@/simulation";
 
 interface ResourceData {
   time: string;
@@ -30,84 +51,6 @@ interface AgentTask {
   spectre: number;
 }
 
-interface ThreatData {
-  label: string;
-  value: number;
-  max: number;
-}
-
-const generateResourceData = (): ResourceData[] => {
-  const now = new Date();
-  return Array.from({ length: 12 }, (_, i) => {
-    const time = new Date(now.getTime() - (11 - i) * 5 * 60000);
-    return {
-      time: time.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }),
-      power: Math.floor(Math.random() * 30) + 60,
-      water: Math.floor(Math.random() * 20) + 70,
-      bandwidth: Math.floor(Math.random() * 40) + 50,
-    };
-  });
-};
-
-const INITIAL_EVENTS: CityEvent[] = [
-  { id: "1", type: "accident", title: "Vehicle Collision", location: "Neo Downtown Interchange", time: "2 min ago", severity: "medium" },
-  { id: "2", type: "crime", title: "Data Breach Attempt", location: "Chrome Heights Network", time: "5 min ago", severity: "high" },
-  { id: "3", type: "market", title: "Crypto Spike +12%", location: "Global Exchange", time: "8 min ago", severity: "low" },
-  { id: "4", type: "system", title: "Power Grid Fluctuation", location: "Industrial Sector 7", time: "12 min ago", severity: "medium" },
-  { id: "5", type: "accident", title: "Drone Malfunction", location: "Skyway L2", time: "15 min ago", severity: "low" },
-  { id: "6", type: "crime", title: "Unauthorized Access", location: "Financial District", time: "18 min ago", severity: "high" },
-];
-
-const INITIAL_TASKS: AgentTask[] = [
-  { name: "Security", atlas: 85, economica: 20, civitas: 30, spectre: 75 },
-  { name: "Analysis", atlas: 30, economica: 90, civitas: 45, spectre: 60 },
-  { name: "Infrastructure", atlas: 25, economica: 35, civitas: 80, spectre: 20 },
-  { name: "Surveillance", atlas: 40, economica: 15, civitas: 25, spectre: 95 },
-  { name: "Trading", atlas: 10, economica: 95, civitas: 20, spectre: 30 },
-];
-
-const THREAT_LEVELS: ThreatData[] = [
-  { label: "External Threats", value: 72, max: 100 },
-  { label: "System Integrity", value: 94, max: 100 },
-  { label: "Data Security", value: 65, max: 100 },
-  { label: "Infrastructure", value: 88, max: 100 },
-];
-
-const METRICS = [
-  { label: "Active Drones", value: 1247, change: "+23" },
-  { label: "Network Nodes", value: 8432, change: "+156" },
-  { label: "Power Output", value: "4.2 GW", change: "+0.3" },
-  { label: "Water Reserve", value: "78%", change: "-2%" },
-  { label: "Traffic Index", value: 67, change: "+5" },
-  { label: "Crime Rate", value: 23, change: "-8" },
-];
-
-const getEventIcon = (type: CityEvent["type"]) => {
-  switch (type) {
-    case "accident": return <AlertTriangle className="w-4 h-4" />;
-    case "crime": return <AlertTriangle className="w-4 h-4" />;
-    case "market": return <TrendingUp className="w-4 h-4" />;
-    case "system": return <Activity className="w-4 h-4" />;
-  }
-};
-
-const getEventColor = (type: CityEvent["type"]) => {
-  switch (type) {
-    case "accident": return "text-cyber-orange";
-    case "crime": return "text-cyber-red";
-    case "market": return "text-cyber-yellow";
-    case "system": return "text-cyber-blue";
-  }
-};
-
-const getSeverityColor = (severity: CityEvent["severity"]) => {
-  switch (severity) {
-    case "low": return "bg-cyber-green";
-    case "medium": return "bg-cyber-orange";
-    case "high": return "bg-cyber-red";
-  }
-};
-
 interface TooltipPayload {
   name: string;
   value: number;
@@ -121,73 +64,208 @@ interface CustomTooltipProps {
 }
 
 const CustomTooltip = ({ active, payload, label }: CustomTooltipProps) => {
-  if (active && payload && payload.length) {
-    return (
-      <div className="bg-cyber-dark/90 border border-cyber-blue/30 rounded-lg p-3 backdrop-blur-sm">
-        <p className="text-cyber-text-dim text-xs mb-1">{label}</p>
-        {payload.map((entry, index) => (
-          <p key={index} className="text-sm font-mono" style={{ color: entry.color }}>
-            {entry.name}: {entry.value}%
-          </p>
-        ))}
-      </div>
-    );
+  if (!active || !payload?.length) {
+    return null;
   }
-  return null;
+
+  return (
+    <div className="rounded-lg border border-cyber-blue/30 bg-cyber-dark/90 p-3 backdrop-blur-sm">
+      <p className="mb-1 text-xs text-cyber-text-dim">{label}</p>
+      {payload.map((entry) => (
+        <p key={entry.name} className="font-mono text-sm" style={{ color: entry.color }}>
+          {entry.name}: {entry.value}%
+        </p>
+      ))}
+    </div>
+  );
+};
+
+function classifyEvent(event: DomainEvent): CityEvent {
+  const metric = String(event.payload.metric ?? "");
+  const type: CityEvent["type"] =
+    metric === "crime"
+      ? "crime"
+      : metric === "traffic"
+        ? "accident"
+        : metric === "gdp" || metric === "happiness"
+          ? "market"
+          : "system";
+  const severity: CityEvent["severity"] =
+    event.type === "command.rejected"
+      ? "high"
+      : event.type === "observation.threshold"
+        ? "medium"
+        : "low";
+
+  return {
+    id: event.id,
+    type,
+    title: event.type,
+    location: event.correlationId,
+    time: `tick ${event.tick}`,
+    severity,
+  };
+}
+
+const getEventIcon = (type: CityEvent["type"]) =>
+  type === "market" ? (
+    <TrendingUp className="h-4 w-4" />
+  ) : type === "system" ? (
+    <Activity className="h-4 w-4" />
+  ) : (
+    <AlertTriangle className="h-4 w-4" />
+  );
+
+const getEventColor = (type: CityEvent["type"]) => {
+  switch (type) {
+    case "accident":
+      return "text-cyber-orange";
+    case "crime":
+      return "text-cyber-red";
+    case "market":
+      return "text-cyber-yellow";
+    default:
+      return "text-cyber-blue";
+  }
+};
+
+const getSeverityColor = (severity: CityEvent["severity"]) => {
+  switch (severity) {
+    case "high":
+      return "bg-cyber-red";
+    case "medium":
+      return "bg-cyber-orange";
+    default:
+      return "bg-cyber-green";
+  }
 };
 
 export default function DataAnalytics() {
   const { t } = useTranslation();
-  const [resourceData, setResourceData] = useState<ResourceData[]>(generateResourceData());
-  const [events] = useState<CityEvent[]>(INITIAL_EVENTS);
-  const [tasks] = useState<AgentTask[]>(INITIAL_TASKS);
-  const [threats] = useState<ThreatData[]>(THREAT_LEVELS);
+  const cityStats = useNexusStore((state) => state.cityStats);
+  const history = useNexusStore((state) => state.cityStatsHistory);
+  const simulation = useNexusStore((state) => state.simulation);
+  const traces = useMemo(
+    () => buildActionTraces(simulation.events),
+    [simulation.events],
+  );
+  const resourceData = useMemo<ResourceData[]>(() => {
+    const source =
+      history.length > 0
+        ? history.slice(-12)
+        : [{ tick: simulation.world.tick, stats: cityStats }];
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setResourceData(prev => {
-        const now = new Date();
-        const newPoint = {
-          time: now.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", hour12: false }),
-          power: Math.floor(Math.random() * 30) + 60,
-          water: Math.floor(Math.random() * 20) + 70,
-          bandwidth: Math.floor(Math.random() * 40) + 50,
-        };
-        return [...prev.slice(1), newPoint];
-      });
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
+    return source.map((snapshot) => {
+      const clock = advanceClock(
+        simulation.initialState.clock,
+        (snapshot.tick - simulation.initialState.tick) *
+          simulation.configuration.minutesPerTick,
+      );
+      return {
+        time: `${clock.hour.toString().padStart(2, "0")}:${clock.minute
+          .toString()
+          .padStart(2, "0")}`,
+        power: snapshot.stats.energy,
+        water: snapshot.stats.water,
+        bandwidth: snapshot.stats.internet,
+      };
+    });
+  }, [
+    cityStats,
+    history,
+    simulation.configuration.minutesPerTick,
+    simulation.initialState.clock,
+    simulation.initialState.tick,
+    simulation.world.tick,
+  ]);
+  const events = simulation.events
+    .filter((event) => event.type !== "city.metrics.updated")
+    .slice(-8)
+    .reverse()
+    .map(classifyEvent);
+  const taskDomains: Array<{
+    name: string;
+    metrics: SimulationMetric[];
+  }> = [
+    { name: "Security", metrics: ["crime"] },
+    {
+      name: "Infrastructure",
+      metrics: ["traffic", "energy", "pollution", "water", "medical"],
+    },
+    { name: "Economy", metrics: ["gdp", "happiness"] },
+    { name: "Network", metrics: ["internet"] },
+  ];
+  const tasks: AgentTask[] = taskDomains.map((domain) => {
+    const count = (agentId: string) =>
+      Math.min(
+        100,
+        traces.filter(
+          (trace) =>
+            trace.agentId === agentId &&
+            domain.metrics.includes(getTraceMetric(trace) ?? "crime"),
+        ).length * 20,
+      );
+    return {
+      name: domain.name,
+      atlas: count("atlas"),
+      economica: count("economica"),
+      civitas: count("civitas"),
+      spectre: count("spectre"),
+    };
+  });
+  const threats = [
+    { label: t("externalThreats"), value: Math.round(cityStats.crime), max: 100 },
+    {
+      label: t("systemIntegrity"),
+      value: Math.round(
+        (cityStats.energy + cityStats.water + cityStats.medical) / 3,
+      ),
+      max: 100,
+    },
+    { label: t("dataSecurity"), value: Math.round(cityStats.internet), max: 100 },
+    {
+      label: t("infrastructure"),
+      value: Math.round(
+        (cityStats.energy + cityStats.water + (100 - cityStats.traffic)) / 3,
+      ),
+      max: 100,
+    },
+  ];
+  const metrics = [
+    { label: "Population", value: cityStats.population.toLocaleString(), change: `tick ${simulation.world.tick}` },
+    { label: "GDP", value: cityStats.gdp.toFixed(1), change: "shared world" },
+    { label: "Power Output", value: `${cityStats.energy}%`, change: "live" },
+    { label: "Water Reserve", value: `${cityStats.water}%`, change: "live" },
+    { label: "Traffic Index", value: Math.round(cityStats.traffic), change: "live" },
+    { label: "Crime Rate", value: Math.round(cityStats.crime), change: "live" },
+  ];
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center gap-3">
-          <div className="p-2 rounded-lg bg-cyber-blue/20 border border-cyber-blue/30">
-            <BarChart3 className="w-6 h-6 text-cyber-blue" />
+          <div className="rounded-lg border border-cyber-blue/30 bg-cyber-blue/20 p-2">
+            <BarChart3 className="h-6 w-6 text-cyber-blue" />
           </div>
           <div>
             <h1 className="text-3xl font-orbitron font-bold text-cyber-blue cyber-text-glow">
-              {t('analytics_title')}
+              {t("analytics_title")}
             </h1>
-            <p className="text-cyber-text-dim mt-1">{t('analytics_desc')}</p>
+            <p className="mt-1 text-cyber-text-dim">{t("analytics_desc")}</p>
           </div>
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-2 gap-6">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-          className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-6"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <Activity className="w-5 h-5 text-cyber-blue" />
-            <h3 className="text-lg font-orbitron text-cyber-text">{t('resourceConsumption')}</h3>
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
+        <section className="rounded-xl border border-cyber-blue/20 bg-cyber-dark/50 p-6">
+          <div className="mb-4 flex items-center gap-2">
+            <Activity className="h-5 w-5 text-cyber-blue" />
+            <h2 className="text-lg font-orbitron text-cyber-text">
+              {t("resourceConsumption")}
+            </h2>
           </div>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-64 min-w-0">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
               <AreaChart data={resourceData}>
                 <defs>
                   <linearGradient id="colorPower" x1="0" y1="0" x2="0" y2="1">
@@ -206,78 +284,62 @@ export default function DataAnalytics() {
                 <XAxis dataKey="time" stroke="#4a4a5e" fontSize={10} tickLine={false} />
                 <YAxis stroke="#4a4a5e" fontSize={10} tickLine={false} axisLine={false} domain={[0, 100]} />
                 <Tooltip content={<CustomTooltip />} />
-                <Area type="monotone" dataKey="power" stroke="#00f0ff" fillOpacity={1} fill="url(#colorPower)" strokeWidth={2} name="Power" />
-                <Area type="monotone" dataKey="water" stroke="#00ff88" fillOpacity={1} fill="url(#colorWater)" strokeWidth={2} name="Water" />
-                <Area type="monotone" dataKey="bandwidth" stroke="#b829ff" fillOpacity={1} fill="url(#colorBandwidth)" strokeWidth={2} name="Bandwidth" />
+                <Area type="monotone" dataKey="power" stroke="#00f0ff" fill="url(#colorPower)" strokeWidth={2} name="Power" />
+                <Area type="monotone" dataKey="water" stroke="#00ff88" fill="url(#colorWater)" strokeWidth={2} name="Water" />
+                <Area type="monotone" dataKey="bandwidth" stroke="#b829ff" fill="url(#colorBandwidth)" strokeWidth={2} name="Bandwidth" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
-          <div className="flex items-center justify-center gap-6 mt-4">
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-cyber-blue" />
-              <span className="text-xs text-cyber-text-dim">{t('power')}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-cyber-green" />
-              <span className="text-xs text-cyber-text-dim">{t('water')}</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <div className="w-3 h-3 rounded-full bg-cyber-purple" />
-              <span className="text-xs text-cyber-text-dim">{t('bandwidth')}</span>
-            </div>
-          </div>
-        </motion.div>
+        </section>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.2 }}
-          className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-6"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <AlertTriangle className="w-5 h-5 text-cyber-orange" />
-            <h3 className="text-lg font-orbitron text-cyber-text">{t('cityEventTimeline')}</h3>
+        <section className="rounded-xl border border-cyber-blue/20 bg-cyber-dark/50 p-6">
+          <div className="mb-4 flex items-center gap-2">
+            <AlertTriangle className="h-5 w-5 text-cyber-orange" />
+            <h2 className="text-lg font-orbitron text-cyber-text">
+              {t("cityEventTimeline")}
+            </h2>
           </div>
-          <div className="space-y-3 h-72 overflow-y-auto pr-2">
-            {events.map((event, index) => (
-              <motion.div
+          <div className="h-72 space-y-3 overflow-y-auto pr-2">
+            {events.map((event) => (
+              <div
                 key={event.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.3 + index * 0.05 }}
-                className="flex items-start gap-3 p-3 bg-cyber-gray/30 rounded-lg border border-cyber-gray/20 hover:border-cyber-blue/30 transition-colors"
+                className="flex items-start gap-3 rounded-lg border border-cyber-gray/20 bg-cyber-gray/30 p-3"
               >
-                <div className={`p-2 rounded-lg ${getEventColor(event.type)}/20`}>
-                  <span className={getEventColor(event.type)}>{getEventIcon(event.type)}</span>
+                <div className="rounded-lg bg-cyber-black/30 p-2">
+                  <span className={getEventColor(event.type)}>
+                    {getEventIcon(event.type)}
+                  </span>
                 </div>
-                <div className="flex-1 min-w-0">
-                  <div className="flex items-center justify-between">
-                    <p className="text-sm text-cyber-text font-medium truncate">{event.title}</p>
-                    <div className={`w-2 h-2 rounded-full ${getSeverityColor(event.severity)}`} />
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="truncate text-sm font-medium text-cyber-text">
+                      {event.title}
+                    </p>
+                    <div className={`h-2 w-2 shrink-0 rounded-full ${getSeverityColor(event.severity)}`} />
                   </div>
-                  <p className="text-xs text-cyber-text-dim mt-1">{event.location}</p>
-                  <p className="text-xs text-cyber-blue-dim mt-1 font-mono">{event.time}</p>
+                  <p className="mt-1 truncate text-xs text-cyber-text-dim">{event.location}</p>
+                  <p className="mt-1 font-mono text-xs text-cyber-blue">{event.time}</p>
                 </div>
-              </motion.div>
+              </div>
             ))}
+            {events.length === 0 && (
+              <p className="text-sm text-cyber-text-dim">No domain events yet.</p>
+            )}
           </div>
-        </motion.div>
+        </section>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.3 }}
-          className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-6"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <BarChart3 className="w-5 h-5 text-cyber-purple" />
-            <h3 className="text-lg font-orbitron text-cyber-text">{t('aiAgentActivity')}</h3>
+        <section className="rounded-xl border border-cyber-blue/20 bg-cyber-dark/50 p-6">
+          <div className="mb-4 flex items-center gap-2">
+            <BarChart3 className="h-5 w-5 text-cyber-blue" />
+            <h2 className="text-lg font-orbitron text-cyber-text">
+              {t("aiAgentActivity")}
+            </h2>
           </div>
-          <div className="h-64">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-64 min-w-0">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0}>
               <BarChart data={tasks} layout="vertical">
-                <XAxis type="number" stroke="#4a4a5e" fontSize={10} tickLine={false} domain={[0, 100]} />
-                <YAxis dataKey="name" type="category" stroke="#4a4a5e" fontSize={10} tickLine={false} width={80} />
+                <XAxis type="number" stroke="#4a4a5e" fontSize={10} domain={[0, 100]} />
+                <YAxis dataKey="name" type="category" stroke="#4a4a5e" fontSize={10} width={90} />
                 <Tooltip content={<CustomTooltip />} />
                 <Bar dataKey="atlas" fill="#00f0ff" radius={[0, 4, 4, 0]} name="ATLAS" />
                 <Bar dataKey="economica" fill="#f0ff00" radius={[0, 4, 4, 0]} name="ECONOMICA" />
@@ -286,80 +348,68 @@ export default function DataAnalytics() {
               </BarChart>
             </ResponsiveContainer>
           </div>
-        </motion.div>
+        </section>
 
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-6"
-        >
-          <div className="flex items-center gap-2 mb-4">
-            <TrendingUp className="w-5 h-5 text-cyber-red" />
-            <h3 className="text-lg font-orbitron text-cyber-text">{t('threatLevelIndicators')}</h3>
+        <section className="rounded-xl border border-cyber-blue/20 bg-cyber-dark/50 p-6">
+          <div className="mb-4 flex items-center gap-2">
+            <TrendingUp className="h-5 w-5 text-cyber-red" />
+            <h2 className="text-lg font-orbitron text-cyber-text">
+              {t("threatLevelIndicators")}
+            </h2>
           </div>
           <div className="space-y-5">
-            {threats.map((threat, index) => (
-              <motion.div
-                key={threat.label}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: 0.5 + index * 0.1 }}
-                className="relative"
-              >
-                <div className="flex items-center justify-between mb-2">
+            {threats.map((threat) => (
+              <div key={threat.label}>
+                <div className="mb-2 flex items-center justify-between">
                   <span className="text-sm text-cyber-text">{threat.label}</span>
-                  <span className="text-lg font-bold font-mono text-cyber-blue">{threat.value}%</span>
+                  <span className="font-mono text-lg font-bold text-cyber-blue">
+                    {threat.value}%
+                  </span>
                 </div>
-                <div className="h-3 bg-cyber-dark rounded-full overflow-hidden border border-cyber-gray/30">
-                  <motion.div
-                    initial={{ width: 0 }}
-                    animate={{ width: `${(threat.value / threat.max) * 100}%` }}
-                    transition={{ delay: 0.6 + index * 0.1, duration: 1, ease: "easeOut" }}
+                <div className="h-3 overflow-hidden rounded-full border border-cyber-gray/30 bg-cyber-dark">
+                  <div
                     className={`h-full rounded-full ${
-                      threat.value > 80 ? "bg-cyber-red" : threat.value > 50 ? "bg-cyber-orange" : "bg-cyber-green"
+                      threat.value > 80
+                        ? "bg-cyber-green"
+                        : threat.value > 50
+                          ? "bg-cyber-orange"
+                          : "bg-cyber-red"
                     }`}
-                    style={{
-                      boxShadow: `0 0 10px ${
-                        threat.value > 80 ? "#ff3333" : threat.value > 50 ? "#ff8c00" : "#00ff88"
-                      }`,
-                    }}
+                    style={{ width: `${(threat.value / threat.max) * 100}%` }}
                   />
                 </div>
-              </motion.div>
+              </div>
             ))}
           </div>
-        </motion.div>
+        </section>
       </div>
 
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.6 }}
-        className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-6"
-      >
-        <div className="flex items-center gap-2 mb-4">
-          <Activity className="w-5 h-5 text-cyber-green" />
-          <h3 className="text-lg font-orbitron text-cyber-text">{t('liveCityMetrics')}</h3>
+      <section className="rounded-xl border border-cyber-blue/20 bg-cyber-dark/50 p-6">
+        <div className="mb-4 flex items-center gap-2">
+          <Activity className="h-5 w-5 text-cyber-green" />
+          <h2 className="text-lg font-orbitron text-cyber-text">
+            {t("liveCityMetrics")}
+          </h2>
         </div>
-        <div className="grid grid-cols-6 gap-4">
-          {METRICS.map((metric, index) => (
-            <motion.div
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 xl:grid-cols-6">
+          {metrics.map((metric) => (
+            <div
               key={metric.label}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.7 + index * 0.05 }}
-              className="bg-cyber-gray/30 rounded-lg p-4 border border-cyber-gray/20 hover:border-cyber-blue/30 transition-colors"
+              className="rounded-lg border border-cyber-gray/20 bg-cyber-gray/30 p-4"
             >
-              <div className="text-xs text-cyber-text-dim uppercase tracking-wider mb-1">{metric.label}</div>
-              <div className="text-xl font-bold text-cyber-text font-mono">{metric.value}</div>
-              <div className={`text-xs font-mono mt-1 ${metric.change.startsWith("+") ? "text-cyber-green" : metric.change.startsWith("-") ? "text-cyber-red" : "text-cyber-text-dim"}`}>
+              <div className="mb-1 text-xs uppercase tracking-wider text-cyber-text-dim">
+                {metric.label}
+              </div>
+              <div className="font-mono text-xl font-bold text-cyber-text">
+                {metric.value}
+              </div>
+              <div className="mt-1 font-mono text-xs text-cyber-blue">
                 {metric.change}
               </div>
-            </motion.div>
+            </div>
           ))}
         </div>
-      </motion.div>
+      </section>
     </div>
   );
 }

@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Cpu, HardDrive, Wifi, Shield } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
+import SandboxNotice from '@/components/sandbox/SandboxNotice';
 
 interface HistoryEntry {
   type: 'input' | 'output' | 'error' | 'success';
@@ -100,11 +101,13 @@ export default function Terminal() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-orbitron font-bold text-cyber-green cyber-text-glow">{t('terminal_title')}</h1>
         <p className="text-cyber-text-dim mt-1">{t('terminal_desc')}</p>
       </motion.div>
+
+      <SandboxNotice />
 
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
         ref={terminalRef}
@@ -134,7 +137,7 @@ export default function Terminal() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[
           { icon: Cpu, label: t('cpu'), value: '47%', color: 'cyber-blue' },
           { icon: HardDrive, label: t('ram'), value: '12.4 GB', color: 'cyber-purple' },

@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useNexusStore } from "@/stores/nexus-store";
 import { useCitySimulation } from "@/hooks/useCitySimulation";
 import Sidebar from "@/components/layout/Sidebar";
@@ -28,6 +29,12 @@ import AchievementsPanel from "@/components/achievements/AchievementsPanel";
 import ResourceManagement from "@/components/resource/ResourceManagement";
 import SocialHub from "@/components/social/SocialHub";
 import EvolutionLog from "@/components/evolution/EvolutionLog";
+import ObserverDashboard from "@/components/observer/ObserverDashboard";
+import ExperimentPlatform from "@/components/experiments/ExperimentPlatform";
+import IterationLab from "@/components/iteration/IterationLab";
+import VerificationCenter from "@/components/verification/VerificationCenter";
+import OperationsCenter from "@/components/operations/OperationsCenter";
+import ParticipationCenter from "@/components/participation/ParticipationCenter";
 
 const viewComponents: Record<string, React.ComponentType> = {
   dashboard: Dashboard,
@@ -52,10 +59,17 @@ const viewComponents: Record<string, React.ComponentType> = {
   resource: ResourceManagement,
   social: SocialHub,
   evolution: EvolutionLog,
+  observer: ObserverDashboard,
+  experiments: ExperimentPlatform,
+  iteration: IterationLab,
+  verification: VerificationCenter,
+  operations: OperationsCenter,
+  participation: ParticipationCenter,
 };
 
 export default function Home() {
   const { activeView, theme } = useNexusStore();
+  const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const ActiveComponent = viewComponents[activeView] || Dashboard;
   useCitySimulation();
 
@@ -63,9 +77,20 @@ export default function Home() {
     <div className="min-h-screen bg-cyber-black">
       <BackgroundEffects />
       {theme === 'matrix' && <MatrixRain enabled={true} opacity={0.7} />}
-      <Sidebar />
-      <Topbar />
-      <main className="ml-64 pt-16 min-h-screen">
+      {mobileNavOpen && (
+        <button
+          type="button"
+          aria-label="Close navigation"
+          className="fixed inset-0 z-40 bg-black/70 backdrop-blur-sm lg:hidden"
+          onClick={() => setMobileNavOpen(false)}
+        />
+      )}
+      <Sidebar
+        mobileOpen={mobileNavOpen}
+        onClose={() => setMobileNavOpen(false)}
+      />
+      <Topbar onOpenMenu={() => setMobileNavOpen(true)} />
+      <main className="min-h-screen pt-16 lg:ml-64">
         <ActiveComponent />
       </main>
     </div>

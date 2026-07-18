@@ -1,0 +1,29 @@
+{
+  "id": "iteration-v0.5.0",
+  "version": "0.5.0",
+  "date": "2026-07-16",
+  "trigger": "observation",
+  "triggerReason": "Deterministic replay proved what happened, but observers still lacked a complete explanation from trigger through evaluation.",
+  "action": "Added structured observations, proposals, commands, executions, evaluations, a full Action Trace, north-star metrics, tick reconstruction, counterfactual run comparison, and manifest-backed EvolutionLog entries.",
+  "outcome": "Humans can now inspect why an autonomous action happened, what guardrail accepted it, what changed, and whether the result matched the proposal.",
+  "metrics": [
+    { "label": "Primary views", "before": 21, "after": 22 },
+    { "label": "Unit tests", "before": 27, "after": 29 },
+    { "label": "Browser tests", "before": 7, "after": 8 },
+    { "label": "Action trace stages", "before": 2, "after": 5 }
+  ],
+  "evidence": [
+    "Policy actions produce complete observation-to-evaluation causal chains",
+    "Observer Dashboard reports verified loop and causal completeness rates",
+    "Any prior tick can be reconstructed from initial state and commands",
+    "Counterfactual seeds produce comparable metric and event deltas",
+    "Observer workflow passes WCAG A/AA checks in Chromium"
+  ],
+  "artifacts": [
+    "src/components/observer/ObserverDashboard.tsx",
+    "src/simulation/observation/traces.ts",
+    "src/simulation/observation/comparison.ts",
+    "iterations/v0.5.0.json",
+    "docs/adr/0002-causal-observation-model.md"
+  ]
+}

@@ -53,13 +53,13 @@ export default function NotificationCenter() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-orbitron font-bold text-cyber-yellow cyber-text-glow">NOTIFICATIONS</h1>
         <p className="text-cyber-text-dim mt-1">System alerts and event log</p>
       </motion.div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[
           { label: 'Total', value: allNotifications.length, color: 'cyber-blue' },
           { label: 'Unread', value: allNotifications.filter(n => !n.read).length, color: 'cyber-red' },
@@ -74,7 +74,7 @@ export default function NotificationCenter() {
         ))}
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {(['all', 'unread'] as const).map((f) => (
           <button key={f} onClick={() => setFilter(f)}
             className={`px-4 py-2 rounded-lg text-sm font-medium transition-all ${filter === f ? 'bg-cyber-blue text-white' : 'bg-cyber-gray text-cyber-text-dim hover:bg-cyber-gray-light'}`}>
@@ -88,7 +88,7 @@ export default function NotificationCenter() {
         </button>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {(['all', 'error', 'warning', 'info', 'success'] as const).map((t) => (
           <button key={t} onClick={() => setSelectedType(t)}
             className={`px-3 py-1.5 rounded text-xs font-medium transition-all capitalize ${selectedType === t ? 'bg-cyber-purple text-white' : 'bg-cyber-gray text-cyber-text-dim hover:bg-cyber-gray-light'}`}>

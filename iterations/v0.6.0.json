@@ -1,0 +1,29 @@
+{
+  "id": "iteration-v0.6.0",
+  "version": "0.6.0",
+  "date": "2026-07-16",
+  "trigger": "observation",
+  "triggerReason": "Causal traces exposed agent decisions, but policy logic, cooldowns, and arbitration were still embedded in the simulation step.",
+  "action": "Introduced a formal agent runtime with independent policies, capability contracts, per-agent and global budgets, cooldowns, priorities, risk ceilings, conflict resolution, and ARIA coordination.",
+  "outcome": "Agents now compete and cooperate through proposals instead of mutating the world, while every scheduling or rejection decision remains observable.",
+  "metrics": [
+    { "label": "Independent policy modules", "before": 0, "after": 4 },
+    { "label": "Runtime contract tests", "before": 0, "after": 5 },
+    { "label": "Unit tests", "before": 29, "after": 34 },
+    { "label": "Scheduler guardrails", "before": 1, "after": 5 }
+  ],
+  "evidence": [
+    "500-tick conformance test keeps every command within capability and budget contracts",
+    "All four domain agents receive scheduled work without starvation",
+    "Cooldown, per-agent budget, global budget, risk ceiling, and metric conflicts are tested",
+    "ARIA explains the latest scheduling decision and can pause or resume the run",
+    "Rejected proposals receive complete trace and evaluation records"
+  ],
+  "artifacts": [
+    "src/simulation/agents/runtime.ts",
+    "src/simulation/agents/scheduler.ts",
+    "src/simulation/agents/policies/",
+    "src/simulation/agents/agent-runtime.test.ts",
+    "docs/adr/0003-agent-runtime-and-coordination.md"
+  ]
+}

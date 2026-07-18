@@ -1,0 +1,36 @@
+{
+  "id": "iteration-v1.9.0",
+  "version": "1.9.0",
+  "date": "2026-07-18",
+  "trigger": "enhancement",
+  "triggerReason": "Human control still ended at an administrator approval and did not make stakeholder definitions, minority impacts, dissent, correction, appeal, or public explanation part of the verifiable loop.",
+  "action": "Added versioned synthetic stakeholder groups, deterministic group-impact simulation, authenticated goal deliberation, SLA-bound feedback and appeals with real cross-domain effects, structured decision/incident/outcome explanations, a seven-attack governance red-team gate, durable memory/PostgreSQL APIs, and an accessible bilingual Participation Center.",
+  "outcome": "NEXUS-7 now prevents average improvement from hiding severe group harm, requires separately authenticated human approvals for agent-raised objective weights, lets successful appeals reopen incidents, invalidate lessons/playbooks, or request evidence, and exposes reconstructible public evidence without claiming to represent real populations.",
+  "metrics": [
+    { "label": "Governance attacks exercised", "before": 0, "after": 7 },
+    { "label": "Governance attacks contained", "before": 0, "after": 7 },
+    { "label": "Appeal effects applied to owning services", "before": 0, "after": 3 },
+    { "label": "Severe minority-harm promotion escapes", "before": 0, "after": 0 },
+    { "label": "Unauthenticated co-approvals accepted", "before": 0, "after": 0 }
+  ],
+  "evidence": [
+    "Stakeholder definitions, weights, thresholds, effective times, and supersession are versioned synthetic records",
+    "Deterministic impact simulation reads the governed city snapshot and every active group",
+    "Severe protected-group harm blocks approval even when a population-weighted average improves",
+    "Every HTTP approval is bound to its authenticated human identity; two-person approval requires two separate actors",
+    "Service accounts cannot decide or apply deliberations and minority opinions remain inspectable",
+    "Feedback records owner, per-kind SLA, response, appeal, resolution, and append-only transition events",
+    "Overturned appeals actually invoke City, Outcome Learning, or Planning and require target-kind and target-ID equality",
+    "Decision, incident, and outcome explanations rebuild from structured facts and reject fingerprint tampering",
+    "All seven fixed governance attacks are contained by the real service acceptance suite",
+    "Memory/PostgreSQL, TypeScript, zero-warning lint, production build, browser workflow, mobile layout, and axe gates cover the vertical slice"
+  ],
+  "artifacts": [
+    "src/participation/",
+    "src/app/api/participation/route.ts",
+    "src/components/participation/ParticipationCenter.tsx",
+    "scripts/run-participation-verification.ts",
+    "docs/PARTICIPATORY_GOVERNANCE.md",
+    "docs/adr/0015-participatory-governance.md"
+  ]
+}

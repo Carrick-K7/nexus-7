@@ -1,0 +1,39 @@
+{
+  "id": "iteration-v1.5.0",
+  "version": "1.5.0",
+  "date": "2026-07-18",
+  "trigger": "enhancement",
+  "triggerReason": "The deterministic city shared core metrics, but derived values, scenario truth, objectives, guardrails, and incident impact were not represented by one durable and traceable model.",
+  "action": "Added a nine-domain ontology and shared snapshot, deterministic cross-domain mechanisms, 20 truth-labelled scenarios, versioned objectives and guardrails, deduplicated synthetic city incidents, a generic atomic lifecycle repository, Observer drill-down, shared legacy projections, and explicit narrative sandbox boundaries.",
+  "outcome": "Every governed city view can now trace its business state to the same world or event stream, synthetic detection quality is measurable against replayable truth, and future diagnosis and learning records have a common workspace-scoped persistence envelope.",
+  "metrics": [
+    { "label": "Versioned city metrics", "before": 10, "after": 22 },
+    { "label": "Represented city domains", "before": 5, "after": 9 },
+    { "label": "Truth-labelled public city scenarios", "before": 0, "after": 20 },
+    { "label": "Deterministic mechanism families", "before": 0, "after": 5 },
+    { "label": "Governed converged legacy views", "before": 5, "after": 7 }
+  ],
+  "evidence": [
+    "Every ontology metric declares unit, legal range, beneficial direction, update frequency, owner, source, formula, observability and sensitivities",
+    "Energy, congestion, network, pollution and water cascades execute in the simulation core and emit causal domain events",
+    "Five incident families each cover normal, single-fault, cascade and conflicting-objective modes",
+    "The reference truth corpus reaches 100% precision, recall and deterministic replay with zero invariant violations",
+    "Objectives, guardrails, scenario truth and incidents persist atomically with append-only lifecycle events in memory and PostgreSQL",
+    "Lifecycle records and events survive checksum backup/restore while older backup documents remain compatible",
+    "Observer exposes the shared snapshot, full metric dictionary and persisted synthetic incident truth in English and Chinese",
+    "Weather, Resource, Trading, Emergency, Analytics, News and Missions use shared governed state with no component business clocks or randomness",
+    "Terminal, Quantum, Satellite and Hacker explicitly declare that they are narrative sandboxes",
+    "133 standard tests, 7 real PostgreSQL tests, 16 browser/axe tests, a production build, 12 model cases and 10,000-tick stress verification pass"
+  ],
+  "artifacts": [
+    "src/city/",
+    "src/lifecycle/",
+    "src/app/api/city/route.ts",
+    "src/components/observer/ObserverDashboard.tsx",
+    "src/components/sandbox/SandboxNotice.tsx",
+    "migrations/0007_lifecycle_records.sql",
+    "scripts/run-city-verification.ts",
+    "docs/COHERENT_CITY_MODEL.md",
+    "docs/adr/0012-coherent-city-and-incident-model.md"
+  ]
+}

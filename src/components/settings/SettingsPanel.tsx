@@ -76,7 +76,7 @@ export default function SettingsPanel() {
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -121,7 +121,7 @@ export default function SettingsPanel() {
             <h2 className="text-lg font-orbitron font-bold text-cyber-text">{t("language")}</h2>
           </div>
           
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             <button
               onClick={() => setLanguage("en")}
               className={`p-4 rounded-lg border-2 transition-all ${
@@ -280,7 +280,7 @@ export default function SettingsPanel() {
           <Info className="w-5 h-5 text-cyber-purple" />
           <h2 className="text-lg font-orbitron font-bold text-cyber-text">{t("systemInformation")}</h2>
         </div>
-        <div className="grid grid-cols-3 gap-4 text-sm">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 text-sm">
           <div>
             <div className="text-cyber-text-dim">Version</div>
             <div className="text-cyber-text font-mono">NEXUS-7 v0.5.1</div>

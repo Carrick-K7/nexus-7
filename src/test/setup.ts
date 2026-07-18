@@ -1,19 +1,43 @@
 import '@testing-library/jest-dom';
+import React from 'react';
+
+const MOTION_ONLY_PROPS = new Set([
+  'animate',
+  'exit',
+  'initial',
+  'layoutId',
+  'transition',
+  'whileHover',
+  'whileTap',
+]);
+
+const mockMotionElement = (tag: keyof React.JSX.IntrinsicElements) =>
+  function MockMotionElement({
+    children,
+    ...props
+  }: React.PropsWithChildren<Record<string, unknown>>) {
+    const domProps = Object.fromEntries(
+      Object.entries(props).filter(([key]) => !MOTION_ONLY_PROPS.has(key)),
+    );
+
+    return React.createElement(tag, domProps, children);
+  };
 
 // Mock framer-motion
 vi.mock('framer-motion', () => ({
   motion: {
-    div: ({ children }: { children: React.ReactNode }) => children,
-    button: ({ children }: { children: React.ReactNode }) => children,
-    aside: ({ children }: { children: React.ReactNode }) => children,
-    header: ({ children }: { children: React.ReactNode }) => children,
-    main: ({ children }: { children: React.ReactNode }) => children,
-    nav: ({ children }: { children: React.ReactNode }) => children,
-    h1: ({ children }: { children: React.ReactNode }) => children,
-    h2: ({ children }: { children: React.ReactNode }) => children,
-    h3: ({ children }: { children: React.ReactNode }) => children,
-    p: ({ children }: { children: React.ReactNode }) => children,
-    span: ({ children }: { children: React.ReactNode }) => children,
+    div: mockMotionElement('div'),
+    button: mockMotionElement('button'),
+    aside: mockMotionElement('aside'),
+    header: mockMotionElement('header'),
+    main: mockMotionElement('main'),
+    nav: mockMotionElement('nav'),
+    section: mockMotionElement('section'),
+    h1: mockMotionElement('h1'),
+    h2: mockMotionElement('h2'),
+    h3: mockMotionElement('h3'),
+    p: mockMotionElement('p'),
+    span: mockMotionElement('span'),
   },
   useAnimation: () => ({
     start: vi.fn(),

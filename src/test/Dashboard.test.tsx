@@ -7,16 +7,9 @@ describe('Dashboard Component', () => {
   beforeEach(() => {
     vi.clearAllMocks();
     const store = useNexusStore.getState();
-    store.updateCityStats({
-      population: 8472934,
-      energy: 78,
-      traffic: 56,
-      crime: 23,
-      pollution: 34,
-      medical: 85,
-      internet: 94,
-      water: 91,
-    });
+    store.resetSimulation();
+    store.pauseSimulation();
+    store.setLanguage('en');
   });
 
   it('renders city overview heading', () => {
@@ -52,15 +45,21 @@ describe('useNexusStore', () => {
     expect(store.cityStats).toBeDefined();
     expect(store.districts).toBeDefined();
     expect(Array.isArray(store.districts)).toBe(true);
+    expect(store.simulation.world).toBeDefined();
   });
 
-  it('should update city stats', () => {
+  it('advances only through simulation steps while paused', () => {
     const store = useNexusStore.getState();
-    const initialEnergy = store.cityStats.energy;
+    store.resetSimulation();
+    store.pauseSimulation();
+    const initialTick = useNexusStore.getState().simulation.world.tick;
 
-    store.updateCityStats({ energy: initialEnergy + 10 });
+    store.advanceSimulation();
+    expect(useNexusStore.getState().simulation.world.tick).toBe(initialTick);
 
-    expect(useNexusStore.getState().cityStats.energy).toBe(initialEnergy + 10);
+    store.stepSimulationOnce();
+    expect(useNexusStore.getState().simulation.world.tick).toBe(initialTick + 1);
+    expect(useNexusStore.getState().cityStatsHistory).toHaveLength(1);
   });
 
   it('should change language', () => {
@@ -73,21 +72,14 @@ describe('useNexusStore', () => {
     expect(useNexusStore.getState().language).toBe('zh');
   });
 
-  it('should dispatch agent action and update cityStats', () => {
+  it('verifies replay for the current deterministic run', () => {
     const store = useNexusStore.getState();
-    const initialCrime = store.cityStats.crime;
+    store.resetSimulation();
+    store.pauseSimulation();
+    store.stepSimulationOnce();
+    store.stepSimulationOnce();
+    store.verifySimulationReplay();
 
-    store.dispatchAgentAction('atlas', { crime: Math.max(0, initialCrime - 2) });
-
-    expect(useNexusStore.getState().cityStats.crime).toBeLessThanOrEqual(initialCrime);
-  });
-
-  it('should add agent logs', () => {
-    const store = useNexusStore.getState();
-    const initialLogCount = store.agentLogs.length;
-
-    store.addAgentLog({ type: 'info', message: 'Test log', agentId: 'atlas' });
-
-    expect(useNexusStore.getState().agentLogs.length).toBe(initialLogCount + 1);
+    expect(useNexusStore.getState().simulation.replay.status).toBe('verified');
   });
 });

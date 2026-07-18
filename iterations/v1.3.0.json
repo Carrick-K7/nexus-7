@@ -1,0 +1,38 @@
+{
+  "id": "iteration-v1.3.0",
+  "version": "1.3.0",
+  "date": "2026-07-16",
+  "trigger": "enhancement",
+  "triggerReason": "Governed deployment still trusted transient role claims, local drill files, a single deployment environment, and unsigned in-process release policy.",
+  "action": "Added persistent organization membership and service-account lifecycle, federated workload OIDC, least-privilege CI/worker/deployment identities, signed remote evidence ingestion with freshness alerts, signed release-policy bundles, and ordered development-to-staging-to-production promotion.",
+  "outcome": "NEXUS-7 now treats identity, evidence freshness, policy authority, environment order, runtime SLOs, and recovery history as durable and independently observable governance state.",
+  "metrics": [
+    { "label": "Workload identity profiles", "before": 0, "after": 3 },
+    { "label": "Persistent governance domains", "before": 0, "after": 5 },
+    { "label": "Release environments", "before": 1, "after": 3 },
+    { "label": "Remote evidence freshness classes", "before": 0, "after": 4 }
+  ],
+  "evidence": [
+    "OIDC roles are replaced by authoritative persisted workspace membership",
+    "CI, worker, and deployment-controller service accounts receive disjoint permission templates",
+    "Signed remote CI/model/recovery/deployment receipts are verified, stored idempotently, and age-alerted",
+    "Signed organization release policies are versioned and superseded transactionally",
+    "The same artifact must promote through development and staging before production",
+    "Governance identity, audit, policy, evidence history, expiry, traffic, and SLO state are visible in the UI",
+    "PostgreSQL backup and restore preserve memberships, service accounts, evidence, and release policies",
+    "Legacy v1.2 backups remain checksum-verifiable and restore with empty governance tables",
+    "101 unit/component/service tests, 4 real PostgreSQL tests, 14 browser/accessibility tests, and a 10,000-tick stress run pass"
+  ],
+  "artifacts": [
+    "src/governance/",
+    "src/evidence/remote-evidence-receipt.ts",
+    "src/app/api/governance/",
+    "src/iteration/service.ts",
+    "src/components/verification/VerificationCenter.tsx",
+    "src/components/iteration/IterationLab.tsx",
+    "migrations/0004_identity_governance.sql",
+    ".github/workflows/evidence-receipts.yml",
+    "docs/FEDERATED_OPERATIONS.md",
+    "docs/adr/0010-federated-operations.md"
+  ]
+}

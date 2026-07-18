@@ -1,0 +1,37 @@
+{
+  "id": "iteration-v1.7.0",
+  "version": "1.7.0",
+  "date": "2026-07-18",
+  "trigger": "enhancement",
+  "triggerReason": "An eligible causal diagnosis still could not be converted into a safe choice among no action and multiple bounded interventions with comparable evidence, resource constraints, stopping rules, and human authorization.",
+  "action": "Added a strict versioned Intervention DSL, provenance-preserving candidate portfolios, Pareto comparison, paired multi-seed experiment designs, first-sample guardrail stops, deterministic replay, resource-aware isolated scheduling, durable planning decisions, authenticated APIs, and an accessible Planning Workbench.",
+  "outcome": "NEXUS-7 can now compare no action with at least two distinct synthetic interventions, explain their trade-offs and rejection reasons, stop unsafe experiments immediately, and prevent staging when diagnosis trust, capability, budget, schedule, experiment evidence, or human approvals are missing.",
+  "metrics": [
+    { "label": "Synthetic incident plans", "before": 0, "after": 15 },
+    { "label": "Valid intervention candidates", "before": 0, "after": 30 },
+    { "label": "No-action baselines", "before": 0, "after": 15 },
+    { "label": "Paired experiment seeds", "before": 0, "after": 75 },
+    { "label": "Ungated staged plans", "before": 0, "after": 0 }
+  ],
+  "evidence": [
+    "Every incident plan contains no action and two valid declarative candidates",
+    "The strict DSL rejects arbitrary fields, action kinds, capability mismatches, unbounded values, invalid resource claims, and broken inverses",
+    "Rule, validated-model, human, and no-action provenance is preserved while equivalent action sets are deduplicated",
+    "Every candidate records benefit, cost, risk, synthetic group impacts, Pareto position, dominators, and rejection reasons",
+    "Five paired seeds freeze objectives, guardrails, sample windows, stopping rules, Holm-Bonferroni correction, regression-to-mean control, and cycle control",
+    "All 225 experiment runs replay deterministically and injected guardrail failures stop at the first sample",
+    "Isolated scheduling records budget and resource conflicts instead of contaminating a shared world",
+    "High-risk or irreversible candidates declare two distinct human-admin approvals; service accounts cannot approve",
+    "Memory and PostgreSQL persist plans, decisions, and append-only causal events through the shared lifecycle contract",
+    "Planning Workbench exposes no-action, alternatives, evidence controls, queue reasons, approvals, and the synthetic staging boundary",
+    "Planning acceptance, focused unit tests, PostgreSQL round trip, TypeScript, lint, production build, and browser/axe gates pass"
+  ],
+  "artifacts": [
+    "src/planning/",
+    "src/app/api/planning/route.ts",
+    "src/components/observer/ObserverDashboard.tsx",
+    "scripts/run-planning-verification.ts",
+    "docs/GOAL_CONSTRAINED_PLANNING.md",
+    "docs/adr/0014-goal-constrained-planning.md"
+  ]
+}

@@ -1,0 +1,31 @@
+{
+  "id": "iteration-v0.7.0",
+  "version": "0.7.0",
+  "date": "2026-07-16",
+  "trigger": "enhancement",
+  "triggerReason": "The constrained agent runtime could schedule deterministic policies, but it lacked a safe boundary for fallible external model proposals and explicit human authorization.",
+  "action": "Added a pluggable model-provider interface, deterministic mock provider, structured proposal validation, prompt and policy versioning, token/cost/timeout budgets, fallback behavior, risk-tiered approval, and an Observer approval queue.",
+  "outcome": "Model output is now treated as untrusted advice. Only validated and policy-approved commands enter the deterministic run, while medium and high risk proposals require an auditable human decision.",
+  "metrics": [
+    { "label": "Model provider contract tests", "before": 0, "after": 6 },
+    { "label": "Risk tiers enforced", "before": 1, "after": 4 },
+    { "label": "Unit tests", "before": 34, "after": 39 },
+    { "label": "Browser tests", "before": 8, "after": 8 }
+  ],
+  "evidence": [
+    "Deterministic mock proposals are byte-equivalent for the same seed and context",
+    "Malformed, timeout, token/cost budget, capability, and critical-risk paths cannot bypass validation",
+    "Medium-risk proposals require explicit approval before entering the next simulation tick",
+    "Approved model commands produce observation, proposal, command, execution, and evaluation records",
+    "Observer browser coverage verifies pending, approved, and executed approval states",
+    "ARIA exposes model provenance, usage, latency, approval status, and fallback reason"
+  ],
+  "artifacts": [
+    "src/simulation/models/",
+    "src/components/observer/ObserverDashboard.tsx",
+    "src/stores/nexus-store.ts",
+    "src/simulation/models/model-provider.test.ts",
+    "src/test/ObserverDashboard.test.tsx",
+    "docs/adr/0004-human-in-the-loop-model-boundary.md"
+  ]
+}

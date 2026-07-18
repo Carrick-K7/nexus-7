@@ -3,17 +3,23 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
 import type { TranslationKey } from "@/i18n/translations";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import {
   GitCommit, Brain, TrendingUp, Target, Lightbulb,
-  CheckCircle2, Clock, Zap, BarChart2, Eye
+  CheckCircle2, Clock, Zap, BarChart2, Eye, GitPullRequestArrow
 } from "lucide-react";
+import type { ImprovementProposal } from "@/iteration/types";
 
 interface IterationEntry {
   id: string;
   version: string;
   date: string;
-  trigger: "observation" | "bug" | "enhancement" | "test";
+  trigger:
+    | "observation"
+    | "bug"
+    | "enhancement"
+    | "test"
+    | "milestone";
   triggerReason: string;
   action: string;
   outcome: string;
@@ -22,6 +28,9 @@ interface IterationEntry {
     after: number;
     label: string;
   }[];
+  source?: "manifest" | "git";
+  evidence?: string[];
+  artifacts?: string[];
 }
 
 const evolutionLog: IterationEntry[] = [
@@ -47,6 +56,8 @@ const getTriggerIcon = (trigger: IterationEntry["trigger"]) => {
     case "bug": return Target;
     case "enhancement": return TrendingUp;
     case "test": return CheckCircle2;
+    case "milestone": return Zap;
+    default: return GitCommit;
   }
 };
 
@@ -56,6 +67,8 @@ const getTriggerColor = (trigger: IterationEntry["trigger"]) => {
     case "bug": return "cyber-red";
     case "enhancement": return "cyber-green";
     case "test": return "cyber-yellow";
+    case "milestone": return "cyber-purple";
+    default: return "cyber-gray";
   }
 };
 
@@ -65,6 +78,8 @@ const getTriggerLabel = (trigger: IterationEntry["trigger"], t: (key: Translatio
     case "bug": return t("trigger_bug");
     case "enhancement": return t("trigger_enhancement");
     case "test": return t("trigger_test");
+    case "milestone": return t("trigger_milestone");
+    default: return trigger;
   }
 };
 
@@ -75,17 +90,29 @@ export default function EvolutionLog() {
   const [currentIndex, setCurrentIndex] = useState(0);
   const [entries, setEntries] = useState<IterationEntry[]>([]);
   const [loading, setLoading] = useState(true);
-  const autoPlayRef = useRef(autoPlay);
+  const [controlledIterations, setControlledIterations] = useState<
+    ImprovementProposal[]
+  >([]);
 
   useEffect(() => {
-    autoPlayRef.current = autoPlay;
-  }, [autoPlay]);
-
-  useEffect(() => {
-    fetch("/data/git-log.json")
+    fetch("/data/iteration-manifests.json")
       .then(r => { if (!r.ok) throw new Error("not found"); return r.json(); })
-      .then(data => { setEntries(data); setLoading(false); })
+      .then((data: IterationEntry[]) => {
+        setEntries(data.filter(entry => entry.id && entry.triggerReason));
+        setCurrentIndex(0);
+        setLoading(false);
+      })
       .catch(() => { setEntries(evolutionLog); setLoading(false); });
+  }, []);
+
+  useEffect(() => {
+    fetch("/api/iterations", { cache: "no-store" })
+      .then((response) => {
+        if (!response.ok) throw new Error("iteration workflow unavailable");
+        return response.json() as Promise<{ proposals: ImprovementProposal[] }>;
+      })
+      .then((data) => setControlledIterations(data.proposals))
+      .catch(() => setControlledIterations([]));
   }, []);
 
   useEffect(() => {
@@ -105,7 +132,7 @@ export default function EvolutionLog() {
     : selectedEntry;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <div className="flex items-center gap-3 mb-2">
           <div className="p-2 rounded-lg bg-cyber-purple/20 border border-cyber-purple/30">
@@ -142,6 +169,52 @@ export default function EvolutionLog() {
           </button>
         </div>
       </div>
+
+      <section className="rounded-xl border border-cyber-green/30 bg-cyber-green/5 p-4 sm:p-5">
+        <div className="mb-3 flex items-center gap-2">
+          <GitPullRequestArrow className="h-5 w-5 text-cyber-green" />
+          <div>
+            <h2 className="font-orbitron text-lg text-cyber-text">
+              {t("controlledIterations")}
+            </h2>
+            <p className="text-sm text-cyber-text-dim">
+              {t("controlledIterationsDesc")}
+            </p>
+          </div>
+          <span className="ml-auto rounded-full bg-cyber-green/15 px-3 py-1 text-sm text-cyber-green">
+            {controlledIterations.length}
+          </span>
+        </div>
+        {controlledIterations.length > 0 ? (
+          <div className="grid gap-3 lg:grid-cols-3">
+            {controlledIterations.slice(0, 3).map((proposal) => (
+              <div
+                key={proposal.id}
+                className="rounded-lg border border-cyber-gray/30 bg-cyber-black/20 p-3"
+              >
+                <div className="flex items-center justify-between gap-2">
+                  <span className="truncate text-sm font-semibold text-cyber-text">
+                    {proposal.title}
+                  </span>
+                  <span className="text-xs text-cyber-green">
+                    {proposal.status}
+                  </span>
+                </div>
+                <p className="mt-2 font-mono text-xs text-cyber-purple">
+                  {proposal.implementation.branchName}
+                </p>
+                <p className="mt-2 text-xs text-cyber-text-dim">
+                  proposal → experiment → approval → canary → promotion
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <p className="text-sm text-cyber-text-dim">
+            {t("noControlledIterations")}
+          </p>
+        )}
+      </section>
 
       <div className="relative">
         <div className="absolute left-6 top-0 bottom-0 w-px bg-gradient-to-b from-cyber-purple via-cyber-blue to-cyber-gray/30" />
@@ -189,6 +262,7 @@ export default function EvolutionLog() {
                         entry.trigger === "observation" ? "bg-cyber-blue/20 text-cyber-blue" :
                         entry.trigger === "bug" ? "bg-cyber-red/20 text-cyber-red" :
                         entry.trigger === "enhancement" ? "bg-cyber-green/20 text-cyber-green" :
+                        entry.trigger === "milestone" ? "bg-cyber-purple/20 text-cyber-purple" :
                         "bg-cyber-yellow/20 text-cyber-yellow"
                       }`}>
                         <TriggerIcon className="w-3 h-3" />
@@ -239,7 +313,7 @@ export default function EvolutionLog() {
           {displayEntry.metrics.some(m => m.before !== m.after) && (
             <div className="mt-4 pt-4 border-t border-cyber-gray/30">
               <div className="text-xs text-cyber-text-dim uppercase tracking-wider mb-3">{t("metricsImpact")}</div>
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                 {displayEntry.metrics.filter(m => m.before !== m.after).map((metric) => (
                   <div key={metric.label} className="flex items-center gap-3">
                     <span className="text-xs text-cyber-text-dim w-24 truncate">{metric.label}</span>
@@ -263,6 +337,36 @@ export default function EvolutionLog() {
               </div>
             </div>
           )}
+
+          {(displayEntry.evidence?.length || displayEntry.artifacts?.length) && (
+            <div className="mt-4 grid gap-4 border-t border-cyber-gray/30 pt-4 lg:grid-cols-2">
+              <div>
+                <div className="mb-2 text-xs uppercase tracking-wider text-cyber-text-dim">
+                  {t("verificationEvidence")}
+                </div>
+                <ul className="space-y-2">
+                  {(displayEntry.evidence ?? []).map((item) => (
+                    <li key={item} className="flex gap-2 text-sm text-cyber-text">
+                      <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-cyber-green" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div>
+                <div className="mb-2 text-xs uppercase tracking-wider text-cyber-text-dim">
+                  {t("iterationArtifacts")}
+                </div>
+                <ul className="space-y-2">
+                  {(displayEntry.artifacts ?? []).map((item) => (
+                    <li key={item}>
+                      <code className="text-xs text-cyber-blue">{item}</code>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          )}
         </motion.div>
       )}
 
@@ -276,7 +380,7 @@ export default function EvolutionLog() {
           <Eye className="w-5 h-5 text-cyber-purple" />
           {t("howToObserve")}
         </h3>
-        <div className="grid grid-cols-3 gap-4 text-sm">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 text-sm">
           <div className="p-4 bg-cyber-dark/50 rounded-lg">
             <div className="flex items-center gap-2 mb-2">
               <div className="w-3 h-3 rounded-full bg-cyber-blue animate-pulse" />

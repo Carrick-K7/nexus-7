@@ -1,0 +1,36 @@
+{
+  "id": "iteration-v1.8.0",
+  "version": "1.8.0",
+  "date": "2026-07-18",
+  "trigger": "enhancement",
+  "triggerReason": "A safely staged intervention still had no independent delayed evaluation, invalidatable organizational memory, context-checked reuse, or governed path from evidence to the next improvement proposal.",
+  "action": "Added an independent deterministic Outcome Evaluator with three horizons and frozen comparisons, late-evidence revision and incident reopening, a lineage-preserving Lesson Registry, invalidation-aware response playbooks, governed learning proposals, durable memory/PostgreSQL services and APIs, and a bilingual Learning Observatory.",
+  "outcome": "NEXUS-7 can now distinguish short-term movement from sustained synthetic benefit, retain failure and uncertainty, revise conclusions when late harm arrives, prevent harmful or invalid memory from becoming a recommendation, and route learning back through the existing controlled release chain.",
+  "metrics": [
+    { "label": "Acceptance outcomes", "before": 0, "after": 4 },
+    { "label": "Delayed outcome windows", "before": 0, "after": 12 },
+    { "label": "Verdict vocabulary covered", "before": 0, "after": 4 },
+    { "label": "Deterministic outcome replay (%)", "before": 0, "after": 100 },
+    { "label": "Harmful positive retrievals", "before": 0, "after": 0 }
+  ],
+  "evidence": [
+    "The evaluator is explicitly independent from proposing Agents and records deterministic repeated fingerprints",
+    "Every outcome evaluates 15-, 60-, and 180-tick windows against frozen, historical, and same-seed seasonal comparisons",
+    "Beneficial, harmful, neutral, and inconclusive verdicts are represented in the acceptance corpus",
+    "Late synthetic harm creates a new outcome revision, invalidates superseded lessons and playbooks, and reopens the city incident",
+    "Success, failure, rollback, and inconclusive lessons remain in the registry with complete outcome provenance",
+    "Only validated success lessons are positive-retrieval eligible",
+    "Playbook reuse rechecks lesson, context, drift, trust, capability, budget, experiment, and human approval gates",
+    "Generated policy, prompt, scenario, and test requests cannot bypass controlled iteration",
+    "Memory and PostgreSQL round-trip outcomes, lessons, playbooks, proposals, and invalidation lineage",
+    "Learning Observatory exposes prediction error, contradictions, human correction, provenance, and the synthetic boundary in English and Chinese"
+  ],
+  "artifacts": [
+    "src/outcomes/",
+    "src/app/api/outcomes/route.ts",
+    "src/components/observer/ObserverDashboard.tsx",
+    "scripts/run-outcome-learning-verification.ts",
+    "docs/OUTCOME_LEARNING.md",
+    "docs/adr/0016-outcome-learning.md"
+  ]
+}

@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "scenarioId": "neo-angeles-baseline",
+  "seed": "nexus-7-neo-angeles",
+  "policyVersion": "policy-1.0.0",
+  "ticks": 10000,
+  "finalTick": 10000,
+  "eventCount": 48219,
+  "acceptedActions": 1767,
+  "verifiedActions": 1767,
+  "deterministicReplay": true,
+  "invariantViolations": [],
+  "verifiedAutonomyLoopRate": 100,
+  "causalTraceCompleteness": 100,
+  "rollbackCoverage": 100,
+  "meetsStabilityGate": true,
+  "fingerprint": "96c424f0"
+}

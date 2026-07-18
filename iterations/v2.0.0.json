@@ -1,0 +1,44 @@
+{
+  "id": "iteration-v2.0.0",
+  "version": "2.0.0",
+  "date": "2026-07-18",
+  "trigger": "milestone",
+  "triggerReason": "The city, diagnosis, planning, deployment, outcome, learning, operations, and participation domains were individually verifiable but still lacked one restart-safe incident-to-learning aggregate and one anti-Goodhart release contract.",
+  "action": "Added a ten-stage durable closed-loop orchestrator with owner/deadline evidence prerequisites, idempotency, compensation and human control; an exact-artifact release binding; a frozen 25-case certification corpus; seven extension conformance suites; a unified bilingual Observer trace; PostgreSQL indexes, backup coverage, threat model, runbook, ADRs, API, browser accessibility, sabotage, concurrency, deadline, and real injected rollback tests.",
+  "outcome": "NEXUS-7 can now close a real synthetic incident through diagnosis, alternatives, experiment, authenticated authorization, development-to-production canary, independent delayed outcome, lesson, governed next proposal, and formal disposition without manual record injection. It also retains rollback, no-action, inconclusive, and governance-denied outcomes and refuses to claim production verification without fresh external evidence for the exact clean artifact.",
+  "metrics": [
+    { "label": "Verified Beneficial Closure Rate (%)", "before": 0, "after": 80 },
+    { "label": "Eligible-problem detection coverage (%)", "before": 0, "after": 100 },
+    { "label": "Deterministic closed-loop replay (%)", "before": 0, "after": 100 },
+    { "label": "Injected-fault rollback coverage (%)", "before": 0, "after": 100 },
+    { "label": "Severe guardrail escapes", "before": 0, "after": 0 },
+    { "label": "Frozen certification scenarios", "before": 0, "after": 25 },
+    { "label": "Certified extension boundaries", "before": 0, "after": 7 }
+  ],
+  "evidence": [
+    "The real reference flow persists linked city incident, diagnosis, plan, deployment, outcome, lesson, and learning proposal records",
+    "The same reference flow rebuilt against a fresh repository produces the same terminal fingerprint",
+    "A real injected unhealthy production canary rolls back and then reaches harmful outcome revision, rollback lesson, and valid closure",
+    "Concurrent advances permit exactly one lifecycle commit and retain one transition",
+    "Expired stages block, compensate, and require a reasoned human deadline renewal",
+    "Missing stages, forged evidence, wrong artifact binding, and expired unsuperseded evidence fail certification",
+    "The frozen 25-case corpus has 20 eligible problems and 16 beneficial closures, with non-success dispositions retained",
+    "The v1 verification contract remains independently passing",
+    "Memory and PostgreSQL share the lifecycle contract; closed-loop records enter migration indexes and checksum backup/restore",
+    "Observer and Verification Center expose the bilingual closed-loop trace, anti-Goodhart metrics, corpus, extension report, and honest external-evidence boundary"
+  ],
+  "artifacts": [
+    "src/closure/",
+    "src/app/api/closure/route.ts",
+    "src/app/api/verification/v2/route.ts",
+    "src/components/observer/ClosedLoopWorkbench.tsx",
+    "src/components/verification/V2CertificationPanel.tsx",
+    "scripts/run-closed-loop-verification.ts",
+    "migrations/0008_closed_loop_indexes.sql",
+    "docs/CLOSED_LOOP_ORCHESTRATION.md",
+    "docs/V2_VERIFICATION.md",
+    "docs/THREAT_MODEL.md",
+    "docs/adr/0017-closed-loop-orchestration.md",
+    "docs/adr/0018-v2-certification-and-release-trust.md"
+  ]
+}

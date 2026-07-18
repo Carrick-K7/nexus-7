@@ -5,6 +5,7 @@ import { motion } from "framer-motion";
 import { useMemo } from "react";
 import { Atom, Lock, Activity, Circle } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import SandboxNotice from "@/components/sandbox/SandboxNotice";
 
 export default function Quantum() {
   const { qubits, setQubits } = useNexusStore();
@@ -34,13 +35,15 @@ export default function Quantum() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-orbitron font-bold text-cyber-purple cyber-text-glow">{t('quantum_title')}</h1>
         <p className="text-cyber-text-dim mt-1">{t('quantum_desc')}</p>
       </motion.div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <SandboxNotice />
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[
           { label: t('qubits'), value: qubits.length, icon: Circle, color: "cyber-blue" },
           { label: t('superposition'), value: superpositionCount, icon: Atom, color: "cyber-purple" },
@@ -58,8 +61,8 @@ export default function Quantum() {
         ))}
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <div className="xl:col-span-2">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-6">
             <h3 className="text-lg font-orbitron text-cyber-text mb-6">{t('quantumBitViz')}</h3>
@@ -131,7 +134,7 @@ export default function Quantum() {
           <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} transition={{ delay: 0.3 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-4">
             <h3 className="text-sm font-orbitron text-cyber-text mb-3">{t('quantumGates')}</h3>
-            <div className="grid grid-cols-3 gap-2">
+            <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
               {["H", "X", "Y", "Z", "CNOT", "SWAP"].map((gate) => (
                 <button key={gate} className="py-2 bg-cyber-gray/50 border border-cyber-blue/20 rounded text-sm text-cyber-text hover:bg-cyber-gray hover:border-cyber-blue/40 transition-colors font-mono">
                   {gate}
