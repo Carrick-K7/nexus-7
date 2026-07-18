@@ -952,6 +952,17 @@
     "source": "manifest"
   },
   {
+    "id": "08368f76",
+    "version": "2",
+    "date": "2026-07-18",
+    "trigger": "observation",
+    "triggerReason": "release: complete v2 closed-loop autonomy lab",
+    "action": "release: complete v2 closed-loop autonomy lab",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
     "id": "d0d1484d",
     "version": "0.3.0",
     "date": "2026-06-14",

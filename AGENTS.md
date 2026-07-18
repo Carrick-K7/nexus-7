@@ -94,6 +94,6 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 
 ## 外部边界
 
-- 当前工作树未 commit/push，无该 revision 的远端 Sigstore receipt。
+- 当前 v2 commit 未 push，无该 revision 的远端 Sigstore receipt。
 - live OpenAI、deployment/recovery gate 需要部署密钥、外部 controller 和第二数据库。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。
