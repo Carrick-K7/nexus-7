@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-19 · v2.0.0 安全内核 + v4.3.1 双主题城市界面
+> 更新：2026-07-19 · v2.0.0 安全内核 + v4.3.2 双主题城市界面
 
 ## 定义与边界
 
@@ -51,7 +51,7 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 v2.0 本地/reference 已闭环；未获得远端 attestation 时只能写
 `implementation complete / external evidence pending`。
 
-v4.3.1 含 200 人、36 AI、24 机器人、Turn 资源流、Human Observatory 与
+v4.3.2 含 200 人、36 AI、24 机器人、Turn 资源流、Human Observatory 与
 浅/深双主题；其余页面使用赛博朋克视觉层。真人接入、身份映射、私人输入和
 居民登录不在范围。
 

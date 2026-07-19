@@ -2,7 +2,7 @@
 
 > Date: 2026-07-19
 >
-> Status: v4.3.1 Chromatic City Shell locally verified / v4.3.0 production /
+> Status: v4.3.2 Chromatic City Shell verification in progress /
 > external CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
@@ -68,7 +68,7 @@ and segregation keeps an honest null denominator.
 - Observatory v2 shows exact flow rows and map lanes while v1 remains readable;
 - desktop/mobile/Chinese, resource-layer and WCAG A/AA checks pass.
 
-## v4.3.1 Chromatic City Shell gate
+## v4.3.2 Chromatic City Shell gate
 
 - rendered UI contains no observer-mode or software-run status badges;
 - persisted `matrix` and `hacker` theme values migrate to `dark`;

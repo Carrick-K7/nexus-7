@@ -157,6 +157,7 @@ test("Human Observatory explains the city in Chinese", async ({ page }) => {
 test("redundant status labels stay hidden and both color themes remain accessible", async ({
   page,
 }) => {
+  test.slow();
   await page.goto("/");
 
   const shell = page.locator("[data-surface]").first();
@@ -189,6 +190,11 @@ test("redundant status labels stay hidden and both color themes remain accessibl
   });
   expect(lightPalette.background).not.toBe(darkPalette.background);
   expect(new Set(Object.values(lightPalette)).size).toBe(4);
+
+  const lightObservatoryAccessibility = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  expect(lightObservatoryAccessibility.violations).toEqual([]);
 
   await page.getByRole("button", { name: "Dashboard" }).click();
   await expect(shell).toHaveAttribute("data-surface", "cyberpunk");

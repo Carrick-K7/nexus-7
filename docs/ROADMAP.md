@@ -81,7 +81,7 @@ Locks the production and repository boundary:
 - Adds a Cities: Skylines-inspired city information layer over actual
   production, consumption, transfer, inventory and pressure data.
 
-### v4.3.1 — Chromatic City Shell
+### v4.3.2 — Chromatic City Shell
 
 - Removes redundant observer-mode and software-run status labels from the UI.
 - Replaces dark/matrix/hacker modes with persistent light and dark palettes.

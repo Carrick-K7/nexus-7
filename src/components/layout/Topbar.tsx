@@ -19,9 +19,13 @@ import { useTranslation } from '@/hooks/useTranslation';
 
 interface TopbarProps {
   onOpenMenu: () => void;
+  themeReady: boolean;
 }
 
-export default function Topbar({ onOpenMenu }: TopbarProps) {
+export default function Topbar({
+  onOpenMenu,
+  themeReady,
+}: TopbarProps) {
   const {
     gameTime,
     setSimulationSpeed,
@@ -205,6 +209,7 @@ export default function Topbar({ onOpenMenu }: TopbarProps) {
           whileTap={{ scale: 0.95 }}
           type="button"
           onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          disabled={!themeReady}
           aria-label={
             theme === "dark"
               ? language === "zh"
@@ -214,7 +219,7 @@ export default function Topbar({ onOpenMenu }: TopbarProps) {
                 ? "切换到深色模式"
                 : "Switch to dark theme"
           }
-          className="rounded-lg border border-cyber-purple/25 bg-cyber-gray p-2 text-cyber-purple transition-all hover:border-cyber-pink/50 hover:bg-cyber-gray-light hover:text-cyber-pink"
+          className="rounded-lg border border-cyber-purple/25 bg-cyber-gray p-2 text-cyber-purple transition-all hover:border-cyber-pink/50 hover:bg-cyber-gray-light hover:text-cyber-pink disabled:cursor-wait disabled:opacity-55"
         >
           {theme === "dark" ? (
             <Sun className="h-4 w-4" aria-hidden="true" />

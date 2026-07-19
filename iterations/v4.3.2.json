@@ -1,0 +1,44 @@
+{
+  "id": "iteration-v4.3.2",
+  "version": "4.3.2",
+  "date": "2026-07-19",
+  "trigger": "human-observation",
+  "triggerReason": "Redundant deployment-mode labels competed with city information, non-Observatory views lacked the intended cyberpunk atmosphere, and the existing theme selector did not provide a real light palette.",
+  "action": "Removed observer-mode and software-run badges from rendered UI; replaced dark, hacker and matrix settings with persistent light and dark palettes; migrated old theme values safely; kept Human Observatory restrained while adding a shared multicolor cyberpunk atmosphere to every other view; added desktop/mobile WCAG checks for both modes.",
+  "outcome": "The initial v4.3.1 production browser audit found transient mixed-theme colors and several dynamic light-palette contrasts below 4.5:1. v4.3.2 darkens light-theme blue and green semantics and expands the Observatory light-mode axe gate. Final verification and production deployment are pending.",
+  "metrics": [
+    {
+      "label": "Rendered deployment-mode badges",
+      "before": 3,
+      "after": 0
+    },
+    {
+      "label": "Accessible color modes",
+      "before": 1,
+      "after": 2
+    },
+    {
+      "label": "Non-Observatory visual systems",
+      "before": 0,
+      "after": 1
+    }
+  ],
+  "evidence": [
+    "Light and dark palettes use semantic CSS variables",
+    "Persisted hacker and matrix values normalize to dark",
+    "Human Observatory does not render cyberpunk background effects",
+    "Every other view inherits the shared cyberpunk shell",
+    "Redundant English and Chinese status labels are absent from rendered UI",
+    "Desktop and mobile light/dark palettes have zero WCAG A/AA violations and no horizontal overflow",
+    "All primary views render inside the cyberpunk shell without application or console errors",
+    "The production audit, not the release claim, is authoritative when dynamic data reveals a missed contrast state"
+  ],
+  "artifacts": [
+    "src/app/globals.css",
+    "src/app/page.tsx",
+    "src/components/layout/BackgroundEffects.tsx",
+    "src/components/layout/Sidebar.tsx",
+    "src/components/layout/Topbar.tsx",
+    "docs/adr/0024-chromatic-city-shell.md"
+  ]
+}

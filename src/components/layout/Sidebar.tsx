@@ -87,11 +87,13 @@ const legacyItems = [
 interface SidebarProps {
   mobileOpen: boolean;
   onClose: () => void;
+  themeReady: boolean;
 }
 
 export default function Sidebar({
   mobileOpen,
   onClose,
+  themeReady,
 }: SidebarProps) {
   const {
     activeView,
@@ -220,8 +222,9 @@ export default function Sidebar({
               key={id}
               type="button"
               onClick={() => setTheme(id)}
+              disabled={!themeReady}
               aria-pressed={theme === id}
-              className={`flex items-center justify-center gap-2 rounded-lg px-2 py-2 text-xs font-semibold transition-all ${
+              className={`flex items-center justify-center gap-2 rounded-lg px-2 py-2 text-xs font-semibold transition-all disabled:cursor-wait disabled:opacity-55 ${
                 theme === id
                   ? "bg-gradient-to-r from-cyber-purple to-cyber-pink text-white shadow-[0_0_18px_color-mix(in_srgb,var(--cyber-purple)_32%,transparent)]"
                   : "text-cyber-text-dim hover:bg-cyber-gray hover:text-cyber-text"

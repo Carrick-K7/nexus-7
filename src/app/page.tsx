@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 import { useNexusStore } from "@/stores/nexus-store";
 import { useCitySimulation } from "@/hooks/useCitySimulation";
 import Sidebar from "@/components/layout/Sidebar";
@@ -68,9 +68,27 @@ const viewComponents: Record<string, React.ComponentType> = {
   symbiosis: HumanObservatory,
 };
 
+function subscribeToStoreHydration(onStoreChange: () => void) {
+  const unsubscribeHydrate = useNexusStore.persist.onHydrate(onStoreChange);
+  const unsubscribeFinish = useNexusStore.persist.onFinishHydration(onStoreChange);
+  return () => {
+    unsubscribeHydrate();
+    unsubscribeFinish();
+  };
+}
+
+function getStoreHydrationSnapshot() {
+  return useNexusStore.persist.hasHydrated();
+}
+
 export default function Home() {
   const { activeView, theme } = useNexusStore();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
+  const storeHydrated = useSyncExternalStore(
+    subscribeToStoreHydration,
+    getStoreHydrationSnapshot,
+    () => false,
+  );
   const ActiveComponent = viewComponents[activeView] || Dashboard;
   useCitySimulation(activeView !== "symbiosis");
 
@@ -101,8 +119,12 @@ export default function Home() {
       <Sidebar
         mobileOpen={mobileNavOpen}
         onClose={() => setMobileNavOpen(false)}
+        themeReady={storeHydrated}
       />
-      <Topbar onOpenMenu={() => setMobileNavOpen(true)} />
+      <Topbar
+        onOpenMenu={() => setMobileNavOpen(true)}
+        themeReady={storeHydrated}
+      />
       <main className="relative z-10 min-h-screen pt-16 lg:ml-64">
         <ActiveComponent />
       </main>
