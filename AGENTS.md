@@ -106,7 +106,8 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 
 ## 外部边界
 
-- 当前 v2 commit 未 push，无该 revision 的远端 Sigstore receipt。
-- v4 工作树、方向分支和 Tag 在提交前均为本地事实；真人参与未获授权且不在范围。
-- live OpenAI、deployment/recovery gate 需要部署密钥、外部 controller 和第二数据库。
+- v4.0.0 Tag/方向分支已 push；`f4d428a` 已部署至
+  `nexus7.carrick7.com`，TLS、API、持久 Turn 与备份已验证。
+- 尚无该 revision 的远端 Sigstore receipt；live DeepSeek、外部恢复演练和第二
+  数据库待验证。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。

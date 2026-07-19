@@ -2,7 +2,8 @@
 
 > Date: 2026-07-19
 >
-> Status: local implementation complete / external evidence pending
+> Status: reference verified / production deployment active / external
+> CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
 
@@ -61,8 +62,12 @@ The production-built Playwright/axe suite must verify:
 
 ## Trust boundary
 
-These values are generated from the local working tree. They do not represent a
-remote commit, CI/Sigstore receipt, live DeepSeek result, production recovery
-drill or claim about real humans. A deployment may be called live only after
-its exact commit, database, service health, TLS route and observation APIs are
-checked independently.
+The reference values above are generated from the tagged source and do not
+represent a claim about real humans. Tag `v4.0.0` and its direction branch are
+remote, and exact commit `f4d428a` is active at
+`https://nexus7.carrick7.com`; database state, services, TLS, protected route
+and observation APIs were checked on 2026-07-19. The production attestation is
+recorded in `docs/V4_DEPLOYMENT_ATTESTATION.md`.
+
+Remote CI/Sigstore, live DeepSeek and an external second-database recovery
+drill remain pending and must not be inferred from the production deployment.
