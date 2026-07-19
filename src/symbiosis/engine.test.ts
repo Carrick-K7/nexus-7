@@ -36,9 +36,9 @@ describe("Symbiotic Shenzhen deterministic world", () => {
     expect(initial.season.timeZone).toBe("Asia/Shanghai");
     expect(initial.residents).toHaveLength(260);
     expect(kinds).toEqual({
-      "synthetic-human": 200,
-      "software-ai": 36,
-      "embodied-robot": 24,
+      human: 200,
+      ai: 36,
+      robot: 24,
     });
     expect(
       initial.residents.every(
@@ -77,6 +77,22 @@ describe("Symbiotic Shenzhen deterministic world", () => {
     ).toBe(true);
     expect(isExactWorldReplay(first, second)).toBe(true);
     assertResourceConservation(first.ledgers);
+    expect(
+      first.ledgers.some(
+        (ledger) =>
+          ledger.transferredIn > 0 || ledger.transferredOut > 0,
+      ),
+    ).toBe(true);
+    expect(
+      first.events.some(
+        (event) => event.type === "shared.resource-transfer",
+      ),
+    ).toBe(true);
+    expect(
+      first.ledgers.every(
+        (ledger) => ledger.closing <= ledger.capacity,
+      ),
+    ).toBe(true);
   }, 60_000);
 
   it("rejects a snapshot that is not the current season head", () => {

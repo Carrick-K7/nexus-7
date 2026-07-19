@@ -385,11 +385,11 @@ export class WorldService {
     );
     const humanStates = snapshot.residentStates.filter((state) => {
       const kind = residentsById.get(state.residentId)?.kind;
-      return kind === "synthetic-human";
+      return kind === "human";
     });
     const aiRobotStates = snapshot.residentStates.filter((state) => {
       const kind = residentsById.get(state.residentId)?.kind;
-      return kind === "software-ai" || kind === "embodied-robot";
+      return kind === "ai" || kind === "robot";
     });
     const byCommunity = season.communities.map((community) => {
       const ids = new Set(
@@ -409,11 +409,7 @@ export class WorldService {
         ),
       };
     });
-    const residentKinds = [
-      "synthetic-human",
-      "software-ai",
-      "embodied-robot",
-    ] as const;
+    const residentKinds = ["human", "ai", "robot"] as const;
     const byResidentKind = residentKinds.map((kind) => {
       const ids = new Set(
         residents

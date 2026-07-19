@@ -14,9 +14,9 @@ const first = replayWorld(initial, 365);
 const second = replayWorld(initial, 365);
 const residentCounts = Object.fromEntries(
   [
-    "synthetic-human",
-    "software-ai",
-    "embodied-robot",
+    "human",
+    "ai",
+    "robot",
   ].map((kind) => [
     kind,
     first.residents.filter((resident) => resident.kind === kind).length,
@@ -112,9 +112,9 @@ const report = {
     segregatedEligibleEpisodes: segregated?.eligibleEpisodes ?? 0,
   },
   disclosures: [
-    "Synthetic Shenzhen; not a digital twin.",
+    "Simulated Shenzhen; not a digital twin.",
     "No claim of real policy effects.",
-    "All 260 residents are synthetic autonomous software; no real participant is present.",
+    "The resident kinds are human, AI, and robot; all 260 are software-simulated and no real participant is present.",
     "No remote attestation is represented by this local report.",
   ],
 };
@@ -123,7 +123,7 @@ if (
   !report.exactReplay ||
   !report.resourceConservation ||
   report.foregroundResidents !== 260 ||
-  report.residentCounts["synthetic-human"] !== 200 ||
+  report.residentCounts.human !== 200 ||
   report.reciprocalEpisodes < 50 ||
   report.ralr === null ||
   report.ralr < 0.5 ||

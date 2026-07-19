@@ -5,7 +5,10 @@ import type {
 } from "pg";
 import { EXPERIMENT_SCHEMA_SQL } from "@/experiments/postgres-schema";
 import { stableStringify } from "@/simulation";
-import { SYMBIOSIS_SCHEMA_SQL } from "@/symbiosis/postgres-schema";
+import {
+  SYMBIOSIS_RESIDENT_TAXONOMY_MIGRATION_SQL,
+  SYMBIOSIS_SCHEMA_SQL,
+} from "@/symbiosis/postgres-schema";
 
 const TABLES = [
   {
@@ -431,6 +434,32 @@ function normalizePostgresBackup(backup: BackupDocument): PostgresBackup {
     );
     rowCounts[table.name] = backup.rowCounts[table.name] ?? 0;
   }
+  tables.nexus_world_residents =
+    tables.nexus_world_residents.map((row) => {
+      const legacyKind = row.kind;
+      const kind =
+        legacyKind === "synthetic-human"
+          ? "human"
+          : legacyKind === "software-ai"
+            ? "ai"
+            : legacyKind === "embodied-robot"
+              ? "robot"
+              : legacyKind;
+      const residentJson =
+        typeof row.resident_json === "object" &&
+        row.resident_json !== null &&
+        !Array.isArray(row.resident_json)
+          ? {
+              ...row.resident_json,
+              kind,
+            }
+          : row.resident_json;
+      return {
+        ...row,
+        kind,
+        resident_json: residentJson,
+      };
+    });
   return {
     schemaVersion: 1,
     createdAt: backup.createdAt,
@@ -575,6 +604,7 @@ export async function restorePostgresBackup(
     restoreLocked = true;
     await client.query(EXPERIMENT_SCHEMA_SQL);
     await client.query(SYMBIOSIS_SCHEMA_SQL);
+    await client.query(SYMBIOSIS_RESIDENT_TAXONOMY_MIGRATION_SQL);
     await client.query("BEGIN");
     transactionStarted = true;
     if (!options.force && (await databaseHasPersistentData(client))) {

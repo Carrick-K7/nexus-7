@@ -1,5 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 
+const e2ePort = Number(process.env.NEXUS_E2E_PORT ?? 43_217);
+const e2eBaseUrl = `http://127.0.0.1:${e2ePort}`;
+
 export default defineConfig({
   testDir: "./e2e",
   // The browser suite intentionally exercises one shared in-memory control
@@ -10,7 +13,7 @@ export default defineConfig({
   workers: process.env.CI ? 2 : undefined,
   reporter: process.env.CI ? "github" : "list",
   use: {
-    baseURL: "http://127.0.0.1:4174",
+    baseURL: e2eBaseUrl,
     trace: "retain-on-failure",
     screenshot: "only-on-failure",
     video: "retain-on-failure",
@@ -22,9 +25,9 @@ export default defineConfig({
     },
   ],
   webServer: {
-    command: "npm run start -- -H 127.0.0.1 -p 4174",
-    url: "http://127.0.0.1:4174",
-    reuseExistingServer: !process.env.CI,
+    command: `npm run start -- -H 127.0.0.1 -p ${e2ePort}`,
+    url: e2eBaseUrl,
+    reuseExistingServer: false,
     timeout: 120_000,
     env: {
       ...process.env,

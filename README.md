@@ -1,18 +1,17 @@
 # NEXUS-7
 
-NEXUS-7 is an observable, reproducible experiment in AI coexistence. It runs a
-fully synthetic Shenzhen where every foreground resident is software:
+NEXUS-7 is an observable, reproducible experiment in human–AI–robot
+coexistence. It runs a simulated Shenzhen with three resident kinds:
 
-- 200 synthetic-human archetypes;
-- 36 software-AI residents;
-- 24 embodied-robot residents.
+- 200 humans;
+- 36 AI;
+- 24 robots.
 
-“Synthetic human” means an AI-controlled resident with modeled food, shelter,
-health, belonging and autonomy needs. It is not a person, account, avatar or
-proxy. The city accepts no real identity, participant input, private diary or
-resident login.
+Humans are modeled as humans, not as a fourth “synthetic human” species. The
+current season is still fully software-run and contains no real participant,
+identity, private diary or resident login.
 
-The active release is **v4.2 — AI-Only Human Observatory**. The v2 closed-loop
+The active release is **v4.3 — Living City Flow**. The v2 closed-loop
 autonomy laboratory remains its safety kernel for evidence, release approval,
 rollback and recovery. Human administrators in that control plane operate the
 software; they do not participate in the simulated city.
@@ -23,7 +22,7 @@ One deterministic engine owns all city changes. Each simulated day settles an
 atomic Turn containing:
 
 - resource production, transfer and consumption;
-- distinct human-archetype and AI/robot needs;
+- distinct human, AI and robot needs;
 - seeded shared and type-specific events;
 - relationships, refusal, withdrawal, commitments, outcomes and reflection;
 - optional schema-bounded model decisions;
@@ -46,10 +45,12 @@ Production is available at
 [https://nexus7.carrick7.com](https://nexus7.carrick7.com) without a username
 or password. The public surface is anonymous and read-only.
 
-The default **Human Observatory / 人类观测台** explains:
+The default **Human Observatory / 人类观测台** exposes:
 
-- foreground/background population and all 260 software-unit states;
-- type-aware synthetic mood, AI engagement, integrity and robot durability;
+- foreground/background population and all 260 resident states;
+- human mood, AI engagement/integrity and robot readiness/durability;
+- persisted production, consumption, transfer, inventory and pressure ledgers;
+- a city information layer showing actual inter-community resource movement;
 - city and community needs, resources and institution smoothness;
 - 100% AI-controlled production coverage versus dynamic chain continuity;
 - event lineage, RALR denominator, safety, replay and snapshot evidence.
@@ -61,8 +62,12 @@ GET /api/world/v3/snapshot
 GET /api/world/v3/events?afterCursor=0
 GET /api/reports/symbiosis
 GET /api/reports/symbiosis/study?turns=90
+GET /api/observatory/v2/overview
 GET /api/observatory/v1/overview
 ```
+
+Observatory v2 uses only `human`, `ai` and `robot`. V1 remains a compatibility
+projection for clients that still understand the deprecated storage labels.
 
 The public proxy rejects mutation methods. The application independently maps
 anonymous requests to a fixed viewer and ignores asserted identity headers.
@@ -124,7 +129,7 @@ Real PostgreSQL and restore tests require both `TEST_DATABASE_URL` and
 ## Repository order
 
 ```text
-src/symbiosis/        AI-only city world, cognition and persistence
+src/symbiosis/        autonomous city world, cognition and persistence
 src/simulation/       v1/v2 deterministic safety-kernel world
 src/* domain modules  diagnosis, planning, outcomes, governance and operations
 migrations/           ordered PostgreSQL migrations
@@ -136,7 +141,7 @@ scripts/              workers, verification and evidence generation
 
 Start with [docs/INDEX.md](docs/INDEX.md). Current v4 authority:
 
-- [AI-only constitution](docs/SYMBIOSIS_CONSTITUTION.md)
+- [symbiosis constitution](docs/SYMBIOSIS_CONSTITUTION.md)
 - [product plan](docs/SYMBIOTIC_SHENZHEN_PLAN.md)
 - [architecture](docs/V4_ARCHITECTURE.md)
 - [Human Observatory guide](docs/HUMAN_OBSERVATORY.md)

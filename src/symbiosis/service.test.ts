@@ -55,7 +55,7 @@ describe("Symbiotic Shenzhen world service", () => {
     expect(resident).toMatchObject({
       projection: "researcher-pseudonymized",
       resident: {
-        kind: "software-ai",
+        kind: "ai",
         controller: "cognitive-gateway",
       },
     });
@@ -68,7 +68,17 @@ describe("Symbiotic Shenzhen world service", () => {
     expect(report.cognition.decisions).toBeGreaterThan(0);
     expect(report.disclosures.join(" ")).toContain("not a digital twin");
     expect(observatory.units).toHaveLength(260);
+    expect(observatory.population.byKind).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({ kind: "human", count: 200 }),
+        expect.objectContaining({ kind: "ai", count: 36 }),
+        expect.objectContaining({ kind: "robot", count: 24 }),
+      ]),
+    );
     expect(observatory.institutions).toHaveLength(24);
+    expect(observatory.economy.resources).toHaveLength(8);
+    expect(observatory.economy.persistedLedgerRows).toBe(24);
+    expect(observatory.economy.transfers.length).toBeGreaterThan(0);
     expect(observatory.production.autonomousControlRate).toBe(1);
     expect(observatory.production.humanLaborDependencyRate).toBe(0);
   });

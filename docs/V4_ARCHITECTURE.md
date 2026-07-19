@@ -2,10 +2,10 @@
 
 ## Boundary
 
-`src/symbiosis` owns the long-running synthetic Shenzhen world. Every
-foreground resident is software: 200 synthetic-human archetypes, 36 software
-AI residents and 24 embodied-robot residents. “Synthetic human” describes a
-modeled need profile, not a person, account, avatar, proxy or identity link.
+`src/symbiosis` owns the long-running simulated Shenzhen world. Its only
+resident kinds are 200 humans, 36 AI and 24 robots. Humans are modeled as
+humans, not as a separate “synthetic human” kind. The current season is fully
+software-run and has no real participant, account, avatar or identity link.
 
 The v2 closed-loop domains remain the operational safety kernel. Their human
 administrator concepts govern software release and emergency responsibility;
@@ -61,11 +61,12 @@ degradation and never stop the world. Provider reasoning is discarded.
 
 ## Persistence
 
-Migration `0009_symbiotic_shenzhen_world.sql` defines the AI-only schema.
+Migration `0009_symbiotic_shenzhen_world.sql` defines the city schema.
 Migration `0010_ai_only_world.sql` hardens databases created by the v3
 prototype: it refuses to proceed if any participant-avatar row exists, removes
-the unused human-intent/private-memory tables and restricts resident kinds to
-the three software types.
+the unused human-intent/private-memory tables. Migration
+`0011_resident_taxonomy.sql` atomically migrates legacy labels and restricts
+resident kinds to `human`, `ai` and `robot`.
 
 Checksum backup/restore covers only active tables. Empty backups from the v3
 prototype remain readable, but any deprecated participant table containing
@@ -74,10 +75,15 @@ rows is rejected instead of silently importing or discarding personal data.
 ## Observation
 
 The Human Observatory is a pure projection over the same memory/PostgreSQL
-world contract. `nexus.human-observatory.v1` exposes every pseudonymous unit,
-type-aware need proxies, community institutions, production continuity,
-trends, event lineage, RALR and evidence. Formula version
-`human-observatory-formulas-1.0.0` binds every derived score.
+world contract. `nexus.human-observatory.v2` exposes every pseudonymous
+resident, the 24 persisted resource-ledger rows, inter-community transfer
+lanes, community institutions, production continuity, trends, event lineage,
+RALR and evidence. Formula version `human-observatory-formulas-2.0.0` binds
+every derived score. V1 remains a read-only label compatibility projection.
+
+Each Turn first settles local production and consumption, then balances
+resource reserve pressure between communities. Transfer lanes are included in
+both conserved ledgers and append-only events before the atomic commit.
 
 There is no second display database, identity plane, private diary,
 participant input, resident login or public mutation API. The old client-only

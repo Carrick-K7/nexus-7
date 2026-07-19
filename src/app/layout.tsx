@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NEXUS-7 | Synthetic Shenzhen Human Observatory",
+  title: "NEXUS-7 | Shenzhen Symbiosis City Observatory",
   description:
-    "A public, read-only observatory for the all-software Synthetic Shenzhen experiment.",
+    "A public, read-only observatory for a simulated city of humans, AI, and robots.",
 };
 
 export default function RootLayout({

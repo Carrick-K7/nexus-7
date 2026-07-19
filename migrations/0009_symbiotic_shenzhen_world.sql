@@ -47,9 +47,9 @@ CREATE TABLE IF NOT EXISTS nexus_world_residents (
     CONSTRAINT nexus_world_residents_kind_ai_only_check
     CHECK (
       kind IN (
-        'synthetic-human',
-        'software-ai',
-        'embodied-robot'
+        'human',
+        'ai',
+        'robot'
       )
   ),
   community_id TEXT NOT NULL,

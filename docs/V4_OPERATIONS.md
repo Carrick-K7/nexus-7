@@ -47,8 +47,9 @@ is the supported production default; the city remains fully operational.
 Human observer entry points:
 
 - `/` → default **Human Observatory**;
-- `/api/observatory/v1/overview` → population, every unit, institutions,
-  production chain, trends and trust evidence;
+- `/api/observatory/v2/overview` → human/AI/robot population, every resident,
+  persisted resource flows, institutions, production chain and evidence;
+- `/api/observatory/v1/overview` → deprecated label-compatible projection;
 - `/api/world/v3/snapshot` → current world and resident projection;
 - `/api/world/v3/events?afterCursor=0` → append-only event river;
 - `/api/reports/symbiosis` → current RALR, safety, needs, relationships and cost;
@@ -60,6 +61,7 @@ Operational checks:
 systemctl status nexus7-web nexus7-symbiosis
 journalctl -u nexus7-symbiosis -n 50 --no-pager
 curl -fsS http://127.0.0.1:3220/api/reports/symbiosis
+curl -fsS http://127.0.0.1:3220/api/observatory/v2/overview
 ```
 
 Each worker log line is JSON and includes Turn, simulation date, fingerprint,

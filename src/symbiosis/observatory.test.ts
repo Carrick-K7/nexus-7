@@ -12,6 +12,7 @@ import {
 import {
   buildHumanObservatory,
   HUMAN_OBSERVATORY_SCHEMA_VERSION,
+  toHumanObservatoryV1,
 } from "./observatory";
 import type {
   SymbiosisReport,
@@ -127,9 +128,9 @@ describe("human observatory projection", () => {
     expect(projection.units).toHaveLength(260);
     expect(projection.population.byKind).toEqual(
       expect.arrayContaining([
-        expect.objectContaining({ kind: "synthetic-human", count: 200 }),
-        expect.objectContaining({ kind: "software-ai", count: 36 }),
-        expect.objectContaining({ kind: "embodied-robot", count: 24 }),
+        expect.objectContaining({ kind: "human", count: 200 }),
+        expect.objectContaining({ kind: "ai", count: 36 }),
+        expect.objectContaining({ kind: "robot", count: 24 }),
       ]),
     );
     expect(projection.institutions).toHaveLength(24);
@@ -140,22 +141,39 @@ describe("human observatory projection", () => {
     expect(projection.production.modeledStageCoverageRate).toBe(1);
     expect(projection.production.continuity).toBeGreaterThanOrEqual(0);
     expect(projection.production.continuity).toBeLessThanOrEqual(1);
-    expect(projection.units.every((unit) => unit.synthetic)).toBe(true);
+    expect(projection.units.every((unit) => unit.simulated)).toBe(true);
     expect(
       projection.units.find(
-        (unit) => unit.kind === "synthetic-human",
+        (unit) => unit.kind === "human",
       )?.primarySignal,
-    ).toBe("synthetic-mood");
+    ).toBe("mood");
     expect(
       projection.units.find(
-        (unit) => unit.kind === "software-ai",
+        (unit) => unit.kind === "ai",
       )?.primarySignal,
     ).toBe("engagement");
     expect(
       projection.units.find(
-        (unit) => unit.kind === "embodied-robot",
+        (unit) => unit.kind === "robot",
       )?.primarySignal,
     ).toBe("task-readiness");
+    expect(projection.economy.persistedLedgerRows).toBe(24);
+    expect(projection.economy.residentStateRows).toBe(260);
+    expect(projection.economy.resources).toHaveLength(8);
+    expect(projection.economy.production).toBeGreaterThan(0);
+    expect(projection.economy.consumption).toBeGreaterThan(0);
+    expect(projection.economy.transfers.length).toBeGreaterThan(0);
+    for (const resource of projection.economy.resources) {
+      expect(
+        resource.opening +
+          resource.produced +
+          resource.transferredIn,
+      ).toBe(
+        resource.consumed +
+          resource.transferredOut +
+          resource.closing,
+      );
+    }
     expect(projection.trends).toHaveLength(13);
     expect(projection.evidence).toMatchObject({
       privateFieldsIncluded: false,
@@ -165,5 +183,18 @@ describe("human observatory projection", () => {
     });
     expect(buildHumanObservatory(input)).toEqual(projection);
     expect(JSON.stringify(projection)).not.toContain("participant-avatar");
+    expect(JSON.stringify(projection)).not.toContain("synthetic-human");
+    const legacy = toHumanObservatoryV1(projection);
+    expect(legacy).toMatchObject({
+      schemaVersion: "nexus.human-observatory.v1",
+      population: {
+        byKind: expect.arrayContaining([
+          expect.objectContaining({
+            kind: "synthetic-human",
+            count: 200,
+          }),
+        ]),
+      },
+    });
   });
 });

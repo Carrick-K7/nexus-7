@@ -153,7 +153,7 @@ export default function Sidebar({
               NEXUS-7
             </h1>
             <p className="truncate text-xs text-cyber-text-dim">
-              {language === "zh" ? "合成深圳观测站" : "Synthetic Shenzhen"}
+              {language === "zh" ? "深圳共生城市" : "Shenzhen Symbiosis City"}
             </p>
           </div>
           <button
@@ -167,7 +167,9 @@ export default function Sidebar({
         </div>
         <div className="mt-4 flex items-center gap-2 rounded-lg border border-cyber-green/25 bg-cyber-green/5 px-3 py-2 text-xs text-cyber-green">
           <span className="h-2 w-2 rounded-full bg-cyber-green" />
-          {language === "zh" ? "纯 AI · 公共只读" : "AI-only · public read-only"}
+          {language === "zh"
+            ? "无人值守运行 · 公共只读"
+            : "Autonomous run · public read-only"}
         </div>
       </div>
 
@@ -192,8 +194,8 @@ export default function Sidebar({
           </summary>
           <p className="px-3 py-2 text-[11px] leading-4 text-cyber-text-dim">
             {language === "zh"
-              ? "这些模块不改变正在运行的合成深圳。"
-              : "These modules do not mutate the live Synthetic Shenzhen season."}
+              ? "这些模块不改变正在运行的共生城市。"
+              : "These modules do not mutate the live symbiosis city."}
           </p>
           <div className="space-y-1 border-l border-cyber-gray-light pl-2">
             {renderItems(legacyItems)}

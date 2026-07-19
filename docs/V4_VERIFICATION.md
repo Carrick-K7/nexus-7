@@ -1,8 +1,8 @@
-# v4 All-Synthetic Symbiosis Verification
+# v4 Simulated Symbiosis Verification
 
 > Date: 2026-07-19
 >
-> Status: v4.2 Human Observatory locally and publicly verified /
+> Status: v4.3 Living City Flow locally verified / v4.2 remains in production /
 > external CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
@@ -15,8 +15,8 @@ and segregation keeps an honest null denominator.
 
 | Gate | Local result |
 |---|---:|
-| Foreground residents | 260 autonomous synthetic residents |
-| Resident mix | 200 synthetic human / 36 software AI / 24 robot |
+| Foreground residents | 260 software-simulated residents |
+| Resident mix | 200 human / 36 AI / 24 robot |
 | Exact 365-Turn replay | pass |
 | Resource conservation | pass |
 | Resolved reciprocal episodes | 725 |
@@ -57,6 +57,17 @@ and segregation keeps an honest null denominator.
 - desktop, mobile, Chinese, unit drill-down and WCAG A/AA checks pass;
 - 229 unit, 16 real PostgreSQL/restore and 25 browser checks pass.
 
+## v4.3 Living City Flow gate
+
+- domain, PostgreSQL and Observatory v2 expose only `human`, `ai` and `robot`;
+- migration 0011 rewrites legacy rows/JSON and rejects any fourth kind;
+- checksum-valid legacy backups restore through an explicit taxonomy adapter;
+- every Turn persists 24 production/consumption/transfer/inventory ledgers;
+- inter-community transfer lanes conserve both endpoints and emit events;
+- closing inventory never exceeds capacity;
+- Observatory v2 shows exact flow rows and map lanes while v1 remains readable;
+- desktop/mobile/Chinese, resource-layer and WCAG A/AA checks pass.
+
 The multi-season reference reports reciprocal RALR 73.33% across 525 resolved
 episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR
 0, and `null` RALR for the segregated zero-denominator control.
@@ -81,9 +92,10 @@ backup/restore verification. Skipped environment gates are not passes.
 The production-built Playwright/axe suite must verify:
 
 - Human Observatory is the default English/Chinese entry;
-- its API exposes 260 units, 24 institutions and eight production stages;
-- population, unit, institution and chain semantics remain explicit;
-- unit search/detail, keyboard-scrollable tables and export remain accessible;
+- its v2 API exposes 260 residents, 24 ledgers, 24 institutions and eight
+  production stages while v1 remains compatible;
+- population, resource, resident, institution and chain semantics stay explicit;
+- resident search/detail, keyboard-scrollable tables and export stay accessible;
 - snapshot, event, resident, report and multi-season APIs exclude private data;
 - mobile navigation, keyboard focus and reduced motion remain usable;
 - every legacy v1/v2 view and certification panel still renders.

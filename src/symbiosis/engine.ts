@@ -40,7 +40,7 @@ import {
 } from "./contracts";
 
 export const SYMBIOSIS_ENGINE_VERSION =
-  "symbiotic-shenzhen-engine-4.1.0";
+  "symbiotic-shenzhen-engine-4.2.0";
 export const SYMBIOSIS_DISTRIBUTION_VERSION =
   "symbiotic-shenzhen-distributions-2.0.0";
 
@@ -256,9 +256,9 @@ function pseudoName(index: number): string {
 }
 
 function residentKind(index: number): Resident["kind"] {
-  if (index < 200) return "synthetic-human";
-  if (index < 236) return "software-ai";
-  return "embodied-robot";
+  if (index < 200) return "human";
+  if (index < 236) return "ai";
+  return "robot";
 }
 
 export function createForegroundResidents(
@@ -295,14 +295,14 @@ export function createForegroundResidents(
           : "deterministic-policy" as const,
       createdAt,
     };
-    if (kind === "synthetic-human") {
+    if (kind === "human") {
       return {
         ...base,
         kind,
         occupationFamily: occupations[index % occupations.length],
       };
     }
-    if (kind === "software-ai") {
+    if (kind === "ai") {
       const runtimeClasses = ["community", "research", "service"] as const;
       return {
         ...base,
@@ -325,11 +325,11 @@ export function createForegroundResidents(
 
 function needCodes(resident: Resident): NeedCode[] {
   if (
-    resident.kind === "synthetic-human"
+    resident.kind === "human"
   ) {
     return HUMAN_NEEDS;
   }
-  return resident.kind === "embodied-robot" ? ROBOT_NEEDS : AI_NEEDS;
+  return resident.kind === "robot" ? ROBOT_NEEDS : AI_NEEDS;
 }
 
 function initialNeedState(
@@ -383,10 +383,10 @@ function createInitialRelationships(
   residents: Resident[],
 ): Relationship[] {
   const humans = residents.filter(
-    (resident) => resident.kind === "synthetic-human",
+    (resident) => resident.kind === "human",
   );
   return residents
-    .filter((resident) => resident.kind !== "synthetic-human")
+    .filter((resident) => resident.kind !== "human")
     .map((resident, index) => {
       const sameCommunity = humans.filter(
         (human) => human.communityId === resident.communityId,
@@ -561,7 +561,11 @@ function settleResources(
   previous: WorldSnapshot,
   turn: number,
   events: NewWorldEvent[],
-): { resources: ResourceBalance[]; ledgers: ResourceLedgerEntry[] } {
+): {
+  resources: ResourceBalance[];
+  ledgers: ResourceLedgerEntry[];
+  transfers: ResourceTransfer[];
+} {
   const resources = previous.resources.map((prior, index) => {
     const relevantEvent = events.find(
       (event) => event.communityId === prior.communityId,
@@ -582,9 +586,6 @@ function settleResources(
       1.03,
       index,
     );
-    const produced = Math.round(
-      DAILY_PRODUCTION[prior.resource] * shock * variation,
-    );
     const consumptionVariation = randomBetween(
       season.seed,
       turn,
@@ -593,12 +594,23 @@ function settleResources(
       1.015,
       index,
     );
+    const desiredConsumption = Math.round(
+      DAILY_CONSUMPTION[prior.resource] * consumptionVariation,
+    );
+    const unconstrainedProduction = Math.round(
+      DAILY_PRODUCTION[prior.resource] * shock * variation,
+    );
+    const produced = Math.min(
+      unconstrainedProduction,
+      Math.max(
+        0,
+        prior.capacity - prior.closing + desiredConsumption,
+      ),
+    );
     const available = prior.closing + produced;
     const consumed = Math.min(
       available,
-      Math.round(
-        DAILY_CONSUMPTION[prior.resource] * consumptionVariation,
-      ),
+      desiredConsumption,
     );
     const closing = available - consumed;
     return {
@@ -611,11 +623,75 @@ function settleResources(
       transferredOut: 0,
       closing,
       capacity: prior.capacity,
-      pressure: Number((1 - closing / prior.capacity).toFixed(6)),
+      pressure: 0,
     };
   });
+  const transfers: ResourceTransfer[] = [];
+  for (const resourceCode of WORLD_RESOURCES) {
+    const balances = resources
+      .filter((resource) => resource.resource === resourceCode)
+      .sort((left, right) =>
+        left.communityId.localeCompare(right.communityId),
+      );
+    const totalClosing = balances.reduce(
+      (sum, resource) => sum + resource.closing,
+      0,
+    );
+    const totalCapacity = balances.reduce(
+      (sum, resource) => sum + resource.capacity,
+      0,
+    );
+    const targetReserveRate =
+      totalCapacity === 0 ? 0 : totalClosing / totalCapacity;
+    const donors = balances.map((resource) => ({
+      resource,
+      available: Math.max(
+        0,
+        resource.closing -
+          Math.floor(resource.capacity * targetReserveRate),
+      ),
+    }));
+    const receivers = balances.map((resource) => ({
+      resource,
+      needed: Math.max(
+        0,
+        Math.ceil(resource.capacity * targetReserveRate) -
+          resource.closing,
+      ),
+    }));
+    for (const receiver of receivers) {
+      for (const donor of donors) {
+        if (
+          receiver.needed === 0 ||
+          donor.available === 0 ||
+          donor.resource.communityId === receiver.resource.communityId
+        ) {
+          continue;
+        }
+        const amount = Math.min(receiver.needed, donor.available);
+        donor.resource.transferredOut += amount;
+        donor.resource.closing -= amount;
+        receiver.resource.transferredIn += amount;
+        receiver.resource.closing += amount;
+        donor.available -= amount;
+        receiver.needed -= amount;
+        transfers.push({
+          resource: resourceCode,
+          fromCommunityId: donor.resource.communityId,
+          toCommunityId: receiver.resource.communityId,
+          amount,
+        });
+      }
+    }
+  }
+  for (const resource of resources) {
+    resource.pressure = Number(
+      (1 - resource.closing / resource.capacity).toFixed(6),
+    );
+  }
   return {
     resources,
+    transfers,
     ledgers: resources.map((resource) => ({
       ...resource,
       id: `${season.id}-ledger-${String(turn).padStart(4, "0")}-${
@@ -632,6 +708,85 @@ function settleResources(
           resource.closing,
     })),
   };
+}
+
+interface ResourceTransfer {
+  resource: ResourceCode;
+  fromCommunityId: string;
+  toCommunityId: string;
+  amount: number;
+}
+
+function resourceTransferEvents(
+  season: WorldSeason,
+  turn: number,
+  occurredAt: string,
+  transfers: ResourceTransfer[],
+): NewWorldEvent[] {
+  return WORLD_RESOURCES.flatMap((resource) => {
+    const lanes = transfers.filter(
+      (transfer) => transfer.resource === resource,
+    );
+    if (lanes.length === 0) return [];
+    const amount = lanes.reduce(
+      (sum, transfer) => sum + transfer.amount,
+      0,
+    );
+    const subjectIds = Array.from(
+      new Set(
+        lanes.flatMap((transfer) => [
+          transfer.fromCommunityId,
+          transfer.toCommunityId,
+        ]),
+      ),
+    );
+    return [
+      {
+        id: `${season.id}-event-${String(turn).padStart(4, "0")}-resource-${resource}`,
+        seasonId: season.id,
+        workspaceId: season.workspaceId,
+        turn,
+        layer: "shared",
+        type: "shared.resource-transfer",
+        subjectIds,
+        magnitude: Number(
+          Math.min(
+            1,
+            amount /
+              resourcesCapacityFor(
+                season,
+                resource,
+              ),
+          ).toFixed(6),
+        ),
+        causationId: `${season.id}-turn-${String(turn).padStart(4, "0")}`,
+        correlationId: `${season.id}-resource-flow-${String(turn).padStart(4, "0")}`,
+        occurredAt,
+        publicSummary: {
+          zh: `${resource} 在社区间调度 ${amount.toLocaleString("en-US")} 单位。`,
+          en: `${amount.toLocaleString("en-US")} units of ${resource} moved between communities.`,
+        },
+        payload: {
+          resource,
+          amount,
+          lanes,
+          calculatedBy: "deterministic-reserve-balancer-v1",
+        },
+        synthetic: true,
+      },
+    ];
+  });
+}
+
+function resourcesCapacityFor(
+  season: WorldSeason,
+  resource: ResourceCode,
+): number {
+  return season.communities.reduce(
+    (sum, _community, index) =>
+      sum + RESOURCE_CAPACITY[resource] + index * 2_000,
+    0,
+  );
 }
 
 function resourceAccess(
@@ -1254,13 +1409,22 @@ export function settleNextTurn(
     settledAt,
     providedDecisions,
   );
-  const events = [...worldEvents, ...social.events];
-  const { resources, ledgers } = settleResources(
+  const causalEvents = [...worldEvents, ...social.events];
+  const { resources, ledgers, transfers } = settleResources(
     season,
     previous,
     turnNumber,
-    events,
+    causalEvents,
   );
+  const events = [
+    ...causalEvents,
+    ...resourceTransferEvents(
+      season,
+      turnNumber,
+      settledAt,
+      transfers,
+    ),
+  ];
   assertResourceConservation(ledgers);
   const residentStates = settleNeedStates(
     season,

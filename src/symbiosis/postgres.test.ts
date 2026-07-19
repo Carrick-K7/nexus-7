@@ -62,12 +62,16 @@ integrationDescribe("PostgreSQL Symbiotic Shenzhen world", () => {
           `symbiosis-pg-${suffix}`,
         ),
       ).toMatchObject({ currentTurn: 2 });
+      const residents = await secondRepository.listResidents(
+        "workspace-neo-angeles",
+        `symbiosis-pg-${suffix}`,
+      );
+      expect(residents).toHaveLength(260);
       expect(
-        await secondRepository.listResidents(
-          "workspace-neo-angeles",
-          `symbiosis-pg-${suffix}`,
+        residents.every((resident) =>
+          ["human", "ai", "robot"].includes(resident.kind),
         ),
-      ).toHaveLength(260);
+      ).toBe(true);
       expect(
         await secondRepository.listCohorts(
           "workspace-neo-angeles",

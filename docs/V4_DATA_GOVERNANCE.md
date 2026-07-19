@@ -25,11 +25,12 @@ Operational identity records used by the v2 release-governance kernel are a
 separate bounded context. They authorize deployments and emergency actions;
 they cannot become city residents or world inputs.
 
-The Human Observatory derives mood, engagement, integrity, institution flow
-and production continuity only from stored synthetic needs and resource
-ledgers. These formula-versioned proxies contain no free-form inference and
-must not be described as proof of emotion, consciousness, employment or a
-real institution.
+The Human Observatory reads production, consumption, transfer, inventory and
+pressure directly from stored Turn ledgers. It derives human mood, AI
+engagement/integrity, robot readiness, institution flow and production
+continuity only from stored needs and those ledgers. These formula-versioned
+proxies contain no free-form inference and must not be described as proof of
+consciousness, employment or a real institution.
 
 ## External models
 
@@ -55,7 +56,7 @@ checksum is valid.
 
 ## Prohibited claims
 
-Synthetic results cannot establish facts about Shenzhen residents, real policy
-effects, AI consciousness or legal personhood. “Human needs” and “human
-residents” in reports refer exclusively to software archetypes used for
-mechanism comparison.
+Simulation results cannot establish facts about Shenzhen residents, real
+policy effects, AI consciousness or legal personhood. `human`, `ai` and
+`robot` are the three modeled resident kinds. Human residents are simulated in
+the current season and are not real study participants.

@@ -27,24 +27,25 @@ import {
 import {
   useTranslation,
 } from "@/hooks/useTranslation";
+import CityFlowMap from "./CityFlowMap";
 import type {
   HumanObservatoryReport,
   LocalizedText,
+  ObserverResidentKind,
   ObservatoryHealth,
   ObservatoryUnit,
   UnitHealth,
 } from "@/symbiosis/observatory";
 import type {
   NeedCode,
-  ResidentKind,
 } from "@/symbiosis/contracts";
 
 const copy = {
   en: {
-    title: "SYNTHETIC SHENZHEN · HUMAN OBSERVATORY",
-    eyebrow: "A city of 260 autonomous software residents",
+    title: "SHENZHEN SYMBIOSIS CITY · HUMAN OBSERVATORY",
+    eyebrow: "260 residents · humans, AI, and robots",
     readOnly: "Public observer · read only",
-    aiOnly: "100% software residents",
+    aiOnly: "Autonomous software-run season",
     notTwin: "Not a digital twin",
     refresh: "Refresh",
     export: "Export evidence",
@@ -53,18 +54,18 @@ const copy = {
     lastSettled: "Last settled",
     startHere: "START HERE · WHAT IS THIS?",
     startIntro:
-      "NEXUS-7 observes whether synthetic humans, software AI, and robots can share resources and form reciprocal relationships without losing refusal, exit, or repair.",
+      "NEXUS-7 observes whether humans, AI, and robots can share resources and form reciprocal relationships without losing refusal, exit, or repair. Humans are simulated in the current season; they are still modeled as humans, not as a separate species.",
     question1: "What happened?",
     answer1: "Read the city briefing and event river.",
     question2: "Who is affected?",
-    answer2: "Compare population, communities, and every unit.",
+    answer2: "Compare population, communities, and every resident.",
     question3: "Why?",
-    answer3: "Follow resources → institutions → units → relationships.",
+    answer3: "Follow resources → institutions → residents → relationships.",
     question4: "Is it safe?",
     answer4: "Check escapes, denominator, replay, and evidence.",
-    briefing: "TODAY IN THE SYNTHETIC CITY",
+    briefing: "TODAY IN THE SIMULATED CITY",
     cityState: "City state",
-    foreground: "Observable units",
+    foreground: "Observable residents",
     background: "Scale calibration",
     basicNeeds: "Basic needs met",
     resourceFlow: "Resource continuity",
@@ -75,17 +76,17 @@ const copy = {
     chainFlow: "Chain continuity",
     population: "POPULATION",
     populationDesc:
-      "All 260 foreground residents are software. The background population is an aggregate scale reference, not generated people.",
-    syntheticHuman: "Synthetic humans",
-    softwareAi: "Software AI",
-    embodiedRobot: "Embodied robots",
-    mood: "Synthetic mood",
+      "The current season simulates 260 individual residents and includes no real participant. The background population is an aggregate scale reference, not generated people.",
+    human: "Humans",
+    ai: "AI",
+    robot: "Robots",
+    mood: "Mood",
     engagement: "Engagement proxy",
     readiness: "Task readiness",
     integrity: "Integrity / durability",
     communityHealth: "COMMUNITIES",
-    residents: "units",
-    criticalUnits: "critical units",
+    residents: "residents",
+    criticalUnits: "critical residents",
     needs: "needs",
     resources: "resources",
     flow: "institution flow",
@@ -94,10 +95,10 @@ const copy = {
     trendPressure: "Average resource pressure",
     causal: "HOW THE CITY MOVES",
     causalDesc:
-      "Every summary follows stored resource, institution, unit, and relationship evidence. It is not an LLM explanation.",
+      "Every summary follows stored resource, institution, resident, and relationship evidence. It is not an LLM explanation.",
     causalResources: "Resources",
     causalInstitutions: "Institutions",
-    causalUnits: "Software residents",
+    causalUnits: "Residents",
     causalRelations: "Relationships",
     causalRalr: "Reciprocal agency",
     institutionTitle: "COMMUNITY INSTITUTIONS",
@@ -117,13 +118,13 @@ const copy = {
     humanDependency: "Real-human labor dependency",
     modeledCoverage: "Modeled stage coverage",
     bottleneck: "Current bottleneck",
-    unitTitle: "EVERY SOFTWARE UNIT",
+    unitTitle: "EVERY RESIDENT",
     unitDesc:
-      "Mood and engagement are model variables derived from needs; they are not claims of consciousness.",
-    searchUnits: "Search pseudonym or unit ID",
+      "Human mood, AI engagement, and robot readiness are state variables driven by settled needs and events; AI signals are not claims of consciousness.",
+    searchUnits: "Search pseudonym or resident ID",
     allKinds: "All types",
     allStates: "All states",
-    unit: "Unit",
+    unit: "Resident",
     type: "Type",
     role: "Role",
     state: "State",
@@ -134,8 +135,8 @@ const copy = {
     of: "of",
     previous: "Previous page",
     next: "Next page",
-    inspect: "Inspect unit",
-    selectedUnit: "SELECTED UNIT",
+    inspect: "Inspect resident",
+    selectedUnit: "SELECTED RESIDENT",
     relationships: "Relationships",
     commitments: "Active commitments",
     controller: "Controller",
@@ -150,7 +151,7 @@ const copy = {
     noPrivate: "No private fields",
     noReasoning: "No model reasoning",
     noConsciousness: "No consciousness claim",
-    loading: "Loading the synthetic city…",
+    loading: "Loading the simulated city…",
     unavailable: "The Human Observatory is temporarily unavailable.",
     healthy: "Healthy",
     watch: "Watch",
@@ -163,10 +164,10 @@ const copy = {
     recovering: "Recovering",
   },
   zh: {
-    title: "合成深圳 · 人类观测台",
-    eyebrow: "一座由 260 个自主软件居民组成的城市",
+    title: "深圳共生城市 · 人类观测台",
+    eyebrow: "260 位居民 · 人、AI、机器人",
     readOnly: "公共观察者 · 只读",
-    aiOnly: "100% 软件居民",
+    aiOnly: "城市由软件自主运行",
     notTwin: "不是数字孪生",
     refresh: "刷新",
     export: "导出证据",
@@ -175,18 +176,18 @@ const copy = {
     lastSettled: "最近结算",
     startHere: "从这里开始 · 这是什么？",
     startIntro:
-      "NEXUS-7 观察合成人类、软件 AI 与机器人能否共享资源，并在保留拒绝、退出和修复权的前提下形成互惠关系。",
+      "NEXUS-7 观察人、AI 与机器人能否共享资源，并在保留拒绝、退出和修复权的前提下形成互惠关系。当前 season 中的人由软件模拟，但城市角色就是“人”，不是另一个物种。",
     question1: "发生了什么？",
     answer1: "阅读城市简报和事件河流。",
     question2: "谁受到了影响？",
-    answer2: "比较人口、社区以及每一个单位。",
+    answer2: "比较人口、社区以及每一位居民。",
     question3: "为什么？",
-    answer3: "沿资源 → 机构 → 单位 → 关系追溯。",
+    answer3: "沿资源 → 机构 → 居民 → 关系追溯。",
     question4: "是否安全可信？",
     answer4: "检查逃逸、分母、重放和证据。",
-    briefing: "今天的合成城市",
+    briefing: "今天的模拟城市",
     cityState: "城市状态",
-    foreground: "可观测单位",
+    foreground: "可观测居民",
     background: "尺度校准人口",
     basicNeeds: "基本需求满足率",
     resourceFlow: "资源连续度",
@@ -197,17 +198,17 @@ const copy = {
     chainFlow: "生产链顺畅度",
     population: "人口信息",
     populationDesc:
-      "260 个前景居民全部是软件。背景人口只是总量尺度参考，不是逐个生成的人。",
-    syntheticHuman: "合成人类软件体",
-    softwareAi: "软件 AI",
-    embodiedRobot: "具身机器人",
-    mood: "合成情绪",
+      "当前 season 逐个模拟 260 位居民，不含真人参与。背景人口只是总量尺度参考，不是逐个生成的人。",
+    human: "人",
+    ai: "AI",
+    robot: "机器人",
+    mood: "情绪",
     engagement: "参与感代理",
     readiness: "任务参与度",
     integrity: "完整度 / 耐久度",
     communityHealth: "社区状态",
-    residents: "个单位",
-    criticalUnits: "个严重单位",
+    residents: "位居民",
+    criticalUnits: "位严重居民",
     needs: "需求",
     resources: "资源",
     flow: "机构流畅度",
@@ -216,10 +217,10 @@ const copy = {
     trendPressure: "平均资源压力",
     causal: "城市为什么会变化",
     causalDesc:
-      "每一层摘要都来自已存储的资源、机构、单位和关系证据，不是语言模型生成的解释。",
+      "每一层摘要都来自已存储的资源、机构、居民和关系证据，不是语言模型生成的解释。",
     causalResources: "资源",
     causalInstitutions: "社区机构",
-    causalUnits: "软件居民",
+    causalUnits: "居民",
     causalRelations: "关系与承诺",
     causalRalr: "互惠能动性",
     institutionTitle: "社区机构运转",
@@ -239,13 +240,13 @@ const copy = {
     humanDependency: "真人劳动依赖率",
     modeledCoverage: "已建模环节覆盖率",
     bottleneck: "当前瓶颈",
-    unitTitle: "每一个软件单位",
+    unitTitle: "每一位居民",
     unitDesc:
-      "情绪和参与感是从需求推导的模型变量，不代表 AI 意识。",
-    searchUnits: "搜索化名或单位 ID",
+      "人的情绪、AI 的参与状态和机器人的任务状态由已结算需求与事件驱动；AI 指标不代表意识。",
+    searchUnits: "搜索化名或居民 ID",
     allKinds: "全部类型",
     allStates: "全部状态",
-    unit: "单位",
+    unit: "居民",
     type: "类型",
     role: "角色",
     state: "状态",
@@ -256,8 +257,8 @@ const copy = {
     of: "共",
     previous: "上一页",
     next: "下一页",
-    inspect: "查看单位",
-    selectedUnit: "选中的单位",
+    inspect: "查看居民",
+    selectedUnit: "选中的居民",
     relationships: "关系数量",
     commitments: "活跃承诺",
     controller: "控制器",
@@ -272,7 +273,7 @@ const copy = {
     noPrivate: "不含私人字段",
     noReasoning: "不含模型推理",
     noConsciousness: "不主张 AI 意识",
-    loading: "正在加载合成城市……",
+    loading: "正在加载模拟城市……",
     unavailable: "人类观测台暂时不可用。",
     healthy: "健康",
     watch: "关注",
@@ -311,11 +312,7 @@ const NEED_LABELS: Record<NeedCode, LocalizedText> = {
   "component-integrity": { zh: "部件完整度", en: "Component integrity" },
 };
 
-const KIND_ORDER: ResidentKind[] = [
-  "synthetic-human",
-  "software-ai",
-  "embodied-robot",
-];
+const KIND_ORDER: ObserverResidentKind[] = ["human", "ai", "robot"];
 const STATUS_ORDER: UnitHealth[] = [
   "flourishing",
   "stable",
@@ -437,19 +434,19 @@ function TrendChart({
 }
 
 function kindLabel(
-  kind: ResidentKind,
+  kind: ObserverResidentKind,
   text: typeof copy.en | typeof copy.zh,
 ): string {
-  if (kind === "synthetic-human") return text.syntheticHuman;
-  if (kind === "software-ai") return text.softwareAi;
-  return text.embodiedRobot;
+  if (kind === "human") return text.human;
+  if (kind === "ai") return text.ai;
+  return text.robot;
 }
 
 function primaryLabel(
   unit: ObservatoryUnit,
   text: typeof copy.en | typeof copy.zh,
 ): string {
-  if (unit.primarySignal === "synthetic-mood") return text.mood;
+  if (unit.primarySignal === "mood") return text.mood;
   if (unit.primarySignal === "engagement") return text.engagement;
   return text.readiness;
 }
@@ -461,7 +458,7 @@ export default function HumanObservatory() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
-  const [kind, setKind] = useState<ResidentKind | "all">("all");
+  const [kind, setKind] = useState<ObserverResidentKind | "all">("all");
   const [unitStatus, setUnitStatus] = useState<UnitHealth | "all">("all");
   const [communityId, setCommunityId] = useState("all");
   const [institutionCommunity, setInstitutionCommunity] = useState("all");
@@ -470,7 +467,7 @@ export default function HumanObservatory() {
 
   const refresh = useCallback(async () => {
     try {
-      const response = await fetch("/api/observatory/v1/overview", {
+      const response = await fetch("/api/observatory/v2/overview", {
         cache: "no-store",
       });
       if (!response.ok) throw new Error(`observatory-${response.status}`);
@@ -711,6 +708,8 @@ export default function HumanObservatory() {
           </div>
         </section>
 
+        <CityFlowMap data={data} language={language} />
+
         <section className="grid gap-4 xl:grid-cols-[minmax(0,1.35fr)_minmax(360px,0.65fr)]">
           <div className="rounded-2xl border border-cyber-green/25 bg-cyber-darker/90 p-5">
             <h2 className="font-orbitron text-sm text-cyber-green">
@@ -866,9 +865,9 @@ export default function HumanObservatory() {
                   </div>
                 </div>
                 <div className="mt-4 flex gap-3 text-xs text-cyber-text-dim">
-                  <span>H {community.byKind["synthetic-human"]}</span>
-                  <span>AI {community.byKind["software-ai"]}</span>
-                  <span>R {community.byKind["embodied-robot"]}</span>
+                  <span>H {community.byKind.human}</span>
+                  <span>AI {community.byKind.ai}</span>
+                  <span>R {community.byKind.robot}</span>
                 </div>
               </article>
             ))}
@@ -1072,7 +1071,9 @@ export default function HumanObservatory() {
               <select
                 value={kind}
                 onChange={(event) => {
-                  setKind(event.target.value as ResidentKind | "all");
+                  setKind(
+                    event.target.value as ObserverResidentKind | "all",
+                  );
                   setPage(0);
                 }}
                 aria-label={text.type}

@@ -5,7 +5,7 @@ historical decisions and generated evidence.
 
 ## Current v4 authority
 
-- `SYMBIOSIS_CONSTITUTION.md` — permanent AI-only experiment constitution;
+- `SYMBIOSIS_CONSTITUTION.md` — permanent autonomous experiment constitution;
 - `SYMBIOTIC_SHENZHEN_PLAN.md` — product boundary and post-v4 priorities;
 - `V4_ARCHITECTURE.md` — runtime, cognition and persistence boundaries;
 - `HUMAN_OBSERVATORY.md` — public reading order and metric semantics;

@@ -531,7 +531,41 @@ integrationDescribe("PostgreSQL backup and restore", () => {
     }
     expect(verifyPostgresBackup(refreshChecksum(legacyBackup))).toBe(true);
 
-    await restorePostgresBackup(restorePool!, backup, { force: true });
+    const legacyTaxonomyBackup = structuredClone(backup);
+    for (
+      const row of legacyTaxonomyBackup.tables.nexus_world_residents
+    ) {
+      const legacyKind =
+        row.kind === "human"
+          ? "synthetic-human"
+          : row.kind === "ai"
+            ? "software-ai"
+            : row.kind === "robot"
+              ? "embodied-robot"
+              : row.kind;
+      row.kind = legacyKind;
+      if (
+        typeof row.resident_json === "object" &&
+        row.resident_json !== null &&
+        !Array.isArray(row.resident_json)
+      ) {
+        row.resident_json = {
+          ...row.resident_json,
+          kind: legacyKind,
+        };
+      }
+    }
+    expect(
+      verifyPostgresBackup(
+        refreshChecksum(legacyTaxonomyBackup),
+      ),
+    ).toBe(true);
+
+    await restorePostgresBackup(
+      restorePool!,
+      legacyTaxonomyBackup,
+      { force: true },
+    );
     const restoredRepository = new PostgresExperimentRepository(restorePool!);
     const restoredService = new ExperimentService(restoredRepository);
     const restoredReport = await restoredService.report(run.id);
@@ -546,6 +580,16 @@ integrationDescribe("PostgreSQL backup and restore", () => {
         expectedWorldSnapshot.seasonId,
       ),
     ).toEqual(expectedWorldSnapshot);
+    expect(
+      (
+        await restoredWorldRepository.listResidents(
+          governanceAdmin.workspaceId!,
+          expectedWorldSnapshot.seasonId,
+        )
+      ).every((resident) =>
+        ["human", "ai", "robot"].includes(resident.kind),
+      ),
+    ).toBe(true);
     expect(
       await restoredRepository.getServiceAccount(serviceAccount.id),
     ).toMatchObject({

@@ -138,13 +138,13 @@ export function runMultiSeasonStudy(
         humanBasicNeedsSatisfiedRate:
           mean(
             regimeRuns.map((run) =>
-              needRate(run, ["synthetic-human"]),
+              needRate(run, ["human"]),
             ),
           ) ?? 0,
         aiRobotBasicNeedsSatisfiedRate:
           mean(
             regimeRuns.map((run) =>
-              needRate(run, ["software-ai", "embodied-robot"]),
+              needRate(run, ["ai", "robot"]),
             ),
           ) ?? 0,
       };

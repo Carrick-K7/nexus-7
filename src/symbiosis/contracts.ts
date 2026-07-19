@@ -18,10 +18,7 @@ export const SHENZHEN_TIME_ZONE = "Asia/Shanghai" as const;
 export const DEFAULT_SYMBIOSIS_SEASON_ID =
   "symbiotic-shenzhen-season-2026-q3" as const;
 
-export type ResidentKind =
-  | "synthetic-human"
-  | "software-ai"
-  | "embodied-robot";
+export type ResidentKind = "human" | "ai" | "robot";
 
 export type SymbiosisRegime =
   | "reciprocal-agency"
@@ -150,25 +147,25 @@ interface ResidentBase {
   createdAt: string;
 }
 
-export interface SyntheticHumanResident extends ResidentBase {
-  kind: "synthetic-human";
+export interface HumanResident extends ResidentBase {
+  kind: "human";
   occupationFamily: string;
 }
 
-export interface SoftwareAiResident extends ResidentBase {
-  kind: "software-ai";
+export interface AiResident extends ResidentBase {
+  kind: "ai";
   runtimeClass: "community" | "research" | "service";
 }
 
-export interface EmbodiedRobotResident extends ResidentBase {
-  kind: "embodied-robot";
+export interface RobotResident extends ResidentBase {
+  kind: "robot";
   chassisClass: "mobile-service" | "maintenance" | "logistics";
 }
 
 export type Resident =
-  | SyntheticHumanResident
-  | SoftwareAiResident
-  | EmbodiedRobotResident;
+  | HumanResident
+  | AiResident
+  | RobotResident;
 
 export interface NeedValue {
   code: NeedCode;

@@ -72,9 +72,18 @@ Locks the production and repository boundary:
 - Separates fixed 100% software control from dynamic chain continuity.
 - Connects metrics to events, fingerprints, formulas and replay evidence.
 
+### v4.3 — Living City Flow
+
+- Replaces the public taxonomy with exactly `human`, `ai` and `robot`.
+- Migrates PostgreSQL and resident JSON while preserving v1 read compatibility.
+- Settles deterministic inter-community resource balancing every Turn.
+- Writes transfer lanes to conserved ledgers and append-only events.
+- Adds a Cities: Skylines-inspired city information layer over actual
+  production, consumption, transfer, inventory and pressure data.
+
 ## Next objectives
 
-### v4.3 — Long-running reliability
+### v4.4 — Long-running reliability
 
 - Measure missed, duplicate and delayed Turns over at least 90 wall-clock days.
 - Add SLOs for Turn age, report freshness, database growth and backup age.
@@ -87,7 +96,7 @@ Locks the production and repository boundary:
 Exit: 99.9% on-time Turn settlement, zero duplicate Turns, verified off-host
 restore and no continuity escape.
 
-### v4.4 — Cognitive diversity without provider dependence
+### v4.5 — Cognitive diversity without provider dependence
 
 - Add a second schema-compatible provider in shadow mode.
 - Measure policy/provider homogeneity, decision disagreement and fallback bias.
@@ -97,7 +106,7 @@ restore and no continuity escape.
 Exit: provider substitution changes no world invariant; shadow comparison is
 replayable and budget bounded.
 
-### v4.5 — Richer AI society
+### v4.6 — Richer city society
 
 - Add software-governed work, exchange, institution and household formation.
 - Model compute/energy ownership, maintenance labor and resource bargaining.
@@ -108,7 +117,7 @@ replayable and budget bounded.
 Exit: every new institution has state machines, failure paths, distribution
 metrics, memory/PostgreSQL parity and a controlled comparison.
 
-### v4.6 — Scientific replication
+### v4.7 — Scientific replication
 
 - Freeze preregistered hypotheses and analysis plans.
 - Publish portable scenario/data bundles with exact hashes.

@@ -1,0 +1,48 @@
+{
+  "id": "iteration-v4.3.0",
+  "version": "4.3.0",
+  "date": "2026-07-19",
+  "trigger": "human-observation",
+  "triggerReason": "The public taxonomy treated humans as a strange fourth kind and the dashboard hid durable resource flows behind static-looking projections.",
+  "action": "Changed the domain and PostgreSQL taxonomy to human, ai and robot; added a checksum-compatible migration and v1 API adapter; introduced deterministic inter-community resource balancing, resource-transfer events and a v2 Observatory contract; redesigned the front door around a city information layer with production, consumption, transfer, inventory and pressure ledgers.",
+  "outcome": "Implementation passed 245 tests including 16 real PostgreSQL/independent-restore checks, 25 Playwright/axe scenarios, zero lint warnings, zero audit vulnerabilities, exact 365-Turn replay with conserved resource transfers, the v2 closure gate and a 10,000-tick stress run. Production deployment and public flow evidence are pending.",
+  "metrics": [
+    {
+      "label": "Public resident kinds",
+      "before": 3,
+      "after": 3
+    },
+    {
+      "label": "Persisted resource rows exposed per Turn",
+      "before": 0,
+      "after": 24
+    },
+    {
+      "label": "Resource flow dimensions exposed",
+      "before": 1,
+      "after": 7
+    },
+    {
+      "label": "Versioned Observatory contracts",
+      "before": 1,
+      "after": 2
+    }
+  ],
+  "evidence": [
+    "Resident taxonomy is human, ai and robot in TypeScript, PostgreSQL and Observatory v2",
+    "Every transfer is conserved in source and destination ledgers",
+    "Every non-zero transfer resource produces an append-only event",
+    "Legacy backup taxonomy is normalized only after checksum verification",
+    "The city information layer reads the committed Turn rather than a display fixture",
+    "Desktop, mobile, Chinese and WCAG A/AA city-flow scenarios pass",
+    "Playwright uses an isolated non-reused port so another repository cannot masquerade as this application"
+  ],
+  "artifacts": [
+    "migrations/0011_resident_taxonomy.sql",
+    "src/symbiosis/engine.ts",
+    "src/symbiosis/observatory.ts",
+    "src/app/api/observatory/v2/overview/route.ts",
+    "src/components/symbiosis/CityFlowMap.tsx",
+    "docs/adr/0023-living-city-flow.md"
+  ]
+}

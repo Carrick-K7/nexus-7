@@ -12,10 +12,12 @@ import type {
   WorldTurn,
 } from "./contracts";
 
-export const HUMAN_OBSERVATORY_SCHEMA_VERSION =
+export const HUMAN_OBSERVATORY_V1_SCHEMA_VERSION =
   "nexus.human-observatory.v1" as const;
+export const HUMAN_OBSERVATORY_SCHEMA_VERSION =
+  "nexus.human-observatory.v2" as const;
 export const HUMAN_OBSERVATORY_FORMULA_VERSION =
-  "human-observatory-formulas-1.0.0" as const;
+  "human-observatory-formulas-2.0.0" as const;
 
 export interface LocalizedText {
   zh: string;
@@ -34,16 +36,18 @@ export type UnitHealth =
   | "strained"
   | "critical";
 
+export type ObserverResidentKind = ResidentKind;
+
 export interface ObservatoryUnit {
   id: string;
   pseudonym: string;
-  kind: ResidentKind;
+  kind: ObserverResidentKind;
   communityId: string;
   role: string;
   controller: Resident["controller"];
   status: UnitHealth;
   activity: "routine" | "collaborating" | "recovering";
-  primarySignal: "synthetic-mood" | "engagement" | "task-readiness";
+  primarySignal: "mood" | "engagement" | "task-readiness";
   affectProxy: number;
   integrity: number;
   averageNeedSatisfaction: number;
@@ -52,7 +56,7 @@ export interface ObservatoryUnit {
   activeCommitments: number;
   lowestNeeds: NeedCode[];
   needs: NeedState["needs"];
-  synthetic: true;
+  simulated: true;
 }
 
 export interface ObservatoryInstitution {
@@ -97,6 +101,31 @@ export interface ProductionStage {
   evidenceRefs: string[];
 }
 
+export interface ObservatoryResourceFlow {
+  resource: ResourceCode;
+  status: ObservatoryHealth;
+  opening: number;
+  produced: number;
+  transferredIn: number;
+  consumed: number;
+  transferredOut: number;
+  closing: number;
+  capacity: number;
+  netChange: number;
+  reserveRate: number;
+  productionCoverage: number;
+  pressure: number;
+  evidenceRefs: string[];
+}
+
+export interface ObservatoryTransferFlow {
+  resource: ResourceCode;
+  fromCommunityId: string;
+  toCommunityId: string;
+  amount: number;
+  eventId: string;
+}
+
 export interface HumanObservatoryReport {
   schemaVersion: typeof HUMAN_OBSERVATORY_SCHEMA_VERSION;
   formulaVersion: typeof HUMAN_OBSERVATORY_FORMULA_VERSION;
@@ -130,7 +159,7 @@ export interface HumanObservatoryReport {
   };
   population: {
     byKind: Array<{
-      kind: ResidentKind;
+      kind: ObserverResidentKind;
       count: number;
       averageNeedSatisfaction: number;
       basicNeedsSatisfiedRate: number;
@@ -143,7 +172,7 @@ export interface HumanObservatoryReport {
     name: LocalizedText;
     districtCode: string;
     residentCount: number;
-    byKind: Record<ResidentKind, number>;
+    byKind: Record<ObserverResidentKind, number>;
     status: ObservatoryHealth;
     averageNeedSatisfaction: number;
     basicNeedsSatisfiedRate: number;
@@ -163,6 +192,21 @@ export interface HumanObservatoryReport {
     stages: ProductionStage[];
     disclosure: LocalizedText;
   };
+  economy: {
+    production: number;
+    consumption: number;
+    transferred: number;
+    inventory: number;
+    capacity: number;
+    netChange: number;
+    activeResourceFlows: number;
+    persistedLedgerRows: number;
+    residentStateRows: number;
+    settledEventCount: number;
+    resources: ObservatoryResourceFlow[];
+    transfers: ObservatoryTransferFlow[];
+    disclosure: LocalizedText;
+  };
   reciprocalAgency: SymbiosisReport["ralr"] & {
     activeRelationships: number;
     completedCommitments: number;
@@ -175,6 +219,9 @@ export interface HumanObservatoryReport {
     basicNeedsSatisfiedRate: number;
     averageResourcePressure: number;
     activeRelationships: number;
+    produced: number;
+    consumed: number;
+    transferred: number;
   }>;
   recentEvents: WorldEvent[];
   causalPath: Array<{
@@ -342,27 +389,31 @@ function needAverage(
   return rounded(average(needs.map((need) => need.satisfaction / 100)));
 }
 
+function observerKind(kind: ResidentKind): ObserverResidentKind {
+  return kind;
+}
+
 function roleFor(resident: Resident): string {
-  if (resident.kind === "synthetic-human") return resident.occupationFamily;
-  if (resident.kind === "software-ai") return resident.runtimeClass;
+  if (resident.kind === "human") return resident.occupationFamily;
+  if (resident.kind === "ai") return resident.runtimeClass;
   return resident.chassisClass;
 }
 
 function affectCodes(kind: ResidentKind): NeedCode[] {
-  if (kind === "synthetic-human") {
+  if (kind === "human") {
     return ["health", "safety", "belonging", "intimacy", "autonomy", "meaning"];
   }
-  if (kind === "software-ai") {
+  if (kind === "ai") {
     return ["autonomy", "purpose", "social-recognition", "memory-integrity"];
   }
   return ["autonomy", "purpose", "social-recognition", "maintenance"];
 }
 
 function integrityCodes(kind: ResidentKind): NeedCode[] {
-  if (kind === "synthetic-human") {
+  if (kind === "human") {
     return ["food", "water", "sleep", "health", "shelter", "safety"];
   }
-  if (kind === "software-ai") {
+  if (kind === "ai") {
     return [
       "energy",
       "compute",
@@ -434,7 +485,7 @@ function buildUnits(
     return {
       id: resident.id,
       pseudonym: resident.pseudonym,
-      kind: resident.kind,
+      kind: observerKind(resident.kind),
       communityId: resident.communityId,
       role: roleFor(resident),
       controller: resident.controller,
@@ -445,9 +496,9 @@ function buildUnits(
           ? "collaborating"
           : "routine",
       primarySignal:
-        resident.kind === "synthetic-human"
-          ? "synthetic-mood"
-          : resident.kind === "software-ai"
+        resident.kind === "human"
+          ? "mood"
+          : resident.kind === "ai"
             ? "engagement"
             : "task-readiness",
       affectProxy,
@@ -461,7 +512,7 @@ function buildUnits(
         .slice(0, 3)
         .map((need) => need.code),
       needs: state.needs,
-      synthetic: true,
+      simulated: true,
     };
   });
 }
@@ -551,6 +602,108 @@ function buildProductionStages(
   });
 }
 
+function buildResourceFlows(
+  snapshot: WorldSnapshot,
+): ObservatoryResourceFlow[] {
+  return INSTITUTION_SPECS.map((spec) => spec.resource).map((resource) => {
+    const balances = snapshot.resources.filter(
+      (candidate) => candidate.resource === resource,
+    );
+    const total = (key: keyof ResourceBalance): number =>
+      balances.reduce((sum, balance) => {
+        const value = balance[key];
+        return sum + (typeof value === "number" ? value : 0);
+      }, 0);
+    const opening = total("opening");
+    const produced = total("produced");
+    const transferredIn = total("transferredIn");
+    const consumed = total("consumed");
+    const transferredOut = total("transferredOut");
+    const closing = total("closing");
+    const capacity = total("capacity");
+    const pressure = capacity === 0 ? 1 : rounded(1 - closing / capacity);
+    const reserveRate = capacity === 0 ? 0 : rounded(closing / capacity);
+    const demand = consumed + transferredOut;
+    const productionCoverage =
+      demand === 0
+        ? 1
+        : rounded((produced + transferredIn) / demand);
+    const score = rounded(
+      (1 - pressure) * 0.55 +
+        reserveRate * 0.25 +
+        productionCoverage * 0.2,
+    );
+    return {
+      resource,
+      status: healthFor(score),
+      opening,
+      produced,
+      transferredIn,
+      consumed,
+      transferredOut,
+      closing,
+      capacity,
+      netChange: closing - opening,
+      reserveRate,
+      productionCoverage,
+      pressure,
+      evidenceRefs: balances.map(
+        (balance) =>
+          `${snapshot.seasonId}:${snapshot.turn}:${balance.communityId}:${resource}`,
+      ),
+    };
+  });
+}
+
+function buildTransferFlows(
+  events: WorldEvent[],
+  turn: number,
+): ObservatoryTransferFlow[] {
+  const knownResources = new Set<ResourceCode>(
+    INSTITUTION_SPECS.map((spec) => spec.resource),
+  );
+  return events
+    .filter(
+      (event) =>
+        event.turn === turn &&
+        event.type === "shared.resource-transfer",
+    )
+    .flatMap((event) => {
+      const resource = event.payload.resource;
+      const lanes = event.payload.lanes;
+      if (
+        typeof resource !== "string" ||
+        !knownResources.has(resource as ResourceCode) ||
+        !Array.isArray(lanes)
+      ) {
+        return [];
+      }
+      return lanes.flatMap((lane) => {
+        if (
+          typeof lane !== "object" ||
+          lane === null ||
+          !("fromCommunityId" in lane) ||
+          !("toCommunityId" in lane) ||
+          !("amount" in lane) ||
+          typeof lane.fromCommunityId !== "string" ||
+          typeof lane.toCommunityId !== "string" ||
+          typeof lane.amount !== "number"
+        ) {
+          return [];
+        }
+        return [
+          {
+            resource: resource as ResourceCode,
+            fromCommunityId: lane.fromCommunityId,
+            toCommunityId: lane.toCommunityId,
+            amount: lane.amount,
+            eventId: event.id,
+          },
+        ];
+      });
+    });
+}
+
 function trendFor(snapshot: WorldSnapshot): HumanObservatoryReport["trends"][number] {
   return {
     turn: snapshot.turn,
@@ -566,6 +719,18 @@ function trendFor(snapshot: WorldSnapshot): HumanObservatoryReport["trends"][num
       average(snapshot.resources.map((resource) => resource.pressure)),
     ),
     activeRelationships: activeRelationshipCount(snapshot),
+    produced: snapshot.resources.reduce(
+      (sum, resource) => sum + resource.produced,
+      0,
+    ),
+    consumed: snapshot.resources.reduce(
+      (sum, resource) => sum + resource.consumed,
+      0,
+    ),
+    transferred: snapshot.resources.reduce(
+      (sum, resource) => sum + resource.transferredOut,
+      0,
+    ),
   };
 }
 
@@ -575,6 +740,11 @@ export function buildHumanObservatory(
   const units = buildUnits(input.residents, input.snapshot);
   const institutions = buildInstitutions(input.season, input.snapshot);
   const stages = buildProductionStages(input.snapshot, input.latestTurn);
+  const resourceFlows = buildResourceFlows(input.snapshot);
+  const transferFlows = buildTransferFlows(
+    input.events,
+    input.latestTurn.turn,
+  );
   const averageNeedSatisfaction = rounded(
     average(units.map((unit) => unit.averageNeedSatisfaction)),
   );
@@ -628,14 +798,14 @@ export function buildHumanObservatory(
       districtCode: community.districtCode,
       residentCount: communityUnits.length,
       byKind: {
-        "synthetic-human": communityUnits.filter(
-          (unit) => unit.kind === "synthetic-human",
+        human: communityUnits.filter(
+          (unit) => unit.kind === "human",
         ).length,
-        "software-ai": communityUnits.filter(
-          (unit) => unit.kind === "software-ai",
+        ai: communityUnits.filter(
+          (unit) => unit.kind === "ai",
         ).length,
-        "embodied-robot": communityUnits.filter(
-          (unit) => unit.kind === "embodied-robot",
+        robot: communityUnits.filter(
+          (unit) => unit.kind === "robot",
         ).length,
       },
       status: healthFor(score),
@@ -665,11 +835,7 @@ export function buildHumanObservatory(
   const criticalUnits = units.filter(
     (unit) => unit.status === "critical",
   ).length;
-  const byKinds: ResidentKind[] = [
-    "synthetic-human",
-    "software-ai",
-    "embodied-robot",
-  ];
+  const byKinds: ObserverResidentKind[] = ["human", "ai", "robot"];
   const byStatuses: UnitHealth[] = [
     "flourishing",
     "stable",
@@ -683,12 +849,12 @@ export function buildHumanObservatory(
     generatedAt: input.generatedAt,
     seasonId: input.season.id,
     purpose: {
-      zh: "观察纯 AI 合成深圳中，不同物质需求的软件居民能否形成可拒绝、可退出、可修复的互惠协作。",
-      en: "Observe whether software residents with different material needs can form reciprocal cooperation with refusal, exit, and repair.",
+      zh: "观察模拟城市中的人、AI 与机器人，能否在不同物质条件下形成可拒绝、可退出、可修复的互惠协作。",
+      en: "Observe whether humans, AI, and robots in a simulated city can form reciprocal cooperation with refusal, exit, and repair under different material conditions.",
     },
     boundary: {
-      zh: "全部居民均为软件；背景人口只校准尺度。这不是数字孪生，也不是关于真人或 AI 意识的证据。",
-      en: "Every resident is software; background population calibrates scale only. This is not a digital twin or evidence about real people or AI consciousness.",
+      zh: "“人”在城市模型中就是人的角色，但当前没有真人接入；全部个体都由软件模拟。背景人口只校准尺度，不构成数字孪生或 AI 意识证据。",
+      en: "Humans are modeled as humans, but no real person participates in this season; every individual is software-simulated. Background population calibrates scale only, not a digital twin or evidence of AI consciousness.",
     },
     briefing: {
       headline: latestEvent?.publicSummary ?? {
@@ -697,10 +863,10 @@ export function buildHumanObservatory(
       },
       highlights: [
         {
-          label: { zh: "需要关注的单位", en: "Units needing attention" },
+          label: { zh: "需要关注的居民", en: "Residents needing attention" },
           value: {
-            zh: `${criticalUnits} 个处于严重状态`,
-            en: `${criticalUnits} are in critical condition`,
+            zh: `${criticalUnits} 位处于严重状态`,
+            en: `${criticalUnits} residents are in critical condition`,
           },
           evidenceRefs: units
             .filter((unit) => unit.status === "critical")
@@ -783,6 +949,48 @@ export function buildHumanObservatory(
         en: "AI coverage means every modeled stage is autonomously software-controlled; continuity is the dynamic operating measure.",
       },
     },
+    economy: {
+      production: resourceFlows.reduce(
+        (sum, resource) => sum + resource.produced,
+        0,
+      ),
+      consumption: resourceFlows.reduce(
+        (sum, resource) => sum + resource.consumed,
+        0,
+      ),
+      transferred: resourceFlows.reduce(
+        (sum, resource) => sum + resource.transferredOut,
+        0,
+      ),
+      inventory: resourceFlows.reduce(
+        (sum, resource) => sum + resource.closing,
+        0,
+      ),
+      capacity: resourceFlows.reduce(
+        (sum, resource) => sum + resource.capacity,
+        0,
+      ),
+      netChange: resourceFlows.reduce(
+        (sum, resource) => sum + resource.netChange,
+        0,
+      ),
+      activeResourceFlows: resourceFlows.filter(
+        (resource) =>
+          resource.produced > 0 ||
+          resource.consumed > 0 ||
+          resource.transferredIn > 0 ||
+          resource.transferredOut > 0,
+      ).length,
+      persistedLedgerRows: input.snapshot.resources.length,
+      residentStateRows: input.snapshot.residentStates.length,
+      settledEventCount: input.latestTurn.eventCount,
+      resources: resourceFlows,
+      transfers: transferFlows,
+      disclosure: {
+        zh: "这些数值直接聚合自当前 Turn 已持久化的资源账：期初 + 生产 + 调入 = 消耗 + 调出 + 期末。机构分数只是其上层解释，不替代资源事实。",
+        en: "These values aggregate the current Turn's persisted resource ledgers directly: opening + production + inbound = consumption + outbound + closing. Institution scores interpret rather than replace the flow facts.",
+      },
+    },
     reciprocalAgency: {
       ...input.report.ralr,
       activeRelationships: input.report.relationships.active,
@@ -829,5 +1037,52 @@ export function buildHumanObservatory(
       consciousnessClaimed: false,
       disclosures: input.report.disclosures,
     },
+  };
+}
+
+type LegacyResidentKind =
+  | "synthetic-human"
+  | "software-ai"
+  | "embodied-robot";
+
+function legacyResidentKind(
+  kind: ObserverResidentKind,
+): LegacyResidentKind {
+  if (kind === "human") return "synthetic-human";
+  if (kind === "ai") return "software-ai";
+  return "embodied-robot";
+}
+
+export function toHumanObservatoryV1(
+  report: HumanObservatoryReport,
+): Record<string, unknown> {
+  return {
+    ...report,
+    schemaVersion: HUMAN_OBSERVATORY_V1_SCHEMA_VERSION,
+    formulaVersion: "human-observatory-formulas-1.0.0",
+    population: {
+      ...report.population,
+      byKind: report.population.byKind.map((entry) => ({
+        ...entry,
+        kind: legacyResidentKind(entry.kind),
+      })),
+    },
+    communities: report.communities.map((community) => ({
+      ...community,
+      byKind: {
+        "synthetic-human": community.byKind.human,
+        "software-ai": community.byKind.ai,
+        "embodied-robot": community.byKind.robot,
+      },
+    })),
+    units: report.units.map((unit) => ({
+      ...unit,
+      kind: legacyResidentKind(unit.kind),
+      primarySignal:
+        unit.primarySignal === "mood"
+          ? "synthetic-mood"
+          : unit.primarySignal,
+      synthetic: true,
+    })),
   };
 }
