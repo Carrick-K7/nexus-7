@@ -632,6 +632,10 @@ function migratePersistedState(
   persistedVersion = 0,
 ): Partial<NexusStore> {
   const persisted = (persistedState ?? {}) as Partial<NexusStore>;
+  const theme: ThemeMode =
+    (persistedState as { theme?: unknown } | undefined)?.theme === "light"
+      ? "light"
+      : "dark";
 
   if (persisted.simulation?.world) {
     const simulation =
@@ -647,6 +651,7 @@ function migratePersistedState(
     const metrics = selectCityMetrics(simulation.world);
     return {
       ...persisted,
+      theme,
       simulation,
       cityStats: metrics,
       gameTime: {
@@ -677,6 +682,7 @@ function migratePersistedState(
 
   return {
     ...persisted,
+    theme,
     simulation: createSimulationSession(migratedWorld),
     cityStats: selectCityMetrics(migratedWorld),
     cityStatsHistory: [],
@@ -1248,7 +1254,7 @@ export const useNexusStore = create<NexusStore>()(
     }),
     {
       name: STORAGE_KEY,
-      version: 3,
+      version: 4,
       migrate: (persistedState, version) =>
         migratePersistedState(persistedState, version),
       storage: {

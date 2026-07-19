@@ -44,9 +44,6 @@ const copy = {
   en: {
     title: "SHENZHEN SYMBIOSIS CITY · HUMAN OBSERVATORY",
     eyebrow: "260 residents · humans, AI, and robots",
-    readOnly: "Public observer · read only",
-    aiOnly: "Autonomous software-run season",
-    notTwin: "Not a digital twin",
     refresh: "Refresh",
     export: "Export evidence",
     turn: "Turn",
@@ -76,7 +73,7 @@ const copy = {
     chainFlow: "Chain continuity",
     population: "POPULATION",
     populationDesc:
-      "The current season simulates 260 individual residents and includes no real participant. The background population is an aggregate scale reference, not generated people.",
+      "The current season models 260 individual residents. The background population is an aggregate scale reference, not generated people.",
     human: "Humans",
     ai: "AI",
     robot: "Robots",
@@ -113,7 +110,7 @@ const copy = {
     smoothness: "Smoothness",
     productionTitle: "END-TO-END AI PRODUCTION",
     productionDesc:
-      "AI coverage is fixed by the all-software boundary. Continuity changes with actual resource and institution conditions.",
+      "Control coverage describes how much of the chain is operated by modeled agents. Continuity changes with actual resource and institution conditions.",
     autonomousCoverage: "Autonomous control coverage",
     humanDependency: "Real-human labor dependency",
     modeledCoverage: "Modeled stage coverage",
@@ -166,9 +163,6 @@ const copy = {
   zh: {
     title: "深圳共生城市 · 人类观测台",
     eyebrow: "260 位居民 · 人、AI、机器人",
-    readOnly: "公共观察者 · 只读",
-    aiOnly: "城市由软件自主运行",
-    notTwin: "不是数字孪生",
     refresh: "刷新",
     export: "导出证据",
     turn: "日序",
@@ -198,7 +192,7 @@ const copy = {
     chainFlow: "生产链顺畅度",
     population: "人口信息",
     populationDesc:
-      "当前 season 逐个模拟 260 位居民，不含真人参与。背景人口只是总量尺度参考，不是逐个生成的人。",
+      "当前 season 逐个建模 260 位居民。背景人口只是总量尺度参考，不是逐个生成的人。",
     human: "人",
     ai: "AI",
     robot: "机器人",
@@ -235,7 +229,7 @@ const copy = {
     smoothness: "顺畅度",
     productionTitle: "生产环节全链条 AI 化",
     productionDesc:
-      "AI 控制率由纯软件边界固定；真正随城市变化的是链路连续度和瓶颈。",
+      "控制覆盖率描述城市主体自动执行生产环节的比例；链路连续度和瓶颈随资源与机构状态变化。",
     autonomousCoverage: "自主控制覆盖率",
     humanDependency: "真人劳动依赖率",
     modeledCoverage: "已建模环节覆盖率",
@@ -606,7 +600,7 @@ export default function HumanObservatory() {
       aria-labelledby="human-observatory-title"
     >
       <div className="mx-auto max-w-[1720px] space-y-5">
-        <header className="overflow-hidden rounded-3xl border border-cyber-blue/30 bg-[radial-gradient(circle_at_top_right,rgba(0,240,255,0.13),transparent_42%),linear-gradient(135deg,rgba(18,18,26,0.98),rgba(8,8,12,0.98))] p-5 shadow-[0_0_60px_rgba(0,240,255,0.08)] sm:p-7">
+        <header className="observatory-hero overflow-hidden rounded-3xl border border-cyber-blue/30 p-5 sm:p-7">
           <div className="flex flex-col gap-6 xl:flex-row xl:items-start xl:justify-between">
             <div className="max-w-4xl">
               <p className="mb-2 text-xs font-semibold uppercase tracking-[0.28em] text-cyber-green">
@@ -621,19 +615,6 @@ export default function HumanObservatory() {
               <p className="mt-4 max-w-3xl text-base leading-7 text-cyber-text">
                 {data.purpose[language]}
               </p>
-              <p className="mt-2 max-w-3xl text-sm leading-6 text-cyber-text-dim">
-                {data.boundary[language]}
-              </p>
-              <div className="mt-4 flex flex-wrap gap-2 text-xs">
-                {[text.readOnly, text.aiOnly, text.notTwin].map((label) => (
-                  <span
-                    key={label}
-                    className="rounded-full border border-cyber-purple/35 bg-cyber-purple/10 px-3 py-1.5 text-cyber-text"
-                  >
-                    {label}
-                  </span>
-                ))}
-              </div>
             </div>
             <div className="min-w-72 rounded-2xl border border-cyber-gray-light bg-cyber-black/55 p-4">
               <div className="grid grid-cols-2 gap-4">
@@ -1362,16 +1343,6 @@ export default function HumanObservatory() {
                 </div>
               ))}
             </dl>
-            <div className="mt-5 space-y-2">
-              {data.evidence.disclosures.map((disclosure) => (
-                <p
-                  key={disclosure}
-                  className="rounded-lg border border-cyber-gray-light p-3 text-xs leading-5 text-cyber-text-dim"
-                >
-                  {disclosure}
-                </p>
-              ))}
-            </div>
           </div>
         </section>
       </div>

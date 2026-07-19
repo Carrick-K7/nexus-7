@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNexusStore } from "@/stores/nexus-store";
 import { useCitySimulation } from "@/hooks/useCitySimulation";
 import Sidebar from "@/components/layout/Sidebar";
@@ -17,7 +17,6 @@ import NotificationCenter from "@/components/notifications/NotificationCenter";
 import SatelliteControl from "@/components/satellite/SatelliteControl";
 import HackerGame from "@/components/hacker/HackerGame";
 import AIAgentsPanel from "@/components/agents/AIAgentsPanel";
-import MatrixRain from "@/components/effects/MatrixRain";
 import CityPreview3D from "@/components/city/CityPreview3D";
 import DataAnalytics from "@/components/analytics/DataAnalytics";
 import About from "@/components/about/About";
@@ -75,10 +74,22 @@ export default function Home() {
   const ActiveComponent = viewComponents[activeView] || Dashboard;
   useCitySimulation(activeView !== "symbiosis");
 
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    document.documentElement.style.colorScheme = theme;
+  }, [theme]);
+
+  const cyberpunkShell = activeView !== "symbiosis";
+
   return (
-    <div className="min-h-screen bg-cyber-black">
-      <BackgroundEffects />
-      {theme === 'matrix' && <MatrixRain enabled={true} opacity={0.7} />}
+    <div
+      data-theme={theme}
+      data-surface={cyberpunkShell ? "cyberpunk" : "observatory"}
+      className={`min-h-screen bg-cyber-black ${
+        cyberpunkShell ? "cyberpunk-shell" : "observatory-shell"
+      }`}
+    >
+      <BackgroundEffects enabled={cyberpunkShell} />
       {mobileNavOpen && (
         <button
           type="button"
@@ -92,7 +103,7 @@ export default function Home() {
         onClose={() => setMobileNavOpen(false)}
       />
       <Topbar onOpenMenu={() => setMobileNavOpen(true)} />
-      <main className="min-h-screen pt-16 lg:ml-64">
+      <main className="relative z-10 min-h-screen pt-16 lg:ml-64">
         <ActiveComponent />
       </main>
     </div>

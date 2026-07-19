@@ -2,7 +2,18 @@
 
 import { useNexusStore } from '@/stores/nexus-store';
 import { motion } from 'framer-motion';
-import { Bell, Search, Clock, Eye, Globe, Menu, Pause, Play } from 'lucide-react';
+import {
+  Bell,
+  Search,
+  Clock,
+  Eye,
+  Globe,
+  Menu,
+  Moon,
+  Pause,
+  Play,
+  Sun,
+} from "lucide-react";
 import { useState } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 
@@ -23,6 +34,8 @@ export default function Topbar({ onOpenMenu }: TopbarProps) {
     language,
     setLanguage,
     activeView,
+    theme,
+    setTheme,
   } = useNexusStore();
   const { t } = useTranslation();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -120,13 +133,6 @@ export default function Topbar({ onOpenMenu }: TopbarProps) {
           </div>
         </div>}
 
-        {observingSymbiosis && (
-          <div className="hidden items-center gap-2 rounded-full border border-cyber-green/30 bg-cyber-green/5 px-3 py-1.5 text-xs text-cyber-green md:flex">
-            <span className="h-2 w-2 rounded-full bg-cyber-green" />
-            {language === "zh" ? "公共只读" : "PUBLIC READ-ONLY"}
-          </div>
-        )}
-
         {!observingSymbiosis && <div className="relative">
           <motion.button
             whileHover={{ scale: 1.05 }}
@@ -193,6 +199,29 @@ export default function Topbar({ onOpenMenu }: TopbarProps) {
             </motion.div>
           )}
         </div>}
+
+        <motion.button
+          whileHover={{ scale: 1.05 }}
+          whileTap={{ scale: 0.95 }}
+          type="button"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          aria-label={
+            theme === "dark"
+              ? language === "zh"
+                ? "切换到浅色模式"
+                : "Switch to light theme"
+              : language === "zh"
+                ? "切换到深色模式"
+                : "Switch to dark theme"
+          }
+          className="rounded-lg border border-cyber-purple/25 bg-cyber-gray p-2 text-cyber-purple transition-all hover:border-cyber-pink/50 hover:bg-cyber-gray-light hover:text-cyber-pink"
+        >
+          {theme === "dark" ? (
+            <Sun className="h-4 w-4" aria-hidden="true" />
+          ) : (
+            <Moon className="h-4 w-4" aria-hidden="true" />
+          )}
+        </motion.button>
 
         <div className="relative">
           <motion.button

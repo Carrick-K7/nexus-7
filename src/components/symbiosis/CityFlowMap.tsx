@@ -246,7 +246,7 @@ export default function CityFlowMap({
       </div>
 
       <div className="grid xl:grid-cols-[minmax(0,1.3fr)_minmax(320px,0.7fr)]">
-        <div className="relative min-h-[420px] overflow-hidden border-b border-cyber-gray-light bg-[radial-gradient(circle_at_25%_80%,rgba(0,240,255,0.09),transparent_26%),radial-gradient(circle_at_80%_20%,rgba(199,125,255,0.08),transparent_30%),linear-gradient(145deg,#080b11,#0d1119)] xl:border-b-0 xl:border-r">
+        <div className="city-flow-canvas relative min-h-[420px] overflow-hidden border-b border-cyber-gray-light xl:border-b-0 xl:border-r">
           <svg
             viewBox="0 0 100 100"
             className="absolute inset-0 h-full w-full"
@@ -267,7 +267,7 @@ export default function CityFlowMap({
                 <path
                   d="M 7 0 L 0 0 0 7"
                   fill="none"
-                  stroke="#17202b"
+                  stroke="var(--city-grid-line)"
                   strokeWidth="0.25"
                 />
               </pattern>
@@ -291,7 +291,7 @@ export default function CityFlowMap({
                   y1={from.y}
                   x2={to.x}
                   y2={to.y}
-                  stroke="#2a3542"
+                  stroke="var(--city-network-line)"
                   strokeWidth="1.2"
                   strokeDasharray="2 2"
                 />
@@ -328,7 +328,7 @@ export default function CityFlowMap({
                     cx={point.x}
                     cy={point.y}
                     r="9"
-                    fill="#0c121a"
+                    fill="var(--city-node)"
                     stroke={healthColor(community.status)}
                     strokeWidth="1"
                   />
@@ -343,7 +343,7 @@ export default function CityFlowMap({
                     x={point.x}
                     y={point.y - 1}
                     textAnchor="middle"
-                    fill="#f0f4f8"
+                    fill="var(--city-node-text)"
                     fontSize="2.4"
                     fontWeight="700"
                   >
@@ -353,7 +353,7 @@ export default function CityFlowMap({
                     x={point.x}
                     y={point.y + 3}
                     textAnchor="middle"
-                    fill="#8c98a8"
+                    fill="var(--city-node-text-dim)"
                     fontSize="2"
                   >
                     {community.residentCount} ·{" "}

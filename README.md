@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release is **v4.3 — Living City Flow**. The v2 closed-loop
+The active release is **v4.3.1 — Chromatic City Shell**. The v2 closed-loop
 autonomy laboratory remains its safety kernel for evidence, release approval,
 rollback and recovery. Human administrators in that control plane operate the
 software; they do not participate in the simulated city.
@@ -54,6 +54,10 @@ The default **Human Observatory / 人类观测台** exposes:
 - city and community needs, resources and institution smoothness;
 - 100% AI-controlled production coverage versus dynamic chain continuity;
 - event lineage, RALR denominator, safety, replay and snapshot evidence.
+
+The shell supports accessible light and dark palettes. The Human Observatory
+keeps its restrained information design; research, safety-kernel and legacy
+views use the denser cyberpunk visual layer.
 
 Versioned projections:
 

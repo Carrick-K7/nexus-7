@@ -2,7 +2,7 @@
 
 > Date: 2026-07-19
 >
-> Status: v4.3 Living City Flow locally and publicly verified /
+> Status: v4.3.1 Chromatic City Shell locally verified / v4.3.0 production /
 > external CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
@@ -67,6 +67,16 @@ and segregation keeps an honest null denominator.
 - closing inventory never exceeds capacity;
 - Observatory v2 shows exact flow rows and map lanes while v1 remains readable;
 - desktop/mobile/Chinese, resource-layer and WCAG A/AA checks pass.
+
+## v4.3.1 Chromatic City Shell gate
+
+- rendered UI contains no observer-mode or software-run status badges;
+- persisted `matrix` and `hacker` theme values migrate to `dark`;
+- light and dark use distinct multicolor semantic palettes;
+- Human Observatory stays information-first and excludes ambient effects;
+- every other view receives the shared cyberpunk visual layer;
+- desktop/mobile light and dark runs have no horizontal overflow;
+- 245 tests, 26 Playwright/axe scenarios, lint, audit and build pass.
 
 The multi-season reference reports reciprocal RALR 73.33% across 525 resolved
 episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR

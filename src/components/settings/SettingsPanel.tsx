@@ -10,7 +10,7 @@ import {
 } from "lucide-react";
 
 interface SettingsState {
-  theme: "dark" | "hacker" | "matrix";
+  theme: "light" | "dark";
   soundEnabled: boolean;
   notificationsEnabled: boolean;
   animationsEnabled: boolean;
@@ -20,9 +20,9 @@ interface SettingsState {
 
 export default function SettingsPanel() {
   const { t } = useTranslation();
-  const { setTheme, language, setLanguage } = useNexusStore();
+  const { theme, setTheme, language, setLanguage } = useNexusStore();
   const [settings, setSettings] = useState<SettingsState>({
-    theme: "dark",
+    theme,
     soundEnabled: true,
     notificationsEnabled: true,
     animationsEnabled: true,
@@ -54,7 +54,6 @@ export default function SettingsPanel() {
     { key: "⌘1-9", action: "Navigate to view 1-9" },
     { key: "ESC", action: "Close modal/panel" },
     { key: "⌘D", action: "Toggle dark mode" },
-    { key: "⌘M", action: "Toggle matrix effect" },
   ];
 
   return (
@@ -90,12 +89,21 @@ export default function SettingsPanel() {
           
           <div className="space-y-3">
             {[
-              { id: "dark", label: t('darkModeTheme'), color: "from-cyber-dark to-cyber-dark-light" },
-              { id: "hacker", label: t('hackerTheme'), color: "from-cyber-green to-cyber-dark" },
-              { id: "matrix", label: t('matrixTheme'), color: "from-cyber-green/50 to-cyber-dark" },
+              {
+                id: "light",
+                label: t("lightModeTheme"),
+                color: "from-white via-cyan-100 to-purple-100",
+              },
+              {
+                id: "dark",
+                label: t("darkModeTheme"),
+                color: "from-slate-950 via-cyan-950 to-purple-950",
+              },
             ].map((item) => (
               <button
                 key={item.id}
+                type="button"
+                aria-pressed={settings.theme === item.id}
                 onClick={() => setSettings(s => ({ ...s, theme: item.id as SettingsState["theme"] }))}
                 className={`w-full p-4 rounded-lg border-2 transition-all ${
                   settings.theme === item.id

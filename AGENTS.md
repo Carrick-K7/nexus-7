@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-19 · v2.0.0 安全内核 + v4.3 城市资源流
+> 更新：2026-07-19 · v2.0.0 安全内核 + v4.3.1 双主题城市界面
 
 ## 定义与边界
 
@@ -51,9 +51,9 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 v2.0 本地/reference 已闭环；未获得远端 attestation 时只能写
 `implementation complete / external evidence pending`。
 
-v4.3 含 200 人、36 AI、24 机器人、关系/承诺、认知网关、memory/PG、
-Turn 资源调度流和 Human Observatory。真人接入、身份映射、私人输入和居民
-登录不在范围。
+v4.3.1 含 200 人、36 AI、24 机器人、Turn 资源流、Human Observatory 与
+浅/深双主题；其余页面使用赛博朋克视觉层。真人接入、身份映射、私人输入和
+居民登录不在范围。
 
 ## 模块边界
 
@@ -100,7 +100,7 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
 | unit / 条件跳过 | 229/229 / 16 |
-| PostgreSQL / Playwright+axe | 16/16 / 25/25 |
+| PostgreSQL / Playwright+axe | 16/16 / 26/26 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4 多季对照 | 3 regimes × 3 seeds × 90 Turns；mechanism separation pass |

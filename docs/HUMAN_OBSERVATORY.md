@@ -20,6 +20,10 @@ evidence export cannot advance, pause, reset or otherwise mutate the live
 season. Legacy client-only demonstrations are isolated under the compatibility
 section of the navigation.
 
+The interface does not repeat deployment-mode badges. Its light and dark
+palettes preserve the same reading order; the denser cyberpunk atmosphere is
+reserved for the other research, safety and compatibility views.
+
 ## One-minute reading order
 
 1. Read the experiment purpose, simulation boundary and latest Turn.

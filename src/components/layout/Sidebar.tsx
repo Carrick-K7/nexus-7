@@ -19,11 +19,13 @@ import {
   MapPinned,
   MessageSquare,
   Microscope,
+  Moon,
   Newspaper,
   Satellite,
   ScrollText,
   Settings,
   Siren,
+  Sun,
   Terminal,
   TerminalSquare,
   Trophy,
@@ -165,12 +167,6 @@ export default function Sidebar({
             <X className="h-5 w-5" />
           </button>
         </div>
-        <div className="mt-4 flex items-center gap-2 rounded-lg border border-cyber-green/25 bg-cyber-green/5 px-3 py-2 text-xs text-cyber-green">
-          <span className="h-2 w-2 rounded-full bg-cyber-green" />
-          {language === "zh"
-            ? "无人值守运行 · 公共只读"
-            : "Autonomous run · public read-only"}
-        </div>
       </div>
 
       <nav className="flex-1 space-y-2 overflow-y-auto p-4">
@@ -204,19 +200,35 @@ export default function Sidebar({
       </nav>
 
       <div className="border-t border-cyber-blue/20 p-4">
-        <div className="flex gap-2">
-          {(["dark", "hacker", "matrix"] as const).map((entry) => (
+        <div
+          className="grid grid-cols-2 gap-2 rounded-xl border border-cyber-gray-light bg-cyber-dark/55 p-1.5"
+          aria-label={language === "zh" ? "配色主题" : "Color theme"}
+        >
+          {([
+            {
+              id: "light",
+              label: language === "zh" ? "浅色" : "Light",
+              Icon: Sun,
+            },
+            {
+              id: "dark",
+              label: language === "zh" ? "深色" : "Dark",
+              Icon: Moon,
+            },
+          ] as const).map(({ id, label, Icon }) => (
             <button
-              key={entry}
+              key={id}
               type="button"
-              onClick={() => setTheme(entry)}
-              className={`flex-1 rounded px-2 py-2 text-[10px] font-medium transition-all ${
-                theme === entry
-                  ? "bg-cyber-purple text-cyber-black"
-                  : "bg-cyber-gray text-cyber-text-dim hover:bg-cyber-gray-light"
+              onClick={() => setTheme(id)}
+              aria-pressed={theme === id}
+              className={`flex items-center justify-center gap-2 rounded-lg px-2 py-2 text-xs font-semibold transition-all ${
+                theme === id
+                  ? "bg-gradient-to-r from-cyber-purple to-cyber-pink text-white shadow-[0_0_18px_color-mix(in_srgb,var(--cyber-purple)_32%,transparent)]"
+                  : "text-cyber-text-dim hover:bg-cyber-gray hover:text-cyber-text"
               }`}
             >
-              {entry.toUpperCase()}
+              <Icon className="h-3.5 w-3.5" aria-hidden="true" />
+              {label}
             </button>
           ))}
         </div>

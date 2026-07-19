@@ -154,6 +154,97 @@ test("Human Observatory explains the city in Chinese", async ({ page }) => {
   await expect(page.getByText("合成人类")).toHaveCount(0);
 });
 
+test("redundant status labels stay hidden and both color themes remain accessible", async ({
+  page,
+}) => {
+  await page.goto("/");
+
+  const shell = page.locator("[data-surface]").first();
+  await expect(shell).toHaveAttribute("data-surface", "observatory");
+  await expect(page.getByText(/public read-only/i)).toHaveCount(0);
+  await expect(page.getByText(/autonomous software-run/i)).toHaveCount(0);
+
+  const darkPalette = await page.evaluate(() => {
+    const styles = getComputedStyle(document.documentElement);
+    return {
+      background: styles.getPropertyValue("--cyber-black").trim(),
+      blue: styles.getPropertyValue("--cyber-blue").trim(),
+      purple: styles.getPropertyValue("--cyber-purple").trim(),
+      pink: styles.getPropertyValue("--cyber-pink").trim(),
+    };
+  });
+
+  await page.getByRole("button", { name: "Switch to light theme" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "light");
+  await expect(shell).toHaveAttribute("data-theme", "light");
+
+  const lightPalette = await page.evaluate(() => {
+    const styles = getComputedStyle(document.documentElement);
+    return {
+      background: styles.getPropertyValue("--cyber-black").trim(),
+      blue: styles.getPropertyValue("--cyber-blue").trim(),
+      purple: styles.getPropertyValue("--cyber-purple").trim(),
+      pink: styles.getPropertyValue("--cyber-pink").trim(),
+    };
+  });
+  expect(lightPalette.background).not.toBe(darkPalette.background);
+  expect(new Set(Object.values(lightPalette)).size).toBe(4);
+
+  await page.getByRole("button", { name: "Dashboard" }).click();
+  await expect(shell).toHaveAttribute("data-surface", "cyberpunk");
+  await expect(shell).toHaveClass(/cyberpunk-shell/);
+  await expect(page.locator("canvas[aria-hidden='true']")).toBeVisible();
+
+  const lightAccessibility = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  expect(lightAccessibility.violations).toEqual([]);
+
+  await page.getByRole("button", { name: "Switch to dark theme" }).click();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(shell).toHaveAttribute("data-theme", "dark");
+  const darkAccessibility = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  expect(darkAccessibility.violations).toEqual([]);
+
+  await page.getByRole("button", { name: "Change language" }).click();
+  await page.getByRole("button", { name: "中文" }).click();
+  await expect(page.getByText("公共只读")).toHaveCount(0);
+  await expect(page.getByText("城市由软件自主运行")).toHaveCount(0);
+  await expect(page.getByText(/纯\s*AI/)).toHaveCount(0);
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.getByRole("button", { name: "切换到浅色模式" }).click();
+  await expect(shell).toHaveAttribute("data-theme", "light");
+  const mobileOverflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - window.innerWidth,
+  );
+  expect(mobileOverflow).toBeLessThanOrEqual(1);
+  const mobileLightAccessibility = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  expect(mobileLightAccessibility.violations).toEqual([]);
+
+  await page.evaluate(() => {
+    const raw = localStorage.getItem("nexus-store");
+    if (!raw) throw new Error("Expected persisted NEXUS state");
+    const persisted = JSON.parse(raw) as {
+      state: { theme?: string };
+      version: number;
+    };
+    persisted.state.theme = "matrix";
+    persisted.version = 3;
+    localStorage.setItem("nexus-store", JSON.stringify(persisted));
+  });
+  await page.reload();
+  await expect(page.locator("html")).toHaveAttribute("data-theme", "dark");
+  await expect(page.locator("[data-surface]").first()).toHaveAttribute(
+    "data-theme",
+    "dark",
+  );
+});
+
 test("desktop shell, agent details, and charts remain stable", async ({ page }) => {
   test.slow();
 
@@ -915,7 +1006,9 @@ test("controlled iteration evaluates, approves, canaries, and promotes a policy 
   await expect(workflow).toContainText("promotion.completed");
 
   await page.getByRole("button", { name: "EVOLUTION LOG" }).click();
-  await expect(page.getByText("CONTROLLED ITERATION WORKFLOWS")).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "CONTROLLED ITERATION WORKFLOWS" }),
+  ).toBeVisible();
   await expect(page.getByText("Reduce traffic").first()).toBeVisible();
 });
 
