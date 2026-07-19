@@ -27,6 +27,13 @@ function parseTrigger(subject) {
   return 'observation';
 }
 
+function normalizeVersion(value) {
+  if (!value) return 'unreleased';
+  const parts = value.split('.').filter(Boolean);
+  while (parts.length < 3) parts.push('0');
+  return parts.slice(0, 3).join('.');
+}
+
 const gitEntries = gitLogRaw
   .split('---END---')
   .map(block => block.trim())
@@ -41,7 +48,7 @@ const gitEntries = gitLogRaw
 
     return {
       id: hash.slice(0, 8),
-      version: versionMatch?.[1] || 'unreleased',
+      version: normalizeVersion(versionMatch?.[1]),
       date,
       trigger: parseTrigger(subject),
       triggerReason: subject,

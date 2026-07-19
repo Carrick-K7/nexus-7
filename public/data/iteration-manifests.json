@@ -1146,61 +1146,6 @@
     "source": "manifest"
   },
   {
-    "id": "d285638d",
-    "version": "4",
-    "date": "2026-07-19",
-    "trigger": "observation",
-    "triggerReason": "docs: attest v4 production deployment",
-    "action": "docs: attest v4 production deployment",
-    "outcome": "See git log",
-    "metrics": [],
-    "source": "git"
-  },
-  {
-    "id": "f4d428a1",
-    "version": "4",
-    "date": "2026-07-19",
-    "trigger": "observation",
-    "triggerReason": "chore: bind v4 evolution metadata",
-    "action": "chore: bind v4 evolution metadata",
-    "outcome": "See git log",
-    "metrics": [],
-    "source": "git"
-  },
-  {
-    "id": "0bd0c3d7",
-    "version": "4",
-    "date": "2026-07-19",
-    "trigger": "observation",
-    "triggerReason": "release: deliver all-synthetic symbiotic Shenzhen v4",
-    "action": "release: deliver all-synthetic symbiotic Shenzhen v4",
-    "outcome": "See git log",
-    "metrics": [],
-    "source": "git"
-  },
-  {
-    "id": "7dcfeb7f",
-    "version": "2",
-    "date": "2026-07-18",
-    "trigger": "observation",
-    "triggerReason": "chore: refresh v2 release metadata",
-    "action": "chore: refresh v2 release metadata",
-    "outcome": "See git log",
-    "metrics": [],
-    "source": "git"
-  },
-  {
-    "id": "08368f76",
-    "version": "2",
-    "date": "2026-07-18",
-    "trigger": "observation",
-    "triggerReason": "release: complete v2 closed-loop autonomy lab",
-    "action": "release: complete v2 closed-loop autonomy lab",
-    "outcome": "See git log",
-    "metrics": [],
-    "source": "git"
-  },
-  {
     "id": "d0d1484d",
     "version": "0.3.0",
     "date": "2026-06-14",
@@ -1234,17 +1179,6 @@
     "source": "git"
   },
   {
-    "id": "059f98b8",
-    "version": "0.8",
-    "date": "2026-04-03",
-    "trigger": "observation",
-    "triggerReason": "docs: Update AGENTS.md - v0.8 feature complete",
-    "action": "docs: Update AGENTS.md - v0.8 feature complete",
-    "outcome": "See git log",
-    "metrics": [],
-    "source": "git"
-  },
-  {
     "id": "bb211399",
     "version": "unreleased",
     "date": "2026-04-03",
@@ -1267,34 +1201,12 @@
     "source": "git"
   },
   {
-    "id": "d92eb544",
-    "version": "0.8",
-    "date": "2026-04-03",
-    "trigger": "observation",
-    "triggerReason": "docs: Update AGENTS.md - v0.8 lint cleanup complete",
-    "action": "docs: Update AGENTS.md - v0.8 lint cleanup complete",
-    "outcome": "See git log",
-    "metrics": [],
-    "source": "git"
-  },
-  {
     "id": "80cc2fbe",
     "version": "unreleased",
     "date": "2026-04-03",
     "trigger": "bug",
     "triggerReason": "fix: Clear lint errors - unused imports, impure functions, useState lazy init",
     "action": "fix: Clear lint errors - unused imports, impure functions, useState lazy init",
-    "outcome": "See git log",
-    "metrics": [],
-    "source": "git"
-  },
-  {
-    "id": "240ec76d",
-    "version": "0.8",
-    "date": "2026-04-03",
-    "trigger": "observation",
-    "triggerReason": "docs: Update AGENTS.md for v0.8 roadmap",
-    "action": "docs: Update AGENTS.md for v0.8 roadmap",
     "outcome": "See git log",
     "metrics": [],
     "source": "git"
