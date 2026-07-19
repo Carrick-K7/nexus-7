@@ -2,6 +2,7 @@ export const translations = {
   en: {
     // Navigation
     dashboard: "Dashboard",
+    symbiosisLens: "City Lens",
     neural: "Neural Net",
     trading: "Trading",
     missions: "Missions",
@@ -976,6 +977,7 @@ export const translations = {
   zh: {
     // 导航
     dashboard: "仪表盘",
+    symbiosisLens: "城市透镜",
     neural: "神经网络",
     trading: "交易",
     missions: "任务",

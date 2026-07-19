@@ -4,13 +4,39 @@ NEXUS-7 is a cyberpunk city-simulation and multi-agent autonomy experiment. It
 uses a browser-based city loop to make system behavior, agent actions, and the
 project's iteration history observable from one control center.
 
-The current release is **v2.0.0 — Closed-Loop Autonomy Lab**. Its local and
+The current safety kernel is **v2.0.0 — Closed-Loop Autonomy Lab**. The active
+direction release is **v4.0.0 — All-Synthetic Symbiotic Shenzhen**. Its local
 reference implementation is complete; production verification remains pending
 fresh external evidence for an exact clean commit.
 
+**Symbiotic Shenzhen v4** keeps v2 as the safety kernel and adds a long-running
+synthetic world for studying reciprocal agency among 200 synthetic-human
+residents, 36 software-AI residents, and 24 embodied robots. Every resident is
+autonomous software; there are no participant seats, real identities, private
+journals, or claims about real human behavior.
+
+The v4 reference includes three fictional communities, deterministic daily
+Turns, resources and distinct material needs, seeded events, relationships,
+revocable commitments, outcome/reflection traces, a bounded DeepSeek-compatible
+cognitive gateway with deterministic fallback, memory/PostgreSQL persistence,
+the bilingual City Lens, and a three-regime multi-season mechanism study.
+
+This is not a Shenzhen digital twin and does not support claims about real
+policy effects, AI consciousness, or legal personhood. The
+[Symbiosis Constitution](docs/SYMBIOSIS_CONSTITUTION.md) still requires
+recorded human approval before any future real-participant work. See the
+[evolution plan](docs/SYMBIOTIC_SHENZHEN_PLAN.md) and
+[world architecture](docs/V3_WORLD_ARCHITECTURE.md).
+
+The current local v4 gate replays 365 Turns exactly, conserves every resource
+ledger, resolves 725 reciprocal episodes at 76.97% RALR with 100% trace
+completeness and zero severe escapes, and separates reciprocal, hierarchy, and
+segregation controls across 3 seeds × 90 Turns. These are synthetic mechanism
+results, not production attestation.
+
 ## What it is today
 
-- A Next.js application with 26 primary views and server-side experiment and
+- A Next.js application with 28 primary views and server-side experiment and
   controlled-iteration APIs.
 - A framework-independent, seeded city simulation whose snapshots are projected
   into Zustand for the interface.
@@ -210,6 +236,39 @@ It uses a PostgreSQL lease so only one replica advances running experiments.
 `POST /api/experiments/tick` remains available as a protected scheduler
 integration seam.
 
+Run the all-synthetic city clock separately:
+
+```bash
+SYMBIOSIS_TURN_INTERVAL_MS=3600000 npm run worker:symbiosis
+```
+
+One Turn represents one simulated day. The wall-clock interval is configurable
+because no real participant deadline is involved; production defaults to one
+simulated day per hour. The worker writes a JSON summary containing the Turn
+fingerprint, RALR, safety counts, cognitive status, and accumulated model cost.
+
+Open **City Lens** in the sidebar to observe community need satisfaction,
+resource pressure, relationships, commitments, event flow, cognition cost, and
+the v4 multi-season controls. The same data is available at:
+
+- `/api/world/v3/snapshot`
+- `/api/world/v3/events`
+- `/api/reports/symbiosis`
+- `/api/reports/symbiosis/study?turns=90`
+
+The default cognitive provider is deterministic and costs nothing. To enable
+DeepSeek for bounded preference decisions:
+
+```bash
+SYMBIOSIS_COGNITIVE_PROVIDER=deepseek \
+DEEPSEEK_API_KEY=... \
+SYMBIOSIS_MONTHLY_BUDGET_USD=300 \
+npm run worker:symbiosis
+```
+
+Provider failure or budget exhaustion falls back explicitly and never stops
+the city. Model reasoning is ignored and never persisted.
+
 ## Quality checks
 
 ```bash
@@ -217,6 +276,7 @@ npm run lint -- --max-warnings=0
 npm run test:run
 npm run verify:model
 npm run verify:closure
+npm run verify:symbiosis
 npm run build
 npx playwright install chromium
 npm run test:e2e
@@ -263,6 +323,7 @@ src/
 ├── planning/            Bounded interventions, experiments and decisions
 ├── outcomes/            Delayed evaluation, lessons, playbooks and proposals
 ├── participation/       Stakeholders, deliberation, feedback and appeals
+├── symbiosis/           v4 residents, resources, relationships and studies
 ├── closure/             Durable orchestration, corpus and v2 certification
 ├── lifecycle/           Generic atomic aggregate/event persistence contract
 ├── experiments/         Server run service and memory/PostgreSQL repositories

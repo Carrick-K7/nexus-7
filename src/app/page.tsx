@@ -35,6 +35,7 @@ import IterationLab from "@/components/iteration/IterationLab";
 import VerificationCenter from "@/components/verification/VerificationCenter";
 import OperationsCenter from "@/components/operations/OperationsCenter";
 import ParticipationCenter from "@/components/participation/ParticipationCenter";
+import SymbiosisCityLens from "@/components/symbiosis/SymbiosisCityLens";
 
 const viewComponents: Record<string, React.ComponentType> = {
   dashboard: Dashboard,
@@ -65,6 +66,7 @@ const viewComponents: Record<string, React.ComponentType> = {
   verification: VerificationCenter,
   operations: OperationsCenter,
   participation: ParticipationCenter,
+  symbiosis: SymbiosisCityLens,
 };
 
 export default function Home() {

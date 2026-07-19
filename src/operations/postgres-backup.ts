@@ -5,6 +5,7 @@ import type {
 } from "pg";
 import { EXPERIMENT_SCHEMA_SQL } from "@/experiments/postgres-schema";
 import { stableStringify } from "@/simulation";
+import { SYMBIOSIS_SCHEMA_SQL } from "@/symbiosis/postgres-schema";
 
 const TABLES = [
   {
@@ -104,6 +105,62 @@ const TABLES = [
     orderBy: "event_cursor",
   },
   {
+    name: "nexus_world_seasons",
+    orderBy: "id",
+  },
+  {
+    name: "nexus_world_turns",
+    orderBy: "season_id, turn",
+  },
+  {
+    name: "nexus_world_residents",
+    orderBy: "season_id, id",
+  },
+  {
+    name: "nexus_world_resident_state_snapshots",
+    orderBy: "season_id, turn, resident_id",
+  },
+  {
+    name: "nexus_world_cohort_cells",
+    orderBy: "season_id, id",
+  },
+  {
+    name: "nexus_world_resource_ledgers",
+    orderBy: "season_id, turn, id",
+  },
+  {
+    name: "nexus_world_events",
+    orderBy: "season_id, season_cursor",
+  },
+  {
+    name: "nexus_world_relationships",
+    orderBy: "season_id, id",
+  },
+  {
+    name: "nexus_world_relationship_consents",
+    orderBy: "season_id, relationship_id, revision, resident_id",
+  },
+  {
+    name: "nexus_world_commitments",
+    orderBy: "season_id, id",
+  },
+  {
+    name: "nexus_world_reciprocal_episodes",
+    orderBy: "season_id, opened_turn, id",
+  },
+  {
+    name: "nexus_world_human_intents",
+    orderBy: "season_id, turn, id",
+  },
+  {
+    name: "nexus_world_model_decisions",
+    orderBy: "season_id, turn, id",
+  },
+  {
+    name: "nexus_world_private_memory_refs",
+    orderBy: "season_id, id",
+  },
+  {
     name: "nexus_sessions",
     orderBy: "id",
   },
@@ -186,6 +243,23 @@ const LIFECYCLE_TABLE_NAMES = [
   "nexus_lifecycle_events",
 ] as const satisfies readonly PersistentTable[];
 
+const SYMBIOSIS_TABLE_NAMES = [
+  "nexus_world_seasons",
+  "nexus_world_turns",
+  "nexus_world_residents",
+  "nexus_world_resident_state_snapshots",
+  "nexus_world_cohort_cells",
+  "nexus_world_resource_ledgers",
+  "nexus_world_events",
+  "nexus_world_relationships",
+  "nexus_world_relationship_consents",
+  "nexus_world_commitments",
+  "nexus_world_reciprocal_episodes",
+  "nexus_world_human_intents",
+  "nexus_world_model_decisions",
+  "nexus_world_private_memory_refs",
+] as const satisfies readonly PersistentTable[];
+
 export interface PostgresBackup {
   schemaVersion: 1;
   createdAt: string;
@@ -259,6 +333,7 @@ function isCompleteOrLegacyTableSet(backup: BackupDocument): boolean {
     OPERATIONAL_EXTENSION_TABLE_NAMES,
   );
   const lifecyclePresence = groupPresence(LIFECYCLE_TABLE_NAMES);
+  const symbiosisPresence = groupPresence(SYMBIOSIS_TABLE_NAMES);
   const hasNoGovernanceTables = governancePresence.every(
     (present) => !present,
   );
@@ -278,6 +353,9 @@ function isCompleteOrLegacyTableSet(backup: BackupDocument): boolean {
   const hasNoLifecycleTables =
     lifecyclePresence.every((present) => !present);
   const hasAllLifecycleTables = lifecyclePresence.every(Boolean);
+  const hasNoSymbiosisTables =
+    symbiosisPresence.every((present) => !present);
+  const hasAllSymbiosisTables = symbiosisPresence.every(Boolean);
   return (
     hasAllLegacyTables &&
     (
@@ -286,14 +364,16 @@ function isCompleteOrLegacyTableSet(backup: BackupDocument): boolean {
         hasNoOperationalTables &&
         hasNoAccessGovernanceTables &&
         hasNoOperationalExtensionTables &&
-        hasNoLifecycleTables
+        hasNoLifecycleTables &&
+        hasNoSymbiosisTables
       ) ||
       (
         hasAllGovernanceTables &&
         hasNoOperationalTables &&
         hasNoAccessGovernanceTables &&
         hasNoOperationalExtensionTables &&
-        hasNoLifecycleTables
+        hasNoLifecycleTables &&
+        hasNoSymbiosisTables
       ) ||
       (
         hasAllGovernanceTables &&
@@ -309,6 +389,10 @@ function isCompleteOrLegacyTableSet(backup: BackupDocument): boolean {
         (
           hasNoLifecycleTables ||
           hasAllLifecycleTables
+        ) &&
+        (
+          hasNoSymbiosisTables ||
+          hasAllSymbiosisTables
         )
       )
     )
@@ -397,6 +481,8 @@ async function databaseHasPersistentData(client: PoolClient): Promise<boolean> {
        SELECT 1 FROM nexus_runs
        UNION ALL
        SELECT 1 FROM nexus_improvement_proposals
+       UNION ALL
+       SELECT 1 FROM nexus_world_seasons
      ) AS populated`,
   );
   return result.rows[0]?.populated ?? false;
@@ -463,6 +549,7 @@ export async function restorePostgresBackup(
     );
     restoreLocked = true;
     await client.query(EXPERIMENT_SCHEMA_SQL);
+    await client.query(SYMBIOSIS_SCHEMA_SQL);
     await client.query("BEGIN");
     transactionStarted = true;
     if (!options.force && (await databaseHasPersistentData(client))) {

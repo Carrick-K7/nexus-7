@@ -1,0 +1,42 @@
+{
+  "id": "iteration-v3.0.0-dev.1",
+  "version": "3.0.0-dev.1",
+  "date": "2026-07-18",
+  "trigger": "milestone",
+  "triggerReason": "Begin the gated Symbiotic Shenzhen direction without discarding the v2 verified-autonomy safety kernel.",
+  "action": "Created local direction anchors, a draft human-ratified symbiosis constitution, frozen Shenzhen aggregate calibration metadata, versioned v3 contracts, a deterministic daily world engine, 260 adult pseudonymous residents, three fictional communities, memory/PostgreSQL atomic Turn repositories, partitioned normalized tables, checksum backup coverage, read-only research APIs, and a 365-Turn verification command.",
+  "outcome": "The development branch has a model-independent v3 world vertical slice with exact local replay and conserved resource ledgers. Relationship, participant, external cognition, SSE, and City Lens mechanisms remain gated. The constitution is not yet human-approved, the work is not committed or pushed, and no v3 certification or external attestation is claimed.",
+  "metrics": [
+    { "label": "Foreground residents", "before": 0, "after": 260 },
+    { "label": "Participant-avatar seats", "before": 0, "after": 5 },
+    { "label": "Deterministic verification Turns", "before": 0, "after": 365 },
+    { "label": "Exact numeric replay (%)", "before": 0, "after": 100 },
+    { "label": "Resource conservation (%)", "before": 0, "after": 100 },
+    { "label": "Real participant pilots authorized", "before": 0, "after": 0 }
+  ],
+  "evidence": [
+    "The locked resident mix is 195 synthetic humans, 5 participant avatars, 36 software AIs, and 24 embodied robots",
+    "All foreground residents are adult synthetic identities and participant avatars have safe-routine-only offline authority",
+    "Two independent 365-Turn executions produce the same final world settlement",
+    "Every integer resource ledger satisfies opening plus production and transfer-in equals consumption plus transfer-out and closing",
+    "Memory commits reject stale Turn heads; PostgreSQL uses an atomic expected-Turn update",
+    "Research projections exclude private memory and report a zero RALR denominator as null",
+    "No model provider or model reasoning is needed or stored by the world slice",
+    "v1/v2 remain the safety and compatibility baseline"
+  ],
+  "artifacts": [
+    "docs/SYMBIOSIS_CONSTITUTION.md",
+    "docs/SYMBIOTIC_SHENZHEN_PLAN.md",
+    "docs/V3_WORLD_ARCHITECTURE.md",
+    "docs/V3_DATA_GOVERNANCE.md",
+    "docs/V3_VERIFICATION.md",
+    "data/shenzhen/2026-q2/",
+    "src/symbiosis/",
+    "src/app/api/world/v3/",
+    "src/app/api/residents/[id]/view/route.ts",
+    "src/app/api/reports/symbiosis/route.ts",
+    "migrations/0009_symbiotic_shenzhen_world.sql",
+    "scripts/run-symbiosis-verification.ts",
+    "docs/adr/0019-symbiotic-shenzhen-world-kernel.md"
+  ]
+}

@@ -31,6 +31,10 @@ import {
   buildCertifiedClosedLoopCase,
   CLOSED_LOOP_CERTIFICATION_CORPUS,
 } from "@/closure/corpus";
+import {
+  PostgresWorldRepository,
+  WorldService,
+} from "@/symbiosis";
 
 const sourceUrl = process.env.TEST_DATABASE_URL;
 const restoreUrl = process.env.TEST_RESTORE_DATABASE_URL;
@@ -42,6 +46,23 @@ const sourcePool = sourceUrl
 const restorePool = restoreUrl
   ? new Pool({ connectionString: restoreUrl })
   : null;
+
+const SYMBIOSIS_BACKUP_TABLE_NAMES = [
+  "nexus_world_seasons",
+  "nexus_world_turns",
+  "nexus_world_residents",
+  "nexus_world_resident_state_snapshots",
+  "nexus_world_cohort_cells",
+  "nexus_world_resource_ledgers",
+  "nexus_world_events",
+  "nexus_world_relationships",
+  "nexus_world_relationship_consents",
+  "nexus_world_commitments",
+  "nexus_world_reciprocal_episodes",
+  "nexus_world_human_intents",
+  "nexus_world_model_decisions",
+  "nexus_world_private_memory_refs",
+] as const;
 
 function refreshChecksum<T extends {
   schemaVersion: number;
@@ -336,6 +357,16 @@ integrationDescribe("PostgreSQL backup and restore", () => {
         },
       },
     });
+    const worldRepository = new PostgresWorldRepository(sourcePool!);
+    const worldService = new WorldService(worldRepository, {
+      seasonId: `backup-symbiosis-${Date.now()}`,
+      seed: "backup-symbiosis-seed",
+    });
+    await worldService.initialize();
+    await worldService.advanceTurn(governanceAdmin);
+    const expectedWorldSnapshot = await worldService.snapshot(
+      governanceAdmin,
+    );
     const backup = await createPostgresBackup(
       sourcePool!,
       new Date("2026-07-16T12:00:00.000Z"),
@@ -366,6 +397,24 @@ integrationDescribe("PostgreSQL backup and restore", () => {
     expect(backup.rowCounts.nexus_notification_receipts).toBeGreaterThan(0);
     expect(backup.rowCounts.nexus_lifecycle_records).toBeGreaterThan(0);
     expect(backup.rowCounts.nexus_lifecycle_events).toBeGreaterThan(0);
+    expect(backup.rowCounts.nexus_world_seasons).toBeGreaterThan(0);
+    expect(backup.rowCounts.nexus_world_turns).toBeGreaterThan(0);
+    expect(backup.rowCounts.nexus_world_residents).toBeGreaterThan(0);
+    expect(
+      backup.rowCounts.nexus_world_resident_state_snapshots,
+    ).toBeGreaterThan(0);
+    expect(
+      backup.rowCounts.nexus_world_resource_ledgers,
+    ).toBeGreaterThan(0);
+    expect(
+      backup.rowCounts.nexus_world_relationships,
+    ).toBeGreaterThan(0);
+    expect(
+      backup.rowCounts.nexus_world_reciprocal_episodes,
+    ).toBeGreaterThan(0);
+    expect(
+      backup.rowCounts.nexus_world_model_decisions,
+    ).toBeGreaterThan(0);
 
     const v13Backup = structuredClone(backup);
     for (const tableName of [
@@ -385,6 +434,7 @@ integrationDescribe("PostgreSQL backup and restore", () => {
       "nexus_break_glass_requests",
       "nexus_lifecycle_records",
       "nexus_lifecycle_events",
+      ...SYMBIOSIS_BACKUP_TABLE_NAMES,
     ] as const) {
       delete (
         v13Backup.tables as Partial<typeof v13Backup.tables>
@@ -407,6 +457,7 @@ integrationDescribe("PostgreSQL backup and restore", () => {
       "nexus_break_glass_requests",
       "nexus_lifecycle_records",
       "nexus_lifecycle_events",
+      ...SYMBIOSIS_BACKUP_TABLE_NAMES,
     ] as const) {
       delete (
         earlyV14Backup.tables as Partial<typeof earlyV14Backup.tables>
@@ -446,6 +497,7 @@ integrationDescribe("PostgreSQL backup and restore", () => {
       "nexus_break_glass_requests",
       "nexus_lifecycle_records",
       "nexus_lifecycle_events",
+      ...SYMBIOSIS_BACKUP_TABLE_NAMES,
     ] as const) {
       delete (
         legacyBackup.tables as Partial<typeof legacyBackup.tables>
@@ -463,6 +515,14 @@ integrationDescribe("PostgreSQL backup and restore", () => {
 
     expect(restoredReport.verification).toEqual(expectedReport.verification);
     expect(restoredReport.run).toEqual(expectedReport.run);
+    const restoredWorldRepository = new PostgresWorldRepository(restorePool!);
+    await restoredWorldRepository.initialize();
+    expect(
+      await restoredWorldRepository.getSnapshot(
+        governanceAdmin.workspaceId!,
+        expectedWorldSnapshot.seasonId,
+      ),
+    ).toEqual(expectedWorldSnapshot);
     expect(
       await restoredRepository.getServiceAccount(serviceAccount.id),
     ).toMatchObject({

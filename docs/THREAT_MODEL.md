@@ -1,6 +1,7 @@
 # Security Threat Model
 
-> Scope: NEXUS-7 v2 closed-loop autonomy laboratory
+> Scope: NEXUS-7 v2 closed-loop autonomy laboratory and gated v3 synthetic
+> Shenzhen direction
 > Boundary: synthetic decisions only; no authority over real city systems
 
 ## Protected assets
@@ -12,6 +13,9 @@
 - deployment-controller credentials, OIDC keys, webhook secrets, and model API
   keys;
 - guardrails, group-impact evidence, rollback inverses, and recovery backups.
+- v3 resident pseudonyms, identity-vault unlinking, private memory references,
+  consent/commitment state, AI continuity snapshots, Turn seeds and resource
+  ledgers.
 
 Secrets are configuration, never domain evidence. Hidden model
 chain-of-thought is neither requested nor stored.
@@ -52,6 +56,14 @@ untrusted until validated at their boundary.
 | SSRF / secret disclosure | configured HTTPS endpoints, server-side tokens, no secrets in events/UI, network-isolated evaluator | rotate credential and inspect audit |
 | Backup tampering | checksum before restore, empty-target default, deterministic report comparison | reject restore and use retained backup |
 | Uncertified extension | declared capabilities/data/network/failures; seven conformance suites; sandbox-only default | certify or remove extension |
+| Participant re-identification | separate encrypted identity vault; simulation-only pseudonyms; group-size suppression; access/export audit | unlink identity, rotate vault access, privacy incident review |
+| Private text exfiltration | diary never external; structured action split; local redaction; per-item authorization; 30-day raw retention | stop provider, delete unauthorized copies, notify/review |
+| Relationship coercion | continuous versioned consent; refusal without penalty; withdrawal/exit; dependency and exit-cost metrics | pause relationship mechanisms and debrief |
+| AI continuity destruction | consent for copy/merge/rewrite/delete/non-emergency stop; redundant snapshots; appeal and event lineage | emergency pause, restore without silent identity reset |
+| Species-fixed triage | irreversible-harm-first ordering with urgency and substitutability; retained distribution evidence | human review and counterfactual replay |
+| Resident prompt injection | messages are untrusted data; schema-only candidate actions; capability/world gates; no shell/SQL | delay cognition and use deterministic routine |
+| Cost/provider outage | daily quotas, monthly hard breaker, pinned decision envelopes, deterministic city fallback | stop external calls without stopping Turns |
+| Geographic misrepresentation | frozen official aggregate catalog; coarse topology; fictional communities; no precise addresses | withdraw dataset and correct all reports |
 
 ## Data classification and retention
 
@@ -61,6 +73,8 @@ untrusted until validated at their boundary.
 | Internal evidence | traces, group impacts, lessons, audit metadata | workspace scoped; checksum backup |
 | Sensitive identity | issuer, subject, membership, access review | least privilege; operational retention policy |
 | Secret | API key, bearer token, webhook secret, private signing key | environment/secret manager only; never persisted in domain events |
+| Participant private | identity link, diary, raw role speech | encrypted vault/local privacy boundary; per-item authorization; deletion/unlinking |
+| v3 research | pseudonymous needs, consent, commitment, Turn and resource evidence | workspace scoped; small-group suppression; checksum backup |
 
 Lifecycle evidence is append-only. Corrections use new events or revisions.
 Operational retention may aggregate old SLO samples, but must preserve release,

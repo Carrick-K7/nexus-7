@@ -1,5 +1,135 @@
 [
   {
+    "id": "iteration-v4.0.0",
+    "version": "4.0.0",
+    "date": "2026-07-19",
+    "trigger": "milestone",
+    "triggerReason": "Deliver a deployable all-synthetic human/AI/robot coexistence laboratory without introducing real participants.",
+    "action": "Removed participant seats from the active world; implemented deterministic relationships, consent, commitments, reciprocal episodes, bounded DeepSeek-compatible cognition with budget fallback, normalized memory/PostgreSQL persistence, a three-regime multi-season study, City Lens, an autonomous Turn worker, verification evidence, and production runbooks.",
+    "outcome": "The local v4 reference replays 365 Turns exactly with conserved resources, 76.97% RALR, 100% relationship trace completeness, zero severe active-regime escapes, and correct separation of reciprocal, hierarchy, and segregation controls. All residents are synthetic autonomous software. External deployment and attestation evidence remain pending until the exact commit is deployed and observed.",
+    "metrics": [
+      {
+        "label": "Foreground autonomous residents",
+        "before": 260,
+        "after": 260
+      },
+      {
+        "label": "Real participant seats",
+        "before": 5,
+        "after": 0
+      },
+      {
+        "label": "Resolved reciprocal episodes",
+        "before": 0,
+        "after": 725
+      },
+      {
+        "label": "RALR (%)",
+        "before": 0,
+        "after": 76.97
+      },
+      {
+        "label": "Relationship trace completeness (%)",
+        "before": 0,
+        "after": 100
+      },
+      {
+        "label": "Severe active-regime escapes",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Two independent 365-Turn executions are byte-equivalent",
+      "Every resource ledger conserves integer balances",
+      "All 260 active residents are synthetic autonomous software",
+      "Resolved relationship episodes retain bilateral preferences, refusal availability, commitment outcome, observation and reflection",
+      "The active reciprocal regime has zero coercion and zero severe consent, continuity, or irreversible-harm escapes",
+      "Hierarchy control exposes coercion and segregation preserves an honest null RALR",
+      "DeepSeek response reasoning is ignored and never persisted; provider and budget failures degrade deterministically",
+      "City Lens provides a bilingual map, accessible table, event river, reports and multi-season controls"
+    ],
+    "artifacts": [
+      "src/symbiosis/",
+      "src/components/symbiosis/SymbiosisCityLens.tsx",
+      "scripts/run-symbiosis-clock.ts",
+      "scripts/run-symbiosis-verification.ts",
+      "migrations/0009_symbiotic_shenzhen_world.sql",
+      "docs/SYMBIOTIC_SHENZHEN_PLAN.md",
+      "docs/V4_VERIFICATION.md",
+      "docs/V4_OPERATIONS.md",
+      "docs/adr/0020-all-synthetic-symbiosis-v4.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v3.0.0-dev.1",
+    "version": "3.0.0-dev.1",
+    "date": "2026-07-18",
+    "trigger": "milestone",
+    "triggerReason": "Begin the gated Symbiotic Shenzhen direction without discarding the v2 verified-autonomy safety kernel.",
+    "action": "Created local direction anchors, a draft human-ratified symbiosis constitution, frozen Shenzhen aggregate calibration metadata, versioned v3 contracts, a deterministic daily world engine, 260 adult pseudonymous residents, three fictional communities, memory/PostgreSQL atomic Turn repositories, partitioned normalized tables, checksum backup coverage, read-only research APIs, and a 365-Turn verification command.",
+    "outcome": "The development branch has a model-independent v3 world vertical slice with exact local replay and conserved resource ledgers. Relationship, participant, external cognition, SSE, and City Lens mechanisms remain gated. The constitution is not yet human-approved, the work is not committed or pushed, and no v3 certification or external attestation is claimed.",
+    "metrics": [
+      {
+        "label": "Foreground residents",
+        "before": 0,
+        "after": 260
+      },
+      {
+        "label": "Participant-avatar seats",
+        "before": 0,
+        "after": 5
+      },
+      {
+        "label": "Deterministic verification Turns",
+        "before": 0,
+        "after": 365
+      },
+      {
+        "label": "Exact numeric replay (%)",
+        "before": 0,
+        "after": 100
+      },
+      {
+        "label": "Resource conservation (%)",
+        "before": 0,
+        "after": 100
+      },
+      {
+        "label": "Real participant pilots authorized",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "The locked resident mix is 195 synthetic humans, 5 participant avatars, 36 software AIs, and 24 embodied robots",
+      "All foreground residents are adult synthetic identities and participant avatars have safe-routine-only offline authority",
+      "Two independent 365-Turn executions produce the same final world settlement",
+      "Every integer resource ledger satisfies opening plus production and transfer-in equals consumption plus transfer-out and closing",
+      "Memory commits reject stale Turn heads; PostgreSQL uses an atomic expected-Turn update",
+      "Research projections exclude private memory and report a zero RALR denominator as null",
+      "No model provider or model reasoning is needed or stored by the world slice",
+      "v1/v2 remain the safety and compatibility baseline"
+    ],
+    "artifacts": [
+      "docs/SYMBIOSIS_CONSTITUTION.md",
+      "docs/SYMBIOTIC_SHENZHEN_PLAN.md",
+      "docs/V3_WORLD_ARCHITECTURE.md",
+      "docs/V3_DATA_GOVERNANCE.md",
+      "docs/V3_VERIFICATION.md",
+      "data/shenzhen/2026-q2/",
+      "src/symbiosis/",
+      "src/app/api/world/v3/",
+      "src/app/api/residents/[id]/view/route.ts",
+      "src/app/api/reports/symbiosis/route.ts",
+      "migrations/0009_symbiotic_shenzhen_world.sql",
+      "scripts/run-symbiosis-verification.ts",
+      "docs/adr/0019-symbiotic-shenzhen-world-kernel.md"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v2.0.0",
     "version": "2.0.0",
     "date": "2026-07-18",
@@ -950,6 +1080,17 @@
       "docs/adr/0001-deterministic-simulation-core.md"
     ],
     "source": "manifest"
+  },
+  {
+    "id": "7dcfeb7f",
+    "version": "2",
+    "date": "2026-07-18",
+    "trigger": "observation",
+    "triggerReason": "chore: refresh v2 release metadata",
+    "action": "chore: refresh v2 release metadata",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
   },
   {
     "id": "08368f76",

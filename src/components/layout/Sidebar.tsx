@@ -7,13 +7,14 @@ import {
   ScrollText, Bot, Atom, Satellite, Zap, TerminalSquare,
   Users, Box, BarChart3, Info, Newspaper, Siren, Cloud,
   Settings, Trophy, Factory, MessageSquare, GitCommit, X, Microscope, Database,
-  GitPullRequestArrow, BadgeCheck, ActivitySquare, Vote
+  GitPullRequestArrow, BadgeCheck, ActivitySquare, Vote, MapPinned
 } from 'lucide-react';
 import { useTranslation } from '@/hooks/useTranslation';
 import { TranslationKey } from '@/i18n/translations';
 
 const navItems = [
   { id: 'dashboard', labelKey: 'dashboard', icon: LayoutDashboard },
+  { id: 'symbiosis', labelKey: 'symbiosisLens', icon: MapPinned },
   { id: 'neural', labelKey: 'neural', icon: Brain },
   { id: 'trading', labelKey: 'trading', icon: LineChart },
   { id: 'missions', labelKey: 'missions', icon: ScrollText },

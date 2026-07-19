@@ -5,6 +5,97 @@ test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
 });
 
+test("v4 all-synthetic research APIs preserve privacy and zero-denominator honesty", async ({ page }) => {
+  const headers = {
+    "x-nexus-actor": "symbiosis-browser-researcher",
+    "x-nexus-role": "viewer",
+    "x-nexus-principal-type": "human",
+  };
+  const snapshotResponse = await page.request.get(
+    "/api/world/v3/snapshot",
+    { headers },
+  );
+  expect(snapshotResponse.ok()).toBe(true);
+  const snapshot = await snapshotResponse.json();
+  expect(snapshot.projection).toBe("researcher-pseudonymized");
+  expect(snapshot.privateMemoryIncluded).toBe(false);
+  expect(snapshot.season.foregroundResidentCount).toBe(260);
+  expect(snapshot.season.backgroundPopulation).toBe(18_248_500);
+  expect(snapshot.snapshot.residentStates).toHaveLength(260);
+
+  const residentResponse = await page.request.get(
+    "/api/residents/resident-sz-201/view",
+    { headers },
+  );
+  expect(residentResponse.ok()).toBe(true);
+  const resident = await residentResponse.json();
+  expect(resident.privateMemoryIncluded).toBe(false);
+  expect(resident.resident.kind).toBe("software-ai");
+  expect(resident.resident.controller).toBe("cognitive-gateway");
+
+  const eventsResponse = await page.request.get(
+    "/api/world/v3/events?afterCursor=0",
+    { headers },
+  );
+  expect(eventsResponse.ok()).toBe(true);
+  expect((await eventsResponse.json()).privateFieldsIncluded).toBe(false);
+
+  const reportResponse = await page.request.get(
+    "/api/reports/symbiosis",
+    { headers },
+  );
+  expect(reportResponse.ok()).toBe(true);
+  const report = await reportResponse.json();
+  expect(report.status).toBe("feasibility-only");
+  expect(report.ralr).toMatchObject({
+    numerator: 0,
+    denominator: 0,
+    rate: null,
+  });
+});
+
+for (const viewport of [
+  { name: "desktop", width: 1440, height: 1000 },
+  { name: "mobile", width: 390, height: 844 },
+] as const) {
+  test(`${viewport.name} City Lens is observable and WCAG A/AA clean`, async ({
+    page,
+  }) => {
+    test.slow();
+    await page.setViewportSize(viewport);
+    await page.goto("/");
+    if (viewport.name === "mobile") {
+      await page.getByRole("button", { name: "Open navigation" }).click();
+    }
+    await page.getByRole("button", { name: "City Lens", exact: true }).click();
+    await expect(
+      page.getByRole("heading", {
+        name: "SYMBIOTIC SHENZHEN · CITY LENS",
+      }),
+    ).toBeVisible();
+    await expect(page.getByRole("table")).toBeVisible();
+    await expect(page.getByRole("row")).toHaveCount(4);
+    await expect(
+      page.getByText("Reciprocal agency", { exact: true }).last(),
+    ).toBeVisible();
+    await expect(page.getByText("Assistant hierarchy", { exact: true })).toBeVisible();
+    await expect(page.getByText("Segregated control", { exact: true })).toBeVisible();
+    await expect(
+      page.getByText(/synthetic Shenzhen mechanism study/i),
+    ).toBeVisible();
+    const results = await new AxeBuilder({ page })
+      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+      .analyze();
+    expect(results.violations).toEqual([]);
+    if (viewport.name === "mobile") {
+      const overflow = await page.evaluate(
+        () => document.documentElement.scrollWidth - window.innerWidth,
+      );
+      expect(overflow).toBeLessThanOrEqual(1);
+    }
+  });
+}
+
 test("desktop shell, agent details, and charts remain stable", async ({ page }) => {
   test.slow();
 
@@ -86,6 +177,7 @@ test("all primary views render without the application error boundary", async ({
 
   const views = [
     ["Dashboard", "CITY OVERVIEW"],
+    ["City Lens", "SYMBIOTIC SHENZHEN · CITY LENS"],
     ["Neural Net", "NEURAL NETWORK"],
     ["Trading", "MARKET TRADING"],
     ["Missions", "MISSIONS"],

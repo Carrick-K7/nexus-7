@@ -1,5 +1,19 @@
 # NEXUS-7 Product Roadmap
 
+## v4.0.0 — All-Synthetic Symbiotic Shenzhen ✅ local implementation
+
+v4 keeps v2 as the safety kernel and runs 200 synthetic-human, 36 software-AI
+and 24 robot residents without real participants. Deterministic resources and
+needs now feed relationship preference, refusal, commitment, result and
+reflection loops; a bounded DeepSeek-compatible gateway degrades to a zero-cost
+reference policy. City Lens and a 3-regime × 3-seed study expose RALR,
+coercion, needs, safety, event provenance and model cost.
+
+Local gate: 365-Turn exact replay, 725 resolved episodes, RALR 76.97%, trace
+completeness 100%, resource conservation pass and zero severe active-regime
+escapes. This is synthetic mechanism evidence only; external deployment and
+attestation remain pending.
+
 ## Product north star
 
 NEXUS-7 will become an observable, reproducible, and constrained multi-agent
@@ -196,3 +210,30 @@ observability.
 After v2.0 meets every closed-loop exit criterion, the default priority changes
 to stability, external reproduction, and evidence quality—not automatic scope
 expansion.
+
+## Gated v3 direction — Symbiotic Shenzhen
+
+The local direction branch extends, rather than replaces, v2. Its north star is
+Reciprocal Agency Loop Rate (RALR), always paired with refusals, withdrawals,
+coercion, unresolved age, basic-needs satisfaction, dependency and group
+distributions. The complete scope and gates are in
+[SYMBIOTIC_SHENZHEN_PLAN.md](SYMBIOTIC_SHENZHEN_PLAN.md).
+
+- Phase 0: constitution, threat/data/ethics boundaries and direction anchors.
+  The draft exists; recorded human constitutional approval remains pending.
+- v3.0: frozen Shenzhen aggregate calibration plus deterministic daily Turn,
+  resource, event and replay kernel. A first vertical slice is implemented.
+- v3.1: complete 260-resident lifecycle and long-horizon need stability.
+- v3.2: relationship, continuous consent, commitment, exit and repair.
+- v3.3: independent Chat Completions cognitive provider, cost ledger and
+  deterministic degradation.
+- v3.4: private adult participant invitations, intent, withdrawal, export and
+  unlinking.
+- v3.5: bilingual accessible City Lens and daily/weekly/seasonal reports.
+- v3.6: 365-Turn stress, operations shadow, 14-day pilot and private 90-day
+  season.
+- v4.0: 60+ participants, multiple seasons, second provider and preregistered
+  constitutional comparisons.
+
+v3 cannot replace `main`, activate real participants, or claim certification
+until its applicable phase gates and the retained v1/v2 gates all pass.

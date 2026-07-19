@@ -1,5 +1,10 @@
 # Production Operations
 
+> Symbiotic Shenzhen v4 runtime details, City Lens probes and worker alerts are
+> maintained in [`V4_OPERATIONS.md`](V4_OPERATIONS.md). v4 is all-synthetic and
+> requires a separate `worker:symbiosis` process; it does not require a live
+> model provider.
+
 ## Identity
 
 NEXUS-7 has three explicit authentication modes:
@@ -265,6 +270,22 @@ After database recovery:
 See [CLOSED_LOOP_ORCHESTRATION.md](CLOSED_LOOP_ORCHESTRATION.md),
 [V2_VERIFICATION.md](V2_VERIFICATION.md), and
 [THREAT_MODEL.md](THREAT_MODEL.md).
+
+## Symbiotic Shenzhen v3 direction
+
+Migration `0009_symbiotic_shenzhen_world.sql` adds normalized v3 world tables
+and season-hash partitions. `db:migrate`, checksum backup and restore include
+these tables while accepting older complete backup table sets.
+
+The v3 daily Turn has no production scheduler yet. Do not expose
+`WorldService.advanceTurn` as an unauthenticated route or attach it to the v2
+experiment clock. Production activation requires a dedicated leased daily
+worker, Asia/Shanghai calendar guard, input-freeze deadline, operator
+pause/resume, participant withdrawal gate and real PostgreSQL/restore evidence.
+
+The initial APIs are authenticated read-only researcher projections. Public
+observation is disabled. Identity vault data and private text must remain
+outside the simulation database and its checksum backup.
 
 ## Release checklist
 
