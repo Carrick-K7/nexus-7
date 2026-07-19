@@ -2,8 +2,8 @@
 
 > Date: 2026-07-19
 >
-> Status: v4.2 Human Observatory locally verified / v4.1 production remains
-> active / external CI-Sigstore and live-provider evidence pending
+> Status: v4.2 Human Observatory locally and publicly verified /
+> external CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
 
@@ -88,15 +88,16 @@ The production-built Playwright/axe suite must verify:
 - mobile navigation, keyboard focus and reduced motion remain usable;
 - every legacy v1/v2 view and certification panel still renders.
 
-## Trust boundary
+## Production evidence and trust boundary
 
 The reference values above are generated from the tagged source and do not
-represent a claim about real humans. Annotated Tag `v4.1.0`, exact commit
-`cb569b4` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote. That
-v4.1 remains active at `nexus7.carrick7.com`; anonymous read-only identity, edge
-and application mutation denial, AI-only migration, continued durable Turn
-settlement, TLS and pre/post-upgrade backups were checked on 2026-07-19.
-Deployment history and checksums are recorded in
+represent a claim about real humans. Annotated Tag `v4.2.0`, exact commit
+`9df53ed` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote and the
+exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only identity,
+edge and application mutation denial, the Observatory's 260/24/8 contract,
+desktop/mobile Chromium, Chinese copy, zero WCAG A/AA violations, continued
+durable Turn settlement, TLS and v4.2 pre/post-upgrade backups were checked on
+2026-07-19. Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 
 Remote CI/Sigstore, live DeepSeek and an external second-database recovery

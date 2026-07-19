@@ -5,7 +5,7 @@
   "trigger": "milestone",
   "triggerReason": "Make the all-software city understandable to a human observer without granting control over the live season.",
   "action": "Replaced the legacy default dashboard with a bilingual Human Observatory; added a versioned deterministic overview API, city briefing, population semantics, every-unit state, community institutions, production-chain continuity, causal layers, trends, events and trust evidence; separated fixed software-control coverage from dynamic operational flow; grouped legacy demonstrations away from the active city.",
-  "outcome": "Release implementation fcb2209 passed 229 unit tests, 16 real PostgreSQL/restore tests, 25 Playwright/axe checks, zero lint warnings, zero audit vulnerabilities, exact 365-Turn replay, the v2 closure gate and a 10,000-tick stress run. Production deployment and exact public evidence are pending.",
+  "outcome": "Release implementation fcb2209 passed 229 unit tests, 16 real PostgreSQL/restore tests, 25 Playwright/axe checks, zero lint warnings, zero audit vulnerabilities, exact 365-Turn replay, the v2 closure gate and a 10,000-tick stress run. Annotated Tag v4.2.0 at 9df53ed was deployed to nexus7.carrick7.com; the public 260-unit/24-institution/8-stage contract, anonymous read-only boundary, desktop/mobile/Chinese Chromium rendering, zero live WCAG A/AA violations, Turn 8 continuation and checksum backups were verified.",
   "metrics": [
     {
       "label": "Individually observable software units",
@@ -45,7 +45,10 @@
     "The public home page does not expose live-city mutation controls",
     "Desktop, mobile, Chinese, API and WCAG A/AA Observatory scenarios pass",
     "Legacy client-only simulations remain compatible and isolated from the live season",
-    "Release implementation commit fcb2209 passed every local and environment-backed gate"
+    "Release implementation commit fcb2209 passed every local and environment-backed gate",
+    "Production exact Tag 9df53ed settled Turn 8 with fingerprint a04f8b55 and zero severe escapes",
+    "Public GET returned 200 while edge POST returned 405 and forged direct mutation returned 403",
+    "Production pre/post-upgrade checksums are 03dcaf4af770 and 5abb42b48c74"
   ],
   "artifacts": [
     "src/symbiosis/observatory.ts",

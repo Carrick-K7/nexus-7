@@ -2,7 +2,7 @@
 
 > 更新：2026-07-19
 >
-> 状态：v4.2 Human Observatory 本地验证；生产更新待部署；
+> 状态：v4.2 Human Observatory 本地与生产验证；
 > live provider / external Sigstore pending
 
 ## 目标与研究边界
