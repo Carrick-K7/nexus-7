@@ -2,8 +2,8 @@
 
 > Date: 2026-07-19
 >
-> Status: v4.1 reference and AI-only hardening verified / production update
-> pending / external CI-Sigstore and live-provider evidence pending
+> Status: v4.1 reference, AI-only hardening and production update verified /
+> external CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
 
@@ -77,11 +77,13 @@ The production-built Playwright/axe suite must verify:
 ## Trust boundary
 
 The reference values above are generated from the tagged source and do not
-represent a claim about real humans. Tag `v4.0.0` and its direction branch are
-remote, and exact commit `f4d428a` remains the active v4.0 artifact while the
-v4.1 production update is pending. Its database state, services, TLS,
-protected route and observation APIs were checked on 2026-07-19. Deployment
-history is recorded in `docs/V4_DEPLOYMENT_ATTESTATION.md`.
+represent a claim about real humans. Annotated Tag `v4.1.0`, exact commit
+`cb569b4` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote. That
+commit is active at `nexus7.carrick7.com`; anonymous read-only identity, edge
+and application mutation denial, AI-only migration, continued durable Turn
+settlement, TLS and pre/post-upgrade backups were checked on 2026-07-19.
+Deployment history and checksums are recorded in
+`docs/V4_DEPLOYMENT_ATTESTATION.md`.
 
 Remote CI/Sigstore, live DeepSeek and an external second-database recovery
 drill remain pending and must not be inferred from the production deployment.

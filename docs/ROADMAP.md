@@ -72,6 +72,8 @@ Locks the production and repository boundary:
 - Schedule encrypted off-host backups and a second-database restore drill.
 - Prove restart, provider outage and version upgrade continuity without silent
   resident reset.
+- Bind the exact deployed source revision and engine contract to every settled
+  Turn without rewriting the season's origin provenance.
 
 Exit: 99.9% on-time Turn settlement, zero duplicate Turns, verified off-host
 restore and no continuity escape.

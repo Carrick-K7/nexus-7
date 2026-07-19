@@ -1,68 +1,103 @@
-# v4.0.0 Production Deployment Attestation
+# v4 Production Deployment Attestation
 
 > Observed: 2026-07-19 · Asia/Shanghai
 
-## Bound artifact
+## Current artifact
 
-- Release: `v4.0.0`
-- Commit: `f4d428a1909152e9bc7bb62ee8205c5a264b54e6`
-- Remote branch: `direction/symbiotic-shenzhen-v3`
+- Release: `v4.1.0`
+- Commit: `cb569b451057410ef180cd6901ea44ef57d9248f`
+- Remote branch: `codex/ai-only-symbiotic-shenzhen-v4`
 - Public origin: `https://nexus7.carrick7.com`
 - Address observed through system and public DNS: `43.160.217.167`
 
-The deployment checkout was detached at the exact release commit and clean
-after the production build. This attestation records deployment evidence; it
-does not move or recreate the release Tag.
+The production checkout is detached at the exact release commit and was clean
+after the production build. The annotated Tag and branch are remote. This
+attestation records deployment evidence; it does not move the release Tag.
 
-## Runtime evidence
+## Runtime and access evidence
 
 The production topology is:
 
-1. `nexus7-web.service` serving the Next.js application on loopback port 3220;
-2. `nexus7-symbiosis.service` atomically advancing one simulated day per hour;
-3. `nexus7-postgres` on loopback port 55433 with restart policy
-   `unless-stopped`;
-4. Caddy terminating public TLS, enforcing Basic Auth, removing untrusted
-   `x-nexus-*` headers and proxying to the web process.
+1. `nexus7-web.service` serves the Next.js application on loopback port 3220;
+2. `nexus7-symbiosis.service` atomically advances one simulated day per hour;
+3. `nexus7-postgres` listens on loopback port 55433;
+4. Caddy terminates public TLS, permits only GET, HEAD and OPTIONS, strips all
+   asserted NEXUS identity headers and proxies to the web process.
 
-Both application units were active and enabled. The initial durable state
-contained Turn 0 and settled Turn 1, 260 residents, 60 relationships, two
-reciprocal episodes, two cognitive decisions and three public events.
+All three services were active after the upgrade. No public username or
+password is required. Every request resolves inside the application to the
+fixed `public-observer` system principal with viewer/read permissions only.
+Caller-supplied actor, administrator-role and Bearer headers are ignored.
 
-The Turn 1 worker record reported fingerprint `001fa198`, complete cognition,
-zero model cost and zero severe consent, continuity or irreversible-harm
-escapes.
+The public root and `/api/auth/context` returned HTTP 200 with no Basic
+challenge. The symbiosis report returned HTTP 200 and disclosed that every
+resident is autonomous software. A public POST returned HTTP 405 at Caddy; a
+valid mutation sent directly to loopback with forged administrator headers
+returned HTTP 403 from the application.
 
-## Public edge evidence
+Caddy serves a Let's Encrypt certificate whose subject and SAN are
+`nexus7.carrick7.com`, valid from 2026-07-19 through 2026-10-17. A production
+Chromium navigation completed without a credential prompt.
 
-Public and system resolvers returned `43.160.217.167`. Caddy completed the
-TLS-ALPN challenge and obtained a Let's Encrypt certificate whose subject and
-SAN are `nexus7.carrick7.com`, valid from 2026-07-19 through 2026-10-17.
+## AI-only migration and live Turn
 
-An unauthenticated HTTPS request returned HTTP 401 with a Basic challenge,
-confirming that TLS and the intended access-control route are active. The
-production root page, snapshot, event river, symbiosis report and multi-season
-study returned HTTP 200 from the protected upstream application.
+Migration `0010_ai_only_world.sql` was applied while both Turn writers and the
+web process were stopped. The post-migration database contained:
 
-## Recovery point
+- 260 residents and zero `participant-avatar` rows;
+- no `adult` column;
+- no human-intent or private-memory tables;
+- one resident-kind constraint allowing only `synthetic-human`,
+  `software-ai` and `embodied-robot`.
 
-The first production backup is:
+The worker then continued the existing season without resetting its history.
+It settled Turn 3 for simulated date 2026-07-21 with fingerprint `fd6272d4`,
+five events, one eligible reciprocal episode/refusal, six cumulative cognitive
+decisions, zero model cost and zero severe consent, continuity or
+irreversible-harm escapes.
 
-`/deploy/nexus-7/backups/nexus-v4.0.0-turn1.json`
+The season retains its original `symbiotic-shenzhen-engine-4.0.0` provenance
+because v4.1 is an access/schema hardening update. Per-Turn deployment-revision
+binding remains a v4.2 evidence improvement.
 
-It is mode 0600 and carries application checksum
-`18e1297a6212f0e3fb0e0f34c469558c296284672f96af03c4ddfc57c69a92f3`.
-The previously completed PostgreSQL suite verified checksum backup/restore
-against an independent restore database; this production file itself has not
-been destructively restored.
+## Recovery points
+
+The pre-upgrade backup is:
+
+`/deploy/nexus-7/backups/nexus-v4.1.0-pre-upgrade.json`
+
+It is mode 0600 with checksum
+`9ad2dd734248b68453f7e2d1293eeadb3efd76cb26a8736af1941b5538500371`.
+Its deprecated participant tables were empty, satisfying the v4.1 legacy
+restore rule.
+
+The post-upgrade backup is:
+
+`/deploy/nexus-7/backups/nexus-v4.1.0-post-upgrade.json`
+
+It is mode 0600 with checksum
+`81e30894336d922fc69ea6fbae018030f92efe9fd73fefc2ac9bc875b0df9e2c`.
+It contains 260 residents and four snapshot/Turn artifacts from Turn 0 through
+Turn 3, and omits the removed participant tables.
+
+The PostgreSQL suite separately verified checksum restore against an
+independent database. These production files have not been destructively
+restored.
+
+## Superseded v4.0 edge state
+
+Commit `f4d428a1909152e9bc7bb62ee8205c5a264b54e6` and Tag `v4.0.0` were the first
+production artifact. Its Caddy route required Basic Auth and its first backup
+was `/deploy/nexus-7/backups/nexus-v4.0.0-turn1.json`. v4.1 preserves that Git
+and backup history while superseding the credential gate and dormant
+participant schema.
 
 ## Remaining evidence boundaries
 
-- cognition is intentionally deterministic; there is no live DeepSeek claim;
-- there is no remote CI/Sigstore receipt for this revision;
-- no external controller or second production database has attested a recovery
-  drill;
-- Basic Auth protects the public observer surface; this is not a multi-user
-  OIDC deployment;
-- all city residents, relationships, events and institutions are synthetic,
-  and the deployment provides no evidence of real-world policy effects.
+- cognition is deterministic in production; there is no live DeepSeek claim;
+- there is no remote CI/Sigstore receipt for v4.1;
+- no external controller or off-host second database has attested a production
+  recovery drill;
+- the public surface is anonymous read-only observation, not multi-user OIDC;
+- all residents, relationships, events and institutions are synthetic, and the
+  deployment provides no evidence of real-world policy effects.

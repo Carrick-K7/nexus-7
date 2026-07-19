@@ -6,7 +6,7 @@
     "trigger": "milestone",
     "triggerReason": "Make the production city anonymous to observe, permanently AI-only in its data path, and orderly in its documentation and generated artifacts.",
     "action": "Added a fixed read-only public-observer authentication mode, removed Basic Auth from the intended edge topology, denied public mutation methods, removed dormant participant-avatar, human-intent and private-memory schema seams, rejected legacy backups containing participant rows, separated v4 authority from archived v3 prototypes, consolidated Evolution Log generation, trimmed stale top-level documentation and removed unused template assets.",
-    "outcome": "Reference verification passed with 228 unit tests, 16 real PostgreSQL/restore tests, 24 Playwright/axe checks, zero lint warnings, zero audit vulnerabilities, exact 365-Turn replay and all retained v1/v2 gates. Production deployment remains pending.",
+    "outcome": "Reference verification passed with 228 unit tests, 16 real PostgreSQL/restore tests, 24 Playwright/axe checks, zero lint warnings, zero audit vulnerabilities, exact 365-Turn replay and all retained v1/v2 gates. Exact commit cb569b4 is deployed at nexus7.carrick7.com without a credential prompt; public writes are edge-denied, forged direct writes are application-denied, migration 0010 is active, the worker continued through Turn 3, and pre/post-upgrade checksum backups exist.",
     "metrics": [
       {
         "label": "Public credentials required",
@@ -45,7 +45,11 @@
       "AI-only migration refuses participant-avatar rows before removing abandoned schema seams",
       "Backups with non-empty deprecated participant tables fail verification",
       "The v4 observer shell retains synthetic governance evidence but no resident-participation entry path",
-      "Current documentation authority and generated projections have one declared source each"
+      "Current documentation authority and generated projections have one declared source each",
+      "Public root and auth context returned HTTP 200 without a Basic challenge",
+      "Public POST returned HTTP 405 and forged loopback mutation returned HTTP 403",
+      "Production database has 260 residents, no participant rows or deprecated participant schema, and Turn 3 fingerprint fd6272d4",
+      "Post-upgrade backup checksum is 81e30894336d922fc69ea6fbae018030f92efe9fd73fefc2ac9bc875b0df9e2c"
     ],
     "artifacts": [
       "src/auth/server.ts",
@@ -57,7 +61,8 @@
       "docs/V4_DATA_GOVERNANCE.md",
       "docs/archive/v3-prototype/",
       "docs/adr/0021-ai-only-public-observer.md",
-      "scripts/inject-git-log.js"
+      "scripts/inject-git-log.js",
+      "docs/V4_DEPLOYMENT_ATTESTATION.md"
     ],
     "source": "manifest"
   },
