@@ -1082,6 +1082,17 @@
     "source": "manifest"
   },
   {
+    "id": "0bd0c3d7",
+    "version": "4",
+    "date": "2026-07-19",
+    "trigger": "observation",
+    "triggerReason": "release: deliver all-synthetic symbiotic Shenzhen v4",
+    "action": "release: deliver all-synthetic symbiotic Shenzhen v4",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
     "id": "7dcfeb7f",
     "version": "2",
     "date": "2026-07-18",
