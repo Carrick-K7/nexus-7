@@ -99,7 +99,7 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 |---|---:|
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
-| unit / 条件跳过 | 229/229 / 16 |
+| unit / 条件跳过 | 245/245 / 0 |
 | PostgreSQL / Playwright+axe | 16/16 / 26/26 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
@@ -107,8 +107,8 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 
 ## 外部边界
 
-- v4.3.0 Tag/分支已 push；`bd285f9` 已部署至 `nexus7.carrick7.com`，三类居民
-  迁移、资源流看板、双层写阻断、Turn 12 与升级前后备份已验证。
-- 尚无 v4.3 的远端 Sigstore receipt；live DeepSeek、外部恢复演练和第二数据库
+- v4.3.2 Tag/分支已 push；`c36f542` 已部署至 `nexus7.carrick7.com`，三类居民、
+  双主题/赛博朋克界面、双层写阻断、Turn 15 与升级前后备份已验证。
+- 尚无 v4.3.2 的远端 Sigstore receipt；live DeepSeek、外部恢复演练和第二数据库
   待验证；生产既有 season 保留 v4.0 origin，逐 Turn revision 绑定仍待实现。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。

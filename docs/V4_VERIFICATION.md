@@ -2,7 +2,7 @@
 
 > Date: 2026-07-19
 >
-> Status: v4.3.2 Chromatic City Shell locally verified / production pending /
+> Status: v4.3.2 Chromatic City Shell locally and publicly verified /
 > external CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
@@ -26,9 +26,9 @@ and segregation keeps an honest null denominator.
 | Severe consent / continuity / irreversible harm escapes | 0 / 0 / 0 |
 | 3×3×90 control separation | pass |
 | Model reasoning persisted | no |
-| Unit / conditional skip | 229 / 16 |
+| Unit / conditional skip | 245 / 0 |
 | PostgreSQL integration / restore | 16 / 16 |
-| Playwright + axe | 25 / 25 |
+| Playwright + axe | 26 / 26 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 
 ## v4.1 AI-only hardening gate
@@ -113,14 +113,14 @@ The production-built Playwright/axe suite must verify:
 ## Production evidence and trust boundary
 
 The reference values above are generated from the tagged source and do not
-represent a claim about real humans. Annotated Tag `v4.3.0`, exact commit
-`bd285f9` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote and the
+represent a claim about real humans. Annotated Tag `v4.3.2`, exact commit
+`c36f542` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote and the
 exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only identity,
 edge and application mutation denial, 200/36/24 taxonomy migration, 24 current
 resource ledgers, eight active flows, sixteen transfer lanes, desktop/mobile
-Chromium, Chinese copy, zero WCAG A/AA violations, Turn 12 settlement, TLS and
-v4.3 pre/post-upgrade backups were checked on 2026-07-19. Deployment history
-and checksums are recorded in
+Chromium, both color modes, Chinese copy, zero WCAG A/AA violations, Turn 15
+settlement, TLS and v4.3.2 pre/post-upgrade backups were checked on 2026-07-19.
+Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 
 Remote CI/Sigstore, live DeepSeek and an external second-database recovery
