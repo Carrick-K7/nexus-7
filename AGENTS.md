@@ -107,8 +107,8 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 
 ## 外部边界
 
-- v4.2.0 Tag/分支已 push；`9df53ed` 已部署至 `nexus7.carrick7.com`，匿名
-  只读 Human Observatory、双层写阻断、Turn 8 与升级前后备份已验证。
-- 尚无 v4.2 的远端 Sigstore receipt；live DeepSeek、外部恢复演练和第二数据库
+- v4.3.0 Tag/分支已 push；`bd285f9` 已部署至 `nexus7.carrick7.com`，三类居民
+  迁移、资源流看板、双层写阻断、Turn 12 与升级前后备份已验证。
+- 尚无 v4.3 的远端 Sigstore receipt；live DeepSeek、外部恢复演练和第二数据库
   待验证；生产既有 season 保留 v4.0 origin，逐 Turn revision 绑定仍待实现。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。

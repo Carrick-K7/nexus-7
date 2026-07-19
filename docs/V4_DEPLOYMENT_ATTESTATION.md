@@ -4,8 +4,8 @@
 
 ## Current artifact
 
-- Release: `v4.2.0`
-- Commit: `9df53ed79237b1b2db37126aef074704ebccf1d6`
+- Release: `v4.3.0` — Living City Flow
+- Commit: `bd285f97ee5a21634157089167a058f096d27514`
 - Remote branch: `codex/ai-only-symbiotic-shenzhen-v4`
 - Public origin: `https://nexus7.carrick7.com`
 - Address observed through system and public DNS: `43.160.217.167`
@@ -35,60 +35,66 @@ resident is autonomous software. A public POST returned HTTP 405 at Caddy; a
 valid mutation sent directly to loopback with forged administrator headers
 returned HTTP 403 from the application.
 
-The versioned `/api/observatory/v1/overview` endpoint returned HTTP 200 with
-contract `nexus.human-observatory.v1`, 260 foreground software units, 24
-projected institutions and eight modeled production stages. It separately
-reported 100% autonomous control coverage and 0% real-human labor dependency;
-these fixed scope facts are not the dynamic production-continuity score.
+The versioned `/api/observatory/v2/overview` endpoint returned HTTP 200 with
+contract `nexus.human-observatory.v2`, 200 humans, 36 AI and 24 robots. Its
+current-Turn projection contained 24 persisted resource ledgers, 260 resident
+states, eight active resource flows, 16 transfer lanes and 14 settled events.
+It reported 199,820 produced, 192,611 consumed and 4,918 transferred modeled
+units. These are internally settled simulation values, not live Shenzhen data.
+The v1 endpoint remains HTTP 200 as a deprecated read-compatibility adapter.
 
 Caddy serves a Let's Encrypt certificate whose subject and SAN are
 `nexus7.carrick7.com`, valid from 2026-07-19 through 2026-10-17. A production
 Chromium navigation completed without a credential prompt. Desktop and 390 px
-mobile Chromium runs opened a unit detail, produced no runtime errors or
-horizontal overflow, and returned zero WCAG A/AA violations. The Chinese
-Observatory and its production/unit explanations were visible.
+mobile Chromium runs displayed the Living City Flow layer, produced no runtime
+or console errors or horizontal overflow, and returned zero WCAG A/AA
+violations. English and Chinese rendered correctly, and no “合成人类” label was
+visible.
 
 ## AI-only world and live Turn
 
-Migrations through `0010_ai_only_world.sql` were run idempotently while the Turn
+Migrations through `0011_resident_taxonomy.sql` were run idempotently while the Turn
 writer and web process were stopped. The post-upgrade database contained:
 
-- 260 residents and zero `participant-avatar` rows;
+- exactly 200 `human`, 36 `ai` and 24 `robot` rows in both the indexed column
+  and resident JSON;
+- zero deprecated `synthetic-human`, `software-ai` or `embodied-robot` rows;
 - no `adult` column;
 - no human-intent or private-memory tables;
-- one resident-kind constraint allowing only `synthetic-human`,
-  `software-ai` and `embodied-robot`.
+- one resident-kind constraint allowing only `human`, `ai` and `robot`.
 
 The worker then continued the existing season without resetting its history.
-It settled Turn 8 for simulated date 2026-07-26 with fingerprint `a04f8b55`,
-seven events, twelve cumulative eligible reciprocal episodes, RALR 58.33%,
-four refusals, one withdrawal, zero model cost and zero severe consent,
-continuity or irreversible-harm escapes.
+The v4.3 engine settled Turn 12 for simulated date 2026-07-30 with fingerprint
+`148ec48d`, fourteen events, nineteen cumulative eligible reciprocal episodes,
+RALR 57.89%, five refusals, three withdrawals, zero coercive actions, zero model
+cost and zero severe consent, continuity or irreversible-harm escapes. The Turn
+included append-only, endpoint-conserved inter-community resource-transfer
+events.
 
-The season retains its original `symbiotic-shenzhen-engine-4.0.0` provenance
-because v4.1 and v4.2 are access, schema and observation updates. The exact
-deployment artifact is attested here, but per-Turn deployment-revision binding
-remains a future evidence improvement.
+The season retains its original `symbiotic-shenzhen-engine-4.0.0` origin
+provenance. The exact deployment artifact and the first v4.3 Turn are attested
+here, but durable per-Turn deployment-revision binding remains a future
+evidence improvement.
 
 ## Recovery points
 
 The pre-upgrade backup is:
 
-`/deploy/nexus-7/backups/nexus-v4.2.0-pre-upgrade.json`
+`/deploy/nexus-7/backups/nexus-v4.3.0-pre-upgrade.json`
 
 It is mode 0600 with checksum
-`03dcaf4af770e706290d91e04fd5336f1abc66366bce0208a2b92e6af7bafd2e`.
-It contains 260 residents and 2,080 resident snapshots across Turn 0 through
-Turn 7.
+`b28fd861c46d69bf0fbee32a3ec9064621c52e5bffa00f94f7863f71a1c08278`.
+It contains 260 residents, twelve Turn rows, 3,120 resident snapshots, 264
+resource ledgers and 57 events before the taxonomy migration.
 
 The post-upgrade backup is:
 
-`/deploy/nexus-7/backups/nexus-v4.2.0-post-upgrade.json`
+`/deploy/nexus-7/backups/nexus-v4.3.0-post-upgrade.json`
 
 It is mode 0600 with checksum
-`5abb42b48c745a82075f289112c940e5921291fafab8a402dcf6654a70c686e5`.
-It contains 260 residents, nine Turn rows, 2,340 resident snapshots and 42
-events from Turn 0 through Turn 8.
+`ea124204c58657ae516a2328e52e7d0e19e8cf54741219e5942dc02a7a6f353a`.
+It contains 260 residents, thirteen Turn rows, 3,380 resident snapshots, 288
+resource ledgers and 71 events through Turn 12.
 
 The PostgreSQL suite separately verified checksum restore against an
 independent database. These production files have not been destructively
@@ -96,18 +102,20 @@ restored.
 
 ## Superseded production states
 
-Tag `v4.1.0` at `cb569b451057410ef180cd6901ea44ef57d9248f` removed
+Tag `v4.2.0` at `9df53ed79237b1b2db37126aef074704ebccf1d6`
+introduced the default Human Observatory and its recovery points. Tag `v4.1.0`
+at `cb569b451057410ef180cd6901ea44ef57d9248f` removed
 the credential gate and dormant participant schema; its pre/post-upgrade
 backups remain available. Tag `v4.0.0` at
 `f4d428a1909152e9bc7bb62ee8205c5a264b54e6` was the first production artifact,
-and its Caddy route required Basic Auth. v4.2 preserves both Git and recovery
-histories while replacing the default legacy dashboard with the read-only
-Human Observatory.
+and its Caddy route required Basic Auth. v4.3 preserves all Git and recovery
+history while changing the current domain taxonomy and adding committed city
+resource flows.
 
 ## Remaining evidence boundaries
 
 - cognition is deterministic in production; there is no live DeepSeek claim;
-- there is no remote CI/Sigstore receipt for v4.2;
+- there is no remote CI/Sigstore receipt for v4.3;
 - no external controller or off-host second database has attested a production
   recovery drill;
 - the public surface is anonymous read-only observation, not multi-user OIDC;

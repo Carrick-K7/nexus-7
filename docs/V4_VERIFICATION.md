@@ -2,7 +2,7 @@
 
 > Date: 2026-07-19
 >
-> Status: v4.3 Living City Flow locally verified / v4.2 remains in production /
+> Status: v4.3 Living City Flow locally and publicly verified /
 > external CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
@@ -37,8 +37,8 @@ and segregation keeps an honest null denominator.
 - its resolved viewer has read permissions only, and a direct mutation returns
   HTTP 403;
 - the public proxy contract permits GET, HEAD and OPTIONS only;
-- fresh databases expose only synthetic-human, software-AI and robot resident
-  kinds and contain no adult, human-intent or private-memory field/table;
+- fresh current databases expose only human, AI and robot resident kinds and
+  contain no adult, human-intent or private-memory field/table;
 - migration 0010 aborts before mutation if participant-avatar rows exist;
 - a checksum-valid legacy backup is accepted only when deprecated participant
   tables are empty;
@@ -103,13 +103,14 @@ The production-built Playwright/axe suite must verify:
 ## Production evidence and trust boundary
 
 The reference values above are generated from the tagged source and do not
-represent a claim about real humans. Annotated Tag `v4.2.0`, exact commit
-`9df53ed` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote and the
+represent a claim about real humans. Annotated Tag `v4.3.0`, exact commit
+`bd285f9` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote and the
 exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only identity,
-edge and application mutation denial, the Observatory's 260/24/8 contract,
-desktop/mobile Chromium, Chinese copy, zero WCAG A/AA violations, continued
-durable Turn settlement, TLS and v4.2 pre/post-upgrade backups were checked on
-2026-07-19. Deployment history and checksums are recorded in
+edge and application mutation denial, 200/36/24 taxonomy migration, 24 current
+resource ledgers, eight active flows, sixteen transfer lanes, desktop/mobile
+Chromium, Chinese copy, zero WCAG A/AA violations, Turn 12 settlement, TLS and
+v4.3 pre/post-upgrade backups were checked on 2026-07-19. Deployment history
+and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 
 Remote CI/Sigstore, live DeepSeek and an external second-database recovery
