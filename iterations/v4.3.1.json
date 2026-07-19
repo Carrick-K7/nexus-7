@@ -5,7 +5,7 @@
   "trigger": "human-observation",
   "triggerReason": "Redundant deployment-mode labels competed with city information, non-Observatory views lacked the intended cyberpunk atmosphere, and the existing theme selector did not provide a real light palette.",
   "action": "Removed observer-mode and software-run badges from rendered UI; replaced dark, hacker and matrix settings with persistent light and dark palettes; migrated old theme values safely; kept Human Observatory restrained while adding a shared multicolor cyberpunk atmosphere to every other view; added desktop/mobile WCAG checks for both modes.",
-  "outcome": "Implementation passed 245 tests including 16 real PostgreSQL/independent-restore checks, 26 Playwright/axe scenarios, zero TypeScript or lint warnings, zero audit vulnerabilities, a production build, exact 365-Turn replay, the v2 closure gate and a 10,000-tick stress run. Production deployment and public theme evidence are pending.",
+  "outcome": "Release implementation f1b35a2 passed 245 tests including 16 real PostgreSQL/independent-restore checks, 26 Playwright/axe scenarios, zero TypeScript or lint warnings, zero audit vulnerabilities, a production build, exact 365-Turn replay, the v2 closure gate and a 10,000-tick stress run. Production deployment and public theme evidence are pending.",
   "metrics": [
     {
       "label": "Rendered deployment-mode badges",
@@ -30,7 +30,8 @@
     "Every other view inherits the shared cyberpunk shell",
     "Redundant English and Chinese status labels are absent from rendered UI",
     "Desktop and mobile light/dark palettes have zero WCAG A/AA violations and no horizontal overflow",
-    "All primary views render inside the cyberpunk shell without application or console errors"
+    "All primary views render inside the cyberpunk shell without application or console errors",
+    "Release implementation commit f1b35a2 passed every local and environment-backed gate"
   ],
   "artifacts": [
     "src/app/globals.css",
