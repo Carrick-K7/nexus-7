@@ -3,7 +3,7 @@
 import { useEffect } from "react";
 import { useNexusStore } from "@/stores/nexus-store";
 
-export function useCitySimulation() {
+export function useCitySimulation(enabled = true) {
   const status = useNexusStore((state) => state.simulation.status);
   const speed = useNexusStore((state) => state.gameTime.speed);
   const advanceSimulation = useNexusStore(
@@ -11,7 +11,7 @@ export function useCitySimulation() {
   );
 
   useEffect(() => {
-    if (status !== "running") {
+    if (!enabled || status !== "running") {
       return;
     }
 
@@ -21,5 +21,5 @@ export function useCitySimulation() {
     );
 
     return () => window.clearInterval(interval);
-  }, [advanceSimulation, speed, status]);
+  }, [advanceSimulation, enabled, speed, status]);
 }

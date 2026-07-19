@@ -12,7 +12,7 @@ health, belonging and autonomy needs. It is not a person, account, avatar or
 proxy. The city accepts no real identity, participant input, private diary or
 resident login.
 
-The active release is **v4.1 — AI-Only Symbiotic Shenzhen**. The v2 closed-loop
+The active release is **v4.2 — AI-Only Human Observatory**. The v2 closed-loop
 autonomy laboratory remains its safety kernel for evidence, release approval,
 rollback and recovery. Human administrators in that control plane operate the
 software; they do not participate in the simulated city.
@@ -46,13 +46,13 @@ Production is available at
 [https://nexus7.carrick7.com](https://nexus7.carrick7.com) without a username
 or password. The public surface is anonymous and read-only.
 
-Open **City Lens / 共生深圳 · 城市透镜** to inspect:
+The default **Human Observatory / 人类观测台** explains:
 
-- community needs and resource pressure;
-- relationships, consent state, commitments and event lineage;
-- RALR with denominator, refusals, withdrawals and unresolved age;
-- safety escapes, model status and accumulated cost;
-- reciprocal, hierarchy and segregated control regimes.
+- foreground/background population and all 260 software-unit states;
+- type-aware synthetic mood, AI engagement, integrity and robot durability;
+- city and community needs, resources and institution smoothness;
+- 100% AI-controlled production coverage versus dynamic chain continuity;
+- event lineage, RALR denominator, safety, replay and snapshot evidence.
 
 Versioned projections:
 
@@ -61,6 +61,7 @@ GET /api/world/v3/snapshot
 GET /api/world/v3/events?afterCursor=0
 GET /api/reports/symbiosis
 GET /api/reports/symbiosis/study?turns=90
+GET /api/observatory/v1/overview
 ```
 
 The public proxy rejects mutation methods. The application independently maps
@@ -138,6 +139,7 @@ Start with [docs/INDEX.md](docs/INDEX.md). Current v4 authority:
 - [AI-only constitution](docs/SYMBIOSIS_CONSTITUTION.md)
 - [product plan](docs/SYMBIOTIC_SHENZHEN_PLAN.md)
 - [architecture](docs/V4_ARCHITECTURE.md)
+- [Human Observatory guide](docs/HUMAN_OBSERVATORY.md)
 - [data governance](docs/V4_DATA_GOVERNANCE.md)
 - [verification](docs/V4_VERIFICATION.md)
 - [operations](docs/V4_OPERATIONS.md)

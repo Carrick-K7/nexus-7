@@ -22,7 +22,7 @@ bounded cognition ── structured preference only
              ↓
 memory or PostgreSQL atomic commit
              ↓
-anonymous read-only projection ── City Lens / report APIs
+anonymous read-only projection ── Human Observatory / report APIs
 ```
 
 Only the deterministic engine changes world state. Models cannot execute
@@ -73,10 +73,13 @@ rows is rejected instead of silently importing or discarding personal data.
 
 ## Observation
 
-City Lens and the versioned APIs expose pseudonyms, needs, resource pressure,
-relationships, consent state, commitments, outcomes, event lineage, RALR,
-safety escapes and model cost. There is no identity plane, private diary,
-participant input, resident login or public mutation API.
+The Human Observatory is a pure projection over the same memory/PostgreSQL
+world contract. `nexus.human-observatory.v1` exposes every pseudonymous unit,
+type-aware need proxies, community institutions, production continuity,
+trends, event lineage, RALR and evidence. Formula version
+`human-observatory-formulas-1.0.0` binds every derived score.
 
-The map is progressive enhancement. Accessible tables and reports remain the
-authoritative projection if WebGL or map tiles fail.
+There is no second display database, identity plane, private diary,
+participant input, resident login or public mutation API. The old client-only
+simulation is a compatibility sandbox and does not run while the live
+observatory is active.

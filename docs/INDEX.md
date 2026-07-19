@@ -8,6 +8,7 @@ historical decisions and generated evidence.
 - `SYMBIOSIS_CONSTITUTION.md` — permanent AI-only experiment constitution;
 - `SYMBIOTIC_SHENZHEN_PLAN.md` — product boundary and post-v4 priorities;
 - `V4_ARCHITECTURE.md` — runtime, cognition and persistence boundaries;
+- `HUMAN_OBSERVATORY.md` — public reading order and metric semantics;
 - `V4_DATA_GOVERNANCE.md` — allowed data and prohibited ingress;
 - `V4_VERIFICATION.md` — reference verification;
 - `V4_OPERATIONS.md` — deployment and observation;

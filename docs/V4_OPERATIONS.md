@@ -46,7 +46,9 @@ is the supported production default; the city remains fully operational.
 
 Human observer entry points:
 
-- `/` → **City Lens** in the sidebar;
+- `/` → default **Human Observatory**;
+- `/api/observatory/v1/overview` → population, every unit, institutions,
+  production chain, trends and trust evidence;
 - `/api/world/v3/snapshot` → current world and resident projection;
 - `/api/world/v3/events?afterCursor=0` → append-only event river;
 - `/api/reports/symbiosis` → current RALR, safety, needs, relationships and cost;

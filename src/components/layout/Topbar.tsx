@@ -2,7 +2,7 @@
 
 import { useNexusStore } from '@/stores/nexus-store';
 import { motion } from 'framer-motion';
-import { Bell, Search, Clock, User, ChevronDown, Globe, Menu, Pause, Play } from 'lucide-react';
+import { Bell, Search, Clock, Eye, Globe, Menu, Pause, Play } from 'lucide-react';
 import { useState } from 'react';
 import { useTranslation } from '@/hooks/useTranslation';
 
@@ -22,12 +22,14 @@ export default function Topbar({ onOpenMenu }: TopbarProps) {
     cityStats,
     language,
     setLanguage,
+    activeView,
   } = useNexusStore();
   const { t } = useTranslation();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
 
   const unreadCount = notifications.filter(n => !n.read).length;
+  const observingSymbiosis = activeView === "symbiosis";
 
   const formatTime = (hour: number, minute: number) => {
     return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
@@ -53,7 +55,14 @@ export default function Topbar({ onOpenMenu }: TopbarProps) {
         >
           <Menu className="h-5 w-5" />
         </button>
-        <div className="relative hidden 2xl:block">
+        {observingSymbiosis ? (
+          <div className="hidden items-center gap-2 text-sm text-cyber-text-dim sm:flex">
+            <Eye className="h-4 w-4 text-cyber-green" />
+            <span>
+              {language === "zh" ? "活动城市观测" : "Live city observation"}
+            </span>
+          </div>
+        ) : <div className="relative hidden 2xl:block">
           <Search className="w-4 h-4 text-cyber-text-dim absolute left-3 top-1/2 -translate-y-1/2" />
           <input 
             type="text"
@@ -62,11 +71,11 @@ export default function Topbar({ onOpenMenu }: TopbarProps) {
             className="w-64 pl-10 pr-4 py-2 bg-cyber-dark border border-cyber-blue/20 rounded-lg text-sm text-cyber-text placeholder-cyber-text-dim focus:outline-none focus:border-cyber-blue/50 transition-colors"
           />
           <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-cyber-text-dim bg-cyber-gray px-1.5 py-0.5 rounded">⌘K</kbd>
-        </div>
+        </div>}
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3 xl:gap-5">
-        <div className="hidden items-center gap-3 text-sm md:flex">
+        {!observingSymbiosis && <div className="hidden items-center gap-3 text-sm md:flex">
           <div className="flex items-center gap-2 text-cyber-text-dim">
             <Clock className="w-4 h-4" />
             <span className="font-mono text-cyber-blue">{formatTime(gameTime.hour, gameTime.minute)}</span>
@@ -100,18 +109,25 @@ export default function Topbar({ onOpenMenu }: TopbarProps) {
               </button>
             ))}
           </div>
-        </div>
+        </div>}
 
-        <div className="hidden items-center gap-4 xl:flex">
+        {!observingSymbiosis && <div className="hidden items-center gap-4 xl:flex">
           <div className="flex items-center gap-2 px-3 py-1.5 bg-cyber-green/10 border border-cyber-green/30 rounded">
             <div className="w-2 h-2 rounded-full bg-cyber-green animate-pulse" />
             <span className="text-xs text-cyber-green font-medium">
               {(cityStats.population / 1000000).toFixed(1)}M Citizens
             </span>
           </div>
-        </div>
+        </div>}
 
-        <div className="relative">
+        {observingSymbiosis && (
+          <div className="hidden items-center gap-2 rounded-full border border-cyber-green/30 bg-cyber-green/5 px-3 py-1.5 text-xs text-cyber-green md:flex">
+            <span className="h-2 w-2 rounded-full bg-cyber-green" />
+            {language === "zh" ? "公共只读" : "PUBLIC READ-ONLY"}
+          </div>
+        )}
+
+        {!observingSymbiosis && <div className="relative">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -176,18 +192,7 @@ export default function Topbar({ onOpenMenu }: TopbarProps) {
               </div>
             </motion.div>
           )}
-        </div>
-
-        <motion.button 
-          whileHover={{ scale: 1.05 }}
-          aria-label="Open user menu"
-          className="hidden items-center gap-2 rounded-lg p-2 transition-colors hover:bg-cyber-gray 2xl:flex"
-        >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyber-purple to-cyber-pink flex items-center justify-center">
-            <User className="w-4 h-4 text-white" />
-          </div>
-          <ChevronDown className="w-4 h-4 text-cyber-text-dim" />
-        </motion.button>
+        </div>}
 
         <div className="relative">
           <motion.button

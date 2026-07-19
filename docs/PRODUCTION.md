@@ -1,6 +1,6 @@
 # Production Operations
 
-> Symbiotic Shenzhen v4 runtime details, City Lens probes and worker alerts are
+> Symbiotic Shenzhen v4 runtime details, Human Observatory probes and worker alerts are
 > maintained in [`V4_OPERATIONS.md`](V4_OPERATIONS.md). v4 is all-synthetic and
 > requires a separate `worker:symbiosis` process; it does not require a live
 > model provider.

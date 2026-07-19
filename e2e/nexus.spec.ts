@@ -50,37 +50,55 @@ test("v4 all-synthetic research APIs preserve privacy and zero-denominator hones
     denominator: 0,
     rate: null,
   });
+
+  const observatoryResponse = await page.request.get(
+    "/api/observatory/v1/overview",
+    { headers },
+  );
+  expect(observatoryResponse.ok()).toBe(true);
+  const observatory = await observatoryResponse.json();
+  expect(observatory.schemaVersion).toBe("nexus.human-observatory.v1");
+  expect(observatory.units).toHaveLength(260);
+  expect(observatory.institutions).toHaveLength(24);
+  expect(observatory.production).toMatchObject({
+    autonomousControlRate: 1,
+    humanLaborDependencyRate: 0,
+    modeledStageCoverageRate: 1,
+  });
+  expect(observatory.evidence).toMatchObject({
+    privateFieldsIncluded: false,
+    modelReasoningIncluded: false,
+    consciousnessClaimed: false,
+  });
 });
 
 for (const viewport of [
   { name: "desktop", width: 1440, height: 1000 },
   { name: "mobile", width: 390, height: 844 },
 ] as const) {
-  test(`${viewport.name} City Lens is observable and WCAG A/AA clean`, async ({
+  test(`${viewport.name} Human Observatory is understandable and WCAG A/AA clean`, async ({
     page,
   }) => {
     test.slow();
     await page.setViewportSize(viewport);
     await page.goto("/");
-    if (viewport.name === "mobile") {
-      await page.getByRole("button", { name: "Open navigation" }).click();
-    }
-    await page.getByRole("button", { name: "City Lens", exact: true }).click();
     await expect(
       page.getByRole("heading", {
-        name: "SYMBIOTIC SHENZHEN · CITY LENS",
+        name: "SYNTHETIC SHENZHEN · HUMAN OBSERVATORY",
       }),
     ).toBeVisible();
-    await expect(page.getByRole("table")).toBeVisible();
-    await expect(page.getByRole("row")).toHaveCount(4);
+    await expect(page.getByText("START HERE · WHAT IS THIS?")).toBeVisible();
+    await expect(page.getByText("END-TO-END AI PRODUCTION")).toBeVisible();
+    await expect(page.getByText("EVERY SOFTWARE UNIT")).toBeVisible();
+    await expect(page.getByTestId("unit-status-table")).toBeVisible();
     await expect(
-      page.getByText("Reciprocal agency", { exact: true }).last(),
+      page.getByRole("button", { name: /Inspect unit:/ }).first(),
     ).toBeVisible();
-    await expect(page.getByText("Assistant hierarchy", { exact: true })).toBeVisible();
-    await expect(page.getByText("Segregated control", { exact: true })).toBeVisible();
-    await expect(
-      page.getByText(/synthetic Shenzhen mechanism study/i),
-    ).toBeVisible();
+    await page
+      .getByRole("button", { name: /Inspect unit:/ })
+      .first()
+      .click();
+    await expect(page.getByText("SELECTED UNIT")).toBeVisible();
     const results = await new AxeBuilder({ page })
       .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
       .analyze();
@@ -93,6 +111,18 @@ for (const viewport of [
     }
   });
 }
+
+test("Human Observatory explains the city in Chinese", async ({ page }) => {
+  await page.goto("/");
+  await page.getByRole("button", { name: "Change language" }).click();
+  await page.getByRole("button", { name: "中文" }).click();
+  await expect(
+    page.getByRole("heading", { name: "合成深圳 · 人类观测台" }),
+  ).toBeVisible();
+  await expect(page.getByText("生产环节全链条 AI 化")).toBeVisible();
+  await expect(page.getByText("每一个软件单位")).toBeVisible();
+  await expect(page.getByText(/不代表 AI 意识/)).toBeVisible();
+});
 
 test("desktop shell, agent details, and charts remain stable", async ({ page }) => {
   test.slow();
@@ -111,6 +141,7 @@ test("desktop shell, agent details, and charts remain stable", async ({ page }) 
   });
 
   await page.goto("/");
+  await page.getByRole("button", { name: "Dashboard" }).click();
   await expect(page.getByRole("heading", { name: "CITY OVERVIEW" })).toBeVisible();
   await page.getByRole("button", { name: "10x", exact: true }).click();
   await page.waitForTimeout(1_200);
@@ -129,6 +160,7 @@ test("simulation can pause, step, replay, reset, and continue across views", asy
   test.slow();
 
   await page.goto("/");
+  await page.getByRole("button", { name: "Dashboard" }).click();
 
   const tick = page.getByTestId("simulation-tick");
   await expect(tick).toContainText("Tick");
@@ -175,7 +207,7 @@ test("all primary views render without the application error boundary", async ({
 
   const views = [
     ["Dashboard", "CITY OVERVIEW"],
-    ["City Lens", "SYMBIOTIC SHENZHEN · CITY LENS"],
+    ["Human Observatory", "SYNTHETIC SHENZHEN · HUMAN OBSERVATORY"],
     ["Neural Net", "NEURAL NETWORK"],
     ["Trading", "MARKET TRADING"],
     ["Missions", "MISSIONS"],
@@ -252,6 +284,7 @@ test("observer reconstructs traces and compares counterfactual runs", async ({ p
   test.slow();
 
   await page.goto("/");
+  await page.getByRole("button", { name: "Dashboard" }).click();
   await page.getByRole("button", { name: "10x", exact: true }).click();
   await page.waitForTimeout(2_200);
   await page.getByRole("button", { name: "Pause simulation" }).last().click();
@@ -1049,7 +1082,11 @@ test("mobile shell uses a drawer without horizontal overflow", async ({ page }) 
   await page.setViewportSize({ width: 390, height: 844 });
   await page.goto("/");
 
-  await expect(page.getByRole("heading", { name: "CITY OVERVIEW" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", {
+      name: "SYNTHETIC SHENZHEN · HUMAN OBSERVATORY",
+    }),
+  ).toBeVisible();
   await expect(page.getByRole("button", { name: "Open navigation" })).toBeVisible();
   await page.getByRole("button", { name: "Open navigation" }).click();
   await expect(page.getByRole("button", { name: "Dashboard" })).toBeVisible();

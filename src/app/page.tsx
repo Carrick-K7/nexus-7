@@ -35,7 +35,7 @@ import IterationLab from "@/components/iteration/IterationLab";
 import VerificationCenter from "@/components/verification/VerificationCenter";
 import OperationsCenter from "@/components/operations/OperationsCenter";
 import ParticipationCenter from "@/components/participation/ParticipationCenter";
-import SymbiosisCityLens from "@/components/symbiosis/SymbiosisCityLens";
+import HumanObservatory from "@/components/symbiosis/HumanObservatory";
 
 const viewComponents: Record<string, React.ComponentType> = {
   dashboard: Dashboard,
@@ -66,14 +66,14 @@ const viewComponents: Record<string, React.ComponentType> = {
   verification: VerificationCenter,
   operations: OperationsCenter,
   participation: ParticipationCenter,
-  symbiosis: SymbiosisCityLens,
+  symbiosis: HumanObservatory,
 };
 
 export default function Home() {
   const { activeView, theme } = useNexusStore();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const ActiveComponent = viewComponents[activeView] || Dashboard;
-  useCitySimulation();
+  useCitySimulation(activeView !== "symbiosis");
 
   return (
     <div className="min-h-screen bg-cyber-black">

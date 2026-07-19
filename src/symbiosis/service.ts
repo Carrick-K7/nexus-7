@@ -35,6 +35,10 @@ import type {
 import type {
   WorldRepository,
 } from "./repository";
+import {
+  buildHumanObservatory,
+  type HumanObservatoryReport,
+} from "./observatory";
 
 interface WorldServiceOptions {
   seasonId?: string;
@@ -558,5 +562,46 @@ export class WorldService {
         "Private model reasoning is neither requested nor stored.",
       ],
     };
+  }
+
+  async observatory(
+    actor: ExperimentActor,
+    seasonId = this.seasonId,
+  ): Promise<HumanObservatoryReport> {
+    const [season, snapshot, residents, turns, events, report] =
+      await Promise.all([
+        this.season(actor, seasonId),
+        this.snapshot(actor, seasonId),
+        this.residents(actor, seasonId),
+        this.turns(actor, seasonId),
+        this.events(actor, seasonId, 0, 1_000),
+        this.report(actor, seasonId),
+      ]);
+    const latestTurn = turns.find(
+      (turn) => turn.turn === snapshot.turn,
+    );
+    if (!latestTurn) {
+      throw new ExperimentNotFoundError(
+        `World Turn ${seasonId}:${snapshot.turn} was not found`,
+      );
+    }
+    const historyTurns = turns
+      .filter((turn) => turn.turn <= snapshot.turn)
+      .slice(-30);
+    const history = await Promise.all(
+      historyTurns.map((turn) =>
+        this.snapshot(actor, seasonId, turn.turn),
+      ),
+    );
+    return buildHumanObservatory({
+      generatedAt: this.now().toISOString(),
+      season,
+      snapshot,
+      latestTurn,
+      residents,
+      history,
+      events,
+      report,
+    });
   }
 }

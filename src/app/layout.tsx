@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
-import "maplibre-gl/dist/maplibre-gl.css";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NEXUS | OMNIScient City Control Center",
-  description: "Advanced cyberpunk city management and monitoring system",
+  title: "NEXUS-7 | Synthetic Shenzhen Human Observatory",
+  description:
+    "A public, read-only observatory for the all-software Synthetic Shenzhen experiment.",
 };
 
 export default function RootLayout({

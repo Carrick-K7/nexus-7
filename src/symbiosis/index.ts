@@ -7,3 +7,4 @@ export * from "./postgres-repository";
 export * from "./service";
 export * from "./cognition";
 export * from "./study";
+export * from "./observatory";

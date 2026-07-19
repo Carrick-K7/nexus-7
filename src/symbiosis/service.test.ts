@@ -37,7 +37,7 @@ describe("Symbiotic Shenzhen world service", () => {
       await service.advanceTurn(admin);
     }
 
-    const [season, snapshot, turns, events, resident, report] =
+    const [season, snapshot, turns, events, resident, report, observatory] =
       await Promise.all([
         service.season(admin),
         service.snapshot(admin),
@@ -45,6 +45,7 @@ describe("Symbiotic Shenzhen world service", () => {
         service.events(admin),
         service.residentView(admin, "resident-sz-201"),
         service.report(admin),
+        service.observatory(admin),
       ]);
 
     expect(season.currentTurn).toBe(10);
@@ -66,6 +67,10 @@ describe("Symbiotic Shenzhen world service", () => {
     expect(report.safety.severeConsentEscapes).toBe(0);
     expect(report.cognition.decisions).toBeGreaterThan(0);
     expect(report.disclosures.join(" ")).toContain("not a digital twin");
+    expect(observatory.units).toHaveLength(260);
+    expect(observatory.institutions).toHaveLength(24);
+    expect(observatory.production.autonomousControlRate).toBe(1);
+    expect(observatory.production.humanLaborDependencyRate).toBe(0);
   });
 
   it("commits one of two competing Turn settlements", async () => {

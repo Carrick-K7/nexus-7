@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-19 · v2.0.0 安全内核 + v4.1 纯 AI 共生实验
+> 更新：2026-07-19 · v2.0.0 安全内核 + v4.2 人类观测台
 
 ## 定义与边界
 
@@ -51,9 +51,9 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 v2.0 本地/reference 已闭环；未获得远端 attestation 时只能写
 `implementation complete / external evidence pending`。
 
-v4.1 含 200 合成人类软件体、36 软件 AI、24 机器人，关系/承诺、认知网关、
-City Lens、制度对照、memory/PG、匿名只读 API/worker 和 365 Turn 重放。真人
-接入、身份映射、私人输入和居民登录不在范围。
+v4.2 含 260 个软件居民、关系/承诺、认知网关、制度对照、memory/PG、匿名
+API/worker、365 Turn 重放和 Human Observatory。真人接入、身份映射、私人输入
+和居民登录不在范围。
 
 ## 模块边界
 
@@ -99,8 +99,8 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 |---|---:|
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
-| unit / 条件跳过 | 228/228 / 16 |
-| PostgreSQL / Playwright+axe | 16/16 / 24/24 |
+| unit / 条件跳过 | 229/229 / 16 |
+| PostgreSQL / Playwright+axe | 16/16 / 25/25 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4 多季对照 | 3 regimes × 3 seeds × 90 Turns；mechanism separation pass |

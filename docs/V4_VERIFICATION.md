@@ -2,8 +2,8 @@
 
 > Date: 2026-07-19
 >
-> Status: v4.1 reference, AI-only hardening and production update verified /
-> external CI-Sigstore and live-provider evidence pending
+> Status: v4.2 Human Observatory locally verified / v4.1 production remains
+> active / external CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
 
@@ -26,9 +26,9 @@ and segregation keeps an honest null denominator.
 | Severe consent / continuity / irreversible harm escapes | 0 / 0 / 0 |
 | 3×3×90 control separation | pass |
 | Model reasoning persisted | no |
-| Unit / conditional skip | 228 / 16 |
+| Unit / conditional skip | 229 / 16 |
 | PostgreSQL integration / restore | 16 / 16 |
-| Playwright + axe | 24 / 24 |
+| Playwright + axe | 25 / 25 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 
 ## v4.1 AI-only hardening gate
@@ -44,6 +44,18 @@ and segregation keeps an honest null denominator.
   tables are empty;
 - 12 real PostgreSQL files pass 16/16, including independent restore;
 - production build and 24/24 Playwright/axe checks pass.
+
+## v4.2 Human Observatory gate
+
+- the default page explains purpose, boundary, Turn and reading order;
+- `nexus.human-observatory.v1` projects exactly 260 units, 24 institutions and
+  eight production stages from the shared world state;
+- software-control coverage is 100%, real-human labor dependency is 0%, and
+  dynamic continuity remains separate;
+- all mood, engagement, integrity and institution formulas are versioned and
+  disclaim emotion/consciousness claims;
+- desktop, mobile, Chinese, unit drill-down and WCAG A/AA checks pass;
+- 229 unit, 16 real PostgreSQL/restore and 25 browser checks pass.
 
 The multi-season reference reports reciprocal RALR 73.33% across 525 resolved
 episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR
@@ -68,8 +80,10 @@ backup/restore verification. Skipped environment gates are not passes.
 
 The production-built Playwright/axe suite must verify:
 
-- City Lens renders in English and Chinese;
-- MapLibre failure never removes the accessible community table/report;
+- Human Observatory is the default English/Chinese entry;
+- its API exposes 260 units, 24 institutions and eight production stages;
+- population, unit, institution and chain semantics remain explicit;
+- unit search/detail, keyboard-scrollable tables and export remain accessible;
 - snapshot, event, resident, report and multi-season APIs exclude private data;
 - mobile navigation, keyboard focus and reduced motion remain usable;
 - every legacy v1/v2 view and certification panel still renders.
@@ -79,7 +93,7 @@ The production-built Playwright/axe suite must verify:
 The reference values above are generated from the tagged source and do not
 represent a claim about real humans. Annotated Tag `v4.1.0`, exact commit
 `cb569b4` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote. That
-commit is active at `nexus7.carrick7.com`; anonymous read-only identity, edge
+v4.1 remains active at `nexus7.carrick7.com`; anonymous read-only identity, edge
 and application mutation denial, AI-only migration, continued durable Turn
 settlement, TLS and pre/post-upgrade backups were checked on 2026-07-19.
 Deployment history and checksums are recorded in

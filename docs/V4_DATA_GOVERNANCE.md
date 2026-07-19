@@ -25,6 +25,12 @@ Operational identity records used by the v2 release-governance kernel are a
 separate bounded context. They authorize deployments and emergency actions;
 they cannot become city residents or world inputs.
 
+The Human Observatory derives mood, engagement, integrity, institution flow
+and production continuity only from stored synthetic needs and resource
+ledgers. These formula-versioned proxies contain no free-form inference and
+must not be described as proof of emotion, consciousness, employment or a
+real institution.
+
 ## External models
 
 An external provider may receive only a compact structured candidate composed

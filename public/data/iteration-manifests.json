@@ -1,5 +1,63 @@
 [
   {
+    "id": "iteration-v4.2.0",
+    "version": "4.2.0",
+    "date": "2026-07-19",
+    "trigger": "milestone",
+    "triggerReason": "Make the all-software city understandable to a human observer without granting control over the live season.",
+    "action": "Replaced the legacy default dashboard with a bilingual Human Observatory; added a versioned deterministic overview API, city briefing, population semantics, every-unit state, community institutions, production-chain continuity, causal layers, trends, events and trust evidence; separated fixed software-control coverage from dynamic operational flow; grouped legacy demonstrations away from the active city.",
+    "outcome": "Implementation complete and local browser/API verification passed; production deployment and exact public evidence are pending.",
+    "metrics": [
+      {
+        "label": "Individually observable software units",
+        "before": 0,
+        "after": 260
+      },
+      {
+        "label": "Projected community institutions",
+        "before": 0,
+        "after": 24
+      },
+      {
+        "label": "Observable production-chain stages",
+        "before": 0,
+        "after": 8
+      },
+      {
+        "label": "Foreground resident software-control coverage",
+        "before": 1,
+        "after": 1
+      },
+      {
+        "label": "Real-human labor dependency",
+        "before": 0,
+        "after": 0
+      },
+      {
+        "label": "Human Observatory Playwright/axe scenarios",
+        "before": 0,
+        "after": 5
+      }
+    ],
+    "evidence": [
+      "nexus.human-observatory.v1 projects only persisted synthetic world state",
+      "human-observatory-formulas-1.0.0 binds every derived unit, institution and production score",
+      "Mood and engagement are labeled model proxies and never consciousness claims",
+      "The public home page does not expose live-city mutation controls",
+      "Desktop, mobile, Chinese, API and WCAG A/AA Observatory scenarios pass",
+      "Legacy client-only simulations remain compatible and isolated from the live season"
+    ],
+    "artifacts": [
+      "src/symbiosis/observatory.ts",
+      "src/symbiosis/observatory.test.ts",
+      "src/app/api/observatory/v1/overview/route.ts",
+      "src/components/symbiosis/HumanObservatory.tsx",
+      "docs/HUMAN_OBSERVATORY.md",
+      "docs/adr/0022-human-observatory.md"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.1.0",
     "version": "4.1.0",
     "date": "2026-07-19",
