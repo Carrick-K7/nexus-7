@@ -47,7 +47,12 @@ export type WorkloadIdentityKind =
 export interface ExperimentActor {
   id: string;
   role: ExperimentRole;
-  authSource?: "oidc" | "proxy" | "development" | "system";
+  authSource?:
+    | "oidc"
+    | "proxy"
+    | "development"
+    | "public-observer"
+    | "system";
   issuer?: string;
   organizationId?: string;
   workspaceId?: string;

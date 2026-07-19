@@ -14,7 +14,10 @@ import {
   verifyFederatedOidcBearerToken,
   verifyOidcBearerToken,
 } from "@/auth";
-import { ExperimentPermissionError } from "@/experiments";
+import {
+  actorPermissions,
+  ExperimentPermissionError,
+} from "@/experiments";
 
 const originalEnvironment = { ...process.env };
 
@@ -201,6 +204,34 @@ describe("OIDC authentication", () => {
       workspaceId: "workspace-neo-angeles",
       principalType: "human",
     });
+  });
+
+  it("ignores asserted identities in anonymous read-only observer mode", async () => {
+    process.env.NEXUS_AUTH_MODE = "public-observer";
+    const actor = await authenticateRequest(
+      new Request("https://nexus.test/api/world/v3/snapshot", {
+        headers: {
+          "x-nexus-actor": "attacker",
+          "x-nexus-role": "admin",
+          authorization: "Bearer untrusted",
+        },
+      }),
+    );
+
+    expect(actor).toEqual({
+      id: "public-observer",
+      role: "viewer",
+      authSource: "public-observer",
+      workspaceId: "workspace-neo-angeles",
+      principalType: "system",
+    });
+    expect(actorPermissions(actor)).toEqual([
+      "workspace:read",
+      "governance:read",
+      "operations:read",
+      "participation:read",
+      "closure:read",
+    ]);
   });
 
   it("accepts only fresh, method-and-path-bound trusted proxy identities", async () => {

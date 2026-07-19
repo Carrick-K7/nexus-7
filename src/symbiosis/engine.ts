@@ -40,7 +40,7 @@ import {
 } from "./contracts";
 
 export const SYMBIOSIS_ENGINE_VERSION =
-  "symbiotic-shenzhen-engine-4.0.0";
+  "symbiotic-shenzhen-engine-4.1.0";
 export const SYMBIOSIS_DISTRIBUTION_VERSION =
   "symbiotic-shenzhen-distributions-2.0.0";
 
@@ -287,7 +287,6 @@ export function createForegroundResidents(
       kind,
       communityId:
         SYNTHETIC_COMMUNITIES[index % SYNTHETIC_COMMUNITIES.length].id,
-      adult: true as const,
       synthetic: true as const,
       strategyFamily: strategies[index % strategies.length],
       controller:

@@ -149,16 +149,8 @@ const TABLES = [
     orderBy: "season_id, opened_turn, id",
   },
   {
-    name: "nexus_world_human_intents",
-    orderBy: "season_id, turn, id",
-  },
-  {
     name: "nexus_world_model_decisions",
     orderBy: "season_id, turn, id",
-  },
-  {
-    name: "nexus_world_private_memory_refs",
-    orderBy: "season_id, id",
   },
   {
     name: "nexus_sessions",
@@ -255,10 +247,13 @@ const SYMBIOSIS_TABLE_NAMES = [
   "nexus_world_relationship_consents",
   "nexus_world_commitments",
   "nexus_world_reciprocal_episodes",
-  "nexus_world_human_intents",
   "nexus_world_model_decisions",
-  "nexus_world_private_memory_refs",
 ] as const satisfies readonly PersistentTable[];
+
+const DEPRECATED_PARTICIPANT_TABLE_NAMES = [
+  "nexus_world_human_intents",
+  "nexus_world_private_memory_refs",
+] as const;
 
 export interface PostgresBackup {
   schemaVersion: 1;
@@ -306,9 +301,14 @@ async function readTable(
 }
 
 function isCompleteOrLegacyTableSet(backup: BackupDocument): boolean {
-  const presentTableNames = Object.keys(backup.tables);
-  const presentCountNames = Object.keys(backup.rowCounts);
-  const knownTableNames = TABLES.map((table) => table.name);
+  const tables = backup.tables as Record<string, unknown>;
+  const rowCounts = backup.rowCounts as Record<string, unknown>;
+  const presentTableNames = Object.keys(tables);
+  const presentCountNames = Object.keys(rowCounts);
+  const knownTableNames: string[] = [
+    ...TABLES.map((table) => table.name),
+    ...DEPRECATED_PARTICIPANT_TABLE_NAMES,
+  ];
   if (
     presentTableNames.some((name) => !knownTableNames.includes(
       name as PersistentTable,
@@ -356,8 +356,31 @@ function isCompleteOrLegacyTableSet(backup: BackupDocument): boolean {
   const hasNoSymbiosisTables =
     symbiosisPresence.every((present) => !present);
   const hasAllSymbiosisTables = symbiosisPresence.every(Boolean);
+  const deprecatedPresence = DEPRECATED_PARTICIPANT_TABLE_NAMES.map(
+    (name) => name in tables && name in rowCounts,
+  );
+  const hasNoDeprecatedParticipantTables = deprecatedPresence.every(
+    (present) => !present,
+  );
+  const hasAllDeprecatedParticipantTables =
+    deprecatedPresence.every(Boolean);
+  const deprecatedParticipantTablesAreEmpty =
+    DEPRECATED_PARTICIPANT_TABLE_NAMES.every(
+      (name) =>
+        !(name in tables) ||
+        (
+          Array.isArray(tables[name]) &&
+          tables[name].length === 0 &&
+          rowCounts[name] === 0
+        ),
+    );
   return (
     hasAllLegacyTables &&
+    (
+      hasNoDeprecatedParticipantTables ||
+      hasAllDeprecatedParticipantTables
+    ) &&
+    deprecatedParticipantTablesAreEmpty &&
     (
       (
         hasNoGovernanceTables &&
@@ -426,10 +449,12 @@ export function verifyPostgresBackup(
   if (!isCompleteOrLegacyTableSet(backup)) {
     return false;
   }
-  for (const tableName of Object.keys(backup.tables) as PersistentTable[]) {
+  const tables = backup.tables as Record<string, unknown>;
+  const rowCounts = backup.rowCounts as Record<string, unknown>;
+  for (const tableName of Object.keys(tables)) {
     if (
-      !Array.isArray(backup.tables[tableName]) ||
-      backup.rowCounts[tableName] !== backup.tables[tableName]?.length
+      !Array.isArray(tables[tableName]) ||
+      rowCounts[tableName] !== tables[tableName].length
     ) {
       return false;
     }

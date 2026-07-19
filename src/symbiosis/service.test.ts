@@ -53,7 +53,6 @@ describe("Symbiotic Shenzhen world service", () => {
     expect(events.every((event) => event.synthetic)).toBe(true);
     expect(resident).toMatchObject({
       projection: "researcher-pseudonymized",
-      privateMemoryIncluded: false,
       resident: {
         kind: "software-ai",
         controller: "cognitive-gateway",

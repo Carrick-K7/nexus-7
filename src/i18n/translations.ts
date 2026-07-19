@@ -20,7 +20,7 @@ export const translations = {
     iterationLabNav: "Iteration Lab",
     verificationNav: "Verification",
     operationsNav: "Operations",
-    participationNav: "Participation",
+    participationNav: "Governance Evidence",
     
     // Common
     status: "Status",
@@ -329,8 +329,8 @@ export const translations = {
     governedLearning: "GOVERNED LEARNING",
     governedLearningDesc: "Learning may request policy, prompt, scenario, or test changes; every request stays inside the existing release-governance chain.",
     noLearningProposals: "No governed learning proposals.",
-    participationTitle: "PARTICIPATION & GOVERNANCE",
-    participationDesc: "Versioned representation, deliberation, minority-impact review, feedback, appeals, public explanations, and governance red-team evidence",
+    participationTitle: "GOVERNANCE EVIDENCE",
+    participationDesc: "Operator control-plane evidence for synthetic group review, objections, appeals, explanations, and governance red-team checks; not resident participation",
     participationDataRefreshed: "Participation data refreshed",
     participationActionCompleted: "Governance action completed",
     activeGroups: "Active stakeholder groups",
@@ -995,7 +995,7 @@ export const translations = {
     iterationLabNav: "迭代实验室",
     verificationNav: "验证中心",
     operationsNav: "运营中心",
-    participationNav: "公众参与",
+    participationNav: "治理证据",
     
     // 通用
     status: "状态",
@@ -1304,8 +1304,8 @@ export const translations = {
     governedLearning: "受治理学习",
     governedLearningDesc: "学习只能请求策略、提示词、场景或测试变更；所有请求仍必须经过既有发布治理链。",
     noLearningProposals: "尚无受治理学习提案。",
-    participationTitle: "参与与治理",
-    participationDesc: "版本化代表群体、目标审议、少数群体影响复核、反馈申诉、公共解释与治理红队证据",
+    participationTitle: "治理证据",
+    participationDesc: "面向软件发布控制面的合成群体复核、异议申诉、公共解释与治理红队证据；不是居民参与入口",
     participationDataRefreshed: "参与治理数据已刷新",
     participationActionCompleted: "治理操作已完成",
     activeGroups: "有效利益相关群体",

@@ -7,16 +7,22 @@
 
 ## Identity
 
-NEXUS-7 has three explicit authentication modes:
+NEXUS-7 has four explicit authentication modes:
 
 | Mode | Intended use | Trust boundary |
 |---|---|---|
 | `development` | Local development and browser tests | `X-Nexus-Actor` / `X-Nexus-Role` |
+| `public-observer` | Anonymous AI-city observation | Fixed viewer; asserted identity headers ignored; no mutation permission |
 | `oidc` | API clients and browser sessions that can send a Bearer token | Issuer, audience, expiry, signature, and subject verified against JWKS |
 | `proxy` | Same-origin browser deployment behind an identity-aware proxy | HMAC-signed subject and role bound to method, path, and timestamp |
 
 Production defaults to `oidc` when `NEXUS_AUTH_MODE` is unset. Development
-headers are ignored in both production modes.
+headers are ignored in every non-development mode.
+
+`public-observer` is the production mode for the standalone AI city. The
+reverse proxy must additionally reject methods other than GET, HEAD and
+OPTIONS. Use OIDC or signed proxy mode for a separate operator control plane;
+never expose `development` mode without an authentication boundary.
 
 Authentication claims are not authorization records. After cryptographic
 verification, the exact issuer/subject must resolve to an active persisted
@@ -271,21 +277,19 @@ See [CLOSED_LOOP_ORCHESTRATION.md](CLOSED_LOOP_ORCHESTRATION.md),
 [V2_VERIFICATION.md](V2_VERIFICATION.md), and
 [THREAT_MODEL.md](THREAT_MODEL.md).
 
-## Symbiotic Shenzhen v3 direction
+## Symbiotic Shenzhen v4 AI-only runtime
 
-Migration `0009_symbiotic_shenzhen_world.sql` adds normalized v3 world tables
-and season-hash partitions. `db:migrate`, checksum backup and restore include
-these tables while accepting older complete backup table sets.
+Migration `0009_symbiotic_shenzhen_world.sql` defines normalized AI-only world
+tables and season-hash partitions. Migration `0010_ai_only_world.sql` removes
+the abandoned participant intent/private-memory tables and rejects any
+database that still contains participant-avatar rows.
 
-The v3 daily Turn has no production scheduler yet. Do not expose
-`WorldService.advanceTurn` as an unauthenticated route or attach it to the v2
-experiment clock. Production activation requires a dedicated leased daily
-worker, Asia/Shanghai calendar guard, input-freeze deadline, operator
-pause/resume, participant withdrawal gate and real PostgreSQL/restore evidence.
+The dedicated `worker:symbiosis` process advances one atomic Turn per interval.
+Do not expose `WorldService.advanceTurn` as an HTTP route or attach it to the
+v2 experiment clock.
 
-The initial APIs are authenticated read-only researcher projections. Public
-observation is disabled. Identity vault data and private text must remain
-outside the simulation database and its checksum backup.
+The public APIs are anonymous read-only projections. The city has no identity
+vault, private text, participant input or resident authentication.
 
 ## Release checklist
 

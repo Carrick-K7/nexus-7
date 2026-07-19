@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-19 · v2.0.0 安全内核 + v4.0 全合成共生实验
+> 更新：2026-07-19 · v2.0.0 安全内核 + v4.1 纯 AI 共生实验
 
 ## 定义与边界
 
@@ -18,7 +18,7 @@ v4 运行可重放、可审计的合成深圳，用于研究合成人类、软�
 
 - 产品闭环：`docs/CLOSED_LOOP_PLAN.md`
 - v4 宪法/路线：`docs/SYMBIOSIS_CONSTITUTION.md`、`docs/SYMBIOTIC_SHENZHEN_PLAN.md`
-- v4 架构/数据/验证：`docs/V3_WORLD_ARCHITECTURE.md`、`docs/V3_DATA_GOVERNANCE.md`、
+- v4 架构/数据/验证：`docs/V4_ARCHITECTURE.md`、`docs/V4_DATA_GOVERNANCE.md`、
   `docs/V4_VERIFICATION.md`
 - 当前能力/运行：`README.md`
 - v1/v2 认证：`docs/VERIFICATION.md`、`docs/V2_VERIFICATION.md`
@@ -51,15 +51,16 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 v2.0 本地/reference 已闭环；未获得远端 attestation 时只能写
 `implementation complete / external evidence pending`。
 
-v4 reference 含 200 合成人类、36 软件 AI、24 机器人，关系/承诺、认知网关、
-City Lens、制度对照、memory/PG、API/worker 和 365 Turn 重放。真人不在范围；
-本地结果不得写成真人证据、生产认证或远端 attestation。
+v4.1 含 200 合成人类软件体、36 软件 AI、24 机器人，关系/承诺、认知网关、
+City Lens、制度对照、memory/PG、匿名只读 API/worker 和 365 Turn 重放。真人
+接入、身份映射、私人输入和居民登录不在范围。
 
 ## 模块边界
 
 `simulation` 负责 v1/v2 世界；`symbiosis` 负责 v4 居民/Turn；
 `city`、`diagnosis`、`planning`、`outcomes`、
-`participation` 拥有各自领域规则；`closure` 只编排并链接其持久对象；
+`participation` 仅保留 v2 运营治理证据，不得成为城市输入；`closure` 只编排并
+链接其持久对象；
 `lifecycle`/`experiments` 提供 memory/PostgreSQL 原子持久化；`governance`、
 `deployment`、`operations` 管身份、发布和恢复；UI 只做投影。
 
@@ -80,7 +81,7 @@ simulation/event 流改变；Agent/模型不得执行任意 shell、SQL 或隐�
 10. 动作保留 observation、版本、guardrail、因果链和 rollback。
 11. 高风险变更不可自批；service account 不得获得人类审批/控制权。
 12. 不得通过改 denominator、隐藏未决/否决/群体伤害来提高 VBCR。
-13. 不得接收真人身份/私人日记；模型推理不得持久化或进入公共事件。
+13. 不得增加真人席位、身份/意图/私人输入通道；模型推理不得持久化。
 14. 外部模型断供、超时或预算耗尽不得停止城市；同一运行不得静默换模。
 
 完成定义：领域对象/状态机/失败路径、workspace 隔离/最小权限、memory/PG、
@@ -98,7 +99,7 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 |---|---:|
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
-| unit / 条件跳过 | 227/227 / 16 |
+| unit / 条件跳过 | 228/228 / 16 |
 | PostgreSQL / Playwright+axe | 16/16 / 24/24 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |

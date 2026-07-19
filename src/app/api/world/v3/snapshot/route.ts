@@ -29,7 +29,6 @@ export async function GET(request: Request): Promise<NextResponse> {
       snapshot: await service.snapshot(actor, season, turn),
       residents: await service.residents(actor, season),
       projection: "researcher-pseudonymized",
-      privateMemoryIncluded: false,
     });
   } catch (error) {
     return experimentErrorResponse(error);

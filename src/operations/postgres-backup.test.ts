@@ -59,9 +59,7 @@ const SYMBIOSIS_BACKUP_TABLE_NAMES = [
   "nexus_world_relationship_consents",
   "nexus_world_commitments",
   "nexus_world_reciprocal_episodes",
-  "nexus_world_human_intents",
   "nexus_world_model_decisions",
-  "nexus_world_private_memory_refs",
 ] as const;
 
 function refreshChecksum<T extends {
@@ -415,6 +413,31 @@ integrationDescribe("PostgreSQL backup and restore", () => {
     expect(
       backup.rowCounts.nexus_world_model_decisions,
     ).toBeGreaterThan(0);
+
+    const preAiOnlyBackup = structuredClone(backup);
+    const preAiOnlyTables = preAiOnlyBackup.tables as unknown as Record<
+      string,
+      Array<Record<string, unknown>>
+    >;
+    const preAiOnlyCounts = preAiOnlyBackup.rowCounts as unknown as Record<
+      string,
+      number
+    >;
+    preAiOnlyTables.nexus_world_human_intents = [];
+    preAiOnlyTables.nexus_world_private_memory_refs = [];
+    preAiOnlyCounts.nexus_world_human_intents = 0;
+    preAiOnlyCounts.nexus_world_private_memory_refs = 0;
+    expect(
+      verifyPostgresBackup(refreshChecksum(preAiOnlyBackup)),
+    ).toBe(true);
+
+    preAiOnlyTables.nexus_world_human_intents = [
+      { id: "real-participant-data-is-forbidden" },
+    ];
+    preAiOnlyCounts.nexus_world_human_intents = 1;
+    expect(
+      verifyPostgresBackup(refreshChecksum(preAiOnlyBackup)),
+    ).toBe(false);
 
     const v13Backup = structuredClone(backup);
     for (const tableName of [

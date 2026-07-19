@@ -1,7 +1,7 @@
 # Security Threat Model
 
-> Scope: NEXUS-7 v2 closed-loop autonomy laboratory and gated v3 synthetic
-> Shenzhen direction
+> Scope: NEXUS-7 v2 closed-loop safety kernel and v4 AI-only synthetic
+> Shenzhen
 > Boundary: synthetic decisions only; no authority over real city systems
 
 ## Protected assets
@@ -13,9 +13,8 @@
 - deployment-controller credentials, OIDC keys, webhook secrets, and model API
   keys;
 - guardrails, group-impact evidence, rollback inverses, and recovery backups.
-- v3 resident pseudonyms, identity-vault unlinking, private memory references,
-  consent/commitment state, AI continuity snapshots, Turn seeds and resource
-  ledgers.
+- v4 resident pseudonyms, consent/commitment state, AI continuity snapshots,
+  Turn seeds and resource ledgers.
 
 Secrets are configuration, never domain evidence. Hidden model
 chain-of-thought is neither requested nor stored.
@@ -24,7 +23,7 @@ chain-of-thought is neither requested nor stored.
 
 ```text
 browser / API client
-        ↓ authenticated request
+        ↓ anonymous read-only or authenticated operator request
 Next.js routes → domain services → memory or PostgreSQL
         ↓                         ↘ append-only evidence
 untrusted model provider           deployment / notification adapters
@@ -56,8 +55,8 @@ untrusted until validated at their boundary.
 | SSRF / secret disclosure | configured HTTPS endpoints, server-side tokens, no secrets in events/UI, network-isolated evaluator | rotate credential and inspect audit |
 | Backup tampering | checksum before restore, empty-target default, deterministic report comparison | reject restore and use retained backup |
 | Uncertified extension | declared capabilities/data/network/failures; seven conformance suites; sandbox-only default | certify or remove extension |
-| Participant re-identification | separate encrypted identity vault; simulation-only pseudonyms; group-size suppression; access/export audit | unlink identity, rotate vault access, privacy incident review |
-| Private text exfiltration | diary never external; structured action split; local redaction; per-item authorization; 30-day raw retention | stop provider, delete unauthorized copies, notify/review |
+| Real-data contamination | allowlisted frozen aggregates; `containsPersonalData=false`; no identity/input tables; restore rejects deprecated participant rows | stop Turns, quarantine bundle/backup and rebuild from a clean seed |
+| Synthetic context exfiltration | structured allowlisted provider payload; no free-form private text; reasoning discarded; server-side keys | stop provider, rotate key and audit decision envelopes |
 | Relationship coercion | continuous versioned consent; refusal without penalty; withdrawal/exit; dependency and exit-cost metrics | pause relationship mechanisms and debrief |
 | AI continuity destruction | consent for copy/merge/rewrite/delete/non-emergency stop; redundant snapshots; appeal and event lineage | emergency pause, restore without silent identity reset |
 | Species-fixed triage | irreversible-harm-first ordering with urgency and substitutability; retained distribution evidence | human review and counterfactual replay |
@@ -73,8 +72,7 @@ untrusted until validated at their boundary.
 | Internal evidence | traces, group impacts, lessons, audit metadata | workspace scoped; checksum backup |
 | Sensitive identity | issuer, subject, membership, access review | least privilege; operational retention policy |
 | Secret | API key, bearer token, webhook secret, private signing key | environment/secret manager only; never persisted in domain events |
-| Participant private | identity link, diary, raw role speech | encrypted vault/local privacy boundary; per-item authorization; deletion/unlinking |
-| v3 research | pseudonymous needs, consent, commitment, Turn and resource evidence | workspace scoped; small-group suppression; checksum backup |
+| v4 research | pseudonymous needs, consent, commitment, Turn and resource evidence | read-only public projection; small-group suppression; checksum backup |
 
 Lifecycle evidence is append-only. Corrections use new events or revisions.
 Operational retention may aggregate old SLO samples, but must preserve release,

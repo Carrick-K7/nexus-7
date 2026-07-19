@@ -18,16 +18,17 @@ NODE_ENV=production
 PORT=3220
 HOSTNAME=127.0.0.1
 DATABASE_URL=postgresql://...
-NEXUS_AUTH_MODE=development
+NEXUS_AUTH_MODE=public-observer
 SYMBIOSIS_TURN_INTERVAL_MS=3600000
 SYMBIOSIS_WORKER_ID=nexus7-symbiosis-1
 SYMBIOSIS_COGNITIVE_PROVIDER=deterministic
 SYMBIOSIS_MONTHLY_BUDGET_USD=300
 ```
 
-`NEXUS_AUTH_MODE=development` is acceptable only behind a trusted
-authentication proxy that removes untrusted `x-nexus-*` headers. For public or
-multi-user access, configure OIDC or the signed proxy mode instead.
+`public-observer` ignores asserted identity headers and grants only fixed
+viewer permissions. The public reverse proxy must independently reject every
+method except GET, HEAD and OPTIONS. Use OIDC or signed proxy mode in a
+separate operator deployment if remote mutations are ever required.
 
 Optional live cognition:
 

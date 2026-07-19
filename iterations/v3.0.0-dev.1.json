@@ -5,7 +5,7 @@
   "trigger": "milestone",
   "triggerReason": "Begin the gated Symbiotic Shenzhen direction without discarding the v2 verified-autonomy safety kernel.",
   "action": "Created local direction anchors, a draft human-ratified symbiosis constitution, frozen Shenzhen aggregate calibration metadata, versioned v3 contracts, a deterministic daily world engine, 260 adult pseudonymous residents, three fictional communities, memory/PostgreSQL atomic Turn repositories, partitioned normalized tables, checksum backup coverage, read-only research APIs, and a 365-Turn verification command.",
-  "outcome": "The development branch has a model-independent v3 world vertical slice with exact local replay and conserved resource ledgers. Relationship, participant, external cognition, SSE, and City Lens mechanisms remain gated. The constitution is not yet human-approved, the work is not committed or pushed, and no v3 certification or external attestation is claimed.",
+  "outcome": "The superseded v3 prototype produced a model-independent world slice with exact local replay and conserved resource ledgers. It reserved participant-avatar seams, but no real pilot was authorized or run. v4 removed the seats and v4.1 removed the dormant schema paths; the prototype remains only as auditable history.",
   "metrics": [
     { "label": "Foreground residents", "before": 0, "after": 260 },
     { "label": "Participant-avatar seats", "before": 0, "after": 5 },
@@ -27,9 +27,9 @@
   "artifacts": [
     "docs/SYMBIOSIS_CONSTITUTION.md",
     "docs/SYMBIOTIC_SHENZHEN_PLAN.md",
-    "docs/V3_WORLD_ARCHITECTURE.md",
-    "docs/V3_DATA_GOVERNANCE.md",
-    "docs/V3_VERIFICATION.md",
+    "docs/archive/v3-prototype/V3_WORLD_ARCHITECTURE.md",
+    "docs/archive/v3-prototype/V3_DATA_GOVERNANCE.md",
+    "docs/archive/v3-prototype/V3_VERIFICATION.md",
     "data/shenzhen/2026-q2/",
     "src/symbiosis/",
     "src/app/api/world/v3/",

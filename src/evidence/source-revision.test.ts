@@ -14,7 +14,7 @@ describe("source revision cleanliness", () => {
       hasSourceChanges(
         [
           "?? public/data/ci-evidence.json",
-          " M public/data/git-log.json",
+          " M public/data/iteration-manifests.json",
           "?? public/data/v1-readiness.json",
         ].join("\n"),
       ),

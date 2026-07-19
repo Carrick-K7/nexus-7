@@ -19,6 +19,7 @@ import {
 } from "./engine";
 import {
   SYMBIOSIS_SCHEMA_SQL,
+  SYMBIOSIS_AI_ONLY_MIGRATION_SQL,
 } from "./postgres-schema";
 
 function normalizeSql(sql: string): string {
@@ -33,6 +34,13 @@ describe("Symbiotic Shenzhen governed artifacts", () => {
     );
     expect(normalizeSql(migration)).toBe(
       normalizeSql(SYMBIOSIS_SCHEMA_SQL),
+    );
+    const aiOnlyMigration = await readFile(
+      resolve("migrations/0010_ai_only_world.sql"),
+      "utf8",
+    );
+    expect(normalizeSql(aiOnlyMigration)).toBe(
+      normalizeSql(SYMBIOSIS_AI_ONLY_MIGRATION_SQL),
     );
   });
 

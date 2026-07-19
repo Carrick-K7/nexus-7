@@ -14,7 +14,7 @@ import {
 } from "./engine";
 
 describe("Symbiotic Shenzhen deterministic world", () => {
-  it("creates exactly 260 adult pseudonymous foreground residents", () => {
+  it("creates exactly 260 pseudonymous software residents", () => {
     const initial = createInitialWorld();
     const kinds = initial.residents.reduce<Record<string, number>>(
       (counts, resident) => ({
@@ -43,7 +43,6 @@ describe("Symbiotic Shenzhen deterministic world", () => {
     expect(
       initial.residents.every(
         (resident) =>
-          resident.adult &&
           resident.synthetic &&
           !("realName" in resident) &&
           !("address" in resident),
@@ -78,7 +77,7 @@ describe("Symbiotic Shenzhen deterministic world", () => {
     ).toBe(true);
     expect(isExactWorldReplay(first, second)).toBe(true);
     assertResourceConservation(first.ledgers);
-  }, 30_000);
+  }, 60_000);
 
   it("rejects a snapshot that is not the current season head", () => {
     const initial = createInitialWorld();

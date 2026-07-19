@@ -178,7 +178,6 @@ export class WorldService {
     relationships: Relationship[];
     commitments: Commitment[];
     projection: "researcher-pseudonymized";
-    privateMemoryIncluded: false;
   }> {
     assertActorPermission(actor, "workspace:read");
     const workspaceId = actorWorkspaceId(actor);
@@ -213,7 +212,6 @@ export class WorldService {
           commitment.counterpartyId === residentId,
       ),
       projection: "researcher-pseudonymized",
-      privateMemoryIncluded: false,
     };
   }
 

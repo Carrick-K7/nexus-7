@@ -141,16 +141,15 @@ export class PostgresWorldRepository implements WorldRepository {
       for (const resident of input.residents) {
         await client.query(
           `INSERT INTO nexus_world_residents
-            (season_id, id, workspace_id, kind, community_id, adult,
+            (season_id, id, workspace_id, kind, community_id,
              resident_json, created_at)
-           VALUES ($1, $2, $3, $4, $5, $6, $7::jsonb, $8)`,
+           VALUES ($1, $2, $3, $4, $5, $6::jsonb, $7)`,
           [
             input.season.id,
             resident.id,
             input.season.workspaceId,
             resident.kind,
             resident.communityId,
-            resident.adult,
             JSON.stringify(resident),
             resident.createdAt,
           ],

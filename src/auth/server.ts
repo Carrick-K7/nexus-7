@@ -27,7 +27,8 @@ function authenticationMode(): AuthenticationMode {
   if (
     configured === "oidc" ||
     configured === "proxy" ||
-    configured === "development"
+    configured === "development" ||
+    configured === "public-observer"
   ) {
     return configured;
   }
@@ -216,10 +217,23 @@ function developmentActor(request: Request): ExperimentActor {
   };
 }
 
+function publicObserverActor(): ExperimentActor {
+  return {
+    id: "public-observer",
+    role: "viewer",
+    authSource: "public-observer",
+    workspaceId: "workspace-neo-angeles",
+    principalType: "system",
+  };
+}
+
 export async function authenticateRequest(
   request: Request,
 ): Promise<ExperimentActor> {
   const mode = authenticationMode();
+  if (mode === "public-observer") {
+    return publicObserverActor();
+  }
   if (mode === "development") {
     return developmentActor(request);
   }

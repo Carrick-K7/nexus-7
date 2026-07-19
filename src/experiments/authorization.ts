@@ -81,6 +81,14 @@ const SERVICE_ACCOUNT_DENY = new Set<ExperimentPermission>([
   "closure:control",
 ]);
 
+const PUBLIC_OBSERVER_PERMISSIONS = new Set<ExperimentPermission>([
+  "workspace:read",
+  "governance:read",
+  "operations:read",
+  "participation:read",
+  "closure:read",
+]);
+
 export function actorWorkspaceId(actor?: ExperimentActor): string {
   return actor?.workspaceId?.trim().slice(0, 120) || DEFAULT_WORKSPACE_ID;
 }
@@ -95,6 +103,11 @@ export function actorPermissions(
   actor: ExperimentActor,
 ): ExperimentPermission[] {
   const principalType = actorPrincipalType(actor);
+  if (actor.authSource === "public-observer") {
+    return [...ROLE_PERMISSIONS.viewer].filter((permission) =>
+      PUBLIC_OBSERVER_PERMISSIONS.has(permission),
+    );
+  }
   const rolePermissions = [...ROLE_PERMISSIONS[actor.role]].filter(
     (permission) =>
       principalType !== "service-account" ||

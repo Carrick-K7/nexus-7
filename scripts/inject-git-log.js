@@ -81,13 +81,9 @@ const entries = [
 const outDir = path.resolve(repoRoot, 'public', 'data');
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(
-  path.join(outDir, 'git-log.json'),
-  JSON.stringify(entries, null, 2)
-);
-fs.writeFileSync(
   path.join(outDir, 'iteration-manifests.json'),
   JSON.stringify(entries, null, 2)
 );
 console.log(
-  `Wrote ${manifestEntries.length} manifests and ${gitEntries.length} git entries to public/data`
+  `Wrote ${manifestEntries.length} manifests and ${gitEntries.length} git entries to public/data/iteration-manifests.json`
 );

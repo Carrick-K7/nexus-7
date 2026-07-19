@@ -2,8 +2,8 @@
 
 > Date: 2026-07-19
 >
-> Status: reference verified / production deployment active / external
-> CI-Sigstore and live-provider evidence pending
+> Status: v4.1 reference and AI-only hardening verified / production update
+> pending / external CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
 
@@ -26,10 +26,24 @@ and segregation keeps an honest null denominator.
 | Severe consent / continuity / irreversible harm escapes | 0 / 0 / 0 |
 | 3×3×90 control separation | pass |
 | Model reasoning persisted | no |
-| Unit / conditional skip | 227 / 16 |
+| Unit / conditional skip | 228 / 16 |
 | PostgreSQL integration / restore | 16 / 16 |
 | Playwright + axe | 24 / 24 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
+
+## v4.1 AI-only hardening gate
+
+- `public-observer` ignores asserted actor, admin-role and Bearer headers;
+- its resolved viewer has read permissions only, and a direct mutation returns
+  HTTP 403;
+- the public proxy contract permits GET, HEAD and OPTIONS only;
+- fresh databases expose only synthetic-human, software-AI and robot resident
+  kinds and contain no adult, human-intent or private-memory field/table;
+- migration 0010 aborts before mutation if participant-avatar rows exist;
+- a checksum-valid legacy backup is accepted only when deprecated participant
+  tables are empty;
+- 12 real PostgreSQL files pass 16/16, including independent restore;
+- production build and 24/24 Playwright/axe checks pass.
 
 The multi-season reference reports reciprocal RALR 73.33% across 525 resolved
 episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR
@@ -64,10 +78,10 @@ The production-built Playwright/axe suite must verify:
 
 The reference values above are generated from the tagged source and do not
 represent a claim about real humans. Tag `v4.0.0` and its direction branch are
-remote, and exact commit `f4d428a` is active at
-`https://nexus7.carrick7.com`; database state, services, TLS, protected route
-and observation APIs were checked on 2026-07-19. The production attestation is
-recorded in `docs/V4_DEPLOYMENT_ATTESTATION.md`.
+remote, and exact commit `f4d428a` remains the active v4.0 artifact while the
+v4.1 production update is pending. Its database state, services, TLS,
+protected route and observation APIs were checked on 2026-07-19. Deployment
+history is recorded in `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 
 Remote CI/Sigstore, live DeepSeek and an external second-database recovery
 drill remain pending and must not be inferred from the production deployment.

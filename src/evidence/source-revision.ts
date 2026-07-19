@@ -1,6 +1,5 @@
 const GENERATED_RELEASE_OUTPUTS = new Set([
   "public/data/ci-evidence.json",
-  "public/data/git-log.json",
   "public/data/iteration-manifests.json",
   "public/data/model-regression.json",
   "public/data/v1-1-stress.json",

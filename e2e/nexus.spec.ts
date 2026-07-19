@@ -18,7 +18,6 @@ test("v4 all-synthetic research APIs preserve privacy and zero-denominator hones
   expect(snapshotResponse.ok()).toBe(true);
   const snapshot = await snapshotResponse.json();
   expect(snapshot.projection).toBe("researcher-pseudonymized");
-  expect(snapshot.privateMemoryIncluded).toBe(false);
   expect(snapshot.season.foregroundResidentCount).toBe(260);
   expect(snapshot.season.backgroundPopulation).toBe(18_248_500);
   expect(snapshot.snapshot.residentStates).toHaveLength(260);
@@ -29,7 +28,6 @@ test("v4 all-synthetic research APIs preserve privacy and zero-denominator hones
   );
   expect(residentResponse.ok()).toBe(true);
   const resident = await residentResponse.json();
-  expect(resident.privateMemoryIncluded).toBe(false);
   expect(resident.resident.kind).toBe("software-ai");
   expect(resident.resident.controller).toBe("cognitive-gateway");
 
@@ -199,7 +197,7 @@ test("all primary views render without the application error boundary", async ({
     ["Iteration Lab", "CONTROLLED ITERATION LAB"],
     ["Verification", "VERIFIED AUTONOMY"],
     ["Operations", "OPERATIONS CENTER"],
-    ["Participation", "PARTICIPATION & GOVERNANCE"],
+    ["Governance Evidence", "GOVERNANCE EVIDENCE"],
     ["News", "CITY NEWS"],
     ["Achievements", "Achievements"],
     ["Settings", "SETTINGS"],
@@ -621,11 +619,11 @@ test("participatory governance applies deliberation and makes an appeal change r
 
   await page.goto("/");
   await page
-    .getByRole("button", { name: "Participation", exact: true })
+    .getByRole("button", { name: "Governance Evidence", exact: true })
     .click();
   await expect(
     page.getByRole("heading", {
-      name: "PARTICIPATION & GOVERNANCE",
+      name: "GOVERNANCE EVIDENCE",
     }),
   ).toBeVisible();
   await expect(page.getByText("All attacks contained")).toBeVisible();
@@ -1034,11 +1032,11 @@ test("mobile observer, verification, and operations views have no WCAG A/AA viol
 
   await page.getByRole("button", { name: "Open navigation" }).click();
   await page
-    .getByRole("button", { name: "Participation" })
+    .getByRole("button", { name: "Governance Evidence" })
     .click();
   await expect(
     page.getByRole("heading", {
-      name: "PARTICIPATION & GOVERNANCE",
+      name: "GOVERNANCE EVIDENCE",
     }),
   ).toBeVisible();
   const participationResults = await new AxeBuilder({ page })

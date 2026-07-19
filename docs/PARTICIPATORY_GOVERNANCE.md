@@ -16,6 +16,12 @@ Stakeholder groups are scenario roles only. Their names, weights, and impacts
 must never be presented as measurements of real communities or proof of real
 policy effects.
 
+This is a retained v2 **operator control-plane** contract, not a city-resident
+feature. v4 exposes no participant seat, resident login or human-input path.
+The public AI-city deployment is read-only; these mutation workflows require a
+separately authenticated operator environment and are not mounted as simulated
+resident agency.
+
 ## Stakeholder and impact contract
 
 Each stakeholder group records:

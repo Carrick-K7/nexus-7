@@ -140,7 +140,6 @@ interface ResidentBase {
   pseudonym: string;
   kind: ResidentKind;
   communityId: string;
-  adult: true;
   synthetic: true;
   strategyFamily:
     | "routine"

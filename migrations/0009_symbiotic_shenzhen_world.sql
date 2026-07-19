@@ -43,16 +43,16 @@ CREATE TABLE IF NOT EXISTS nexus_world_residents (
     REFERENCES nexus_world_seasons(id) ON DELETE CASCADE,
   id TEXT NOT NULL,
   workspace_id TEXT NOT NULL,
-  kind TEXT NOT NULL CHECK (
-    kind IN (
-      'synthetic-human',
-      'participant-avatar',
-      'software-ai',
-      'embodied-robot'
-    )
+  kind TEXT NOT NULL
+    CONSTRAINT nexus_world_residents_kind_ai_only_check
+    CHECK (
+      kind IN (
+        'synthetic-human',
+        'software-ai',
+        'embodied-robot'
+      )
   ),
   community_id TEXT NOT NULL,
-  adult BOOLEAN NOT NULL CHECK (adult),
   resident_json JSONB NOT NULL,
   created_at TIMESTAMPTZ NOT NULL,
   PRIMARY KEY (season_id, id)
@@ -217,18 +217,6 @@ CREATE INDEX IF NOT EXISTS nexus_world_reciprocal_episode_outcome_idx
     opened_turn DESC
   );
 
-CREATE TABLE IF NOT EXISTS nexus_world_human_intents (
-  season_id TEXT NOT NULL
-    REFERENCES nexus_world_seasons(id) ON DELETE CASCADE,
-  turn INTEGER NOT NULL,
-  id TEXT NOT NULL,
-  resident_id TEXT NOT NULL,
-  authorization_scope TEXT NOT NULL,
-  intent_json JSONB NOT NULL,
-  submitted_at TIMESTAMPTZ NOT NULL,
-  PRIMARY KEY (season_id, turn, id)
-);
-
 CREATE TABLE IF NOT EXISTS nexus_world_model_decisions (
   season_id TEXT NOT NULL
     REFERENCES nexus_world_seasons(id) ON DELETE CASCADE,
@@ -243,19 +231,3 @@ CREATE TABLE IF NOT EXISTS nexus_world_model_decisions (
   recorded_at TIMESTAMPTZ NOT NULL,
   PRIMARY KEY (season_id, turn, id)
 );
-
-CREATE TABLE IF NOT EXISTS nexus_world_private_memory_refs (
-  season_id TEXT NOT NULL
-    REFERENCES nexus_world_seasons(id) ON DELETE CASCADE,
-  id TEXT NOT NULL,
-  resident_id TEXT NOT NULL,
-  vault_reference TEXT NOT NULL,
-  retention_until TIMESTAMPTZ NOT NULL,
-  authorized_for_external_model BOOLEAN NOT NULL DEFAULT FALSE,
-  metadata_json JSONB NOT NULL,
-  created_at TIMESTAMPTZ NOT NULL,
-  PRIMARY KEY (season_id, id)
-);
-
-CREATE INDEX IF NOT EXISTS nexus_world_private_memory_subject_idx
-  ON nexus_world_private_memory_refs(season_id, resident_id, retention_until);

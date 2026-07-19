@@ -1,5 +1,67 @@
 [
   {
+    "id": "iteration-v4.1.0",
+    "version": "4.1.0",
+    "date": "2026-07-19",
+    "trigger": "milestone",
+    "triggerReason": "Make the production city anonymous to observe, permanently AI-only in its data path, and orderly in its documentation and generated artifacts.",
+    "action": "Added a fixed read-only public-observer authentication mode, removed Basic Auth from the intended edge topology, denied public mutation methods, removed dormant participant-avatar, human-intent and private-memory schema seams, rejected legacy backups containing participant rows, separated v4 authority from archived v3 prototypes, consolidated Evolution Log generation, trimmed stale top-level documentation and removed unused template assets.",
+    "outcome": "Reference verification passed with 228 unit tests, 16 real PostgreSQL/restore tests, 24 Playwright/axe checks, zero lint warnings, zero audit vulnerabilities, exact 365-Turn replay and all retained v1/v2 gates. Production deployment remains pending.",
+    "metrics": [
+      {
+        "label": "Public credentials required",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Schema resident kinds reserved for participant avatars",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Dormant human-input/private-memory tables",
+        "before": 2,
+        "after": 0
+      },
+      {
+        "label": "Duplicate Evolution Log projections",
+        "before": 2,
+        "after": 1
+      },
+      {
+        "label": "Active v3 prototype documents in the current docs root",
+        "before": 3,
+        "after": 0
+      },
+      {
+        "label": "Unused Next.js template assets",
+        "before": 5,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Public observer identity ignores caller-supplied actor, role and bearer headers",
+      "Public observer permissions contain read operations only",
+      "AI-only migration refuses participant-avatar rows before removing abandoned schema seams",
+      "Backups with non-empty deprecated participant tables fail verification",
+      "The v4 observer shell retains synthetic governance evidence but no resident-participation entry path",
+      "Current documentation authority and generated projections have one declared source each"
+    ],
+    "artifacts": [
+      "src/auth/server.ts",
+      "src/experiments/authorization.ts",
+      "migrations/0010_ai_only_world.sql",
+      "src/operations/postgres-backup.ts",
+      "docs/INDEX.md",
+      "docs/V4_ARCHITECTURE.md",
+      "docs/V4_DATA_GOVERNANCE.md",
+      "docs/archive/v3-prototype/",
+      "docs/adr/0021-ai-only-public-observer.md",
+      "scripts/inject-git-log.js"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.0.0",
     "version": "4.0.0",
     "date": "2026-07-19",
@@ -71,7 +133,7 @@
     "trigger": "milestone",
     "triggerReason": "Begin the gated Symbiotic Shenzhen direction without discarding the v2 verified-autonomy safety kernel.",
     "action": "Created local direction anchors, a draft human-ratified symbiosis constitution, frozen Shenzhen aggregate calibration metadata, versioned v3 contracts, a deterministic daily world engine, 260 adult pseudonymous residents, three fictional communities, memory/PostgreSQL atomic Turn repositories, partitioned normalized tables, checksum backup coverage, read-only research APIs, and a 365-Turn verification command.",
-    "outcome": "The development branch has a model-independent v3 world vertical slice with exact local replay and conserved resource ledgers. Relationship, participant, external cognition, SSE, and City Lens mechanisms remain gated. The constitution is not yet human-approved, the work is not committed or pushed, and no v3 certification or external attestation is claimed.",
+    "outcome": "The superseded v3 prototype produced a model-independent world slice with exact local replay and conserved resource ledgers. It reserved participant-avatar seams, but no real pilot was authorized or run. v4 removed the seats and v4.1 removed the dormant schema paths; the prototype remains only as auditable history.",
     "metrics": [
       {
         "label": "Foreground residents",
@@ -117,9 +179,9 @@
     "artifacts": [
       "docs/SYMBIOSIS_CONSTITUTION.md",
       "docs/SYMBIOTIC_SHENZHEN_PLAN.md",
-      "docs/V3_WORLD_ARCHITECTURE.md",
-      "docs/V3_DATA_GOVERNANCE.md",
-      "docs/V3_VERIFICATION.md",
+      "docs/archive/v3-prototype/V3_WORLD_ARCHITECTURE.md",
+      "docs/archive/v3-prototype/V3_DATA_GOVERNANCE.md",
+      "docs/archive/v3-prototype/V3_VERIFICATION.md",
       "data/shenzhen/2026-q2/",
       "src/symbiosis/",
       "src/app/api/world/v3/",
@@ -1082,6 +1144,17 @@
       "docs/adr/0001-deterministic-simulation-core.md"
     ],
     "source": "manifest"
+  },
+  {
+    "id": "d285638d",
+    "version": "4",
+    "date": "2026-07-19",
+    "trigger": "observation",
+    "triggerReason": "docs: attest v4 production deployment",
+    "action": "docs: attest v4 production deployment",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
   },
   {
     "id": "f4d428a1",

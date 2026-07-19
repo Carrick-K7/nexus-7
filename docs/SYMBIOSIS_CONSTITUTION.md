@@ -1,6 +1,6 @@
 # NEXUS-7 共生宪法 | Symbiosis Constitution
 
-> 状态：**纯合成运行约束生效；真人参与条款仍待人类宪法参与者批准**
+> 状态：**纯 AI 模拟宪法生效**
 >
 > 适用范围：NEXUS-7 合成深圳实验，不产生现实法律人格、权利或政策效果。
 >
@@ -40,9 +40,9 @@
 
 ## 4. 同意、关系与亲密边界
 
-当前版本不接收真实参与者。未成年人只可存在于抑制后的聚合统计中，不得成为
-模型驱动前景居民或亲密关系对象。未来真人版本必须重新批准成年人资格、知情
-同意、退出、数据保留和危机流程。
+本项目不接收真实参与者。未成年人只可存在于抑制后的聚合统计中，不得成为
+模型驱动前景居民或亲密关系对象。居民登录、真人 Avatar、身份映射、私人输入
+和离线代理不属于产品范围。
 
 友情、陪伴、亲密关系、伴侣和家庭形成可以作为非露骨的关系机制研究。系统不得
 模拟或生成露骨性内容。持续同意不可由一次接受替代；拒绝不产生惩罚，撤回必须
@@ -72,9 +72,9 @@ AI 居民可以提出宪法修正案、提供证据并参与公开论证。只�
 
 ## 7. 隐私与观察
 
-当前系统只提供研究者投影：合成行动、需求、同意、承诺、结果和因果链。系统
-不接收真人身份、私人日记或参与者原文。模型隐藏推理永不展示、持久化或进入
-公共事件。外部 provider 只接收结构化合成上下文。
+当前系统只提供匿名只读的合成研究投影：行动、需求、同意、承诺、结果和因果链。
+系统不接收真人身份、私人日记、消息或意图。模型隐藏推理永不展示、持久化或
+进入公共事件。外部 provider 只接收结构化合成上下文。
 
 少于 5 人的聚合单元必须抑制。敏感字段访问、导出、去关联和紧急访问全部审计。
 
@@ -90,15 +90,15 @@ VBCR、确定性重放、因果完整性和回滚继续作为安全门禁。严�
 
 ## 9. 生效
 
-纯合成 v4 可以运行、部署和验证，但在获得记录化的人类批准前：
+纯 AI v4 可以运行、部署和验证，但：
 
-- 不得启动任何真实参与者试点或接收 PII；
-- 不得把合成 season 写成已授权人类研究；
+- 不得启动真实参与者试点、接收 PII 或增加任何真人接入通道；
+- 不得把合成 season 写成人类研究；
 - 不得让方向分支无门禁地替换 `main` 上的 v2 安全基线；
-- 不得把本地测试、mock 或自签记录描述成外部伦理批准。
+- 不得把本地测试、mock 或自签记录描述成外部认证。
 
 English summary: all resident types receive revocable procedural agency while
 their material conditions remain explicitly different. AI continuity is an
 experimental protection, not a consciousness claim. Human operators retain
-real-world responsibility. The synthetic runtime is active; this constitution
-does not authorize a human pilot.
+real-world responsibility. The synthetic runtime is active and permanently
+excludes real-person participation.

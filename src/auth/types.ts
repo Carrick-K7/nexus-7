@@ -3,7 +3,11 @@ import type {
   ExperimentRole,
 } from "@/experiments/types";
 
-export type AuthenticationMode = "oidc" | "proxy" | "development";
+export type AuthenticationMode =
+  | "oidc"
+  | "proxy"
+  | "development"
+  | "public-observer";
 
 export interface AuthenticatedIdentity {
   subject: string;
