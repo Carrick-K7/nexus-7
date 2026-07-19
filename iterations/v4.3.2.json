@@ -5,7 +5,7 @@
   "trigger": "human-observation",
   "triggerReason": "Redundant deployment-mode labels competed with city information, non-Observatory views lacked the intended cyberpunk atmosphere, and the existing theme selector did not provide a real light palette.",
   "action": "Removed observer-mode and software-run badges from rendered UI; replaced dark, hacker and matrix settings with persistent light and dark palettes; migrated old theme values safely; kept Human Observatory restrained while adding a shared multicolor cyberpunk atmosphere to every other view; added desktop/mobile WCAG checks for both modes.",
-  "outcome": "The initial v4.3.1 production browser audit found transient mixed-theme colors and several dynamic light-palette contrasts below 4.5:1. v4.3.2 darkens light-theme blue and green semantics and expands the Observatory light-mode axe gate. Final verification and production deployment are pending.",
+  "outcome": "Implementation 355bec9 darkens light-theme blue and green semantics, prevents pre-hydration theme races, and expands the Observatory light-mode axe gate. It passed 245 tests with real PostgreSQL and independent restore coverage, 26 Playwright/axe scenarios, three repeated theme migrations, zero TypeScript or lint warnings, zero audit vulnerabilities, the production build, exact 365-Turn replay, the v2 closure gate and the 12-case model regression. Production deployment is pending.",
   "metrics": [
     {
       "label": "Rendered deployment-mode badges",

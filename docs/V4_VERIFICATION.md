@@ -2,7 +2,7 @@
 
 > Date: 2026-07-19
 >
-> Status: v4.3.2 Chromatic City Shell verification in progress /
+> Status: v4.3.2 Chromatic City Shell locally verified / production pending /
 > external CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
