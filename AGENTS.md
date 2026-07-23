@@ -1,5 +1,26 @@
 # NEXUS-7 AI 迭代日志 | AI Iteration Log
 
+## Production operations authority
+
+- The public production service is `https://nexus7.carrick7.com/`.
+- Production currently follows the v4 line on
+  `codex/ai-only-symbiotic-shenzhen-v4`; `main` must not be assumed to be the
+  deployed revision until the branch reconciliation is completed.
+- A normal push is not authorization to deploy NEXUS. Production promotion,
+  migration, rollback, database restore, and worker changes are explicit
+  operational actions.
+- The active database is the `nexus7-postgres` container and
+  `nexus7-postgres-data` volume. Application releases must not recreate or
+  delete the volume.
+- Shared Caddy, systemd units, database container definition, backups, and
+  observe-only monitoring are owned by the private
+  `Carrick-K7/carrick-ops` repository.
+- Never print production environment values, database URLs, password files,
+  model keys, or signed policy material.
+- After an explicitly authorized production release, the responsible AI must
+  verify the exact revision, Web and worker units, database connectivity, and
+  the public main path before reporting completion.
+
 > 最后更新: 2026-06-14
 
 ---
