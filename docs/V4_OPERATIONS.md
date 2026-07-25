@@ -34,13 +34,15 @@ Optional live cognition:
 
 ```dotenv
 SYMBIOSIS_COGNITIVE_PROVIDER=deepseek
-DEEPSEEK_API_KEY=...
+DEEPSEEK_API_KEY_FILE=/run/secrets/nexus7-deepseek-api-key
 DEEPSEEK_BASE_URL=https://api.deepseek.com
 SYMBIOSIS_MODEL_TIMEOUT_MS=12000
 ```
 
-The API key is server-side only. Without it, deterministic resident cognition
-is the supported production default; the city remains fully operational.
+The API key is server-side only; direct `DEEPSEEK_API_KEY` is also supported.
+The file should be mode 0600 and readable by both web and worker services.
+Without it, deterministic resident cognition is the supported production
+default; the city remains fully operational.
 
 ## Observation
 
@@ -48,7 +50,8 @@ Human observer entry points:
 
 - `/` → default **Human Observatory**;
 - `/api/observatory/v2/overview` → human/AI/robot population, every resident,
-  persisted resource flows, institutions, production chain and evidence;
+  persisted resource flows, institutions, production chain, DeepSeek
+  token/cost ledger and evidence;
 - `/api/observatory/v1/overview` → deprecated label-compatible projection;
 - `/api/world/v3/snapshot` → current world and resident projection;
 - `/api/world/v3/events?afterCursor=0` → append-only event river;

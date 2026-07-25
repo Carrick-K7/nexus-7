@@ -81,6 +81,16 @@ describe("Symbiotic Shenzhen world service", () => {
     expect(observatory.economy.transfers.length).toBeGreaterThan(0);
     expect(observatory.production.autonomousControlRate).toBe(1);
     expect(observatory.production.humanLaborDependencyRate).toBe(0);
+    expect(observatory.cognition).toMatchObject({
+      configuredProvider: "nexus-deterministic-reference",
+      deepseek: {
+        externalCallAttempts: 0,
+        successfulDecisions: 0,
+        totalTokens: 0,
+        costUsd: 0,
+        latestBilledTurn: null,
+      },
+    });
   });
 
   it("commits one of two competing Turn settlements", async () => {

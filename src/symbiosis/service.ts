@@ -29,8 +29,9 @@ import {
   createInitialWorld,
   settleNextTurn,
 } from "./engine";
-import type {
-  CognitiveGateway,
+import {
+  cognitiveDecisionCostUsd,
+  type CognitiveGateway,
 } from "./cognition";
 import type {
   WorldRepository,
@@ -275,7 +276,7 @@ export class WorldService {
         seasonId,
       );
       let monthlySpend = priorDecisions.reduce(
-        (sum, decision) => sum + decision.costUsd,
+        (sum, decision) => sum + cognitiveDecisionCostUsd(decision),
         0,
       );
       for (const candidate of cognitiveCandidatesForTurn(
@@ -288,7 +289,7 @@ export class WorldService {
           monthlySpend,
         );
         cognitiveDecisions.push(decision);
-        monthlySpend += decision.costUsd;
+        monthlySpend += cognitiveDecisionCostUsd(decision);
       }
     }
     const settlement = settleNextTurn(
@@ -546,7 +547,11 @@ export class WorldService {
         ).length,
         costUsd: Number(
           decisions
-            .reduce((sum, decision) => sum + decision.costUsd, 0)
+            .reduce(
+              (sum, decision) =>
+                sum + cognitiveDecisionCostUsd(decision),
+              0,
+            )
             .toFixed(6),
         ),
       },
@@ -564,7 +569,7 @@ export class WorldService {
     actor: ExperimentActor,
     seasonId = this.seasonId,
   ): Promise<HumanObservatoryReport> {
-    const [season, snapshot, residents, turns, events, report] =
+    const [season, snapshot, residents, turns, events, report, decisions] =
       await Promise.all([
         this.season(actor, seasonId),
         this.snapshot(actor, seasonId),
@@ -572,6 +577,7 @@ export class WorldService {
         this.turns(actor, seasonId),
         this.events(actor, seasonId, 0, 1_000),
         this.report(actor, seasonId),
+        this.cognitiveDecisions(actor, seasonId),
       ]);
     const latestTurn = turns.find(
       (turn) => turn.turn === snapshot.turn,
@@ -598,6 +604,10 @@ export class WorldService {
       history,
       events,
       report,
+      decisions,
+      configuredCognitiveProvider:
+        this.cognitiveGateway?.configuredProviderId ??
+        "nexus-deterministic-reference",
     });
   }
 }

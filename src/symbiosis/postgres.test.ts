@@ -12,6 +12,9 @@ import {
   type ExperimentActor,
 } from "@/experiments";
 import {
+  CognitiveGateway,
+} from "./cognition";
+import {
   PostgresWorldRepository,
 } from "./postgres-repository";
 import {
@@ -42,6 +45,40 @@ integrationDescribe("PostgreSQL Symbiotic Shenzhen world", () => {
     const service = new WorldService(worldRepository!, {
       seasonId: `symbiosis-pg-${suffix}`,
       seed: `symbiosis-pg-seed-${suffix}`,
+      cognitiveGateway: new CognitiveGateway({
+        id: "deepseek-chat-completions",
+        decide: async (_candidate, mode) => ({
+          provider: "deepseek-chat-completions",
+          model:
+            mode === "pro"
+              ? "deepseek-v4-pro"
+              : "deepseek-v4-flash",
+          mode: mode === "pro" ? "thinking" : "non-thinking",
+          finalAnswer: {
+            disposition: "engage",
+            action: "negotiate-shared-community-task",
+            reasonCode: "postgres-billing-roundtrip",
+          },
+          inputTokens: 10,
+          outputTokens: 2,
+          costUsd: 0.000002,
+          latencyMs: 10,
+          billing: {
+            provider: "deepseek-chat-completions",
+            model:
+              mode === "pro"
+                ? "deepseek-v4-pro"
+                : "deepseek-v4-flash",
+            pricingVersion: "deepseek-v4-usd-test",
+            currency: "USD",
+            inputTokens: 10,
+            cacheHitInputTokens: 4,
+            cacheMissInputTokens: 6,
+            outputTokens: 2,
+            costUsd: 0.000002,
+          },
+        }),
+      }),
     });
     const actor: ExperimentActor = {
       id: "symbiosis-pg-admin",
@@ -103,12 +140,27 @@ integrationDescribe("PostgreSQL Symbiotic Shenzhen world", () => {
           `symbiosis-pg-${suffix}`,
         ),
       ).toHaveLength(4);
-      expect(
+      const decisions =
         await secondRepository.listCognitiveDecisions(
           "workspace-neo-angeles",
           `symbiosis-pg-${suffix}`,
+        );
+      expect(decisions).toHaveLength(4);
+      expect(
+        decisions.every(
+          (decision) =>
+            decision.billing?.pricingVersion ===
+              "deepseek-v4-usd-test" &&
+            decision.billing.cacheHitInputTokens === 4,
         ),
-      ).toHaveLength(4);
+      ).toBe(true);
+      expect((await service.observatory(actor)).cognition.deepseek).toMatchObject({
+        successfulDecisions: 4,
+        inputTokens: 40,
+        outputTokens: 8,
+        totalTokens: 48,
+        costUsd: 0.000008,
+      });
     } finally {
       await secondRepository.close();
     }

@@ -2,7 +2,7 @@
 
 > Date: 2026-07-19
 >
-> Status: v4.3.2 Chromatic City Shell locally and publicly verified /
+> Status: v4.3.3 Cognitive Cost Ledger locally verified / production pending /
 > external CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
@@ -77,6 +77,18 @@ and segregation keeps an honest null denominator.
 - every other view receives the shared cyberpunk visual layer;
 - desktop/mobile light and dark runs have no horizontal overflow;
 - 245 tests, 26 Playwright/axe scenarios, lint, audit and build pass.
+
+## v4.3.3 Cognitive Cost Ledger gate
+
+- Observatory v2 aggregates only persisted DeepSeek decision usage;
+- cache-hit, cache-miss, output Token and pinned USD pricing remain distinct;
+- billed invalid output survives deterministic fallback and budget accounting;
+- deterministic mode reports exact zero rather than hypothetical consumption;
+- totals are scoped to the active NEXUS-7 season, not the provider account;
+- API keys support a server-only mode-0600 file and never enter evidence.
+- Next.js 16.2.11, sharp 0.35.3 and patched brace expansion restore a zero-
+  vulnerability dependency gate without disabling lint.
+- 246 tests, 26 Playwright/axe scenarios, lint, audit and build pass.
 
 The multi-season reference reports reciprocal RALR 73.33% across 525 resolved
 episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR

@@ -1,4 +1,7 @@
 import {
+  readFileSync,
+} from "node:fs";
+import {
   getExperimentService,
 } from "@/experiments/server";
 import {
@@ -24,6 +27,13 @@ const worldGlobal = globalThis as typeof globalThis & {
   __nexusSymbiosisWorld?: WorldGlobal;
 };
 
+function deepSeekApiKey(): string {
+  const direct = process.env.DEEPSEEK_API_KEY?.trim();
+  if (direct) return direct;
+  const path = process.env.DEEPSEEK_API_KEY_FILE?.trim();
+  return path ? readFileSync(path, "utf8").trim() : "";
+}
+
 export async function getWorldService(): Promise<WorldService> {
   const state =
     worldGlobal.__nexusSymbiosisWorld ??
@@ -43,7 +53,7 @@ export async function getWorldService(): Promise<WorldService> {
         providerName === "deepseek"
           ? new CognitiveGateway(
               new DeepSeekChatCompletionsProvider({
-                apiKey: process.env.DEEPSEEK_API_KEY ?? "",
+                apiKey: deepSeekApiKey(),
                 baseUrl: process.env.DEEPSEEK_BASE_URL,
                 timeoutMs: Number(
                   process.env.SYMBIOSIS_MODEL_TIMEOUT_MS ?? 12_000,

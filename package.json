@@ -1,8 +1,9 @@
 {
   "name": "nexus",
-  "version": "4.3.2",
+  "version": "4.3.3",
   "private": true,
   "scripts": {
+    "postinstall": "node scripts/patch-minimatch-brace-expansion.mjs",
     "prebuild": "node scripts/inject-git-log.js && tsx scripts/generate-symbiosis-study.ts",
     "dev": "next dev",
     "build": "next build",
@@ -46,7 +47,7 @@
     "framer-motion": "^12.38.0",
     "jose": "^6.2.3",
     "lucide-react": "^1.7.0",
-    "next": "^16.2.10",
+    "next": "16.2.11",
     "pg": "^8.22.0",
     "react": "19.2.4",
     "react-dom": "19.2.4",
@@ -66,7 +67,7 @@
     "@types/react-dom": "^19",
     "@vitejs/plugin-react": "^6.0.3",
     "eslint": "^9.39.5",
-    "eslint-config-next": "^16.2.10",
+    "eslint-config-next": "16.2.11",
     "jsdom": "^29.1.1",
     "tailwindcss": "^4",
     "typescript": "^5",
@@ -74,6 +75,8 @@
     "vitest": "^4.1.10"
   },
   "overrides": {
-    "postcss": "^8.5.10"
+    "postcss": "^8.5.10",
+    "sharp": "0.35.3",
+    "brace-expansion": "5.0.8"
   }
 }

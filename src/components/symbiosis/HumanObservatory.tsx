@@ -15,6 +15,7 @@ import {
   ChevronLeft,
   ChevronRight,
   CircleHelp,
+  CircleDollarSign,
   Download,
   Factory,
   HeartHandshake,
@@ -71,6 +72,20 @@ const copy = {
     safety: "Severe escapes",
     aiCoverage: "AI-controlled chain",
     chainFlow: "Chain continuity",
+    deepseekUsage: "DEEPSEEK API USAGE",
+    deepseekDesc:
+      "Actual usage recorded by this season's persisted cognitive decisions. It does not include other activity on the human-provided DeepSeek account.",
+    configuredProvider: "Current cognitive provider",
+    externalCalls: "External call attempts",
+    successfulCalls: "Successful DeepSeek decisions",
+    fallbackCalls: "Fallback decisions",
+    totalTokens: "Total DeepSeek tokens",
+    inputOutputTokens: "Input / output",
+    cumulativeCost: "Recorded API expense",
+    currentTurnUsage: "Current Turn",
+    lastBilledTurn: "Latest billed Turn",
+    pricingEvidence: "Pricing evidence",
+    noBilledTurn: "No billed call yet",
     population: "POPULATION",
     populationDesc:
       "The current season models 260 individual residents. The background population is an aggregate scale reference, not generated people.",
@@ -190,6 +205,20 @@ const copy = {
     safety: "严重安全逃逸",
     aiCoverage: "生产链 AI 控制率",
     chainFlow: "生产链顺畅度",
+    deepseekUsage: "DeepSeek API 用量与开销",
+    deepseekDesc:
+      "来自当前 season 已持久化认知决策的实际用量，不包含人类提供的 DeepSeek 账号在其他项目中的调用。",
+    configuredProvider: "当前认知 Provider",
+    externalCalls: "外部调用尝试",
+    successfulCalls: "成功的 DeepSeek 决策",
+    fallbackCalls: "降级决策",
+    totalTokens: "DeepSeek 累计 Token",
+    inputOutputTokens: "输入 / 输出",
+    cumulativeCost: "已记录 API 开销",
+    currentTurnUsage: "当前 Turn",
+    lastBilledTurn: "最近计费 Turn",
+    pricingEvidence: "计价证据",
+    noBilledTurn: "尚无计费调用",
     population: "人口信息",
     populationDesc:
       "当前 season 逐个建模 260 位居民。背景人口只是总量尺度参考，不是逐个生成的人。",
@@ -317,6 +346,10 @@ const PAGE_SIZE = 20;
 
 function percent(value: number | null): string {
   return value === null ? "—" : `${Math.round(value * 100)}%`;
+}
+
+function usd(value: number): string {
+  return `US$${value.toFixed(value < 0.01 ? 8 : 4)}`;
 }
 
 function statusClasses(status: ObservatoryHealth | UnitHealth): string {
@@ -738,6 +771,90 @@ export default function HumanObservatory() {
               </p>
             </article>
           ))}
+        </section>
+
+        <section
+          className="rounded-2xl border border-cyber-purple/25 bg-cyber-darker/90 p-5"
+          aria-labelledby="deepseek-usage-title"
+          data-testid="deepseek-usage"
+        >
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <CircleDollarSign className="h-5 w-5 text-cyber-purple" />
+                <h2
+                  id="deepseek-usage-title"
+                  className="font-orbitron text-sm text-cyber-purple"
+                >
+                  {text.deepseekUsage}
+                </h2>
+              </div>
+              <p className="mt-2 max-w-4xl text-sm leading-6 text-cyber-text-dim">
+                {text.deepseekDesc}
+              </p>
+            </div>
+            <div className="rounded-lg border border-cyber-gray-light bg-cyber-black/45 px-3 py-2 text-xs">
+              <span className="text-cyber-text-dim">
+                {text.configuredProvider}:{" "}
+              </span>
+              <strong className="font-mono text-cyber-text">
+                {data.cognition.configuredProvider}
+              </strong>
+            </div>
+          </div>
+          <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+            {[
+              {
+                label: text.totalTokens,
+                value: data.cognition.deepseek.totalTokens.toLocaleString(),
+                detail: `${text.inputOutputTokens}: ${data.cognition.deepseek.inputTokens.toLocaleString()} / ${data.cognition.deepseek.outputTokens.toLocaleString()}`,
+              },
+              {
+                label: text.cumulativeCost,
+                value: usd(data.cognition.deepseek.costUsd),
+                detail: `${text.lastBilledTurn}: ${
+                  data.cognition.deepseek.latestBilledTurn ??
+                  text.noBilledTurn
+                }`,
+              },
+              {
+                label: text.successfulCalls,
+                value:
+                  data.cognition.deepseek.successfulDecisions.toLocaleString(),
+                detail: `${text.externalCalls}: ${data.cognition.deepseek.externalCallAttempts.toLocaleString()} · ${text.fallbackCalls}: ${data.cognition.deepseek.fallbackDecisions.toLocaleString()}`,
+              },
+              {
+                label: text.currentTurnUsage,
+                value: `${data.cognition.deepseek.currentTurn.totalTokens.toLocaleString()} Token`,
+                detail: `${usd(data.cognition.deepseek.currentTurn.costUsd)} · ${data.cognition.deepseek.currentTurn.successfulDecisions} ${text.successfulCalls}`,
+              },
+            ].map((entry) => (
+              <article
+                key={entry.label}
+                className="rounded-xl border border-cyber-gray-light bg-cyber-black/45 p-4"
+              >
+                <p className="text-xs text-cyber-text-dim">{entry.label}</p>
+                <p className="mt-2 break-words font-mono text-xl text-cyber-text">
+                  {entry.value}
+                </p>
+                <p className="mt-2 text-xs leading-5 text-cyber-text-dim">
+                  {entry.detail}
+                </p>
+              </article>
+            ))}
+          </div>
+          <p className="mt-4 text-xs leading-5 text-cyber-text-dim">
+            {data.cognition.disclosure[language]}
+            {data.cognition.deepseek.pricingVersions.length > 0 && (
+              <>
+                {" "}
+                {text.pricingEvidence}:{" "}
+                <span className="font-mono">
+                  {data.cognition.deepseek.pricingVersions.join(", ")}
+                </span>
+              </>
+            )}
+          </p>
         </section>
 
         <section className="grid gap-4 xl:grid-cols-[0.8fr_1.2fr]">

@@ -290,6 +290,19 @@ export interface CognitiveDecision {
   outputTokens: number;
   costUsd: number;
   latencyMs: number;
+  requestedProvider?: string;
+  externalCallAttempted?: boolean;
+  billing?: {
+    provider: string;
+    model: string;
+    pricingVersion: string;
+    currency: "USD";
+    inputTokens: number;
+    cacheHitInputTokens: number;
+    cacheMissInputTokens: number;
+    outputTokens: number;
+    costUsd: number;
+  };
   degradationReason?: string;
   reasoningContentStored: false;
 }

@@ -32,6 +32,14 @@ continuity only from stored needs and those ledgers. These formula-versioned
 proxies contain no free-form inference and must not be described as proof of
 consciousness, employment or a real institution.
 
+The cognition cost ledger is another derived projection. It aggregates only
+persisted provider response metadata for the current synthetic season:
+requested provider, final provider, model, prompt/cache/completion token counts,
+pricing version and calculated USD cost. It never stores prompts, responses,
+reasoning or provider credentials. The total is a NEXUS-7 estimate from the
+provider-returned usage and pinned public prices; it is not the owner's account
+balance, invoice, credit or top-up history.
+
 ## External models
 
 An external provider may receive only a compact structured candidate composed
@@ -43,6 +51,12 @@ codes. The provider:
 - must return final JSON matching the action schema;
 - has its reasoning ignored and never persisted;
 - is bounded by timeout, token and monthly cost limits.
+
+A completed provider response can be billable even when its final JSON fails
+validation and the city uses the deterministic fallback. Therefore billing
+metadata survives that fallback and is included in both budget enforcement and
+the Human Observatory. Requests that time out before a usable provider response
+record no guessed usage or cost.
 
 ## Retention and export
 

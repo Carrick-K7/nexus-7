@@ -15,6 +15,7 @@ import {
   toHumanObservatoryV1,
 } from "./observatory";
 import type {
+  CognitiveDecision,
   SymbiosisReport,
   TurnSettlement,
   WorldEvent,
@@ -110,6 +111,61 @@ describe("human observatory projection", () => {
       );
     }
     const report = referenceReport(current);
+    const deepSeekDecision: CognitiveDecision = {
+      schemaVersion: "nexus.cognitive-decision.v1",
+      id: `${current.season.id}-deepseek-observatory-test`,
+      seasonId: current.season.id,
+      turn: current.turn.turn,
+      residentId: current.residents[0].id,
+      provider: "deepseek-chat-completions",
+      model: "deepseek-v4-flash",
+      mode: "non-thinking",
+      promptVersion: "symbiosis-cognition-1.0.0",
+      contextSummarySha256: "observatory-test-context",
+      outputSchema: "nexus.cognitive-action.v1",
+      finalAnswer: {
+        disposition: "engage",
+        action: "negotiate-shared-community-task",
+        reasonCode: "observatory-cost-test",
+      },
+      inputTokens: 100,
+      outputTokens: 20,
+      costUsd: 0.00001411,
+      latencyMs: 120,
+      requestedProvider: "deepseek-chat-completions",
+      externalCallAttempted: true,
+      billing: {
+        provider: "deepseek-chat-completions",
+        model: "deepseek-v4-flash",
+        pricingVersion: "deepseek-v4-usd-2026-04-24",
+        currency: "USD",
+        inputTokens: 100,
+        cacheHitInputTokens: 40,
+        cacheMissInputTokens: 60,
+        outputTokens: 20,
+        costUsd: 0.00001411,
+      },
+      reasoningContentStored: false,
+    };
+    const billedFallbackDecision: CognitiveDecision = {
+      ...deepSeekDecision,
+      id: `${current.season.id}-deepseek-fallback-observatory-test`,
+      residentId: current.residents[1].id,
+      provider: "nexus-deterministic-reference",
+      model: "bounded-resident-policy-v1",
+      inputTokens: 0,
+      outputTokens: 0,
+      costUsd: 0,
+      billing: {
+        ...deepSeekDecision.billing!,
+        inputTokens: 50,
+        cacheHitInputTokens: 0,
+        cacheMissInputTokens: 50,
+        outputTokens: 5,
+        costUsd: 0.0000084,
+      },
+      degradationReason: "DeepSeek returned invalid final JSON",
+    };
     const input = {
       generatedAt: "2026-07-19T12:00:00.000Z",
       season: current.season,
@@ -119,6 +175,12 @@ describe("human observatory projection", () => {
       history,
       events,
       report,
+      decisions: [
+        ...current.cognitiveDecisions,
+        deepSeekDecision,
+        billedFallbackDecision,
+      ],
+      configuredCognitiveProvider: "deepseek-chat-completions",
     };
     const projection = buildHumanObservatory(input);
 
@@ -163,6 +225,25 @@ describe("human observatory projection", () => {
     expect(projection.economy.production).toBeGreaterThan(0);
     expect(projection.economy.consumption).toBeGreaterThan(0);
     expect(projection.economy.transfers.length).toBeGreaterThan(0);
+    expect(projection.cognition).toMatchObject({
+      configuredProvider: "deepseek-chat-completions",
+      deepseek: {
+        externalCallAttempts: 2,
+        successfulDecisions: 1,
+        fallbackDecisions: 1,
+        inputTokens: 150,
+        cacheHitInputTokens: 40,
+        cacheMissInputTokens: 110,
+        outputTokens: 25,
+        totalTokens: 175,
+        costUsd: 0.00002251,
+        latestBilledTurn: current.turn.turn,
+        currentTurn: {
+          totalTokens: 175,
+          costUsd: 0.00002251,
+        },
+      },
+    });
     for (const resource of projection.economy.resources) {
       expect(
         resource.opening +

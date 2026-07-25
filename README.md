@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release is **v4.3.2 — Chromatic City Shell**. The v2 closed-loop
+The active release is **v4.3.3 — Cognitive Cost Ledger**. The v2 closed-loop
 autonomy laboratory remains its safety kernel for evidence, release approval,
 rollback and recovery. Human administrators in that control plane operate the
 software; they do not participate in the simulated city.
@@ -106,10 +106,14 @@ Optional live cognition:
 
 ```bash
 SYMBIOSIS_COGNITIVE_PROVIDER=deepseek \
-DEEPSEEK_API_KEY=... \
+DEEPSEEK_API_KEY_FILE=/run/secrets/nexus7-deepseek-api-key \
 SYMBIOSIS_MONTHLY_BUDGET_USD=300 \
 npm run worker:symbiosis
 ```
+
+The Observatory aggregates actual returned DeepSeek tokens and call-time
+priced USD expense from persisted decision envelopes. Direct
+`DEEPSEEK_API_KEY` remains supported, but a mode-0600 key file is preferred.
 
 ## Verify
 

@@ -33,7 +33,8 @@ reserved for the other research, safety and compatibility views.
 5. Compare the three communities and the 30-Turn trend.
 6. Follow resources → institutions → residents → relationships → RALR.
 7. Inspect production stages, then search or filter any resident.
-8. Finish with the event river and exact snapshot evidence.
+8. Check the DeepSeek Token and cost ledger.
+9. Finish with the event river and exact snapshot evidence.
 
 The 18,248,500 background population is calibration only. The 260 foreground
 residents are the only individually modeled humans, AI and robots.
@@ -73,6 +74,26 @@ committed Turn can change the world.
 
 This is a real internal simulation data stream, not a live Shenzhen feed.
 Public calibration still affects scale only.
+
+## DeepSeek usage and cost
+
+The Observatory aggregates DeepSeek usage from the current season's persisted
+cognitive-decision envelopes. It shows external call attempts, successful and
+fallback decisions, input/output/total tokens, current-Turn usage, latest
+billed Turn and cumulative USD expense. A deterministic season honestly shows
+zero rather than estimating hypothetical calls.
+
+DeepSeek responses provide actual token counts, including cache-hit and
+cache-miss input tokens. NEXUS-7 calculates expense at call time with a pinned
+price version and stores the billing record atomically with the decision.
+Invalid JSON may still have consumed billable tokens; that billing survives
+when the world falls back to a deterministic decision. Provider reasoning and
+API credentials never enter the envelope.
+
+This ledger covers NEXUS-7's active season only. It is not the human owner's
+whole DeepSeek account statement and excludes unrelated API activity, account
+credits and top-ups. Pricing is pinned from the official source:
+`https://api-docs.deepseek.com/quick_start/pricing/`.
 
 ## Institutions and production
 

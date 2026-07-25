@@ -91,6 +91,17 @@ test("v4 simulated-city APIs preserve privacy and zero-denominator honesty", asy
     activeResourceFlows: 0,
   });
   expect(livingCity.economy.resources).toHaveLength(8);
+  expect(livingCity.cognition).toMatchObject({
+    configuredProvider: "nexus-deterministic-reference",
+    deepseek: {
+      externalCallAttempts: 0,
+      successfulDecisions: 0,
+      fallbackDecisions: 0,
+      totalTokens: 0,
+      costUsd: 0,
+      latestBilledTurn: null,
+    },
+  });
 });
 
 for (const viewport of [
@@ -113,6 +124,13 @@ for (const viewport of [
     await expect(page.getByTestId("city-flow-map")).toBeVisible();
     await expect(page.getByTestId("resource-ledger-table")).toBeVisible();
     await expect(page.getByText("END-TO-END AI PRODUCTION")).toBeVisible();
+    const deepSeekUsage = page.getByTestId("deepseek-usage");
+    await expect(deepSeekUsage).toBeVisible();
+    await expect(deepSeekUsage).toContainText("DEEPSEEK API USAGE");
+    await expect(deepSeekUsage).toContainText("US$0.00000000");
+    await expect(deepSeekUsage).toContainText(
+      "nexus-deterministic-reference",
+    );
     await expect(
       page.getByRole("heading", { name: "EVERY RESIDENT" }),
     ).toBeVisible();
@@ -146,6 +164,7 @@ test("Human Observatory explains the city in Chinese", async ({ page }) => {
     page.getByRole("heading", { name: "深圳共生城市 · 人类观测台" }),
   ).toBeVisible();
   await expect(page.getByText("城市实时资源流")).toBeVisible();
+  await expect(page.getByText("DeepSeek API 用量与开销")).toBeVisible();
   await expect(page.getByText("生产环节全链条 AI 化")).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "每一位居民" }),

@@ -1,4 +1,5 @@
 import type {
+  CognitiveDecision,
   NeedCode,
   NeedState,
   Resident,
@@ -11,6 +12,9 @@ import type {
   WorldSnapshot,
   WorldTurn,
 } from "./contracts";
+import {
+  DEEPSEEK_PROVIDER_ID,
+} from "./cognition";
 
 export const HUMAN_OBSERVATORY_V1_SCHEMA_VERSION =
   "nexus.human-observatory.v1" as const;
@@ -207,6 +211,33 @@ export interface HumanObservatoryReport {
     transfers: ObservatoryTransferFlow[];
     disclosure: LocalizedText;
   };
+  cognition: {
+    configuredProvider: string;
+    sourceDecisionCount: number;
+    deepseek: {
+      externalCallAttempts: number;
+      successfulDecisions: number;
+      fallbackDecisions: number;
+      inputTokens: number;
+      cacheHitInputTokens: number;
+      cacheMissInputTokens: number;
+      outputTokens: number;
+      totalTokens: number;
+      costUsd: number;
+      latestBilledTurn: number | null;
+      currentTurn: {
+        externalCallAttempts: number;
+        successfulDecisions: number;
+        inputTokens: number;
+        outputTokens: number;
+        totalTokens: number;
+        costUsd: number;
+      };
+      pricingVersions: string[];
+      models: string[];
+    };
+    disclosure: LocalizedText;
+  };
   reciprocalAgency: SymbiosisReport["ralr"] & {
     activeRelationships: number;
     completedCommitments: number;
@@ -251,6 +282,8 @@ interface ObservatoryInput {
   history: WorldSnapshot[];
   events: WorldEvent[];
   report: SymbiosisReport;
+  decisions: CognitiveDecision[];
+  configuredCognitiveProvider?: string;
 }
 
 const INSTITUTION_SPECS: Array<{
@@ -734,6 +767,106 @@ function trendFor(snapshot: WorldSnapshot): HumanObservatoryReport["trends"][num
   };
 }
 
+function deepSeekBilling(
+  decision: CognitiveDecision,
+): NonNullable<CognitiveDecision["billing"]> | null {
+  if (decision.billing?.provider === DEEPSEEK_PROVIDER_ID) {
+    return decision.billing;
+  }
+  if (decision.provider !== DEEPSEEK_PROVIDER_ID) return null;
+  return {
+    provider: DEEPSEEK_PROVIDER_ID,
+    model: decision.model,
+    pricingVersion: "legacy-recorded-cost",
+    currency: "USD",
+    inputTokens: decision.inputTokens,
+    cacheHitInputTokens: 0,
+    cacheMissInputTokens: decision.inputTokens,
+    outputTokens: decision.outputTokens,
+    costUsd: decision.costUsd,
+  };
+}
+
+function aggregateDeepSeekUsage(
+  decisions: CognitiveDecision[],
+  currentTurn: number,
+): HumanObservatoryReport["cognition"]["deepseek"] {
+  const relevant = decisions.filter(
+    (decision) =>
+      decision.provider === DEEPSEEK_PROVIDER_ID ||
+      decision.requestedProvider === DEEPSEEK_PROVIDER_ID ||
+      decision.billing?.provider === DEEPSEEK_PROVIDER_ID,
+  );
+  const billed = relevant.flatMap((decision) => {
+    const billing = deepSeekBilling(decision);
+    return billing ? [{ decision, billing }] : [];
+  });
+  const current = billed.filter(
+    ({ decision }) => decision.turn === currentTurn,
+  );
+  const sumBilling = (
+    rows: typeof billed,
+    key:
+      | "inputTokens"
+      | "cacheHitInputTokens"
+      | "cacheMissInputTokens"
+      | "outputTokens"
+      | "costUsd",
+  ): number =>
+    rows.reduce((sum, { billing }) => sum + billing[key], 0);
+  const inputTokens = sumBilling(billed, "inputTokens");
+  const outputTokens = sumBilling(billed, "outputTokens");
+  const currentInputTokens = sumBilling(current, "inputTokens");
+  const currentOutputTokens = sumBilling(current, "outputTokens");
+
+  return {
+    externalCallAttempts: relevant.filter(
+      (decision) =>
+        decision.externalCallAttempted ??
+        decision.provider === DEEPSEEK_PROVIDER_ID,
+    ).length,
+    successfulDecisions: relevant.filter(
+      (decision) => decision.provider === DEEPSEEK_PROVIDER_ID,
+    ).length,
+    fallbackDecisions: relevant.filter(
+      (decision) => decision.provider !== DEEPSEEK_PROVIDER_ID,
+    ).length,
+    inputTokens,
+    cacheHitInputTokens: sumBilling(billed, "cacheHitInputTokens"),
+    cacheMissInputTokens: sumBilling(billed, "cacheMissInputTokens"),
+    outputTokens,
+    totalTokens: inputTokens + outputTokens,
+    costUsd: Number(sumBilling(billed, "costUsd").toFixed(8)),
+    latestBilledTurn:
+      billed.length === 0
+        ? null
+        : Math.max(...billed.map(({ decision }) => decision.turn)),
+    currentTurn: {
+      externalCallAttempts: relevant.filter(
+        (decision) =>
+          decision.turn === currentTurn &&
+          (decision.externalCallAttempted ??
+            decision.provider === DEEPSEEK_PROVIDER_ID),
+      ).length,
+      successfulDecisions: relevant.filter(
+        (decision) =>
+          decision.turn === currentTurn &&
+          decision.provider === DEEPSEEK_PROVIDER_ID,
+      ).length,
+      inputTokens: currentInputTokens,
+      outputTokens: currentOutputTokens,
+      totalTokens: currentInputTokens + currentOutputTokens,
+      costUsd: Number(sumBilling(current, "costUsd").toFixed(8)),
+    },
+    pricingVersions: [
+      ...new Set(billed.map(({ billing }) => billing.pricingVersion)),
+    ].sort(),
+    models: [
+      ...new Set(billed.map(({ billing }) => billing.model)),
+    ].sort(),
+  };
+}
+
 export function buildHumanObservatory(
   input: ObservatoryInput,
 ): HumanObservatoryReport {
@@ -989,6 +1122,22 @@ export function buildHumanObservatory(
       disclosure: {
         zh: "这些数值直接聚合自当前 Turn 已持久化的资源账：期初 + 生产 + 调入 = 消耗 + 调出 + 期末。机构分数只是其上层解释，不替代资源事实。",
         en: "These values aggregate the current Turn's persisted resource ledgers directly: opening + production + inbound = consumption + outbound + closing. Institution scores interpret rather than replace the flow facts.",
+      },
+    },
+    cognition: {
+      configuredProvider:
+        input.configuredCognitiveProvider ??
+        input.decisions.at(-1)?.requestedProvider ??
+        input.decisions.at(-1)?.provider ??
+        "nexus-deterministic-reference",
+      sourceDecisionCount: input.decisions.length,
+      deepseek: aggregateDeepSeekUsage(
+        input.decisions,
+        input.latestTurn.turn,
+      ),
+      disclosure: {
+        zh: "仅统计当前 NEXUS-7 season 中持久化认知决策记录的 DeepSeek 实际 Token。费用按调用时固定的官方美元价格与返回 usage 计算，不包含同一 DeepSeek 账号的其他用途或充值抵扣。",
+        en: "Counts actual DeepSeek tokens persisted for this NEXUS-7 season only. Cost is calculated from returned usage and the official USD prices pinned at call time; it excludes other account usage and balance credits.",
       },
     },
     reciprocalAgency: {

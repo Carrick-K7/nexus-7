@@ -58,6 +58,9 @@ The default cognitive policy is deterministic and zero-cost. Optional
 DeepSeek V4 Flash/Pro may express one schema-bounded preference. Invalid JSON,
 timeout, outage and budget exhaustion produce an explicit deterministic
 degradation and never stop the world. Provider reasoning is discarded.
+Every returned usage record preserves input, output, cache-hit and cache-miss
+tokens plus the call-time pricing version and calculated USD expense. Billed
+usage survives a later schema failure and deterministic fallback.
 
 ## Persistence
 
@@ -78,8 +81,9 @@ The Human Observatory is a pure projection over the same memory/PostgreSQL
 world contract. `nexus.human-observatory.v2` exposes every pseudonymous
 resident, the 24 persisted resource-ledger rows, inter-community transfer
 lanes, community institutions, production continuity, trends, event lineage,
-RALR and evidence. Formula version `human-observatory-formulas-2.0.0` binds
-every derived score. V1 remains a read-only label compatibility projection.
+RALR, DeepSeek usage/cost and evidence. Formula version
+`human-observatory-formulas-2.0.0` binds every derived score. V1 remains a
+read-only label compatibility projection.
 
 Each Turn first settles local production and consumption, then balances
 resource reserve pressure between communities. Transfer lanes are included in

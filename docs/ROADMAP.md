@@ -89,6 +89,14 @@ Locks the production and repository boundary:
 - Keeps both palettes colorful, mobile-safe and WCAG A/AA compliant.
 - Migrates obsolete persisted theme values to dark without losing city state.
 
+### v4.3.3 — Cognitive Cost Ledger
+
+- Persists DeepSeek cache-hit, cache-miss, output Token and price evidence.
+- Retains billed usage even when invalid output falls back deterministically.
+- Shows season-total and current-Turn Token/cost in Human Observatory.
+- Separates NEXUS-7 recorded usage from the owner's wider provider account.
+- Supports a mode-0600 API-key file without exposing credentials.
+
 ## Next objectives
 
 ### v4.4 — Long-running reliability

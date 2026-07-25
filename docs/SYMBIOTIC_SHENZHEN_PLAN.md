@@ -2,7 +2,7 @@
 
 > 更新：2026-07-19
 >
-> 状态：v4.3 Living City Flow 本地与生产门禁通过；
+> 状态：v4.3.3 Cognitive Cost Ledger 本地门禁通过、生产待部署；
 > live provider / external Sigstore pending
 
 ## 目标与研究边界

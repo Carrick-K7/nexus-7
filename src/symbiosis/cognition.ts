@@ -23,6 +23,7 @@ export interface CognitiveProviderResult {
   outputTokens: number;
   costUsd: number;
   latencyMs: number;
+  billing?: NonNullable<CognitiveDecision["billing"]>;
 }
 
 export interface CognitiveProvider {
@@ -45,11 +46,44 @@ export const DEFAULT_COGNITIVE_BUDGET: CognitiveBudgetPolicy = {
   proRestrictionThreshold: 0.9,
 };
 
+export const DEEPSEEK_PROVIDER_ID = "deepseek-chat-completions" as const;
+export const DEEPSEEK_V4_PRICING_VERSION =
+  "deepseek-v4-usd-2026-04-24" as const;
+
+const DEEPSEEK_V4_PRICING = {
+  flash: {
+    cacheHitInputPerMillionUsd: 0.0028,
+    cacheMissInputPerMillionUsd: 0.14,
+    outputPerMillionUsd: 0.28,
+  },
+  pro: {
+    cacheHitInputPerMillionUsd: 0.003625,
+    cacheMissInputPerMillionUsd: 0.435,
+    outputPerMillionUsd: 0.87,
+  },
+} as const;
+
+class BilledCognitiveProviderError extends Error {
+  constructor(
+    message: string,
+    readonly billing: NonNullable<CognitiveDecision["billing"]>,
+  ) {
+    super(message);
+    this.name = "BilledCognitiveProviderError";
+  }
+}
+
 function boundedDisposition(value: unknown): PreferenceDisposition {
   if (value === "engage" || value === "decline" || value === "reconsider") {
     return value;
   }
   throw new Error("Cognitive provider returned an invalid disposition");
+}
+
+function nonNegativeTokenCount(value: unknown): number {
+  return typeof value === "number" && Number.isFinite(value) && value > 0
+    ? Math.floor(value)
+    : 0;
 }
 
 function deterministicDisposition(
@@ -111,7 +145,7 @@ interface DeepSeekResponse {
 }
 
 export class DeepSeekChatCompletionsProvider implements CognitiveProvider {
-  readonly id = "deepseek-chat-completions";
+  readonly id = DEEPSEEK_PROVIDER_ID;
 
   constructor(
     private readonly options: {
@@ -181,33 +215,79 @@ export class DeepSeekChatCompletionsProvider implements CognitiveProvider {
       throw new Error(`DeepSeek returned HTTP ${response.status}`);
     }
     const payload = await response.json() as DeepSeekResponse;
+    const inputTokens = nonNegativeTokenCount(
+      payload.usage?.prompt_tokens,
+    );
+    const outputTokens = nonNegativeTokenCount(
+      payload.usage?.completion_tokens,
+    );
+    const cacheHitInputTokens = Math.min(
+      inputTokens,
+      nonNegativeTokenCount(
+        payload.usage?.prompt_cache_hit_tokens,
+      ),
+    );
+    const cacheMissInputTokens = Math.max(
+      0,
+      inputTokens - cacheHitInputTokens,
+    );
+    const pricing = DEEPSEEK_V4_PRICING[mode];
+    const costUsd =
+      (cacheHitInputTokens / 1_000_000) *
+        pricing.cacheHitInputPerMillionUsd +
+      (cacheMissInputTokens / 1_000_000) *
+        pricing.cacheMissInputPerMillionUsd +
+      (outputTokens / 1_000_000) * pricing.outputPerMillionUsd;
+    const billing = {
+      provider: this.id,
+      model: payload.model ?? model,
+      pricingVersion: DEEPSEEK_V4_PRICING_VERSION,
+      currency: "USD" as const,
+      inputTokens,
+      cacheHitInputTokens,
+      cacheMissInputTokens,
+      outputTokens,
+      costUsd: Number(costUsd.toFixed(8)),
+    };
     const choice = payload.choices?.[0];
     if (
       choice?.finish_reason !== "stop" ||
       typeof choice.message?.content !== "string" ||
       !choice.message.content.trim()
     ) {
-      throw new Error("DeepSeek returned no complete final JSON answer");
+      throw new BilledCognitiveProviderError(
+        "DeepSeek returned no complete final JSON answer",
+        billing,
+      );
     }
-    const parsed = JSON.parse(choice.message.content) as Record<
-      string,
-      unknown
-    >;
-    const disposition = boundedDisposition(parsed.disposition);
+    let parsed: Record<string, unknown>;
+    try {
+      parsed = JSON.parse(choice.message.content) as Record<string, unknown>;
+    } catch {
+      throw new BilledCognitiveProviderError(
+        "DeepSeek returned invalid final JSON",
+        billing,
+      );
+    }
+    let disposition: PreferenceDisposition;
+    try {
+      disposition = boundedDisposition(parsed.disposition);
+    } catch {
+      throw new BilledCognitiveProviderError(
+        "DeepSeek final answer failed the disposition schema",
+        billing,
+      );
+    }
     if (
       parsed.action !== "negotiate-shared-community-task" ||
       typeof parsed.reasonCode !== "string" ||
       parsed.reasonCode.length > 120
     ) {
-      throw new Error("DeepSeek final answer failed the action schema");
+      throw new BilledCognitiveProviderError(
+        "DeepSeek final answer failed the action schema",
+        billing,
+      );
     }
-    const inputTokens = payload.usage?.prompt_tokens ?? 0;
-    const outputTokens = payload.usage?.completion_tokens ?? 0;
-    const inputRate = mode === "pro" ? 0.435 : 0.14;
-    const outputRate = mode === "pro" ? 0.87 : 0.28;
-    const costUsd =
-      (inputTokens / 1_000_000) * inputRate +
-      (outputTokens / 1_000_000) * outputRate;
     return {
       provider: this.id,
       model: payload.model ?? model,
@@ -219,8 +299,9 @@ export class DeepSeekChatCompletionsProvider implements CognitiveProvider {
       },
       inputTokens,
       outputTokens,
-      costUsd: Number(costUsd.toFixed(8)),
+      costUsd: billing.costUsd,
       latencyMs: Date.now() - startedAt,
+      billing,
     };
   }
 }
@@ -233,6 +314,10 @@ export class CognitiveGateway {
     private readonly budget: CognitiveBudgetPolicy =
       DEFAULT_COGNITIVE_BUDGET,
   ) {}
+
+  get configuredProviderId(): string {
+    return this.provider.id;
+  }
 
   async decide(
     candidate: CognitiveCandidate,
@@ -259,6 +344,8 @@ export class CognitiveGateway {
       );
     let result: CognitiveProviderResult;
     let degradationReason: string | undefined;
+    let externalCallAttempted = false;
+    let billing: CognitiveDecision["billing"];
     try {
       if (shouldFallback) {
         throw new Error(
@@ -267,8 +354,13 @@ export class CognitiveGateway {
             : "budget-degradation",
         );
       }
+      externalCallAttempted = true;
       result = await this.provider.decide(candidate, requestedMode);
+      billing = result.billing;
     } catch (error) {
+      if (error instanceof BilledCognitiveProviderError) {
+        billing = error.billing;
+      }
       result = await this.fallback.decide(candidate);
       degradationReason =
         error instanceof Error ? error.message : "provider-failure";
@@ -293,8 +385,17 @@ export class CognitiveGateway {
       outputTokens: result.outputTokens,
       costUsd: result.costUsd,
       latencyMs: result.latencyMs,
+      requestedProvider: this.provider.id,
+      externalCallAttempted,
+      billing,
       degradationReason,
       reasoningContentStored: false,
     };
   }
+}
+
+export function cognitiveDecisionCostUsd(
+  decision: CognitiveDecision,
+): number {
+  return decision.billing?.costUsd ?? decision.costUsd;
 }
