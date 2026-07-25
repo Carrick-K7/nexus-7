@@ -80,6 +80,7 @@ and segregation keeps an honest null denominator.
 
 ## v4.3.3 Cognitive Cost Ledger gate
 
+- implementation commit `af7b288` contains the additive ledger and UI;
 - Observatory v2 aggregates only persisted DeepSeek decision usage;
 - cache-hit, cache-miss, output Token and pinned USD pricing remain distinct;
 - billed invalid output survives deterministic fallback and budget accounting;

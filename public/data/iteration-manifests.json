@@ -6,7 +6,7 @@
     "trigger": "human-observation",
     "triggerReason": "Human observers could not distinguish zero-cost deterministic cognition from actual DeepSeek usage, inspect Token volume, or audit how provider expense was calculated.",
     "action": "Extended persisted cognitive decisions with requested-provider, call-attempt and billing evidence; priced actual cache-hit, cache-miss and output Tokens with a pinned official DeepSeek price version; retained billed usage across deterministic fallback; aggregated season and current-Turn usage into Observatory v2; added a bilingual accessible cost panel and secret-file configuration.",
-    "outcome": "The implementation passed 246 tests with real PostgreSQL and independent restore coverage, 26 Playwright/axe scenarios, zero TypeScript or lint warnings, zero audit vulnerabilities, the Next.js 16.2.11 production build, exact 365-Turn replay, the v2 closure gate, the 12-case model regression and a 10,000-tick stress run. Production deployment is pending.",
+    "outcome": "Implementation af7b288 passed 246 tests with real PostgreSQL and independent restore coverage, 26 Playwright/axe scenarios, zero TypeScript or lint warnings, zero audit vulnerabilities, the Next.js 16.2.11 production build, exact 365-Turn replay, the v2 closure gate, the 12-case model regression and a 10,000-tick stress run. Production deployment is pending.",
     "metrics": [
       {
         "label": "Observable DeepSeek Token dimensions",
