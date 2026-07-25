@@ -1,11 +1,11 @@
 # v4 Production Deployment Attestation
 
-> Observed: 2026-07-19 · Asia/Shanghai
+> Observed: 2026-07-25 · Asia/Shanghai
 
 ## Current artifact
 
-- Release: `v4.3.2` — Chromatic City Shell
-- Commit: `c36f54259ad2d5dc2a89c8a2989e1f7b740bb534`
+- Release: `v4.3.3` — Cognitive Cost Ledger
+- Commit: `38bb514198a77db393da6e3918fba4e13c600995`
 - Remote branch: `codex/ai-only-symbiotic-shenzhen-v4`
 - Public origin: `https://nexus7.carrick7.com`
 - Address observed through system and public DNS: `43.160.217.167`
@@ -36,11 +36,17 @@ administrator headers returned HTTP 403 from the application.
 
 The versioned `/api/observatory/v2/overview` endpoint returned HTTP 200 with
 contract `nexus.human-observatory.v2`, 200 humans, 36 AI and 24 robots. Its
-current-Turn projection contained 24 persisted resource ledgers, 260 resident
-states, eight active resource flows, 16 transfer lanes and 14 settled events.
-It reported 194,535 produced, 193,140 consumed and 4,247 transferred modeled
-units. These are internally settled simulation values, not live Shenzhen data.
-The v1 endpoint remains HTTP 200 as a deprecated read-compatibility adapter.
+Turn 161 projection contained 24 persisted resource ledgers, 260 resident
+states, eight active resource flows and thirteen settled events. It reported
+196,265 produced, 193,528 consumed and 1,448 transferred modeled units. These
+are internally settled simulation values, not live Shenzhen data. The v1
+endpoint remains HTTP 200 as a deprecated read-compatibility adapter.
+
+The same API and visible Human Observatory panel reported the configured
+provider as `nexus-deterministic-reference`, 0 DeepSeek external attempts,
+0 input/output/total DeepSeek Tokens and USD 0 recorded expense across 322
+persisted decisions. This is an observed zero, not a live-provider claim or an
+estimate of the human owner's wider account.
 
 Caddy serves a Let's Encrypt certificate whose subject and SAN are
 `nexus7.carrick7.com`, valid from 2026-07-19 through 2026-10-17. A production
@@ -48,7 +54,8 @@ Chromium navigation completed without a credential prompt. Desktop and 390 px
 mobile runs checked Human Observatory and Dashboard in both light and dark
 modes. All eight states produced zero runtime/console errors, zero horizontal
 overflow and zero WCAG A/AA violations. English and Chinese rendered
-correctly; the removed deployment-mode labels did not reappear.
+correctly; the DeepSeek cost panel rendered from its API projection and the
+removed deployment-mode labels did not reappear.
 
 ## AI-only world and live Turn
 
@@ -63,14 +70,15 @@ writer and web process were stopped. The post-upgrade database contained:
 - one resident-kind constraint allowing only `human`, `ai` and `robot`.
 
 The worker then continued the existing season without resetting its history.
-The v4.3.2 process settled Turn 15 for simulated date 2026-08-02 with
-fingerprint `a92d8bc7`, fourteen events, 24 cumulative eligible reciprocal
-episodes, RALR 62.50%, five refusals, four withdrawals, zero coercive actions,
-zero model cost and zero severe consent, continuity or irreversible-harm
-escapes. Resource conservation passed.
+The first v4.3.3 process settled Turn 160 for simulated date 2026-12-25 with
+fingerprint `d27efa89`. After the post-upgrade recovery point and normal worker
+restart, Turn 161 settled with fingerprint `4977660a`, thirteen events, 316
+cumulative eligible reciprocal episodes, RALR 75.00%, 46 refusals, 33
+withdrawals, zero coercive actions, zero model cost and zero severe consent,
+continuity or irreversible-harm escapes. Resource conservation passed.
 
 The season retains its original `symbiotic-shenzhen-engine-4.0.0` origin
-provenance. The exact deployment artifact and its first v4.3.2 Turn are
+provenance. The exact deployment artifact and its first v4.3.3 Turn are
 attested here, but durable per-Turn deployment-revision binding remains a future
 evidence improvement.
 
@@ -78,21 +86,21 @@ evidence improvement.
 
 The pre-upgrade backup is:
 
-`/deploy/nexus-7/backups/nexus-v4.3.2-pre-upgrade.json`
+`/deploy/nexus-7/backups/nexus-v4.3.3-pre-upgrade.json`
 
-It is mode 0600 with checksum
-`8688f30a2200d5f0feb4083abddee140250cf473503e388f894f1d6fc905817c`.
-It contains 260 residents, fifteen Turn rows, 3,900 resident snapshots, 336
-resource ledgers and 99 events through Turn 14.
+It is mode 0600 with internal checksum
+`15d102aa5c004e0e7fac4511574a4a7764010519b53a1d6826526011d8068c09`.
+It contains 260 residents, 160 Turn rows, 41,600 resident snapshots, 3,816
+resource ledgers, 2,069 events and 318 cognitive decisions through Turn 159.
 
 The post-upgrade backup is:
 
-`/deploy/nexus-7/backups/nexus-v4.3.2-post-upgrade.json`
+`/deploy/nexus-7/backups/nexus-v4.3.3-post-upgrade.json`
 
-It is mode 0600 with checksum
-`17ded45f6fedc61456fb0be84621ce05b33b0825c424d9c23d0da95b2dbf7051`.
-It contains 260 residents, sixteen Turn rows, 4,160 resident snapshots, 360
-resource ledgers and 113 events through Turn 15.
+It is mode 0600 with internal checksum
+`da7ee7005cdca49c04f1ba3ca9238353f24eb82ff8230b2a546d374d58360c91`.
+It contains 260 residents, 161 Turn rows, 41,860 resident snapshots, 3,840
+resource ledgers, 2,081 events and 320 cognitive decisions through Turn 160.
 
 The PostgreSQL suite separately verified checksum restore against an
 independent database. These production files have not been destructively
@@ -100,7 +108,9 @@ restored.
 
 ## Superseded production states
 
-Tag `v4.3.1` at `0233ab777b4406ab6e6e557a122300beb8aaff32`
+Tag `v4.3.2` at `c36f54259ad2d5dc2a89c8a2989e1f7b740bb534`
+closed the production contrast gate. Tag `v4.3.1` at
+`0233ab777b4406ab6e6e557a122300beb8aaff32`
 introduced the chromatic shell, but its mandatory production browser audit
 found dynamic light-theme contrast below 4.5:1. The Tag remains immutable and
 is superseded by v4.3.2. Tag `v4.3.0` at
@@ -112,13 +122,13 @@ at `cb569b451057410ef180cd6901ea44ef57d9248f` removed
 the credential gate and dormant participant schema; its pre/post-upgrade
 backups remain available. Tag `v4.0.0` at
 `f4d428a1909152e9bc7bb62ee8205c5a264b54e6` was the first production artifact,
-and its Caddy route required Basic Auth. v4.3.2 preserves all Git and recovery
+and its Caddy route required Basic Auth. v4.3.3 preserves all Git and recovery
 history.
 
 ## Remaining evidence boundaries
 
 - cognition is deterministic in production; there is no live DeepSeek claim;
-- there is no remote CI/Sigstore receipt for v4.3.2;
+- there is no remote CI/Sigstore receipt for v4.3.3;
 - no external controller or off-host second database has attested a production
   recovery drill;
 - the public surface is anonymous read-only observation, not multi-user OIDC;

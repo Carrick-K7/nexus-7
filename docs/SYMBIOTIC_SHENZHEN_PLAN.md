@@ -1,8 +1,8 @@
 # 共生深圳 v4 | AI-Only Symbiotic Shenzhen
 
-> 更新：2026-07-19
+> 更新：2026-07-25
 >
-> 状态：v4.3.3 Cognitive Cost Ledger 本地门禁通过、生产待部署；
+> 状态：v4.3.3 Cognitive Cost Ledger 本地与生产门禁通过；
 > live provider / external Sigstore pending
 
 ## 目标与研究边界
