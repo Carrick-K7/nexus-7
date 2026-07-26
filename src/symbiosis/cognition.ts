@@ -1,8 +1,10 @@
 import {
   fingerprint,
+  randomUnit,
 } from "@/simulation";
 import {
   COGNITIVE_DECISION_SCHEMA_VERSION,
+  COGNITIVE_SHADOW_SCHEMA_VERSION,
   type CognitiveDecision,
   type PreferenceDisposition,
 } from "./contracts";
@@ -28,9 +30,14 @@ export interface CognitiveProviderResult {
 
 export interface CognitiveProvider {
   readonly id: string;
+  readonly external?: boolean;
   decide(
     candidate: CognitiveCandidate,
     mode: "flash" | "pro",
+    request?: {
+      contractVersion: "nexus.cognitive-provider.v1";
+      idempotencyKey: string;
+    },
   ): Promise<CognitiveProviderResult>;
 }
 
@@ -46,7 +53,14 @@ export const DEFAULT_COGNITIVE_BUDGET: CognitiveBudgetPolicy = {
   proRestrictionThreshold: 0.9,
 };
 
+export interface CognitiveShadowPolicy {
+  provider: CognitiveProvider;
+  monthlyCapUsd: number;
+}
+
 export const DEEPSEEK_PROVIDER_ID = "deepseek-chat-completions" as const;
+export const DIVERSITY_REFERENCE_PROVIDER_ID =
+  "nexus-diversity-reference" as const;
 export const DEEPSEEK_V4_PRICING_VERSION =
   "deepseek-v4-usd-2026-04-24" as const;
 
@@ -88,9 +102,18 @@ function nonNegativeTokenCount(value: unknown): number {
 
 function deterministicDisposition(
   candidate: CognitiveCandidate,
+  seed?: string,
 ): PreferenceDisposition {
-  const digest = fingerprint(candidate);
-  const bucket = Number.parseInt(digest.slice(0, 8), 16) / 0xffffffff;
+  const bucket = seed
+    ? randomUnit(
+        seed,
+        candidate.turn,
+        `${candidate.relationshipId}:preference`,
+      )
+    : Number.parseInt(
+        fingerprint(candidate).slice(0, 8),
+        16,
+      ) / 0xffffffff;
   return bucket < 0.16
     ? "decline"
     : bucket < 0.24
@@ -101,10 +124,12 @@ function deterministicDisposition(
 export class DeterministicCognitiveProvider implements CognitiveProvider {
   readonly id = "nexus-deterministic-reference";
 
+  constructor(private readonly seed?: string) {}
+
   async decide(
     candidate: CognitiveCandidate,
   ): Promise<CognitiveProviderResult> {
-    const disposition = deterministicDisposition(candidate);
+    const disposition = deterministicDisposition(candidate, this.seed);
     return {
       provider: this.id,
       model: "bounded-resident-policy-v1",
@@ -118,6 +143,47 @@ export class DeterministicCognitiveProvider implements CognitiveProvider {
             : disposition === "decline"
               ? "boundary-or-capacity"
               : "needs-more-context",
+      },
+      inputTokens: 0,
+      outputTokens: 0,
+      costUsd: 0,
+      latencyMs: 0,
+    };
+  }
+}
+
+export class DiversityReferenceCognitiveProvider
+implements CognitiveProvider {
+  readonly id = DIVERSITY_REFERENCE_PROVIDER_ID;
+
+  async decide(
+    candidate: CognitiveCandidate,
+  ): Promise<CognitiveProviderResult> {
+    const digest = fingerprint({
+      provider: this.id,
+      candidate,
+    });
+    const bucket =
+      Number.parseInt(digest.slice(0, 8), 16) / 0xffffffff;
+    const disposition =
+      bucket < 0.22
+        ? "decline"
+        : bucket < 0.38
+          ? "reconsider"
+          : "engage";
+    return {
+      provider: this.id,
+      model: "bounded-diversity-policy-v1",
+      mode: "non-thinking",
+      finalAnswer: {
+        disposition,
+        action: "negotiate-shared-community-task",
+        reasonCode:
+          disposition === "engage"
+            ? "alternative-mutual-opportunity"
+            : disposition === "decline"
+              ? "alternative-boundary-priority"
+              : "alternative-context-request",
       },
       inputTokens: 0,
       outputTokens: 0,
@@ -146,6 +212,7 @@ interface DeepSeekResponse {
 
 export class DeepSeekChatCompletionsProvider implements CognitiveProvider {
   readonly id = DEEPSEEK_PROVIDER_ID;
+  readonly external = true;
 
   constructor(
     private readonly options: {
@@ -163,6 +230,10 @@ export class DeepSeekChatCompletionsProvider implements CognitiveProvider {
   async decide(
     candidate: CognitiveCandidate,
     mode: "flash" | "pro",
+    request?: {
+      contractVersion: "nexus.cognitive-provider.v1";
+      idempotencyKey: string;
+    },
   ): Promise<CognitiveProviderResult> {
     const startedAt = Date.now();
     const model =
@@ -179,6 +250,16 @@ export class DeepSeekChatCompletionsProvider implements CognitiveProvider {
         headers: {
           Authorization: `Bearer ${this.options.apiKey}`,
           "Content-Type": "application/json",
+          "X-Nexus-Contract":
+            request?.contractVersion ??
+            "nexus.cognitive-provider.v1",
+          "X-Nexus-Idempotency-Key":
+            request?.idempotencyKey ??
+            `nexus-cognition-${fingerprint({
+              provider: this.id,
+              candidate,
+              mode,
+            })}`,
         },
         signal: AbortSignal.timeout(this.options.timeoutMs ?? 12_000),
         body: JSON.stringify({
@@ -307,21 +388,63 @@ export class DeepSeekChatCompletionsProvider implements CognitiveProvider {
 }
 
 export class CognitiveGateway {
-  private readonly fallback = new DeterministicCognitiveProvider();
+  private readonly fallback: DeterministicCognitiveProvider;
 
   constructor(
     private readonly provider: CognitiveProvider,
     private readonly budget: CognitiveBudgetPolicy =
       DEFAULT_COGNITIVE_BUDGET,
-  ) {}
+    private readonly shadow?: CognitiveShadowPolicy,
+    fallbackSeed?: string,
+  ) {
+    if (
+      !Number.isFinite(budget.monthlyCapUsd) ||
+      budget.monthlyCapUsd < 0 ||
+      !Number.isFinite(budget.routineReductionThreshold) ||
+      budget.routineReductionThreshold < 0 ||
+      budget.routineReductionThreshold > 1 ||
+      !Number.isFinite(budget.proRestrictionThreshold) ||
+      budget.proRestrictionThreshold < 0 ||
+      budget.proRestrictionThreshold > 1
+    ) {
+      throw new Error(
+        "Primary cognitive budget must use finite non-negative caps and thresholds from zero to one",
+      );
+    }
+    if (
+      shadow &&
+      shadow.provider.id === provider.id
+    ) {
+      throw new Error(
+        "Shadow provider must differ from the primary provider",
+      );
+    }
+    if (
+      shadow &&
+      (
+        !Number.isFinite(shadow.monthlyCapUsd) ||
+        shadow.monthlyCapUsd < 0
+      )
+    ) {
+      throw new Error(
+        "Shadow monthly budget must be a finite non-negative number",
+      );
+    }
+    this.fallback = new DeterministicCognitiveProvider(fallbackSeed);
+  }
 
   get configuredProviderId(): string {
     return this.provider.id;
   }
 
+  get configuredShadowProviderId(): string | null {
+    return this.shadow?.provider.id ?? null;
+  }
+
   async decide(
     candidate: CognitiveCandidate,
     currentMonthSpendUsd: number,
+    currentShadowSpendUsd = 0,
   ): Promise<CognitiveDecision> {
     const usageRatio =
       currentMonthSpendUsd / this.budget.monthlyCapUsd;
@@ -330,6 +453,11 @@ export class CognitiveGateway {
       candidate.turn % 30 === 0
         ? "pro"
         : "flash";
+    const providerRequestId = `nexus-cognition-${fingerprint({
+      provider: this.provider.id,
+      candidate,
+      mode: requestedMode,
+    })}`;
     const shouldFallback =
       usageRatio >= 1 ||
       (
@@ -354,8 +482,15 @@ export class CognitiveGateway {
             : "budget-degradation",
         );
       }
-      externalCallAttempted = true;
-      result = await this.provider.decide(candidate, requestedMode);
+      externalCallAttempted = this.provider.external === true;
+      result = await this.provider.decide(
+        candidate,
+        requestedMode,
+        {
+          contractVersion: "nexus.cognitive-provider.v1",
+          idempotencyKey: providerRequestId,
+        },
+      );
       billing = result.billing;
     } catch (error) {
       if (error instanceof BilledCognitiveProviderError) {
@@ -365,7 +500,7 @@ export class CognitiveGateway {
       degradationReason =
         error instanceof Error ? error.message : "provider-failure";
     }
-    return {
+    const decision: CognitiveDecision = {
       schemaVersion: COGNITIVE_DECISION_SCHEMA_VERSION,
       id: `${candidate.seasonId}-decision-${String(candidate.turn).padStart(
         4,
@@ -386,11 +521,101 @@ export class CognitiveGateway {
       costUsd: result.costUsd,
       latencyMs: result.latencyMs,
       requestedProvider: this.provider.id,
+      providerRequestId,
       externalCallAttempted,
       billing,
       degradationReason,
       reasoningContentStored: false,
     };
+    if (this.shadow) {
+      const shadowRequestId = `nexus-cognition-${fingerprint({
+        provider: this.shadow.provider.id,
+        candidate,
+        mode: requestedMode,
+        shadow: true,
+      })}`;
+      const primaryDisposition =
+        decision.finalAnswer.disposition as PreferenceDisposition;
+      const primaryUsedFallback = Boolean(degradationReason);
+      if (currentShadowSpendUsd >= this.shadow.monthlyCapUsd) {
+        decision.shadow = {
+          schemaVersion: COGNITIVE_SHADOW_SCHEMA_VERSION,
+          requestedProvider: this.shadow.provider.id,
+          providerRequestId: shadowRequestId,
+          status: "budget-skipped",
+          externalCallAttempted: false,
+          disagreesWithPrimary: null,
+          primaryUsedFallback,
+          inputTokens: 0,
+          outputTokens: 0,
+          costUsd: 0,
+          latencyMs: 0,
+          degradationReason: "shadow-monthly-budget-exhausted",
+          reasoningContentStored: false,
+        };
+      } else {
+        const shadowExternal =
+          this.shadow.provider.external === true;
+        try {
+          const shadowResult =
+            await this.shadow.provider.decide(
+              candidate,
+              requestedMode,
+              {
+                contractVersion: "nexus.cognitive-provider.v1",
+                idempotencyKey: shadowRequestId,
+              },
+            );
+          decision.shadow = {
+            schemaVersion: COGNITIVE_SHADOW_SCHEMA_VERSION,
+            requestedProvider: this.shadow.provider.id,
+            providerRequestId: shadowRequestId,
+            status: "observed",
+            externalCallAttempted: shadowExternal,
+            provider: shadowResult.provider,
+            model: shadowResult.model,
+            disposition: shadowResult.finalAnswer.disposition,
+            disagreesWithPrimary:
+              shadowResult.finalAnswer.disposition !==
+              primaryDisposition,
+            primaryUsedFallback,
+            inputTokens: shadowResult.inputTokens,
+            outputTokens: shadowResult.outputTokens,
+            costUsd: shadowResult.costUsd,
+            latencyMs: shadowResult.latencyMs,
+            billing: shadowResult.billing,
+            reasoningContentStored: false,
+          };
+        } catch (error) {
+          const billed =
+            error instanceof BilledCognitiveProviderError
+              ? error.billing
+              : undefined;
+          decision.shadow = {
+            schemaVersion: COGNITIVE_SHADOW_SCHEMA_VERSION,
+            requestedProvider: this.shadow.provider.id,
+            providerRequestId: shadowRequestId,
+            status: billed ? "billed-invalid" : "provider-failed",
+            externalCallAttempted: shadowExternal,
+            provider: billed?.provider,
+            model: billed?.model,
+            disagreesWithPrimary: null,
+            primaryUsedFallback,
+            inputTokens: billed?.inputTokens ?? 0,
+            outputTokens: billed?.outputTokens ?? 0,
+            costUsd: billed?.costUsd ?? 0,
+            latencyMs: 0,
+            billing: billed,
+            degradationReason:
+              error instanceof Error
+                ? error.message
+                : "shadow-provider-failure",
+            reasoningContentStored: false,
+          };
+        }
+      }
+    }
+    return decision;
   }
 }
 
@@ -398,4 +623,19 @@ export function cognitiveDecisionCostUsd(
   decision: CognitiveDecision,
 ): number {
   return decision.billing?.costUsd ?? decision.costUsd;
+}
+
+export function cognitiveShadowCostUsd(
+  decision: CognitiveDecision,
+): number {
+  return decision.shadow?.billing?.costUsd ??
+    decision.shadow?.costUsd ??
+    0;
+}
+
+export function cognitiveDecisionTotalCostUsd(
+  decision: CognitiveDecision,
+): number {
+  return cognitiveDecisionCostUsd(decision) +
+    cognitiveShadowCostUsd(decision);
 }

@@ -13,6 +13,7 @@ import type {
 import {
   DEFAULT_SYMBIOSIS_SEASON_ID,
   SYMBIOSIS_REPORT_SCHEMA_VERSION,
+  TURN_SCHEMA_VERSION,
   type CognitiveDecision,
   type Commitment,
   type ReciprocalEpisode,
@@ -28,9 +29,12 @@ import {
   cognitiveCandidatesForTurn,
   createInitialWorld,
   settleNextTurn,
+  SYMBIOSIS_ENGINE_VERSION,
 } from "./engine";
 import {
   cognitiveDecisionCostUsd,
+  cognitiveDecisionTotalCostUsd,
+  cognitiveShadowCostUsd,
   type CognitiveGateway,
 } from "./cognition";
 import type {
@@ -40,12 +44,23 @@ import {
   buildHumanObservatory,
   type HumanObservatoryReport,
 } from "./observatory";
+import {
+  attachTurnRuntimeEvidence,
+  buildWorldReliabilityReport,
+  type SymbiosisRecoveryEvidence,
+} from "./reliability";
 
 interface WorldServiceOptions {
   seasonId?: string;
   seed?: string;
   now?: () => Date;
   cognitiveGateway?: CognitiveGateway;
+  runtimeEvidence?: {
+    workerId: string;
+    deploymentRevision: string;
+    intervalMs: number;
+  };
+  recoveryEvidence?: SymbiosisRecoveryEvidence;
 }
 
 function rate(numerator: number, denominator: number): number {
@@ -64,11 +79,35 @@ function average(values: number[]): number {
       );
 }
 
+function nextSimulationMonth(
+  turns: WorldTurn[],
+  currentTurn: number,
+): string {
+  const current = turns.find(
+    (turn) => turn.turn === currentTurn,
+  );
+  if (
+    !current ||
+    !/^\d{4}-\d{2}-\d{2}$/.test(current.simulationDate)
+  ) {
+    throw new ExperimentValidationError(
+      `World Turn ${currentTurn} has no valid simulation date`,
+    );
+  }
+  const next = new Date(
+    `${current.simulationDate}T00:00:00.000Z`,
+  );
+  next.setUTCDate(next.getUTCDate() + 1);
+  return next.toISOString().slice(0, 7);
+}
+
 export class WorldService {
   private readonly seasonId: string;
   private readonly seed?: string;
   private readonly now: () => Date;
   private readonly cognitiveGateway?: CognitiveGateway;
+  private readonly runtimeEvidence?: WorldServiceOptions["runtimeEvidence"];
+  private readonly recoveryEvidence?: SymbiosisRecoveryEvidence;
   private initialized = false;
 
   constructor(
@@ -79,6 +118,8 @@ export class WorldService {
     this.seed = options.seed;
     this.now = options.now ?? (() => new Date());
     this.cognitiveGateway = options.cognitiveGateway;
+    this.runtimeEvidence = options.runtimeEvidence;
+    this.recoveryEvidence = options.recoveryEvidence;
   }
 
   async initialize(): Promise<void> {
@@ -264,10 +305,11 @@ export class WorldService {
     seasonId = this.seasonId,
   ): Promise<WorldTurn> {
     assertActorPermission(actor, "runs:write");
-    const [season, snapshot, residents] = await Promise.all([
+    const [season, snapshot, residents, turns] = await Promise.all([
       this.season(actor, seasonId),
       this.snapshot(actor, seasonId),
       this.residents(actor, seasonId),
+      this.turns(actor, seasonId),
     ]);
     const cognitiveDecisions: CognitiveDecision[] = [];
     if (this.cognitiveGateway) {
@@ -275,8 +317,26 @@ export class WorldService {
         actorWorkspaceId(actor),
         seasonId,
       );
-      let monthlySpend = priorDecisions.reduce(
+      const decisionMonths = new Map(
+        turns.map((turn) => [
+          turn.turn,
+          turn.simulationDate.slice(0, 7),
+        ]),
+      );
+      const activeMonth = nextSimulationMonth(
+        turns,
+        season.currentTurn,
+      );
+      const currentMonthDecisions = priorDecisions.filter(
+        (decision) =>
+          decisionMonths.get(decision.turn) === activeMonth,
+      );
+      let monthlySpend = currentMonthDecisions.reduce(
         (sum, decision) => sum + cognitiveDecisionCostUsd(decision),
+        0,
+      );
+      let monthlyShadowSpend = currentMonthDecisions.reduce(
+        (sum, decision) => sum + cognitiveShadowCostUsd(decision),
         0,
       );
       for (const candidate of cognitiveCandidatesForTurn(
@@ -287,9 +347,11 @@ export class WorldService {
         const decision = await this.cognitiveGateway.decide(
           candidate,
           monthlySpend,
+          monthlyShadowSpend,
         );
         cognitiveDecisions.push(decision);
         monthlySpend += cognitiveDecisionCostUsd(decision);
+        monthlyShadowSpend += cognitiveShadowCostUsd(decision);
       }
     }
     const settlement = settleNextTurn(
@@ -298,6 +360,29 @@ export class WorldService {
       snapshot,
       cognitiveDecisions,
     );
+    if (this.runtimeEvidence) {
+      const previousTurn = turns.find(
+        (turn) => turn.turn === season.currentTurn,
+      );
+      if (!previousTurn) {
+        throw new ExperimentNotFoundError(
+          `World Turn ${seasonId}:${season.currentTurn} was not found`,
+        );
+      }
+      settlement.turn = attachTurnRuntimeEvidence(
+        settlement.turn,
+        previousTurn,
+        {
+          recordedAt: this.now().toISOString(),
+          workerId: this.runtimeEvidence.workerId,
+          deploymentRevision:
+            this.runtimeEvidence.deploymentRevision,
+          engineVersion: SYMBIOSIS_ENGINE_VERSION,
+          engineContractVersion: TURN_SCHEMA_VERSION,
+          intervalMs: this.runtimeEvidence.intervalMs,
+        },
+      );
+    }
     return this.repository.commitTurn({
       expectedTurn: season.currentTurn,
       season: settlement.season,
@@ -549,11 +634,37 @@ export class WorldService {
           decisions
             .reduce(
               (sum, decision) =>
+                sum + cognitiveDecisionTotalCostUsd(decision),
+              0,
+            )
+            .toFixed(6),
+        ),
+        primaryCostUsd: Number(
+          decisions
+            .reduce(
+              (sum, decision) =>
                 sum + cognitiveDecisionCostUsd(decision),
               0,
             )
             .toFixed(6),
         ),
+        shadowCostUsd: Number(
+          decisions
+            .reduce(
+              (sum, decision) =>
+                sum + cognitiveShadowCostUsd(decision),
+              0,
+            )
+            .toFixed(6),
+        ),
+        shadowComparisons: decisions.filter(
+          (decision) =>
+            decision.shadow?.status === "observed",
+        ).length,
+        shadowDisagreements: decisions.filter(
+          (decision) =>
+            decision.shadow?.disagreesWithPrimary === true,
+        ).length,
       },
       disclosures: [
         "This is an all-synthetic Shenzhen mechanism environment, not a digital twin.",
@@ -608,6 +719,14 @@ export class WorldService {
       configuredCognitiveProvider:
         this.cognitiveGateway?.configuredProviderId ??
         "nexus-deterministic-reference",
+      configuredShadowProvider:
+        this.cognitiveGateway?.configuredShadowProviderId ?? null,
+      reliability: buildWorldReliabilityReport(turns, {
+        generatedAt: this.now().toISOString(),
+        intervalMs:
+          this.runtimeEvidence?.intervalMs ?? 3_600_000,
+        recoveryEvidence: this.recoveryEvidence,
+      }),
     });
   }
 }

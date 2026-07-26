@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-25 · v2.0.0 安全内核 + v4.3.3 认知成本账
+> 更新：2026-07-26 · v2.0.0 安全内核 + v4.5.0 可靠认知多样性
 
 ## 定义与边界
 
@@ -16,11 +16,10 @@ v4 运行可重放、可审计的模拟深圳，用于研究人、AI 和机器�
 
 ## 权威来源
 
-- 产品闭环：`docs/CLOSED_LOOP_PLAN.md`
 - v4 宪法/路线：`docs/SYMBIOSIS_CONSTITUTION.md`、`docs/SYMBIOTIC_SHENZHEN_PLAN.md`
 - v4 架构/数据/验证：`docs/V4_ARCHITECTURE.md`、`docs/V4_DATA_GOVERNANCE.md`、
   `docs/V4_VERIFICATION.md`
-- 当前能力/运行：`README.md`
+- 当前能力/运行/闭环：`README.md`、`docs/CLOSED_LOOP_PLAN.md`
 - v1/v2 认证：`docs/VERIFICATION.md`、`docs/V2_VERIFICATION.md`
 - 编排/生产/安全：`docs/CLOSED_LOOP_ORCHESTRATION.md`、`docs/PRODUCTION.md`、
   `docs/THREAT_MODEL.md`
@@ -31,18 +30,18 @@ v4 运行可重放、可审计的模拟深圳，用于研究人、AI 和机器�
 
 ## 北极星
 
-v1 兼容门禁：verified loop ≥ 90%，replay ≥ 99%，accepted causal
-completeness = 100%，rollback = 100%，invariant violations = 0。
+v1 门禁：verified loop ≥ 90%，replay ≥ 99%，因果完整性/rollback = 100%，
+invariant violations = 0。
 
-v2 北极星 **VBCR**：符合条件的问题中，完成检测、诊断、受控实验、授权、
-分阶段执行、独立结果评估和受治理学习，且没有保护指标越界的比例。
+v2 北极星 **VBCR**：符合条件的问题完成检测、诊断、实验、授权、分阶段执行、
+独立评估和受治理学习，且没有保护指标越界的比例。
 
 v2 门禁：VBCR ≥ 80%，检测 ≥ 95%，重放 ≥ 99.9%，注入故障回滚 = 100%，
 严重保护指标逃逸 = 0。必须同时展示 denominator、未决年龄、回滚、人类否决和
 群体影响，防止忽略困难问题。
 
-v4 北极星 **RALR**：具有双方偏好、真实拒绝/退出、协商/接受、承诺结局、结果
-观察和双方反思，且无严重同意、连续性或不可逆伤害违规的跨类型联合事件比例。
+v4 北极星 **RALR**：具备双方偏好、真实拒绝/退出、协商/接受、承诺结局、结果
+观察和反思，且无严重同意、连续性或不可逆伤害违规的跨类型联合事件比例。
 必须同时展示分母、拒绝、撤回、强制、长期未决、基本需求、依赖和群体分布。
 RALR 不替代 VBCR、重放、因果完整性或回滚。
 
@@ -51,21 +50,21 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 v2.0 本地/reference 已闭环；未获得远端 attestation 时只能写
 `implementation complete / external evidence pending`。
 
-v4.3.3 含 200 人、36 AI、24 机器人、Turn 资源流、Human Observatory、双主题
-与 DeepSeek Token/成本账；其余页面使用赛博朋克视觉层。真人接入、身份映射、
-私人输入和居民登录不在范围。
+v4.5.0 含 200 人、36 AI、24 机器人、Turn 资源流、Human Observatory、双主题、
+DeepSeek 成本账、逐 Turn 运行证据和只读影子认知。真人接入、身份映射、私人输入
+和居民登录不在范围。
 
 ## 模块边界
 
 `simulation` 负责 v1/v2 世界；`symbiosis` 负责 v4 居民/Turn；
-`city`、`diagnosis`、`planning`、`outcomes`、
-`participation` 仅保留 v2 运营治理证据，不得成为城市输入；`closure` 只编排并
-链接其持久对象；
+`city`、`diagnosis`、`planning`、`outcomes`、`participation` 仅保留 v2
+运营治理证据，不得成为城市输入；`closure` 只编排并链接其持久对象；
 `lifecycle`/`experiments` 提供 memory/PostgreSQL 原子持久化；`governance`、
 `deployment`、`operations` 管身份、发布和恢复；UI 只做投影。
 
 运营 Incident 与合成城市 Incident 是不同 bounded context。世界只能由确定性
-simulation/event 流改变；Agent/模型不得执行任意 shell、SQL 或隐式代码。
+simulation/event 流改变；影子 Provider 只生成证据，不得进入结算或 fallback；
+Agent/模型不得执行任意 shell、SQL 或隐式代码。
 
 ## 强制规则
 
@@ -99,7 +98,7 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 |---|---:|
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
-| unit / 条件跳过 | 246/246 / 0 |
+| unit / 条件跳过 | 254/254 / 0 |
 | PostgreSQL / Playwright+axe | 16/16 / 26/26 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
@@ -107,8 +106,8 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 
 ## 外部边界
 
-- v4.3.3 Tag/分支已 push；`38bb514` 已部署至 `nexus7.carrick7.com`，认知成本
-  面板、三类居民、双主题、双层写阻断、Turn 161 与升级前后备份已验证。
-- 尚无 v4.3.3 的远端 Sigstore receipt；live DeepSeek、外部恢复演练和第二数据库
-  待验证；生产既有 season 保留 v4.0 origin，逐 Turn revision 绑定仍待实现。
+- v4.3.3 Tag/分支已 push；`38bb514` 当前部署至 `nexus7.carrick7.com`。v4.5.0
+  本地 259/259、26/26、恢复、lint/audit/build 已通过，尚待 Tag 与生产升级。
+- 尚无远端 Sigstore receipt；live DeepSeek、实际 90 天和 off-host 恢复待验证；
+  生产既有 season 保留 v4.0 origin，v4.5 起新 Turn 绑定实际 revision。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。

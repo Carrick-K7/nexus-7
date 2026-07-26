@@ -42,11 +42,14 @@ integrationDescribe("PostgreSQL Symbiotic Shenzhen world", () => {
   it("atomically persists normalized residents, Turns, snapshots, ledgers, and events", async () => {
     await new ExperimentService(experimentRepository!).initialize();
     const suffix = `${Date.now()}-${crypto.randomUUID()}`;
+    let clock = Date.parse("2026-07-26T00:00:00.000Z");
     const service = new WorldService(worldRepository!, {
       seasonId: `symbiosis-pg-${suffix}`,
       seed: `symbiosis-pg-seed-${suffix}`,
+      now: () => new Date(clock),
       cognitiveGateway: new CognitiveGateway({
         id: "deepseek-chat-completions",
+        external: true,
         decide: async (_candidate, mode) => ({
           provider: "deepseek-chat-completions",
           model:
@@ -78,7 +81,31 @@ integrationDescribe("PostgreSQL Symbiotic Shenzhen world", () => {
             costUsd: 0.000002,
           },
         }),
+      }, undefined, {
+        provider: {
+          id: "postgres-shadow-reference",
+          decide: async () => ({
+            provider: "postgres-shadow-reference",
+            model: "postgres-shadow-v1",
+            mode: "non-thinking",
+            finalAnswer: {
+              disposition: "decline",
+              action: "negotiate-shared-community-task",
+              reasonCode: "postgres-shadow-roundtrip",
+            },
+            inputTokens: 0,
+            outputTokens: 0,
+            costUsd: 0,
+            latencyMs: 0,
+          }),
+        },
+        monthlyCapUsd: 1,
       }),
+      runtimeEvidence: {
+        workerId: "postgres-shadow-worker",
+        deploymentRevision: "6".repeat(40),
+        intervalMs: 3_600_000,
+      },
     });
     const actor: ExperimentActor = {
       id: "symbiosis-pg-admin",
@@ -88,6 +115,7 @@ integrationDescribe("PostgreSQL Symbiotic Shenzhen world", () => {
     };
     await service.initialize();
     await service.advanceTurn(actor);
+    clock += 3_600_000;
     await service.advanceTurn(actor);
 
     const secondRepository = new PostgresWorldRepository(databaseUrl!);
@@ -122,12 +150,19 @@ integrationDescribe("PostgreSQL Symbiotic Shenzhen world", () => {
           1,
         ),
       ).toMatchObject({ turn: 1 });
-      expect(
-        await secondRepository.listTurns(
+      const turns = await secondRepository.listTurns(
           "workspace-neo-angeles",
           `symbiosis-pg-${suffix}`,
-        ),
-      ).toHaveLength(3);
+        );
+      expect(turns).toHaveLength(3);
+      expect(turns[1].runtimeEvidence).toMatchObject({
+        timing: "baseline",
+        deploymentRevision: "6".repeat(40),
+      });
+      expect(turns[2].runtimeEvidence).toMatchObject({
+        timing: "on-time",
+        previousTurn: 1,
+      });
       expect(
         await secondRepository.listRelationships(
           "workspace-neo-angeles",
@@ -151,15 +186,31 @@ integrationDescribe("PostgreSQL Symbiotic Shenzhen world", () => {
           (decision) =>
             decision.billing?.pricingVersion ===
               "deepseek-v4-usd-test" &&
-            decision.billing.cacheHitInputTokens === 4,
+            decision.billing.cacheHitInputTokens === 4 &&
+            decision.shadow?.provider ===
+              "postgres-shadow-reference" &&
+            decision.shadow.status === "observed",
         ),
       ).toBe(true);
-      expect((await service.observatory(actor)).cognition.deepseek).toMatchObject({
+      const observatory = await service.observatory(actor);
+      expect(observatory.cognition.deepseek).toMatchObject({
         successfulDecisions: 4,
         inputTokens: 40,
         outputTokens: 8,
         totalTokens: 48,
         costUsd: 0.000008,
+      });
+      expect(observatory.cognition.diversity).toMatchObject({
+        shadowEnabled: true,
+        comparisons: 4,
+        disagreements: 4,
+        homogeneityRate: 0,
+        costUsd: 0,
+      });
+      expect(observatory.reliability).toMatchObject({
+        revisionBoundTurns: 2,
+        comparableSettlements: 1,
+        onTimeRate: 1,
       });
     } finally {
       await secondRepository.close();

@@ -1,9 +1,10 @@
 # v4 Simulated Symbiosis Verification
 
-> Date: 2026-07-25
+> Date: 2026-07-26
 >
-> Status: v4.3.3 Cognitive Cost Ledger locally and publicly verified /
-> external CI-Sigstore and live-provider evidence pending
+> Status: v4.5.0 Reliable Cognitive Diversity locally verified /
+> production, external duration, off-host restore, CI-Sigstore and live-provider
+> evidence pending
 
 ## Reference gate
 
@@ -26,7 +27,7 @@ and segregation keeps an honest null denominator.
 | Severe consent / continuity / irreversible harm escapes | 0 / 0 / 0 |
 | 3×3×90 control separation | pass |
 | Model reasoning persisted | no |
-| Unit / conditional skip | 246 / 0 |
+| Unit / conditional skip | 259 / 0 |
 | PostgreSQL integration / restore | 16 / 16 |
 | Playwright + axe | 26 / 26 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
@@ -91,6 +92,39 @@ and segregation keeps an honest null denominator.
   vulnerability dependency gate without disabling lint.
 - 246 tests, 26 Playwright/axe scenarios, lint, audit and build pass.
 
+## v4.4 Long-running Reliability gate
+
+- each new Turn atomically persists wall-clock time, schedule lag, worker,
+  release revision, engine contract and predecessor evidence;
+- the runtime envelope does not change deterministic world fingerprints;
+- the SLO projection exposes missing, duplicate, late and lineage failures,
+  latest age, revision coverage, backup age and restore status;
+- 2,161 hourly reference records cover exactly 90 days with 100% on-time
+  settlement and zero missing, duplicate or predecessor failures;
+- AES-256-GCM backup round-trip and unsafe-key rejection pass;
+- recovery receipts are checksum-backed and cannot label same-host evidence as
+  off-host unless explicitly attested by the operator;
+- a 14.1 MB local backup restored to an independent PostgreSQL database with
+  exact row counts and latest fingerprint, then resumed with one valid Turn.
+
+This reference validates the algorithm, not 90 elapsed production days.
+
+## v4.5 Cognitive Diversity gate
+
+- primary and shadow Providers use the same versioned bounded contract and
+  caller-stable request ID but have separate monthly budgets;
+- shadow output has no path into settlement and never becomes an implicit
+  fallback;
+- failure, budget skip, billed-invalid, disagreement, homogeneity, fallback
+  bias, Token and cost evidence persist in memory/PostgreSQL decision JSON;
+- a 365-Turn control produced 730 shadow comparisons and 356 disagreements
+  (48.77%) with zero failures, cost or stored reasoning;
+- the shadow world's final fingerprint exactly matches the non-shadow control;
+- promoting the diversity policy changes behavior while resource conservation
+  and all severe consent/continuity/harm invariants remain intact;
+- desktop/mobile English/Chinese Observatory projections and WCAG A/AA checks
+  cover reliability and cognitive-diversity panels.
+
 The multi-season reference reports reciprocal RALR 73.33% across 525 resolved
 episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR
 0, and `null` RALR for the segregated zero-denominator control.
@@ -137,5 +171,6 @@ were checked on 2026-07-25.
 Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 
-Remote CI/Sigstore, live DeepSeek and an external second-database recovery
-drill remain pending and must not be inferred from the production deployment.
+Remote CI/Sigstore, live DeepSeek, 90 elapsed production days and an off-host
+recovery drill remain pending and must not be inferred from local or production
+evidence.

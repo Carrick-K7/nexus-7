@@ -1,6 +1,6 @@
 {
   "name": "nexus",
-  "version": "4.3.3",
+  "version": "4.5.0",
   "private": true,
   "scripts": {
     "postinstall": "node scripts/patch-minimatch-brace-expansion.mjs",
@@ -10,6 +10,8 @@
     "db:migrate": "node scripts/migrate-experiments.mjs",
     "db:backup": "tsx scripts/backup-postgres.ts",
     "db:restore": "tsx scripts/restore-postgres.ts",
+    "backup:crypt": "tsx scripts/crypt-symbiosis-backup.ts",
+    "recovery:evidence": "tsx scripts/record-symbiosis-recovery-evidence.ts",
     "ops:recovery-drill": "tsx scripts/run-recovery-drill.ts",
     "ops:deployment-drill": "tsx scripts/run-deployment-drill.ts",
     "verify:deployment-contract": "tsx scripts/run-deployment-conformance.ts",
@@ -21,6 +23,7 @@
     "verify:participation": "tsx scripts/run-participation-verification.ts",
     "verify:closure": "tsx scripts/run-closed-loop-verification.ts",
     "verify:symbiosis": "tsx scripts/run-symbiosis-verification.ts",
+    "verify:v45": "tsx scripts/run-v45-verification.ts",
     "worker:clock": "tsx scripts/run-experiment-clock.ts",
     "worker:operations": "tsx scripts/run-operational-intelligence.ts",
     "worker:symbiosis": "tsx scripts/run-symbiosis-clock.ts",
@@ -40,7 +43,7 @@
     "test:ui": "vitest --ui",
     "pretest:e2e": "npm run build",
     "test:e2e": "playwright test",
-    "check": "npm audit --audit-level=moderate && npm run lint -- --max-warnings=0 && npm run test:run && npm run verify:model && npm run verify:operations && npm run verify:deployment-contract && npm run verify:city && npm run verify:diagnosis && npm run verify:planning && npm run verify:outcomes && npm run verify:participation && npm run verify:closure && npm run verify:symbiosis && npm run test:e2e && npm run verify:stress",
+    "check": "npm audit --audit-level=moderate && npm run lint -- --max-warnings=0 && npm run test:run && npm run verify:model && npm run verify:operations && npm run verify:deployment-contract && npm run verify:city && npm run verify:diagnosis && npm run verify:planning && npm run verify:outcomes && npm run verify:participation && npm run verify:closure && npm run verify:symbiosis && npm run verify:v45 && npm run test:e2e && npm run verify:stress",
     "check:release": "npm run check && npm run evaluate:isolated -- quality && npm run evidence:generate && npm run verify:closure"
   },
   "dependencies": {

@@ -7,6 +7,10 @@ export const COMMITMENT_SCHEMA_VERSION = "nexus.commitment.v1" as const;
 export const TURN_SCHEMA_VERSION = "nexus.turn.v1" as const;
 export const COGNITIVE_DECISION_SCHEMA_VERSION =
   "nexus.cognitive-decision.v1" as const;
+export const COGNITIVE_SHADOW_SCHEMA_VERSION =
+  "nexus.cognitive-shadow.v1" as const;
+export const TURN_RUNTIME_EVIDENCE_SCHEMA_VERSION =
+  "nexus.turn-runtime-evidence.v1" as const;
 export const RECIPROCAL_EPISODE_SCHEMA_VERSION =
   "nexus.reciprocal-episode.v1" as const;
 export const SYMBIOSIS_REPORT_SCHEMA_VERSION =
@@ -291,18 +295,46 @@ export interface CognitiveDecision {
   costUsd: number;
   latencyMs: number;
   requestedProvider?: string;
+  providerRequestId?: string;
   externalCallAttempted?: boolean;
-  billing?: {
-    provider: string;
-    model: string;
-    pricingVersion: string;
-    currency: "USD";
-    inputTokens: number;
-    cacheHitInputTokens: number;
-    cacheMissInputTokens: number;
-    outputTokens: number;
-    costUsd: number;
-  };
+  billing?: CognitiveBilling;
+  shadow?: CognitiveShadowObservation;
+  degradationReason?: string;
+  reasoningContentStored: false;
+}
+
+export interface CognitiveBilling {
+  provider: string;
+  model: string;
+  pricingVersion: string;
+  currency: "USD";
+  inputTokens: number;
+  cacheHitInputTokens: number;
+  cacheMissInputTokens: number;
+  outputTokens: number;
+  costUsd: number;
+}
+
+export interface CognitiveShadowObservation {
+  schemaVersion: typeof COGNITIVE_SHADOW_SCHEMA_VERSION;
+  requestedProvider: string;
+  providerRequestId: string;
+  status:
+    | "observed"
+    | "budget-skipped"
+    | "provider-failed"
+    | "billed-invalid";
+  externalCallAttempted: boolean;
+  provider?: string;
+  model?: string;
+  disposition?: PreferenceDisposition;
+  disagreesWithPrimary: boolean | null;
+  primaryUsedFallback: boolean;
+  inputTokens: number;
+  outputTokens: number;
+  costUsd: number;
+  latencyMs: number;
+  billing?: CognitiveBilling;
   degradationReason?: string;
   reasoningContentStored: false;
 }
@@ -372,6 +404,20 @@ export interface WorldTurn {
   resourceConservationPassed: boolean;
   cognitionStatus: "not-required" | "complete" | "delayed";
   cognitiveDecisionIds: string[];
+  runtimeEvidence?: {
+    schemaVersion: typeof TURN_RUNTIME_EVIDENCE_SCHEMA_VERSION;
+    recordedAt: string;
+    workerId: string;
+    deploymentRevision: string;
+    engineVersion: string;
+    engineContractVersion: string;
+    intervalMs: number;
+    previousTurn: number;
+    previousFingerprint: string;
+    expectedAt?: string;
+    lagMs?: number;
+    timing: "baseline" | "on-time" | "early-restart" | "late";
+  };
 }
 
 export interface WorldSnapshot {
@@ -456,6 +502,10 @@ export interface SymbiosisReport {
     decisions: number;
     delayed: number;
     costUsd: number;
+    primaryCostUsd?: number;
+    shadowCostUsd?: number;
+    shadowComparisons?: number;
+    shadowDisagreements?: number;
   };
   disclosures: string[];
 }

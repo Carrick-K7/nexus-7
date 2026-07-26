@@ -93,6 +93,7 @@ test("v4 simulated-city APIs preserve privacy and zero-denominator honesty", asy
   expect(livingCity.economy.resources).toHaveLength(8);
   expect(livingCity.cognition).toMatchObject({
     configuredProvider: "nexus-deterministic-reference",
+    configuredShadowProvider: null,
     deepseek: {
       externalCallAttempts: 0,
       successfulDecisions: 0,
@@ -101,6 +102,27 @@ test("v4 simulated-city APIs preserve privacy and zero-denominator honesty", asy
       costUsd: 0,
       latestBilledTurn: null,
     },
+    diversity: {
+      shadowEnabled: false,
+      comparisons: 0,
+      disagreements: 0,
+      disagreementRate: null,
+      homogeneityRate: null,
+      externalCallAttempts: 0,
+      totalTokens: 0,
+      costUsd: 0,
+    },
+  });
+  expect(livingCity.reliability).toMatchObject({
+    schemaVersion: "nexus.world-reliability.v1",
+    status: "watch",
+    storedTurns: 1,
+    missingTurns: 0,
+    duplicateTurns: 0,
+    predecessorMismatches: 0,
+    revisionBoundTurns: 0,
+    observationWindowDays: 0,
+    requiredObservationDays: 90,
   });
 });
 
@@ -131,6 +153,18 @@ for (const viewport of [
     await expect(deepSeekUsage).toContainText(
       "nexus-deterministic-reference",
     );
+    const reliability = page.getByTestId("reliability-evidence");
+    await expect(reliability).toBeVisible();
+    await expect(reliability).toContainText(
+      "TURN RELIABILITY & PROVENANCE",
+    );
+    await expect(reliability).toContainText("0.0 / 90 days");
+    const diversity = page.getByTestId("cognitive-diversity");
+    await expect(diversity).toBeVisible();
+    await expect(diversity).toContainText(
+      "COGNITIVE DIVERSITY SHADOW",
+    );
+    await expect(diversity).toContainText("Disabled");
     await expect(
       page.getByRole("heading", { name: "EVERY RESIDENT" }),
     ).toBeVisible();
@@ -165,6 +199,8 @@ test("Human Observatory explains the city in Chinese", async ({ page }) => {
   ).toBeVisible();
   await expect(page.getByText("城市实时资源流")).toBeVisible();
   await expect(page.getByText("DeepSeek API 用量与开销")).toBeVisible();
+  await expect(page.getByText("Turn 可靠性与版本证据")).toBeVisible();
+  await expect(page.getByText("认知多样性 Shadow")).toBeVisible();
   await expect(page.getByText("生产环节全链条 AI 化")).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "每一位居民" }),

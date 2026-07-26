@@ -15,6 +15,12 @@ import {
 import {
   WorldService,
 } from "./service";
+import {
+  CognitiveGateway,
+  DeterministicCognitiveProvider,
+  DiversityReferenceCognitiveProvider,
+  type CognitiveProvider,
+} from "./cognition";
 
 const admin: ExperimentActor = {
   id: "symbiosis-admin",
@@ -129,5 +135,172 @@ describe("Symbiotic Shenzhen world service", () => {
       rejection?.status === "rejected" ? rejection.reason : null,
     ).toBeInstanceOf(ExperimentConflictError);
     expect((await service.season(admin)).currentTurn).toBe(1);
+  });
+
+  it("binds runtime revision and persists read-only shadow comparisons", async () => {
+    const seed = "runtime-shadow-seed";
+    let clock = Date.parse("2026-07-26T00:00:00.000Z");
+    const service = new WorldService(
+      new InMemoryWorldRepository(),
+      {
+        seasonId: "runtime-shadow-season",
+        seed,
+        now: () => new Date(clock),
+        cognitiveGateway: new CognitiveGateway(
+          new DeterministicCognitiveProvider(seed),
+          undefined,
+          {
+            provider: new DiversityReferenceCognitiveProvider(),
+            monthlyCapUsd: 1,
+          },
+          seed,
+        ),
+        runtimeEvidence: {
+          workerId: "runtime-shadow-worker",
+          deploymentRevision: "5".repeat(40),
+          intervalMs: 3_600_000,
+        },
+      },
+    );
+    const control = new WorldService(
+      new InMemoryWorldRepository(),
+      {
+        seasonId: "runtime-shadow-season",
+        seed,
+        now: () => new Date(clock),
+      },
+    );
+    await Promise.all([service.initialize(), control.initialize()]);
+
+    await service.advanceTurn(admin);
+    await control.advanceTurn(admin);
+    clock += 3_600_000;
+    await service.advanceTurn(admin);
+    await control.advanceTurn(admin);
+
+    const [turns, decisions, observatory, snapshot, controlSnapshot] =
+      await Promise.all([
+        service.turns(admin),
+        service.cognitiveDecisions(admin),
+        service.observatory(admin),
+        service.snapshot(admin),
+        control.snapshot(admin),
+      ]);
+
+    expect(turns[1].runtimeEvidence).toMatchObject({
+      timing: "baseline",
+      deploymentRevision: "5".repeat(40),
+      workerId: "runtime-shadow-worker",
+    });
+    expect(turns[2].runtimeEvidence).toMatchObject({
+      timing: "on-time",
+      lagMs: 0,
+      previousTurn: 1,
+    });
+    expect(decisions).toHaveLength(4);
+    expect(
+      decisions.every(
+        (decision) =>
+          decision.shadow?.status === "observed" &&
+          decision.shadow.requestedProvider ===
+            "nexus-diversity-reference",
+      ),
+    ).toBe(true);
+    expect(snapshot.fingerprint).toBe(controlSnapshot.fingerprint);
+    expect(observatory.reliability).toMatchObject({
+      missingTurns: 0,
+      duplicateTurns: 0,
+      predecessorMismatches: 0,
+      revisionBoundTurns: 2,
+      comparableSettlements: 1,
+      onTimeRate: 1,
+    });
+    expect(observatory.cognition.diversity).toMatchObject({
+      shadowEnabled: true,
+      comparisons: 4,
+      providerFailures: 0,
+      budgetSkipped: 0,
+      externalCallAttempts: 0,
+      costUsd: 0,
+    });
+  });
+
+  it("resets primary and shadow budget accounting on a simulated calendar month", async () => {
+    let primaryCalls = 0;
+    let shadowCalls = 0;
+    const pricedProvider = (
+      id: string,
+      count: () => void,
+    ): CognitiveProvider => ({
+      id,
+      external: true,
+      decide: async () => {
+        count();
+        return {
+          provider: id,
+          model: `${id}-model`,
+          mode: "non-thinking",
+          finalAnswer: {
+            disposition: "engage",
+            action: "negotiate-shared-community-task",
+            reasonCode: "monthly-budget-test",
+          },
+          inputTokens: 10,
+          outputTokens: 2,
+          costUsd: 0.5,
+          latencyMs: 1,
+        };
+      },
+    });
+    const service = new WorldService(
+      new InMemoryWorldRepository(),
+      {
+        seasonId: "monthly-budget-season",
+        cognitiveGateway: new CognitiveGateway(
+          pricedProvider(
+            "priced-primary",
+            () => {
+              primaryCalls += 1;
+            },
+          ),
+          {
+            monthlyCapUsd: 1,
+            routineReductionThreshold: 1,
+            proRestrictionThreshold: 1,
+          },
+          {
+            provider: pricedProvider(
+              "priced-shadow",
+              () => {
+                shadowCalls += 1;
+              },
+            ),
+            monthlyCapUsd: 1,
+          },
+        ),
+      },
+    );
+    await service.initialize();
+
+    for (let turn = 0; turn < 14; turn += 1) {
+      await service.advanceTurn(admin);
+    }
+
+    expect(primaryCalls).toBe(4);
+    expect(shadowCalls).toBe(4);
+    const decisions = await service.cognitiveDecisions(admin);
+    expect(
+      decisions.filter(
+        (decision) =>
+          decision.degradationReason ===
+          "monthly-budget-exhausted",
+      ).length,
+    ).toBeGreaterThan(0);
+    expect(
+      decisions.filter(
+        (decision) =>
+          decision.shadow?.status === "budget-skipped",
+      ).length,
+    ).toBeGreaterThan(0);
   });
 });

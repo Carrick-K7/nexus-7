@@ -50,9 +50,12 @@ operator control plane.
 
 Every Turn binds its season seed, distribution version, predecessor
 fingerprint, simulation date, final fingerprint, event count, cognition
-status and decision IDs. Random draws use stable `(seed, turn, channel,
-sample)` coordinates. A saved model decision is an input artifact on replay;
-the provider is never called again.
+status and decision IDs. New Turns also carry an additive runtime envelope:
+wall-clock record time, expected time/lag, worker, interval, exact deployment
+revision and engine contract. This operational evidence does not enter the
+world fingerprint. Random draws use stable `(seed, turn, channel, sample)`
+coordinates. A saved model decision is an input artifact on replay; the
+provider is never called again.
 
 The default cognitive policy is deterministic and zero-cost. Optional
 DeepSeek V4 Flash/Pro may express one schema-bounded preference. Invalid JSON,
@@ -61,6 +64,14 @@ degradation and never stop the world. Provider reasoning is discarded.
 Every returned usage record preserves input, output, cache-hit and cache-miss
 tokens plus the call-time pricing version and calculated USD expense. Billed
 usage survives a later schema failure and deterministic fallback.
+
+The primary and shadow cognition paths share the versioned bounded output
+contract but have separate budgets and request IDs. Only the primary result
+can enter settlement. A shadow result is stored inside the same atomic
+decision envelope with disagreement, failure and billing evidence; outage or
+budget exhaustion never invokes a hidden shadow fallback. The permanent
+`nexus-diversity-reference` provider supplies a zero-cost comparison control,
+and DeepSeek may be configured as shadow before any governed promotion.
 
 ## Persistence
 
@@ -71,7 +82,12 @@ the unused human-intent/private-memory tables. Migration
 `0011_resident_taxonomy.sql` atomically migrates legacy labels and restricts
 resident kinds to `human`, `ai` and `robot`.
 
-Checksum backup/restore covers only active tables. Empty backups from the v3
+Checksum backup/restore covers only active tables. AES-256-GCM envelopes use a
+mode-0600 32-byte key file and authenticate the complete backup before
+decryption. A checksum-backed recovery receipt binds the encrypted artifact
+hash to its embedded backup checksum and records location,
+row-count/fingerprint equality and a resumed write on a second database.
+Same-host evidence is explicitly distinct from off-host evidence. Empty backups from the v3
 prototype remain readable, but any deprecated participant table containing
 rows is rejected instead of silently importing or discarding personal data.
 
@@ -81,7 +97,8 @@ The Human Observatory is a pure projection over the same memory/PostgreSQL
 world contract. `nexus.human-observatory.v2` exposes every pseudonymous
 resident, the 24 persisted resource-ledger rows, inter-community transfer
 lanes, community institutions, production continuity, trends, event lineage,
-RALR, DeepSeek usage/cost and evidence. Formula version
+RALR, DeepSeek usage/cost, cognitive diversity, wall-clock reliability and
+evidence. Formula version
 `human-observatory-formulas-2.0.0` binds every derived score. V1 remains a
 read-only label compatibility projection.
 

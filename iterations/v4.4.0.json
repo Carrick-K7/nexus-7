@@ -1,0 +1,39 @@
+{
+  "id": "iteration-v4.4.0",
+  "version": "4.4.0",
+  "date": "2026-07-26",
+  "trigger": "long-running-reliability",
+  "triggerReason": "Simulation timestamps and deployment documents could not prove wall-clock Turn freshness, duplicate/missed settlement, or the exact revision that advanced an existing season.",
+  "action": "Added additive per-Turn runtime evidence, a versioned reliability projection, a 90-day hourly reference-clock gate, AES-256-GCM backup envelopes and checksum-backed second-database recovery receipts while preserving legacy Turn and season provenance.",
+  "outcome": "The 2,161-record reference covers exactly 90 days with 100% on-time settlement, zero missing or duplicate Turns and zero lineage mismatches. Encryption round-trip and unsafe key rejection pass. Actual production duration and off-host recovery remain external evidence pending.",
+  "metrics": [
+    {
+      "label": "Reference clock days",
+      "before": 0,
+      "after": 90
+    },
+    {
+      "label": "Revision-bound runtime fields",
+      "before": 0,
+      "after": 10
+    },
+    {
+      "label": "Authenticated backup algorithms",
+      "before": 0,
+      "after": 1
+    }
+  ],
+  "evidence": [
+    "Runtime metadata stays outside the deterministic world fingerprint",
+    "Legacy Turns remain readable and visibly unbound",
+    "Reference duration is never described as elapsed production time",
+    "Same-host restore evidence cannot silently become off-host evidence",
+    "Recovery receipts verify checksum, row counts, fingerprint and resumed write"
+  ],
+  "artifacts": [
+    "src/symbiosis/reliability.ts",
+    "src/operations/encrypted-backup.ts",
+    "scripts/record-symbiosis-recovery-evidence.ts",
+    "docs/adr/0026-turn-runtime-evidence.md"
+  ]
+}

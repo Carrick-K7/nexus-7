@@ -1,5 +1,87 @@
 [
   {
+    "id": "iteration-v4.5.0",
+    "version": "4.5.0",
+    "date": "2026-07-26",
+    "trigger": "cognitive-diversity",
+    "triggerReason": "A single cognitive Provider made homogeneity invisible, while switching Providers inside an active run would confound the experiment and could change resident outcomes without governed evidence.",
+    "action": "Added a separately budgeted, schema-compatible read-only shadow Provider; persisted stable request, disagreement, failure, fallback-bias and billing evidence; exposed bilingual diversity and reliability panels; kept deterministic controls and proved that shadow output has no settlement path.",
+    "outcome": "The local v4.5 gate completed 259 tests, 26 browser/axe scenarios, 365 Turns and 730 shadow comparisons with 356 disagreements (48.77%), zero shadow failures or stored reasoning and an exact control fingerprint. Provider substitution changed behavior while resource and severe safety invariants remained intact. Production deployment is pending.",
+    "metrics": [
+      {
+        "label": "Shadow comparisons",
+        "before": 0,
+        "after": 730
+      },
+      {
+        "label": "Measured disagreement rate",
+        "before": 0,
+        "after": 0.487671
+      },
+      {
+        "label": "Shadow-caused world changes",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Primary and shadow use versioned bounded contracts and stable caller IDs",
+      "Shadow has a separate monthly budget and no fallback authority",
+      "DeepSeek shadow billing contributes to the actual Token/cost ledger",
+      "Shadow failure and budget exhaustion do not pause or alter the city",
+      "365-Turn shadow and no-shadow world fingerprints are identical",
+      "Provider substitution preserves resource, consent, continuity and harm invariants"
+    ],
+    "artifacts": [
+      "src/symbiosis/cognition.ts",
+      "src/symbiosis/observatory.ts",
+      "src/components/symbiosis/HumanObservatory.tsx",
+      "public/data/v4-5-verification.json",
+      "docs/adr/0027-read-only-shadow-cognition.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.4.0",
+    "version": "4.4.0",
+    "date": "2026-07-26",
+    "trigger": "long-running-reliability",
+    "triggerReason": "Simulation timestamps and deployment documents could not prove wall-clock Turn freshness, duplicate/missed settlement, or the exact revision that advanced an existing season.",
+    "action": "Added additive per-Turn runtime evidence, a versioned reliability projection, a 90-day hourly reference-clock gate, AES-256-GCM backup envelopes and checksum-backed second-database recovery receipts while preserving legacy Turn and season provenance.",
+    "outcome": "The 2,161-record reference covers exactly 90 days with 100% on-time settlement, zero missing or duplicate Turns and zero lineage mismatches. Encryption round-trip and unsafe key rejection pass. Actual production duration and off-host recovery remain external evidence pending.",
+    "metrics": [
+      {
+        "label": "Reference clock days",
+        "before": 0,
+        "after": 90
+      },
+      {
+        "label": "Revision-bound runtime fields",
+        "before": 0,
+        "after": 10
+      },
+      {
+        "label": "Authenticated backup algorithms",
+        "before": 0,
+        "after": 1
+      }
+    ],
+    "evidence": [
+      "Runtime metadata stays outside the deterministic world fingerprint",
+      "Legacy Turns remain readable and visibly unbound",
+      "Reference duration is never described as elapsed production time",
+      "Same-host restore evidence cannot silently become off-host evidence",
+      "Recovery receipts verify checksum, row counts, fingerprint and resumed write"
+    ],
+    "artifacts": [
+      "src/symbiosis/reliability.ts",
+      "src/operations/encrypted-backup.ts",
+      "scripts/record-symbiosis-recovery-evidence.ts",
+      "docs/adr/0026-turn-runtime-evidence.md"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.3.3",
     "version": "4.3.3",
     "date": "2026-07-25",

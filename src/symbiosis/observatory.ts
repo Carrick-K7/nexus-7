@@ -15,6 +15,10 @@ import type {
 import {
   DEEPSEEK_PROVIDER_ID,
 } from "./cognition";
+import {
+  buildWorldReliabilityReport,
+  type WorldReliabilityReport,
+} from "./reliability";
 
 export const HUMAN_OBSERVATORY_V1_SCHEMA_VERSION =
   "nexus.human-observatory.v1" as const;
@@ -213,6 +217,7 @@ export interface HumanObservatoryReport {
   };
   cognition: {
     configuredProvider: string;
+    configuredShadowProvider: string | null;
     sourceDecisionCount: number;
     deepseek: {
       externalCallAttempts: number;
@@ -236,8 +241,35 @@ export interface HumanObservatoryReport {
       pricingVersions: string[];
       models: string[];
     };
+    diversity: {
+      shadowEnabled: boolean;
+      comparisons: number;
+      disagreements: number;
+      disagreementRate: number | null;
+      homogeneityRate: number | null;
+      providerFailures: number;
+      budgetSkipped: number;
+      billedInvalid: number;
+      externalCallAttempts: number;
+      inputTokens: number;
+      outputTokens: number;
+      totalTokens: number;
+      costUsd: number;
+      fallbackComparisons: number;
+      fallbackDisagreements: number;
+      fallbackDisagreementRate: number | null;
+      primaryDispositions: Record<
+        "engage" | "decline" | "reconsider",
+        number
+      >;
+      shadowDispositions: Record<
+        "engage" | "decline" | "reconsider",
+        number
+      >;
+    };
     disclosure: LocalizedText;
   };
+  reliability: WorldReliabilityReport;
   reciprocalAgency: SymbiosisReport["ralr"] & {
     activeRelationships: number;
     completedCommitments: number;
@@ -284,6 +316,8 @@ interface ObservatoryInput {
   report: SymbiosisReport;
   decisions: CognitiveDecision[];
   configuredCognitiveProvider?: string;
+  configuredShadowProvider?: string | null;
+  reliability?: WorldReliabilityReport;
 }
 
 const INSTITUTION_SPECS: Array<{
@@ -791,15 +825,37 @@ function aggregateDeepSeekUsage(
   decisions: CognitiveDecision[],
   currentTurn: number,
 ): HumanObservatoryReport["cognition"]["deepseek"] {
-  const relevant = decisions.filter(
+  const primaryRelevant = decisions.filter(
     (decision) =>
       decision.provider === DEEPSEEK_PROVIDER_ID ||
       decision.requestedProvider === DEEPSEEK_PROVIDER_ID ||
       decision.billing?.provider === DEEPSEEK_PROVIDER_ID,
   );
-  const billed = relevant.flatMap((decision) => {
-    const billing = deepSeekBilling(decision);
-    return billing ? [{ decision, billing }] : [];
+  const shadowRelevant = decisions.filter(
+    (decision) =>
+      decision.shadow?.requestedProvider === DEEPSEEK_PROVIDER_ID ||
+      decision.shadow?.provider === DEEPSEEK_PROVIDER_ID ||
+      decision.shadow?.billing?.provider === DEEPSEEK_PROVIDER_ID,
+  );
+  const billed = decisions.flatMap((decision) => {
+    const rows: Array<{
+      decision: CognitiveDecision;
+      billing: NonNullable<CognitiveDecision["billing"]>;
+    }> = [];
+    const primaryBilling = deepSeekBilling(decision);
+    if (primaryBilling) {
+      rows.push({ decision, billing: primaryBilling });
+    }
+    if (
+      decision.shadow?.billing?.provider ===
+      DEEPSEEK_PROVIDER_ID
+    ) {
+      rows.push({
+        decision,
+        billing: decision.shadow.billing,
+      });
+    }
+    return rows;
   });
   const current = billed.filter(
     ({ decision }) => decision.turn === currentTurn,
@@ -820,16 +876,28 @@ function aggregateDeepSeekUsage(
   const currentOutputTokens = sumBilling(current, "outputTokens");
 
   return {
-    externalCallAttempts: relevant.filter(
+    externalCallAttempts:
+      primaryRelevant.filter(
+        (decision) =>
+          decision.externalCallAttempted ??
+          decision.provider === DEEPSEEK_PROVIDER_ID,
+      ).length +
+      shadowRelevant.filter(
+        (decision) =>
+          decision.shadow?.externalCallAttempted === true,
+      ).length,
+    successfulDecisions:
+      primaryRelevant.filter(
+        (decision) => decision.provider === DEEPSEEK_PROVIDER_ID,
+      ).length +
+      shadowRelevant.filter(
+        (decision) =>
+          decision.shadow?.status === "observed" &&
+          decision.shadow.provider === DEEPSEEK_PROVIDER_ID,
+      ).length,
+    fallbackDecisions: primaryRelevant.filter(
       (decision) =>
-        decision.externalCallAttempted ??
-        decision.provider === DEEPSEEK_PROVIDER_ID,
-    ).length,
-    successfulDecisions: relevant.filter(
-      (decision) => decision.provider === DEEPSEEK_PROVIDER_ID,
-    ).length,
-    fallbackDecisions: relevant.filter(
-      (decision) => decision.provider !== DEEPSEEK_PROVIDER_ID,
+        decision.provider !== DEEPSEEK_PROVIDER_ID,
     ).length,
     inputTokens,
     cacheHitInputTokens: sumBilling(billed, "cacheHitInputTokens"),
@@ -842,17 +910,32 @@ function aggregateDeepSeekUsage(
         ? null
         : Math.max(...billed.map(({ decision }) => decision.turn)),
     currentTurn: {
-      externalCallAttempts: relevant.filter(
-        (decision) =>
-          decision.turn === currentTurn &&
-          (decision.externalCallAttempted ??
-            decision.provider === DEEPSEEK_PROVIDER_ID),
-      ).length,
-      successfulDecisions: relevant.filter(
-        (decision) =>
-          decision.turn === currentTurn &&
-          decision.provider === DEEPSEEK_PROVIDER_ID,
-      ).length,
+      externalCallAttempts:
+        primaryRelevant.filter(
+          (decision) =>
+            decision.turn === currentTurn &&
+            (
+              decision.externalCallAttempted ??
+              decision.provider === DEEPSEEK_PROVIDER_ID
+            ),
+        ).length +
+        shadowRelevant.filter(
+          (decision) =>
+            decision.turn === currentTurn &&
+            decision.shadow?.externalCallAttempted === true,
+        ).length,
+      successfulDecisions:
+        primaryRelevant.filter(
+          (decision) =>
+            decision.turn === currentTurn &&
+            decision.provider === DEEPSEEK_PROVIDER_ID,
+        ).length +
+        shadowRelevant.filter(
+          (decision) =>
+            decision.turn === currentTurn &&
+            decision.shadow?.status === "observed" &&
+            decision.shadow.provider === DEEPSEEK_PROVIDER_ID,
+        ).length,
       inputTokens: currentInputTokens,
       outputTokens: currentOutputTokens,
       totalTokens: currentInputTokens + currentOutputTokens,
@@ -864,6 +947,109 @@ function aggregateDeepSeekUsage(
     models: [
       ...new Set(billed.map(({ billing }) => billing.model)),
     ].sort(),
+  };
+}
+
+function aggregateCognitiveDiversity(
+  decisions: CognitiveDecision[],
+): HumanObservatoryReport["cognition"]["diversity"] {
+  const shadows = decisions.flatMap((decision) =>
+    decision.shadow ? [{ decision, shadow: decision.shadow }] : [],
+  );
+  const comparisons = shadows.filter(
+    ({ shadow }) =>
+      shadow.status === "observed" &&
+      shadow.disagreesWithPrimary !== null,
+  );
+  const disagreements = comparisons.filter(
+    ({ shadow }) => shadow.disagreesWithPrimary,
+  );
+  const fallbackComparisons = comparisons.filter(
+    ({ shadow }) => shadow.primaryUsedFallback,
+  );
+  const fallbackDisagreements = fallbackComparisons.filter(
+    ({ shadow }) => shadow.disagreesWithPrimary,
+  );
+  const primaryDispositions = {
+    engage: 0,
+    decline: 0,
+    reconsider: 0,
+  };
+  const shadowDispositions = {
+    engage: 0,
+    decline: 0,
+    reconsider: 0,
+  };
+  for (const { decision, shadow } of comparisons) {
+    const primary = decision.finalAnswer.disposition;
+    if (
+      primary === "engage" ||
+      primary === "decline" ||
+      primary === "reconsider"
+    ) {
+      primaryDispositions[primary] += 1;
+    }
+    if (shadow.disposition) {
+      shadowDispositions[shadow.disposition] += 1;
+    }
+  }
+  const inputTokens = shadows.reduce(
+    (sum, { shadow }) => sum + shadow.inputTokens,
+    0,
+  );
+  const outputTokens = shadows.reduce(
+    (sum, { shadow }) => sum + shadow.outputTokens,
+    0,
+  );
+  const disagreementRate =
+    comparisons.length === 0
+      ? null
+      : rate(disagreements.length, comparisons.length);
+
+  return {
+    shadowEnabled: shadows.length > 0,
+    comparisons: comparisons.length,
+    disagreements: disagreements.length,
+    disagreementRate,
+    homogeneityRate:
+      disagreementRate === null
+        ? null
+        : rounded(1 - disagreementRate),
+    providerFailures: shadows.filter(
+      ({ shadow }) => shadow.status === "provider-failed",
+    ).length,
+    budgetSkipped: shadows.filter(
+      ({ shadow }) => shadow.status === "budget-skipped",
+    ).length,
+    billedInvalid: shadows.filter(
+      ({ shadow }) => shadow.status === "billed-invalid",
+    ).length,
+    externalCallAttempts: shadows.filter(
+      ({ shadow }) => shadow.externalCallAttempted,
+    ).length,
+    inputTokens,
+    outputTokens,
+    totalTokens: inputTokens + outputTokens,
+    costUsd: Number(
+      shadows
+        .reduce(
+          (sum, { shadow }) =>
+            sum + (shadow.billing?.costUsd ?? shadow.costUsd),
+          0,
+        )
+        .toFixed(8),
+    ),
+    fallbackComparisons: fallbackComparisons.length,
+    fallbackDisagreements: fallbackDisagreements.length,
+    fallbackDisagreementRate:
+      fallbackComparisons.length === 0
+        ? null
+        : rate(
+            fallbackDisagreements.length,
+            fallbackComparisons.length,
+          ),
+    primaryDispositions,
+    shadowDispositions,
   };
 }
 
@@ -1130,16 +1316,29 @@ export function buildHumanObservatory(
         input.decisions.at(-1)?.requestedProvider ??
         input.decisions.at(-1)?.provider ??
         "nexus-deterministic-reference",
+      configuredShadowProvider:
+        input.configuredShadowProvider ??
+        input.decisions.findLast(
+          (decision) => decision.shadow,
+        )?.shadow?.requestedProvider ??
+        null,
       sourceDecisionCount: input.decisions.length,
       deepseek: aggregateDeepSeekUsage(
         input.decisions,
         input.latestTurn.turn,
       ),
+      diversity: aggregateCognitiveDiversity(input.decisions),
       disclosure: {
-        zh: "仅统计当前 NEXUS-7 season 中持久化认知决策记录的 DeepSeek 实际 Token。费用按调用时固定的官方美元价格与返回 usage 计算，不包含同一 DeepSeek 账号的其他用途或充值抵扣。",
-        en: "Counts actual DeepSeek tokens persisted for this NEXUS-7 season only. Cost is calculated from returned usage and the official USD prices pinned at call time; it excludes other account usage and balance credits.",
+        zh: "仅统计当前 NEXUS-7 season 中持久化认知决策与只读 shadow 记录。shadow 不参与世界结算。DeepSeek 费用按调用时固定价格与返回 usage 计算，不包含账号其他用途或充值抵扣。",
+        en: "Counts persisted primary and read-only shadow cognition for this NEXUS-7 season only. Shadow output never settles the world. DeepSeek cost uses returned usage and call-time pinned prices, excluding other account activity and credits.",
       },
     },
+    reliability:
+      input.reliability ??
+      buildWorldReliabilityReport([input.latestTurn], {
+        generatedAt: input.generatedAt,
+        intervalMs: 3_600_000,
+      }),
     reciprocalAgency: {
       ...input.report.ralr,
       activeRelationships: input.report.relationships.active,

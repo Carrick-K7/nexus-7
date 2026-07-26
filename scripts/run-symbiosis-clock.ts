@@ -35,9 +35,23 @@ async function advance(): Promise<void> {
       fingerprint: turn.fingerprint,
       eventCount: turn.eventCount,
       cognitionStatus: turn.cognitionStatus,
+      runtimeEvidence: turn.runtimeEvidence
+        ? {
+            deploymentRevision:
+              turn.runtimeEvidence.deploymentRevision,
+            timing: turn.runtimeEvidence.timing,
+            lagMs: turn.runtimeEvidence.lagMs ?? null,
+          }
+        : null,
       ralr: report.ralr,
       safety: report.safety,
       costUsd: report.cognition.costUsd,
+      shadow: {
+        comparisons: report.cognition.shadowComparisons ?? 0,
+        disagreements:
+          report.cognition.shadowDisagreements ?? 0,
+        costUsd: report.cognition.shadowCostUsd ?? 0,
+      },
     }),
   );
 }

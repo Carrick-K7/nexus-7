@@ -97,30 +97,30 @@ Locks the production and repository boundary:
 - Separates NEXUS-7 recorded usage from the owner's wider provider account.
 - Supports a mode-0600 API-key file without exposing credentials.
 
-## Next objectives
-
 ### v4.4 — Long-running reliability
 
-- Measure missed, duplicate and delayed Turns over at least 90 wall-clock days.
-- Add SLOs for Turn age, report freshness, database growth and backup age.
-- Schedule encrypted off-host backups and a second-database restore drill.
-- Prove restart, provider outage and version upgrade continuity without silent
-  resident reset.
-- Bind the exact deployed source revision and engine contract to every settled
-  Turn without rewriting the season's origin provenance.
-
-Exit: 99.9% on-time Turn settlement, zero duplicate Turns, verified off-host
-restore and no continuity escape.
+- Binds wall-clock schedule, worker, deployed revision and engine contract to
+  each new Turn without changing the season's origin or world fingerprint.
+- Projects missing, duplicate, late, lineage, freshness and revision SLOs.
+- Verifies the 90-day hourly algorithm over 2,161 reference records without
+  claiming elapsed production time.
+- Adds authenticated AES-256-GCM backups and checksum-backed second-database
+  recovery receipts; same-host and off-host evidence remain distinct.
 
 ### v4.5 — Cognitive diversity without provider dependence
 
-- Add a second schema-compatible provider in shadow mode.
-- Measure policy/provider homogeneity, decision disagreement and fallback bias.
-- Pin pricing and token accounting as versioned evidence.
-- Keep deterministic reference residents as a permanent control.
+- Runs a second schema-compatible Provider under a separate shadow budget.
+- Persists disagreement, homogeneity, fallback bias, failure and billing
+  evidence without giving shadow output a world-settlement path.
+- Keeps deterministic and diversity reference policies as permanent controls;
+  DeepSeek can run as shadow before a governed promotion.
+- Proves across 365 Turns that shadow observation leaves the world fingerprint
+  unchanged and provider substitution preserves every safety invariant.
 
-Exit: provider substitution changes no world invariant; shadow comparison is
-replayable and budget bounded.
+Reference exit is complete. Actual 90-day production duration and encrypted
+off-host restore remain external evidence gates and are shown as pending.
+
+## Next objectives
 
 ### v4.6 — Richer city society
 

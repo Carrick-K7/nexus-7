@@ -28,6 +28,9 @@ import {
 import {
   useTranslation,
 } from "@/hooks/useTranslation";
+import type {
+  Language,
+} from "@/i18n/translations";
 import CityFlowMap from "./CityFlowMap";
 import type {
   HumanObservatoryReport,
@@ -86,6 +89,32 @@ const copy = {
     lastBilledTurn: "Latest billed Turn",
     pricingEvidence: "Pricing evidence",
     noBilledTurn: "No billed call yet",
+    reliability: "TURN RELIABILITY & PROVENANCE",
+    reliabilityDesc:
+      "Wall-clock settlement evidence, source revision coverage, continuity, backup age and restore status. Reference-clock evidence never counts as elapsed production time.",
+    observationWindow: "Observed wall-clock window",
+    onTimeSettlement: "On-time settlements",
+    turnIntegrity: "Turn sequence integrity",
+    revisionCoverage: "Revision-bound Turns",
+    latestTurnAge: "Latest Turn age",
+    recoveryEvidence: "Backup / restore evidence",
+    missingDuplicate: "Missing / duplicate",
+    lineageMismatch: "Lineage mismatches",
+    encryptedBackup: "Encrypted backup",
+    offHostBackup: "Off-host backup",
+    secondDatabaseRestore: "Second-database restore",
+    evidencePending: "Evidence pending",
+    cognitiveDiversity: "COGNITIVE DIVERSITY SHADOW",
+    cognitiveDiversityDesc:
+      "A shadow provider can disagree, fail or consume budget, but its output never settles the city.",
+    shadowProvider: "Configured shadow provider",
+    comparisonCount: "Comparable decisions",
+    disagreementRate: "Disagreement rate",
+    homogeneityRate: "Homogeneity rate",
+    fallbackBias: "Fallback disagreement",
+    shadowFailures: "Failures / budget skips",
+    shadowCost: "Shadow cost",
+    disabled: "Disabled",
     population: "POPULATION",
     populationDesc:
       "The current season models 260 individual residents. The background population is an aggregate scale reference, not generated people.",
@@ -219,6 +248,32 @@ const copy = {
     lastBilledTurn: "最近计费 Turn",
     pricingEvidence: "计价证据",
     noBilledTurn: "尚无计费调用",
+    reliability: "Turn 可靠性与版本证据",
+    reliabilityDesc:
+      "显示墙钟结算、源代码 revision 覆盖、连续性、备份年龄和恢复状态。参考时钟不会冒充真实生产运行时长。",
+    observationWindow: "真实观测窗口",
+    onTimeSettlement: "准时结算率",
+    turnIntegrity: "Turn 序列完整性",
+    revisionCoverage: "已绑定 revision 的 Turn",
+    latestTurnAge: "最近 Turn 年龄",
+    recoveryEvidence: "备份 / 恢复证据",
+    missingDuplicate: "缺失 / 重复",
+    lineageMismatch: "谱系不匹配",
+    encryptedBackup: "加密备份",
+    offHostBackup: "异地备份",
+    secondDatabaseRestore: "第二数据库恢复",
+    evidencePending: "证据待补",
+    cognitiveDiversity: "认知多样性 Shadow",
+    cognitiveDiversityDesc:
+      "Shadow Provider 可以产生分歧、失败或消耗预算，但其输出永远不能参与城市结算。",
+    shadowProvider: "当前 Shadow Provider",
+    comparisonCount: "可比较决策",
+    disagreementRate: "分歧率",
+    homogeneityRate: "同质率",
+    fallbackBias: "降级决策分歧率",
+    shadowFailures: "失败 / 预算跳过",
+    shadowCost: "Shadow 开销",
+    disabled: "未启用",
     population: "人口信息",
     populationDesc:
       "当前 season 逐个建模 260 位居民。背景人口只是总量尺度参考，不是逐个生成的人。",
@@ -350,6 +405,35 @@ function percent(value: number | null): string {
 
 function usd(value: number): string {
   return `US$${value.toFixed(value < 0.01 ? 8 : 4)}`;
+}
+
+function duration(
+  value: number | null,
+  language: Language,
+): string {
+  if (value === null) return "—";
+  const hours = value / 3_600_000;
+  if (hours < 1) {
+    return `${Math.max(0, Math.round(value / 60_000))} min`;
+  }
+  if (hours < 48) return `${hours.toFixed(1)} h`;
+  return `${(hours / 24).toFixed(1)} ${
+    language === "zh" ? "天" : "days"
+  }`;
+}
+
+function evidenceState(
+  value: boolean | null,
+  language: Language,
+): string {
+  if (value === null) return language === "zh" ? "待补" : "Pending";
+  return value
+    ? language === "zh"
+      ? "通过"
+      : "Pass"
+    : language === "zh"
+      ? "未通过"
+      : "Not met";
 }
 
 function statusClasses(status: ObservatoryHealth | UnitHealth): string {
@@ -855,6 +939,206 @@ export default function HumanObservatory() {
               </>
             )}
           </p>
+        </section>
+
+        <section className="grid gap-4 xl:grid-cols-2">
+          <article
+            className="rounded-2xl border border-cyber-blue/25 bg-cyber-darker/90 p-5"
+            aria-labelledby="turn-reliability-title"
+            data-testid="reliability-evidence"
+          >
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-5 w-5 text-cyber-blue" />
+                  <h2
+                    id="turn-reliability-title"
+                    className="font-orbitron text-sm text-cyber-blue"
+                  >
+                    {text.reliability}
+                  </h2>
+                </div>
+                <p className="mt-2 text-sm leading-6 text-cyber-text-dim">
+                  {text.reliabilityDesc}
+                </p>
+              </div>
+              <span
+                className={`self-start rounded-full border px-3 py-1 text-xs ${statusClasses(data.reliability.status)}`}
+              >
+                {healthLabel(data.reliability.status)}
+              </span>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {[
+                {
+                  label: text.observationWindow,
+                  value: `${data.reliability.observationWindowDays.toFixed(1)} / ${data.reliability.requiredObservationDays} ${
+                    language === "zh" ? "天" : "days"
+                  }`,
+                  detail: `${data.reliability.storedTurns.toLocaleString()} Turns`,
+                },
+                {
+                  label: text.onTimeSettlement,
+                  value: percent(data.reliability.onTimeRate),
+                  detail: `${data.reliability.onTimeSettlements} / ${data.reliability.comparableSettlements} · ${data.reliability.lateSettlements} late`,
+                },
+                {
+                  label: text.turnIntegrity,
+                  value: evidenceState(
+                    data.reliability.missingTurns === 0 &&
+                      data.reliability.duplicateTurns === 0 &&
+                      data.reliability.predecessorMismatches === 0,
+                    language,
+                  ),
+                  detail: `${text.missingDuplicate}: ${data.reliability.missingTurns} / ${data.reliability.duplicateTurns} · ${text.lineageMismatch}: ${data.reliability.predecessorMismatches}`,
+                },
+                {
+                  label: text.revisionCoverage,
+                  value: percent(
+                    data.reliability.revisionCoverageRate,
+                  ),
+                  detail: `${data.reliability.revisionBoundTurns} / ${data.reliability.storedTurns}`,
+                },
+                {
+                  label: text.latestTurnAge,
+                  value: duration(
+                    data.reliability.latestTurnAgeMs,
+                    language,
+                  ),
+                  detail: evidenceState(
+                    data.reliability.reportFresh,
+                    language,
+                  ),
+                },
+                {
+                  label: text.recoveryEvidence,
+                  value: evidenceState(
+                    data.reliability.recovery
+                      .secondDatabaseRestorePassed,
+                    language,
+                  ),
+                  detail: `${text.encryptedBackup}: ${evidenceState(
+                    data.reliability.recovery.encrypted,
+                    language,
+                  )} · ${text.offHostBackup}: ${evidenceState(
+                    data.reliability.recovery.offHost,
+                    language,
+                  )}`,
+                },
+              ].map((entry) => (
+                <div
+                  key={entry.label}
+                  className="rounded-xl border border-cyber-gray-light bg-cyber-black/45 p-4"
+                >
+                  <p className="text-xs text-cyber-text-dim">
+                    {entry.label}
+                  </p>
+                  <p className="mt-2 break-words font-mono text-lg text-cyber-text">
+                    {entry.value}
+                  </p>
+                  <p className="mt-2 text-xs leading-5 text-cyber-text-dim">
+                    {entry.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-4 text-xs leading-5 text-cyber-text-dim">
+              {data.reliability.disclosures[language]}
+            </p>
+          </article>
+
+          <article
+            className="rounded-2xl border border-cyber-green/25 bg-cyber-darker/90 p-5"
+            aria-labelledby="cognitive-diversity-title"
+            data-testid="cognitive-diversity"
+          >
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div>
+                <div className="flex items-center gap-2">
+                  <Bot className="h-5 w-5 text-cyber-green" />
+                  <h2
+                    id="cognitive-diversity-title"
+                    className="font-orbitron text-sm text-cyber-green"
+                  >
+                    {text.cognitiveDiversity}
+                  </h2>
+                </div>
+                <p className="mt-2 text-sm leading-6 text-cyber-text-dim">
+                  {text.cognitiveDiversityDesc}
+                </p>
+              </div>
+              <div className="rounded-lg border border-cyber-gray-light bg-cyber-black/45 px-3 py-2 text-xs">
+                <span className="text-cyber-text-dim">
+                  {text.shadowProvider}:{" "}
+                </span>
+                <strong className="font-mono text-cyber-text">
+                  {data.cognition.configuredShadowProvider ??
+                    text.disabled}
+                </strong>
+              </div>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
+              {[
+                {
+                  label: text.comparisonCount,
+                  value:
+                    data.cognition.diversity.comparisons.toLocaleString(),
+                  detail: `${data.cognition.diversity.disagreements} ${text.disagreementRate}`,
+                },
+                {
+                  label: text.disagreementRate,
+                  value: percent(
+                    data.cognition.diversity.disagreementRate,
+                  ),
+                  detail: `${text.homogeneityRate}: ${percent(
+                    data.cognition.diversity.homogeneityRate,
+                  )}`,
+                },
+                {
+                  label: text.fallbackBias,
+                  value: percent(
+                    data.cognition.diversity
+                      .fallbackDisagreementRate,
+                  ),
+                  detail: `${data.cognition.diversity.fallbackDisagreements} / ${data.cognition.diversity.fallbackComparisons}`,
+                },
+                {
+                  label: text.shadowFailures,
+                  value: `${data.cognition.diversity.providerFailures} / ${data.cognition.diversity.budgetSkipped}`,
+                  detail: `${data.cognition.diversity.billedInvalid} billed-invalid`,
+                },
+                {
+                  label: text.shadowCost,
+                  value: usd(data.cognition.diversity.costUsd),
+                  detail: `${data.cognition.diversity.totalTokens.toLocaleString()} Token`,
+                },
+                {
+                  label: text.externalCalls,
+                  value:
+                    data.cognition.diversity.externalCallAttempts.toLocaleString(),
+                  detail: `${text.inputOutputTokens}: ${data.cognition.diversity.inputTokens.toLocaleString()} / ${data.cognition.diversity.outputTokens.toLocaleString()}`,
+                },
+              ].map((entry) => (
+                <div
+                  key={entry.label}
+                  className="rounded-xl border border-cyber-gray-light bg-cyber-black/45 p-4"
+                >
+                  <p className="text-xs text-cyber-text-dim">
+                    {entry.label}
+                  </p>
+                  <p className="mt-2 break-words font-mono text-lg text-cyber-text">
+                    {entry.value}
+                  </p>
+                  <p className="mt-2 text-xs leading-5 text-cyber-text-dim">
+                    {entry.detail}
+                  </p>
+                </div>
+              ))}
+            </div>
+            <p className="mt-4 text-xs leading-5 text-cyber-text-dim">
+              {data.cognition.disclosure[language]}
+            </p>
+          </article>
         </section>
 
         <section className="grid gap-4 xl:grid-cols-[0.8fr_1.2fr]">

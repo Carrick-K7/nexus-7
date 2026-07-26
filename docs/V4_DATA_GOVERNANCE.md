@@ -40,6 +40,11 @@ reasoning or provider credentials. The total is a NEXUS-7 estimate from the
 provider-returned usage and pinned public prices; it is not the owner's account
 balance, invoice, credit or top-up history.
 
+Shadow evidence is limited to provider/model, caller-stable request ID, final
+bounded disposition, primary disagreement, status, latency, token counts and
+cost. It contains no prompt, raw response or reasoning. Shadow output is
+observational metadata and is prohibited from becoming a world input.
+
 ## External models
 
 An external provider may receive only a compact structured candidate composed
@@ -58,11 +63,22 @@ metadata survives that fallback and is included in both budget enforcement and
 the Human Observatory. Requests that time out before a usable provider response
 record no guessed usage or cost.
 
+Primary and shadow providers have independent monthly budgets. The same
+synthetic candidate uses a stable versioned request identifier on repeated
+adapter calls; this is audit evidence and does not imply that a third-party
+provider promises server-side deduplication. Provider promotion always starts a
+new governed run or release and cannot silently alter an active run.
+
 ## Retention and export
 
 Turn evidence is append-only and checksum-backed. Corrections create new
 events or revisions. Public exports carry the all-synthetic, non-digital-twin
 boundary and suppress cells smaller than five.
+
+Runtime envelopes retain worker ID, release revision, schedule classification
+and engine contract but no host secret. Encrypted backup and recovery receipts
+may expose checksums, timestamps, sizes and coarse location class only; URLs,
+keys, credentials and database connection strings are forbidden.
 
 An AI-only backup may contain no deprecated participant-table rows. Restore
 verification fails closed if such rows are present, even when the outer

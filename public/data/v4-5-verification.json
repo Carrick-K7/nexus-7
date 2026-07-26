@@ -1,0 +1,42 @@
+{
+  "schemaVersion": "nexus.v45-verification.v1",
+  "generatedAt": "2026-07-26T04:28:22.389Z",
+  "status": "implementation complete / external duration and off-host evidence pending",
+  "reliabilityReference": {
+    "days": 90,
+    "storedTurns": 2161,
+    "onTimeRate": 1,
+    "missingTurns": 0,
+    "duplicateTurns": 0,
+    "predecessorMismatches": 0,
+    "status": "healthy"
+  },
+  "shadow": {
+    "turns": 365,
+    "decisions": 730,
+    "comparisons": 730,
+    "disagreements": 356,
+    "disagreementRate": 0.487671,
+    "homogeneityRate": 0.512329,
+    "failures": 0,
+    "costUsd": 0,
+    "worldFingerprintUnchanged": true,
+    "reasoningStored": false
+  },
+  "substitution": {
+    "turns": 365,
+    "resourceConservation": true,
+    "severeEscapes": 0,
+    "worldFingerprintDiffers": true
+  },
+  "referenceSafety": {
+    "severeConsentEscapes": 0,
+    "identityContinuityEscapes": 0,
+    "irreversibleHarmEscapes": 0
+  },
+  "disclosures": [
+    "The 90-day result is a reference-clock algorithm gate, not elapsed production time.",
+    "No off-host restore is claimed by this local verification.",
+    "Shadow output is persisted for comparison but never supplied to world settlement."
+  ]
+}

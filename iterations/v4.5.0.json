@@ -1,0 +1,41 @@
+{
+  "id": "iteration-v4.5.0",
+  "version": "4.5.0",
+  "date": "2026-07-26",
+  "trigger": "cognitive-diversity",
+  "triggerReason": "A single cognitive Provider made homogeneity invisible, while switching Providers inside an active run would confound the experiment and could change resident outcomes without governed evidence.",
+  "action": "Added a separately budgeted, schema-compatible read-only shadow Provider; persisted stable request, disagreement, failure, fallback-bias and billing evidence; exposed bilingual diversity and reliability panels; kept deterministic controls and proved that shadow output has no settlement path.",
+  "outcome": "The local v4.5 gate completed 259 tests, 26 browser/axe scenarios, 365 Turns and 730 shadow comparisons with 356 disagreements (48.77%), zero shadow failures or stored reasoning and an exact control fingerprint. Provider substitution changed behavior while resource and severe safety invariants remained intact. Production deployment is pending.",
+  "metrics": [
+    {
+      "label": "Shadow comparisons",
+      "before": 0,
+      "after": 730
+    },
+    {
+      "label": "Measured disagreement rate",
+      "before": 0,
+      "after": 0.487671
+    },
+    {
+      "label": "Shadow-caused world changes",
+      "before": 0,
+      "after": 0
+    }
+  ],
+  "evidence": [
+    "Primary and shadow use versioned bounded contracts and stable caller IDs",
+    "Shadow has a separate monthly budget and no fallback authority",
+    "DeepSeek shadow billing contributes to the actual Token/cost ledger",
+    "Shadow failure and budget exhaustion do not pause or alter the city",
+    "365-Turn shadow and no-shadow world fingerprints are identical",
+    "Provider substitution preserves resource, consent, continuity and harm invariants"
+  ],
+  "artifacts": [
+    "src/symbiosis/cognition.ts",
+    "src/symbiosis/observatory.ts",
+    "src/components/symbiosis/HumanObservatory.tsx",
+    "public/data/v4-5-verification.json",
+    "docs/adr/0027-read-only-shadow-cognition.md"
+  ]
+}

@@ -1,4 +1,5 @@
 export * from "./postgres-backup";
+export * from "./encrypted-backup";
 export * from "./recovery-drill";
 export * from "./deployment-drill";
 export * from "./intelligence-types";

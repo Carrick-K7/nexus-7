@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release is **v4.3.3 — Cognitive Cost Ledger**. The v2 closed-loop
+The active release is **v4.5.0 — Reliable Cognitive Diversity**. The v2 closed-loop
 autonomy laboratory remains its safety kernel for evidence, release approval,
 rollback and recovery. Human administrators in that control plane operate the
 software; they do not participate in the simulated city.
@@ -32,6 +32,9 @@ The default cognitive provider is a zero-cost deterministic policy. Optional
 DeepSeek V4 Flash/Pro can express bounded preferences but cannot call tools or
 write world state. Invalid output, timeout, outage and budget exhaustion
 degrade explicitly to the deterministic policy. Model reasoning is discarded.
+A second provider can run in read-only shadow mode: its preference, failure,
+Token use and cost are persisted for comparison but never supplied to world
+settlement.
 
 The v4 reference gate completes two byte-equivalent 365-Turn runs, conserves
 every resource ledger, resolves 725 reciprocal episodes at 76.97% RALR with
@@ -53,7 +56,9 @@ The default **Human Observatory / 人类观测台** exposes:
 - a city information layer showing actual inter-community resource movement;
 - city and community needs, resources and institution smoothness;
 - 100% AI-controlled production coverage versus dynamic chain continuity;
-- event lineage, RALR denominator, safety, replay and snapshot evidence.
+- event lineage, RALR denominator, safety, replay and snapshot evidence;
+- wall-clock Turn age, sequence integrity and per-Turn deployment revision;
+- primary/shadow disagreement, homogeneity, fallback bias and shadow cost.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy
@@ -111,9 +116,22 @@ SYMBIOSIS_MONTHLY_BUDGET_USD=300 \
 npm run worker:symbiosis
 ```
 
+The safer first step is DeepSeek shadow mode, which spends a separate bounded
+budget without changing the city:
+
+```bash
+SYMBIOSIS_COGNITIVE_PROVIDER=deterministic \
+SYMBIOSIS_SHADOW_PROVIDER=deepseek \
+SYMBIOSIS_SHADOW_MONTHLY_BUDGET_USD=30 \
+DEEPSEEK_API_KEY_FILE=/run/secrets/nexus7-deepseek-api-key \
+npm run worker:symbiosis
+```
+
 The Observatory aggregates actual returned DeepSeek tokens and call-time
 priced USD expense from persisted decision envelopes. Direct
 `DEEPSEEK_API_KEY` remains supported, but a mode-0600 key file is preferred.
+Shadow mode has no write path into the world and retains a caller-stable
+provider request ID for audit.
 
 ## Verify
 
@@ -121,6 +139,7 @@ priced USD expense from persisted decision envelopes. Direct
 npm run lint -- --max-warnings=0
 npm run test:run
 npm run verify:symbiosis
+npm run verify:v45
 npm run build
 npm run test:e2e
 ```

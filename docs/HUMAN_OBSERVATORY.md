@@ -34,7 +34,8 @@ reserved for the other research, safety and compatibility views.
 6. Follow resources → institutions → residents → relationships → RALR.
 7. Inspect production stages, then search or filter any resident.
 8. Check the DeepSeek Token and cost ledger.
-9. Finish with the event river and exact snapshot evidence.
+9. Check Turn reliability/provenance and cognitive diversity.
+10. Finish with the event river and exact snapshot evidence.
 
 The 18,248,500 background population is calibration only. The 260 foreground
 residents are the only individually modeled humans, AI and robots.
@@ -94,6 +95,34 @@ This ledger covers NEXUS-7's active season only. It is not the human owner's
 whole DeepSeek account statement and excludes unrelated API activity, account
 credits and top-ups. Pricing is pinned from the official source:
 `https://api-docs.deepseek.com/quick_start/pricing/`.
+
+## Turn reliability and provenance
+
+Each new production Turn stores a wall-clock runtime envelope alongside the
+deterministic world record: worker ID, interval, observed/expected time, lag,
+timing class, exact deployment revision, engine version and predecessor. The
+Observatory derives missing/duplicate Turns, lineage mismatch, on-time rate,
+latest Turn age and revision coverage from those persisted envelopes.
+
+Historical Turns remain readable without invented metadata, so revision
+coverage initially rises from below 100%. The 90-day reference gate proves the
+SLO algorithm over 2,161 hourly records; only elapsed production evidence
+increases the public observed-window counter. Backup cards distinguish
+encryption, same-host second-database restore and genuinely off-host evidence.
+
+## Cognitive diversity shadow
+
+The shadow panel compares a second provider with the primary decision and
+shows comparison count, disagreement/homogeneity, provider failures, budget
+skips, fallback disagreement and shadow Token/cost. The shadow provider
+receives the same bounded synthetic candidate but its result is never passed
+to the world engine.
+
+`nexus-diversity-reference` is a permanent zero-cost comparison policy.
+DeepSeek can instead run as a separately budgeted shadow before any governed
+promotion. No comparison is a vote: changing the primary provider requires a
+new run or release, and provider substitution is accepted only when resource,
+consent, continuity and harm invariants still pass.
 
 ## Institutions and production
 

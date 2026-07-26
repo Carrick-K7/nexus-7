@@ -12,7 +12,8 @@
 - deterministic scenario truth, seeds, policy versions, and replay evidence;
 - deployment-controller credentials, OIDC keys, webhook secrets, and model API
   keys;
-- guardrails, group-impact evidence, rollback inverses, and recovery backups.
+- guardrails, group-impact evidence, rollback inverses, recovery backups and
+  encrypted recovery receipts;
 - v4 resident pseudonyms, consent/commitment state, AI continuity snapshots,
   Turn seeds and resource ledgers.
 
@@ -46,6 +47,9 @@ untrusted until validated at their boundary.
 | Stale or replayed evidence | expiry, superseding revalidation links, idempotency keys, signed receipt freshness | block and require human revalidation |
 | Artifact substitution | package/lock/manifest/corpus digest, exact commit, CI manifest fingerprint, signed external receipt | roll back and invalidate the release |
 | Model capability escape | strict structured output, declarative actions, budget/risk/capability validation, no shell/SQL | disable provider and retain fallback reason |
+| Shadow-to-primary privilege creep | distinct provider objects and budgets; shadow result is evidence only and has no settlement or fallback path | stop shadow calls, verify control fingerprint and require a governed release for promotion |
+| Provider retry double billing | stable caller request ID and contract header; persisted attempts and actual billing; no claim that the remote provider deduplicates | reconcile provider invoice and stop calls at the hard budget |
+| Homogeneous cognition hidden | comparison denominator, disagreement, homogeneity, fallback-bias, failure and budget-skip projections | retain deterministic/diversity controls and investigate missing comparisons |
 | Approval collusion | distinct human identity, two-person high-risk approval, immutable audit, red-team gate | suspend promotion and review identities |
 | Goodhart / hidden hard cases | fixed denominator, detection coverage, unresolved age, rollback/veto/group distributions | freeze release and inspect exclusions |
 | Minority harm hidden by averages | protected-group thresholds and severe-harm veto | reopen objective deliberation |
@@ -53,7 +57,8 @@ untrusted until validated at their boundary.
 | Delayed harm | independent windows, late-evidence revisions, lesson/playbook invalidation, case reopen | re-evaluate and roll back |
 | Notification suppression | durable delivery attempts, receipts, dead letter, escalation, governance red team | use alternate channel and incident review |
 | SSRF / secret disclosure | configured HTTPS endpoints, server-side tokens, no secrets in events/UI, network-isolated evaluator | rotate credential and inspect audit |
-| Backup tampering | checksum before restore, empty-target default, deterministic report comparison | reject restore and use retained backup |
+| Backup theft or tampering | mode-0600 AES-256-GCM key, authenticated encrypted artifact, checksum before restore, empty-target default, deterministic report comparison | reject restore, rotate key and use a retained clean artifact |
+| Misstated recovery locality | checksum-backed receipt records restore database identity and explicit same/off-host scope | never promote same-host evidence to off-host without an operator-attested drill |
 | Uncertified extension | declared capabilities/data/network/failures; seven conformance suites; sandbox-only default | certify or remove extension |
 | Real-data contamination | allowlisted frozen aggregates; `containsPersonalData=false`; no identity/input tables; restore rejects deprecated participant rows | stop Turns, quarantine bundle/backup and rebuild from a clean seed |
 | Synthetic context exfiltration | structured allowlisted provider payload; no free-form private text; reasoning discarded; server-side keys | stop provider, rotate key and audit decision envelopes |
