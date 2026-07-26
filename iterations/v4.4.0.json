@@ -5,7 +5,7 @@
   "trigger": "long-running-reliability",
   "triggerReason": "Simulation timestamps and deployment documents could not prove wall-clock Turn freshness, duplicate/missed settlement, or the exact revision that advanced an existing season.",
   "action": "Added additive per-Turn runtime evidence, a versioned reliability projection, a 90-day hourly reference-clock gate, AES-256-GCM backup envelopes and checksum-backed second-database recovery receipts while preserving legacy Turn and season provenance.",
-  "outcome": "The 2,161-record reference covers exactly 90 days with 100% on-time settlement, zero missing or duplicate Turns and zero lineage mismatches. Encryption round-trip and unsafe key rejection pass. Actual production duration and off-host recovery remain external evidence pending.",
+  "outcome": "Implementation 9da503f contains the accepted v4.4 capability. The 2,161-record reference covers exactly 90 days with 100% on-time settlement, zero missing or duplicate Turns and zero lineage mismatches. Authenticated encryption, tamper rejection and a 14.1 MB same-host second-database restore/resumed-write drill pass. Actual production duration and off-host recovery remain external evidence pending.",
   "metrics": [
     {
       "label": "Reference clock days",

@@ -94,6 +94,7 @@ and segregation keeps an honest null denominator.
 
 ## v4.4 Long-running Reliability gate
 
+- implementation commit `9da503f` contains the accepted v4.4/v4.5 code;
 - each new Turn atomically persists wall-clock time, schedule lag, worker,
   release revision, engine contract and predecessor evidence;
 - the runtime envelope does not change deterministic world fingerprints;

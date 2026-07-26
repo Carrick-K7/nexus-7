@@ -5,7 +5,7 @@
   "trigger": "cognitive-diversity",
   "triggerReason": "A single cognitive Provider made homogeneity invisible, while switching Providers inside an active run would confound the experiment and could change resident outcomes without governed evidence.",
   "action": "Added a separately budgeted, schema-compatible read-only shadow Provider; persisted stable request, disagreement, failure, fallback-bias and billing evidence; exposed bilingual diversity and reliability panels; kept deterministic controls and proved that shadow output has no settlement path.",
-  "outcome": "The local v4.5 gate completed 259 tests, 26 browser/axe scenarios, 365 Turns and 730 shadow comparisons with 356 disagreements (48.77%), zero shadow failures or stored reasoning and an exact control fingerprint. Provider substitution changed behavior while resource and severe safety invariants remained intact. Production deployment is pending.",
+  "outcome": "Implementation 9da503f passed 259 tests, 26 browser/axe scenarios, 365 Turns and 730 shadow comparisons with 356 disagreements (48.77%), zero shadow failures or stored reasoning and an exact control fingerprint. Provider substitution changed behavior while resource and severe safety invariants remained intact. Production deployment is pending.",
   "metrics": [
     {
       "label": "Shadow comparisons",
