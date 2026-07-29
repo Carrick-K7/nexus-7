@@ -145,6 +145,8 @@ This reference validates the algorithm, not 90 elapsed production days.
 
 ## v4.6 Reversible City Society gate
 
+- implementation commit `a8ba2bd` contains the accepted society engine,
+  persistence, Observatory, tests and machine evidence;
 - a 365-Turn exact replay produced the same final fingerprint and conserved
   both material resources and 29,000 civic credits;
 - 500/500 eligible household, work, exchange, bargain and rule outcomes closed

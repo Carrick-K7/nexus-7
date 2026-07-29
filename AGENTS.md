@@ -104,6 +104,7 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 ## 外部边界
 
 - `1226826` (v4.5.1) 已部署；生产 Turn 256 按持久到期时间结算，lag 306 ms。
-- v4.6 本地 267/267、PG 16/16、browser 26/26；尚未 Tag/部署，不得写成线上事实。
+- v4.6 implementation `a8ba2bd` 本地 267/267、PG 16/16、browser 26/26；
+  尚未 Tag/部署，不得写成线上事实。
 - 尚无远端 Sigstore receipt；live DeepSeek、实际 90 天和 off-host 恢复待验证。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。
