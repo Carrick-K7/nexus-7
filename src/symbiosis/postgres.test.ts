@@ -175,6 +175,24 @@ integrationDescribe("PostgreSQL Symbiotic Shenzhen world", () => {
           `symbiosis-pg-${suffix}`,
         ),
       ).toHaveLength(4);
+      const societyRecords =
+        await secondRepository.listSocietyRecords(
+          "workspace-neo-angeles",
+          `symbiosis-pg-${suffix}`,
+        );
+      expect(societyRecords.length).toBeGreaterThan(300);
+      expect(
+        societyRecords.filter(
+          (record) => record.recordType === "credit-account",
+        ),
+      ).toHaveLength(263);
+      expect(
+        societyRecords.some(
+          (record) =>
+            record.recordType === "exchange" &&
+            record.balanced,
+        ),
+      ).toBe(true);
       const decisions =
         await secondRepository.listCognitiveDecisions(
           "workspace-neo-angeles",
@@ -211,6 +229,13 @@ integrationDescribe("PostgreSQL Symbiotic Shenzhen world", () => {
         revisionBoundTurns: 2,
         comparableSettlements: 1,
         onTimeRate: 1,
+      });
+      expect(observatory.society).toMatchObject({
+        safeClosureRate: 1,
+        balancedExchangeRate: 1,
+        creditConservationPassed: true,
+        forcedWorkAgreements: 0,
+        forcedBargains: 0,
       });
     } finally {
       await secondRepository.close();

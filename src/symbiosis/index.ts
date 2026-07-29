@@ -8,3 +8,5 @@ export * from "./service";
 export * from "./cognition";
 export * from "./study";
 export * from "./observatory";
+export * from "./society";
+export * from "./society-study";

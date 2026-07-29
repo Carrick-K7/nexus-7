@@ -43,7 +43,16 @@ describe("Symbiotic Shenzhen world service", () => {
       await service.advanceTurn(admin);
     }
 
-    const [season, snapshot, turns, events, resident, report, observatory] =
+    const [
+      season,
+      snapshot,
+      turns,
+      events,
+      resident,
+      report,
+      observatory,
+      societyRecords,
+    ] =
       await Promise.all([
         service.season(admin),
         service.snapshot(admin),
@@ -52,6 +61,7 @@ describe("Symbiotic Shenzhen world service", () => {
         service.residentView(admin, "resident-sz-201"),
         service.report(admin),
         service.observatory(admin),
+        service.societyRecords(admin),
       ]);
 
     expect(season.currentTurn).toBe(10);
@@ -72,6 +82,14 @@ describe("Symbiotic Shenzhen world service", () => {
     expect(report.ralr.coerciveActions).toBe(0);
     expect(report.safety.severeConsentEscapes).toBe(0);
     expect(report.cognition.decisions).toBeGreaterThan(0);
+    expect(report.society).toMatchObject({
+      safeClosureRate: 1,
+      creditConservationPassed: true,
+      balancedExchangeRate: 1,
+      forcedWorkAgreements: 0,
+      forcedBargains: 0,
+      invalidProposals: 0,
+    });
     expect(report.disclosures.join(" ")).toContain("not a digital twin");
     expect(observatory.units).toHaveLength(260);
     expect(observatory.population.byKind).toEqual(
@@ -87,6 +105,17 @@ describe("Symbiotic Shenzhen world service", () => {
     expect(observatory.economy.transfers.length).toBeGreaterThan(0);
     expect(observatory.production.autonomousControlRate).toBe(1);
     expect(observatory.production.humanLaborDependencyRate).toBe(0);
+    expect(observatory.society.households.total).toBeGreaterThan(50);
+    expect(societyRecords.length).toBeGreaterThan(300);
+    expect(observatory.society.creditConservationPassed).toBe(true);
+    expect(observatory.units[0]).toMatchObject({
+      civicCredits: expect.any(Number),
+      activeWorkAgreements: expect.any(Number),
+    });
+    expect(resident.society.creditAccount).toMatchObject({
+      ownerId: "resident-sz-201",
+      ownerKind: "ai",
+    });
     expect(observatory.cognition).toMatchObject({
       configuredProvider: "nexus-deterministic-reference",
       deepseek: {

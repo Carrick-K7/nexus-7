@@ -19,6 +19,7 @@ import {
   type ReciprocalEpisode,
   type Relationship,
   type Resident,
+  type SocietyRecord,
   type SymbiosisReport,
   type WorldEvent,
   type WorldSeason,
@@ -49,6 +50,10 @@ import {
   buildWorldReliabilityReport,
   type SymbiosisRecoveryEvidence,
 } from "./reliability";
+import {
+  buildSocietyMetrics,
+  createInitialSociety,
+} from "./society";
 
 interface WorldServiceOptions {
   seasonId?: string;
@@ -199,7 +204,30 @@ export class WorldService {
         `World snapshot ${seasonId}:${turn ?? "latest"} was not found`,
       );
     }
-    return snapshot;
+    if (snapshot.society) return snapshot;
+    const [season, residents] = await Promise.all([
+      this.repository.getSeason(
+        actorWorkspaceId(actor),
+        seasonId,
+      ),
+      this.repository.listResidents(
+        actorWorkspaceId(actor),
+        seasonId,
+      ),
+    ]);
+    if (!season) {
+      throw new ExperimentNotFoundError(
+        `World season ${seasonId} was not found`,
+      );
+    }
+    return {
+      ...snapshot,
+      society: createInitialSociety(
+        season,
+        residents,
+        snapshot.turn,
+      ),
+    };
   }
 
   async residents(
@@ -223,6 +251,13 @@ export class WorldService {
     needState: WorldSnapshot["residentStates"][number];
     relationships: Relationship[];
     commitments: Commitment[];
+    society: {
+      households: WorldSnapshot["society"]["households"];
+      workAgreements: WorldSnapshot["society"]["workAgreements"];
+      creditAccount:
+        | WorldSnapshot["society"]["creditAccounts"][number]
+        | null;
+    };
     projection: "researcher-pseudonymized";
   }> {
     assertActorPermission(actor, "workspace:read");
@@ -257,6 +292,20 @@ export class WorldService {
           commitment.proposerId === residentId ||
           commitment.counterpartyId === residentId,
       ),
+      society: {
+        households: snapshot.society.households.filter(
+          (household) =>
+            household.memberIds.includes(residentId) ||
+            household.exitedMemberIds.includes(residentId),
+        ),
+        workAgreements: snapshot.society.workAgreements.filter(
+          (agreement) => agreement.workerId === residentId,
+        ),
+        creditAccount:
+          snapshot.society.creditAccounts.find(
+            (account) => account.ownerId === residentId,
+          ) ?? null,
+      },
       projection: "researcher-pseudonymized",
     };
   }
@@ -440,6 +489,18 @@ export class WorldService {
     assertActorPermission(actor, "workspace:read");
     await this.season(actor, seasonId);
     return this.repository.listCognitiveDecisions(
+      actorWorkspaceId(actor),
+      seasonId,
+    );
+  }
+
+  async societyRecords(
+    actor: ExperimentActor,
+    seasonId = this.seasonId,
+  ): Promise<SocietyRecord[]> {
+    assertActorPermission(actor, "workspace:read");
+    await this.season(actor, seasonId);
+    return this.repository.listSocietyRecords(
       actorWorkspaceId(actor),
       seasonId,
     );
@@ -666,11 +727,17 @@ export class WorldService {
             decision.shadow?.disagreesWithPrimary === true,
         ).length,
       },
+      society: buildSocietyMetrics(
+        snapshot.society,
+        residents,
+        season.communities.length,
+      ),
       disclosures: [
         "This is an all-synthetic Shenzhen mechanism environment, not a digital twin.",
         "Every resident is autonomous software; no real participant or personal data is present.",
         "No real policy effect or claim about AI consciousness follows from this report.",
         "RALR is descriptive; a zero denominator is reported as null, never as success.",
+        "Households, work, credits, assets, bargains, and city-rule proposals are synthetic mechanism records, not real social or economic claims.",
         "Private model reasoning is neither requested nor stored.",
       ],
     };
@@ -680,16 +747,21 @@ export class WorldService {
     actor: ExperimentActor,
     seasonId = this.seasonId,
   ): Promise<HumanObservatoryReport> {
-    const [season, snapshot, residents, turns, events, report, decisions] =
+    const [season, snapshot, residents, turns, report, decisions] =
       await Promise.all([
         this.season(actor, seasonId),
         this.snapshot(actor, seasonId),
         this.residents(actor, seasonId),
         this.turns(actor, seasonId),
-        this.events(actor, seasonId, 0, 1_000),
         this.report(actor, seasonId),
         this.cognitiveDecisions(actor, seasonId),
       ]);
+    const events = await this.events(
+      actor,
+      seasonId,
+      Math.max(0, snapshot.eventCursor - 1_000),
+      1_000,
+    );
     const latestTurn = turns.find(
       (turn) => turn.turn === snapshot.turn,
     );

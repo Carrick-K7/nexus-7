@@ -7,6 +7,7 @@ import type {
   Relationship,
   Resident,
   ResourceLedgerEntry,
+  SocietyRecord,
   WorldEvent,
   WorldSeason,
   WorldSnapshot,
@@ -87,5 +88,9 @@ export interface WorldRepository {
     workspaceId: string,
     seasonId: string,
   ): Promise<CognitiveDecision[]>;
+  listSocietyRecords(
+    workspaceId: string,
+    seasonId: string,
+  ): Promise<SocietyRecord[]>;
   commitTurn(input: CommitWorldTurnInput): Promise<WorldTurn>;
 }

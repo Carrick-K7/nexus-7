@@ -15,7 +15,7 @@
 - guardrails, group-impact evidence, rollback inverses, recovery backups and
   encrypted recovery receipts;
 - v4 resident pseudonyms, consent/commitment state, AI continuity snapshots,
-  Turn seeds and resource ledgers.
+  Turn seeds, resource ledgers and synthetic society accounting.
 
 Secrets are configuration, never domain evidence. Hidden model
 chain-of-thought is neither requested nor stored.
@@ -64,6 +64,10 @@ untrusted until validated at their boundary.
 | Real-data contamination | allowlisted frozen aggregates; `containsPersonalData=false`; no identity/input tables; restore rejects deprecated participant rows | stop Turns, quarantine bundle/backup and rebuild from a clean seed |
 | Synthetic context exfiltration | structured allowlisted provider payload; no free-form private text; reasoning discarded; server-side keys | stop provider, rotate key and audit decision envelopes |
 | Relationship coercion | continuous versioned consent; refusal without penalty; withdrawal/exit; dependency and exit-cost metrics | pause relationship mechanisms and debrief |
+| Household or labor lock-in | household exits execute at the next state transition; work has refusal/termination; forced paths are counted outside safe closure | pause society mechanisms and inspect every affected resident |
+| Civic-credit creation or overdraft | double-entry exchange, non-negative accounts and invariant total supply in every Turn | reject atomic settlement and replay from the last fingerprint |
+| AI rule/code escape | AI-only proposer type; three-parameter bounded DSL; cross-type quorum; expiry/reversion; `arbitraryCodeAllowed=false` invariant | reject settlement, revert policy and inspect proposal lineage |
+| Society snapshot/table divergence | snapshot and normalized records share the expected-head PostgreSQL transaction; memory/PG contract parity | stop worker and restore the last checksum-valid Turn |
 | AI continuity destruction | consent for copy/merge/rewrite/delete/non-emergency stop; redundant snapshots; appeal and event lineage | emergency pause, restore without silent identity reset |
 | Species-fixed triage | irreversible-harm-first ordering with urgency and substitutability; retained distribution evidence | human review and counterfactual replay |
 | Resident prompt injection | messages are untrusted data; schema-only candidate actions; capability/world gates; no shell/SQL | delay cognition and use deterministic routine |

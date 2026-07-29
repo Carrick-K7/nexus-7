@@ -45,6 +45,20 @@ bounded disposition, primary disagreement, status, latency, token counts and
 cost. It contains no prompt, raw response or reasoning. Shadow output is
 observational metadata and is prohibited from becoming a world input.
 
+Society records are synthetic structured state. Household membership contains
+only pseudonymous resident IDs; work records contain bounded role, workload
+and civic-credit reward; exchanges contain balanced debit/credit account IDs;
+assets use fictional community owners; bargains contain allowed resource
+codes; city-rule proposals contain bounded parameters and aggregate synthetic
+votes. They contain no address, employer, salary, legal ownership, free-form
+message, real vote or model reasoning.
+
+The civic-credit supply is a conserved simulation ledger, not money,
+compensation or a financial account. A care household is a voluntary
+resource-sharing mechanism, not evidence of kinship, marriage or cohabitation.
+City-rule proposals cannot alter repository code, release policy, the project
+constitution or real infrastructure.
+
 ## External models
 
 An external provider may receive only a compact structured candidate composed
@@ -74,6 +88,12 @@ new governed run or release and cannot silently alter an active run.
 Turn evidence is append-only and checksum-backed. Corrections create new
 events or revisions. Public exports carry the all-synthetic, non-digital-twin
 boundary and suppress cells smaller than five.
+
+Current society objects are normalized for query and also included in every
+fingerprinted snapshot. Exchanges and proposals remain in terminal states for
+audit. Household exits are recorded rather than deleting prior membership.
+Backups include `nexus_world_society_records`; older valid backups without
+that additive table remain restorable and hydrate the state on the next Turn.
 
 Runtime envelopes retain worker ID, release revision, schedule classification
 and engine contract but no host secret. Encrypted backup and recovery receipts

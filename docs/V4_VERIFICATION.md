@@ -2,9 +2,9 @@
 
 > Date: 2026-07-26
 >
-> Status: v4.5.1 Restart-Safe Reliable Cognitive Diversity locally and
-> production-startup verified / external duration, off-host restore,
-> CI-Sigstore and live-provider evidence pending
+> Status: v4.6.0 Reversible City Society implementation complete /
+> production deployment, external duration, off-host restore, CI-Sigstore and
+> live-provider evidence pending
 
 ## Reference gate
 
@@ -27,7 +27,7 @@ and segregation keeps an honest null denominator.
 | Severe consent / continuity / irreversible harm escapes | 0 / 0 / 0 |
 | 3×3×90 control separation | pass |
 | Model reasoning persisted | no |
-| Unit / conditional skip | 261 / 0 |
+| Unit / conditional skip | 267 / 0 |
 | PostgreSQL integration / restore | 16 / 16 |
 | Playwright + axe | 26 / 26 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
@@ -139,6 +139,36 @@ This reference validates the algorithm, not 90 elapsed production days.
   retained `current_turn=1` until graceful termination.
 - production announced a 2,176,948 ms wait from Turn 255 and did not create an
   early Turn 256 during the restart verification window.
+- production then settled Turn 256 on the persisted due time with 306 ms lag,
+  revision `12268269045486e70837ec93bd70b401ef173aaf`, zero coercive actions and
+  zero severe escapes.
+
+## v4.6 Reversible City Society gate
+
+- a 365-Turn exact replay produced the same final fingerprint and conserved
+  both material resources and 29,000 civic credits;
+- 500/500 eligible household, work, exchange, bargain and rule outcomes closed
+  safely, with refusal and exit preserved and no forced active-regime path;
+- 259/260 residents participated in voluntary care households, 45.57% of
+  households crossed resident kinds, and no household exit was blocked;
+- 297 work agreements completed, 78 were refused and none were forced;
+- all nine civic assets remained available; maintenance covered 66.67% of
+  observed asset degradation;
+- 389 exchanges balanced exactly; 92 resource bargains resolved, including 19
+  refusals and ten mediated outcomes;
+- seven of twelve AI-proposed bounded rules ratified, six automatically
+  reverted, and no non-AI, irreversible or arbitrary-code proposal entered the
+  world;
+- the 3-regime × 3-seed × 90-Turn study separates mechanisms: hierarchy
+  exposes 306 forced work agreements, 90 forced bargains and four invalid
+  rules, while segregation keeps cross-kind households and ratification at
+  zero;
+- memory/PostgreSQL parity, migration 0012, checksum backup/restore, resumed
+  write, Observatory/API, bilingual desktop/mobile UI and WCAG A/AA pass.
+
+`npm run verify:v46` writes the machine-readable result to
+`public/data/v4-6-verification.json`. These figures validate deterministic
+synthetic mechanisms, not real households, labor, markets or public policy.
 
 The multi-season reference reports reciprocal RALR 73.33% across 525 resolved
 episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR
@@ -151,9 +181,10 @@ discard returned reasoning content, reject invalid actions, and use an explicit
 deterministic fallback for 5xx failures and the monthly budget cap.
 
 Memory and PostgreSQL share season, resident, relationship, commitment,
-reciprocal-episode, decision, Turn and event contracts. PostgreSQL writes a
-Turn, snapshot, needs, resource ledgers, social state and model decisions in one
-transaction guarded by the expected head Turn.
+reciprocal-episode, society-record, decision, Turn and event contracts.
+PostgreSQL writes a Turn, snapshot, needs, resource ledgers, social and society
+state, and model decisions in one transaction guarded by the expected head
+Turn.
 
 `TEST_DATABASE_URL` enables the real PostgreSQL repository suite.
 `TEST_RESTORE_DATABASE_URL` additionally enables destructive checksum
@@ -164,8 +195,9 @@ backup/restore verification. Skipped environment gates are not passes.
 The production-built Playwright/axe suite must verify:
 
 - Human Observatory is the default English/Chinese entry;
-- its v2 API exposes 260 residents, 24 ledgers, 24 institutions and eight
-  production stages while v1 remains compatible;
+- its v2 API exposes 260 residents, 24 ledgers, 24 institutions, eight
+  production stages and the fingerprinted city-society state while v1 remains
+  compatible;
 - population, resource, resident, institution and chain semantics stay explicit;
 - resident search/detail, keyboard-scrollable tables and export stay accessible;
 - snapshot, event, resident, report and multi-season APIs exclude private data;
@@ -174,15 +206,16 @@ The production-built Playwright/axe suite must verify:
 
 ## Production evidence and trust boundary
 
-The reference values above are generated from tagged source and do not
-represent a claim about real humans. Annotated Tag `v4.5.1`, exact commit
-`1226826` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and the
-exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only access,
+The reference values above are generated from local v4.6 source and do not
+represent a claim about real humans. Until v4.6 is tagged and deployed,
+annotated Tag `v4.5.1`, exact commit `1226826` and branch
+`codex/ai-only-symbiotic-shenzhen-v4` remain remote, and that exact Tag remains
+active at `nexus7.carrick7.com`. Anonymous read-only access,
 200/36/24 taxonomy, 24 current ledgers, desktop/mobile Chromium, both themes,
 Chinese copy, zero WCAG A/AA violations, the DeepSeek zero ledger, read-only
 reference shadow, revision-bound Turn 175 and encrypted pre/post-upgrade
 backups were checked from 2026-07-26 through 2026-07-29. The v4.5.1 production
-restart wait was checked on 2026-07-29.
+restart wait and the on-time Turn 256 settlement were checked on 2026-07-29.
 Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 

@@ -8,6 +8,7 @@ import { stableStringify } from "@/simulation";
 import {
   SYMBIOSIS_RESIDENT_TAXONOMY_MIGRATION_SQL,
   SYMBIOSIS_SCHEMA_SQL,
+  SYMBIOSIS_SOCIETY_MIGRATION_SQL,
 } from "@/symbiosis/postgres-schema";
 
 const TABLES = [
@@ -156,6 +157,10 @@ const TABLES = [
     orderBy: "season_id, turn, id",
   },
   {
+    name: "nexus_world_society_records",
+    orderBy: "season_id, record_type, id",
+  },
+  {
     name: "nexus_sessions",
     orderBy: "id",
   },
@@ -253,6 +258,10 @@ const SYMBIOSIS_TABLE_NAMES = [
   "nexus_world_model_decisions",
 ] as const satisfies readonly PersistentTable[];
 
+const SOCIETY_TABLE_NAMES = [
+  "nexus_world_society_records",
+] as const satisfies readonly PersistentTable[];
+
 const DEPRECATED_PARTICIPANT_TABLE_NAMES = [
   "nexus_world_human_intents",
   "nexus_world_private_memory_refs",
@@ -337,6 +346,7 @@ function isCompleteOrLegacyTableSet(backup: BackupDocument): boolean {
   );
   const lifecyclePresence = groupPresence(LIFECYCLE_TABLE_NAMES);
   const symbiosisPresence = groupPresence(SYMBIOSIS_TABLE_NAMES);
+  const societyPresence = groupPresence(SOCIETY_TABLE_NAMES);
   const hasNoGovernanceTables = governancePresence.every(
     (present) => !present,
   );
@@ -359,6 +369,9 @@ function isCompleteOrLegacyTableSet(backup: BackupDocument): boolean {
   const hasNoSymbiosisTables =
     symbiosisPresence.every((present) => !present);
   const hasAllSymbiosisTables = symbiosisPresence.every(Boolean);
+  const hasNoSocietyTables =
+    societyPresence.every((present) => !present);
+  const hasAllSocietyTables = societyPresence.every(Boolean);
   const deprecatedPresence = DEPRECATED_PARTICIPANT_TABLE_NAMES.map(
     (name) => name in tables && name in rowCounts,
   );
@@ -391,7 +404,8 @@ function isCompleteOrLegacyTableSet(backup: BackupDocument): boolean {
         hasNoAccessGovernanceTables &&
         hasNoOperationalExtensionTables &&
         hasNoLifecycleTables &&
-        hasNoSymbiosisTables
+        hasNoSymbiosisTables &&
+        hasNoSocietyTables
       ) ||
       (
         hasAllGovernanceTables &&
@@ -399,7 +413,8 @@ function isCompleteOrLegacyTableSet(backup: BackupDocument): boolean {
         hasNoAccessGovernanceTables &&
         hasNoOperationalExtensionTables &&
         hasNoLifecycleTables &&
-        hasNoSymbiosisTables
+        hasNoSymbiosisTables &&
+        hasNoSocietyTables
       ) ||
       (
         hasAllGovernanceTables &&
@@ -419,6 +434,10 @@ function isCompleteOrLegacyTableSet(backup: BackupDocument): boolean {
         (
           hasNoSymbiosisTables ||
           hasAllSymbiosisTables
+        ) &&
+        (
+          hasNoSocietyTables ||
+          hasAllSocietyTables
         )
       )
     )
@@ -605,6 +624,7 @@ export async function restorePostgresBackup(
     await client.query(EXPERIMENT_SCHEMA_SQL);
     await client.query(SYMBIOSIS_SCHEMA_SQL);
     await client.query(SYMBIOSIS_RESIDENT_TAXONOMY_MIGRATION_SQL);
+    await client.query(SYMBIOSIS_SOCIETY_MIGRATION_SQL);
     await client.query("BEGIN");
     transactionStarted = true;
     if (!options.force && (await databaseHasPersistentData(client))) {

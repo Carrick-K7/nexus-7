@@ -8,6 +8,7 @@ import type {
   ReciprocalEpisode,
   Relationship,
   Resident,
+  SocietyRecord,
   WorldEvent,
   WorldSeason,
   WorldSnapshot,
@@ -17,6 +18,9 @@ import type {
   CommitWorldTurnInput,
   WorldRepository,
 } from "./repository";
+import {
+  societyRecords,
+} from "./society";
 
 function key(workspaceId: string, seasonId: string): string {
   return `${workspaceId}:${seasonId}`;
@@ -183,6 +187,21 @@ export class InMemoryWorldRepository implements WorldRepository {
     return structuredClone(
       this.decisions.get(key(workspaceId, seasonId)) ?? [],
     );
+  }
+
+  async listSocietyRecords(
+    workspaceId: string,
+    seasonId: string,
+  ): Promise<SocietyRecord[]> {
+    const scope = key(workspaceId, seasonId);
+    const season = this.seasons.get(scope);
+    const snapshot =
+      season === undefined
+        ? undefined
+        : this.snapshots.get(scope)?.get(season.currentTurn);
+    return snapshot
+      ? structuredClone(societyRecords(snapshot.society))
+      : [];
   }
 
   async commitTurn(input: CommitWorldTurnInput): Promise<WorldTurn> {

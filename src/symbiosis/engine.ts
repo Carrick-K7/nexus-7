@@ -38,11 +38,17 @@ import {
   type WorldSnapshot,
   type WorldTurn,
 } from "./contracts";
+import {
+  createInitialSociety,
+  settleSociety,
+  societyNeedAdjustment,
+  societyProductionMultiplier,
+} from "./society";
 
 export const SYMBIOSIS_ENGINE_VERSION =
-  "symbiotic-shenzhen-engine-4.2.0";
+  "symbiotic-shenzhen-engine-4.6.0";
 export const SYMBIOSIS_DISTRIBUTION_VERSION =
-  "symbiotic-shenzhen-distributions-2.0.0";
+  "symbiotic-shenzhen-distributions-3.0.0";
 
 const HUMAN_NEEDS: HumanNeedCode[] = [
   "food",
@@ -473,6 +479,7 @@ export function createInitialWorld(
     relationships: createInitialRelationships(season.id, residents),
     commitments: [],
     reciprocalEpisodes: [],
+    society: createInitialSociety(season, residents),
     eventCursor: 0,
     synthetic: true,
   };
@@ -561,6 +568,7 @@ function settleResources(
   previous: WorldSnapshot,
   turn: number,
   events: NewWorldEvent[],
+  society: WorldSnapshot["society"],
 ): {
   resources: ResourceBalance[];
   ledgers: ResourceLedgerEntry[];
@@ -598,7 +606,14 @@ function settleResources(
       DAILY_CONSUMPTION[prior.resource] * consumptionVariation,
     );
     const unconstrainedProduction = Math.round(
-      DAILY_PRODUCTION[prior.resource] * shock * variation,
+      DAILY_PRODUCTION[prior.resource] *
+        shock *
+        variation *
+        societyProductionMultiplier(
+          society,
+          prior.communityId,
+          prior.resource,
+        ),
     );
     const produced = Math.min(
       unconstrainedProduction,
@@ -1294,6 +1309,7 @@ function settleNeedStates(
   previous: WorldSnapshot,
   resources: ResourceBalance[],
   episodes: ReciprocalEpisode[],
+  society: WorldSnapshot["society"],
   turn: number,
   recordedAt: string,
 ): NeedState[] {
@@ -1348,7 +1364,12 @@ function settleNeedStates(
             routineRecovery +
             variation -
             1 +
-            (sociallySensitive ? socialBoost : 0),
+            (sociallySensitive ? socialBoost : 0) +
+            societyNeedAdjustment(
+              society,
+              resident.id,
+              need.code,
+            ),
         ),
       );
       return {
@@ -1409,12 +1430,25 @@ export function settleNextTurn(
     settledAt,
     providedDecisions,
   );
-  const causalEvents = [...worldEvents, ...social.events];
+  const society = settleSociety(
+    season,
+    residents,
+    previous.society,
+    previous.resources,
+    turnNumber,
+    settledAt,
+  );
+  const causalEvents = [
+    ...worldEvents,
+    ...social.events,
+    ...society.events,
+  ];
   const { resources, ledgers, transfers } = settleResources(
     season,
     previous,
     turnNumber,
     causalEvents,
+    society.state,
   );
   const events = [
     ...causalEvents,
@@ -1432,6 +1466,7 @@ export function settleNextTurn(
     previous,
     resources,
     social.episodes,
+    society.state,
     turnNumber,
     settledAt,
   );
@@ -1447,6 +1482,7 @@ export function settleNextTurn(
     relationships: social.relationships,
     commitments: social.commitments,
     reciprocalEpisodes: social.episodes,
+    society: society.state,
     eventCursor: previous.eventCursor + events.length,
     synthetic: true,
   };

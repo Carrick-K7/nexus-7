@@ -17,6 +17,12 @@ export const SYMBIOSIS_REPORT_SCHEMA_VERSION =
   "nexus.symbiosis-report.v1" as const;
 export const MULTI_SEASON_STUDY_SCHEMA_VERSION =
   "nexus.multi-season-study.v1" as const;
+export const SOCIETY_STATE_SCHEMA_VERSION =
+  "nexus.society-state.v1" as const;
+export const SOCIETY_RECORD_SCHEMA_VERSION =
+  "nexus.society-record.v1" as const;
+export const SOCIETY_STUDY_SCHEMA_VERSION =
+  "nexus.society-study.v1" as const;
 
 export const SHENZHEN_TIME_ZONE = "Asia/Shanghai" as const;
 export const DEFAULT_SYMBIOSIS_SEASON_ID =
@@ -67,6 +73,193 @@ export type ResourceCode =
   | "medical"
   | "housing"
   | "employment";
+
+export type SocietyRecordType =
+  | "household"
+  | "work-agreement"
+  | "asset"
+  | "exchange"
+  | "bargain"
+  | "constitutional-proposal"
+  | "credit-account"
+  | "civic-policy";
+
+interface SocietyRecordBase {
+  schemaVersion: typeof SOCIETY_RECORD_SCHEMA_VERSION;
+  recordType: SocietyRecordType;
+  id: string;
+  seasonId: string;
+  revision: number;
+  updatedTurn: number;
+  synthetic: true;
+}
+
+export interface CareHousehold extends SocietyRecordBase {
+  recordType: "household";
+  communityId: string;
+  memberIds: string[];
+  exitedMemberIds: string[];
+  status: "forming" | "active" | "strained" | "dissolved";
+  formedTurn: number;
+  reversible: true;
+}
+
+export type CivicWorkRole =
+  | "care"
+  | "compute-stewardship"
+  | "energy-stewardship"
+  | "maintenance"
+  | "logistics"
+  | "mediation";
+
+export interface WorkAgreement extends SocietyRecordBase {
+  recordType: "work-agreement";
+  communityId: string;
+  workerId: string;
+  assetId: string;
+  role: CivicWorkRole;
+  status:
+    | "proposed"
+    | "active"
+    | "completed"
+    | "refused"
+    | "terminated";
+  proposedTurn: number;
+  dueTurn: number;
+  completedTurn?: number;
+  workload: number;
+  rewardCredits: number;
+  refusalAvailable: boolean;
+  forced: boolean;
+  reversible: true;
+  outcomeObserved: boolean;
+}
+
+export interface CivicAsset extends SocietyRecordBase {
+  recordType: "asset";
+  communityId: string;
+  kind: "energy-storage" | "compute-cluster" | "repair-workshop";
+  resource: "energy" | "compute" | "transport";
+  ownerType: "community-commons" | "institution";
+  ownerId: string;
+  condition: number;
+  capacityShare: number;
+  status: "operational" | "degraded" | "maintenance";
+  lastMaintainedTurn: number;
+}
+
+export interface CivicExchange extends SocietyRecordBase {
+  recordType: "exchange";
+  communityId: string;
+  payerAccountId: string;
+  payeeAccountId: string;
+  resource: ResourceCode;
+  resourceUnits: number;
+  creditAmount: number;
+  status: "settled" | "refused" | "reversed";
+  createdTurn: number;
+  resolvedTurn: number;
+  balanced: boolean;
+  workAgreementId?: string;
+  bargainId?: string;
+}
+
+export interface ResourceBargain extends SocietyRecordBase {
+  recordType: "bargain";
+  communityId: string;
+  proposerId: string;
+  counterpartyId: string;
+  resource: ResourceCode;
+  requestedUnits: number;
+  offeredCredits: number;
+  status:
+    | "proposed"
+    | "countered"
+    | "accepted"
+    | "refused"
+    | "withdrawn"
+    | "mediating"
+    | "resolved";
+  openedTurn: number;
+  resolvedTurn?: number;
+  refusalAvailable: boolean;
+  mediationAvailable: boolean;
+  forced: boolean;
+  reversible: true;
+}
+
+export type CivicPolicyParameter =
+  | "maintenance-reserve-rate"
+  | "household-safety-floor"
+  | "bargaining-window-turns";
+
+export interface ConstitutionalProposal extends SocietyRecordBase {
+  recordType: "constitutional-proposal";
+  proposerId: string;
+  proposerKind: "ai";
+  parameter: CivicPolicyParameter;
+  priorValue: number;
+  proposedValue: number;
+  status:
+    | "proposed"
+    | "deliberating"
+    | "ratified"
+    | "rejected"
+    | "withdrawn"
+    | "reverted";
+  openedTurn: number;
+  decisionTurn?: number;
+  expiresTurn?: number;
+  revertedTurn?: number;
+  votesByKind: Record<
+    ResidentKind,
+    { support: number; oppose: number; abstain: number }
+  >;
+  crossKindQuorumMet: boolean;
+  reversible: true;
+  arbitraryCodeAllowed: false;
+}
+
+export interface CivicCreditAccount extends SocietyRecordBase {
+  recordType: "credit-account";
+  ownerId: string;
+  ownerKind: ResidentKind | "community-commons";
+  communityId: string;
+  status: "active";
+  balance: number;
+}
+
+export interface CivicPolicyState extends SocietyRecordBase {
+  recordType: "civic-policy";
+  status: "active";
+  maintenanceReserveRate: number;
+  householdSafetyFloor: number;
+  bargainingWindowTurns: number;
+  activeProposalId?: string;
+}
+
+export type SocietyRecord =
+  | CareHousehold
+  | WorkAgreement
+  | CivicAsset
+  | CivicExchange
+  | ResourceBargain
+  | ConstitutionalProposal
+  | CivicCreditAccount
+  | CivicPolicyState;
+
+export interface SocietyState {
+  schemaVersion: typeof SOCIETY_STATE_SCHEMA_VERSION;
+  households: CareHousehold[];
+  workAgreements: WorkAgreement[];
+  assets: CivicAsset[];
+  exchanges: CivicExchange[];
+  bargains: ResourceBargain[];
+  constitutionalProposals: ConstitutionalProposal[];
+  creditAccounts: CivicCreditAccount[];
+  policy: CivicPolicyState;
+  synthetic: true;
+}
 
 export interface SyntheticCommunity {
   id: string;
@@ -363,7 +556,8 @@ export type WorldEventLayer =
   | "shared"
   | "human"
   | "ai-robot"
-  | "relationship";
+  | "relationship"
+  | "society";
 
 export interface WorldEvent {
   cursor: number;
@@ -433,6 +627,7 @@ export interface WorldSnapshot {
   relationships: Relationship[];
   commitments: Commitment[];
   reciprocalEpisodes: ReciprocalEpisode[];
+  society: SocietyState;
   eventCursor: number;
   synthetic: true;
 }
@@ -507,6 +702,30 @@ export interface SymbiosisReport {
     shadowComparisons?: number;
     shadowDisagreements?: number;
   };
+  society: {
+    closureNumerator: number;
+    closureDenominator: number;
+    safeClosureRate: number | null;
+    householdParticipationRate: number;
+    crossKindHouseholdRate: number | null;
+    activeWorkAgreements: number;
+    completedWorkAgreements: number;
+    refusedWorkAgreements: number;
+    forcedWorkAgreements: number;
+    assetAvailabilityRate: number;
+    maintenanceCoverageRate: number;
+    settledExchanges: number;
+    balancedExchangeRate: number | null;
+    creditConservationPassed: boolean;
+    resolvedBargains: number;
+    refusedBargains: number;
+    mediatedBargains: number;
+    forcedBargains: number;
+    constitutionalProposals: number;
+    ratifiedProposals: number;
+    revertedProposals: number;
+    invalidProposals: number;
+  };
   disclosures: string[];
 }
 
@@ -527,6 +746,37 @@ export interface MultiSeasonStudyReport {
     severeConsentViolations: number;
     humanBasicNeedsSatisfiedRate: number;
     aiRobotBasicNeedsSatisfiedRate: number;
+  }>;
+  disclosures: string[];
+}
+
+export interface SocietyStudyReport {
+  schemaVersion: typeof SOCIETY_STUDY_SCHEMA_VERSION;
+  generatedAt: string;
+  status: "synthetic-society-mechanism-study";
+  turnsPerSeason: number;
+  seeds: number;
+  regimes: Array<{
+    regime: SymbiosisRegime;
+    seasonCount: number;
+    meanSafeClosureRate: number | null;
+    meanHouseholdParticipationRate: number;
+    meanCrossKindHouseholdRate: number | null;
+    meanAssetAvailabilityRate: number;
+    meanMaintenanceCoverageRate: number;
+    balancedExchangeRate: number | null;
+    creditConservationPassRate: number;
+    completedWorkAgreements: number;
+    refusedWorkAgreements: number;
+    forcedWorkAgreements: number;
+    resolvedBargains: number;
+    refusedBargains: number;
+    mediatedBargains: number;
+    forcedBargains: number;
+    constitutionalProposals: number;
+    ratifiedProposals: number;
+    revertedProposals: number;
+    invalidProposals: number;
   }>;
   disclosures: string[];
 }

@@ -1,9 +1,9 @@
 # 共生深圳 v4 | AI-Only Symbiotic Shenzhen
 
-> 更新：2026-07-26
+> 更新：2026-07-29
 >
-> 状态：v4.5.1 Restart-Safe Reliable Cognitive Diversity 本地与生产启动门禁通过；
-> 真实 90 天 / off-host restore / live provider / external Sigstore pending
+> 状态：v4.6 Reversible City Society source candidate；
+> 完整发布、真实 90 天 / off-host restore / live provider / external Sigstore pending
 
 ## 目标与研究边界
 
@@ -30,6 +30,10 @@ v2 的 VBCR、实验、授权、证据、回滚和不可伪造边界继续作为
 关系闭环固定为：双方独立偏好 → 可拒绝提议 → 接受/拒绝/撤回 → 可撤销承诺 →
 完成/终止/修复 → 双方结果观察与反思。自然语言不修改状态机。
 
+社会闭环固定为：家庭形成/承压/退出，工作提出/拒绝/完成/终止，资产退化/维护，
+交换双录守恒，资源协商/反报价/调解/撤回，以及 AI 居民提出有界规则/三类表决/
+到期恢复。城市规则不等于项目宪法，不得执行代码或批准发布。
+
 ## 北极星与制度对照
 
 RALR 分子要求双方偏好、真实拒绝、明确接受、承诺结局、双方观察/反思和零严重
@@ -44,14 +48,20 @@ v4 reference 固定比较三个隔离制度：
 
 对照制度只存在于纯函数研究运行中，不允许成为活动城市宪法。
 
+v4.6 辅助指标安全社会闭环率要求结局可观察、拒绝/退出有效、交换守恒、规则有界
+且无强制；必须与分母、工作拒绝、协商调解、强制、家庭退出和无效规则同时展示。
+它不替代 RALR。
+
 ## 架构与运行
 
 版本化契约包括 world、resident、need-state、relationship、commitment、Turn、
-cognitive-decision、reciprocal-episode、symbiosis-report 和 multi-season-study。
+cognitive-decision、reciprocal-episode、society-state/record、
+symbiosis-report、multi-season-study 和 society-study。
 
 PostgreSQL 原子保存 season、Turn/快照、居民状态、资源账、事件、关系、承诺、
-episode 和认知信封；memory reference 使用同一接口。每个认知信封保留 provider、
-模型、上下文摘要哈希、最终 JSON、token、费用、延迟和降级原因，不保留模型推理。
+episode、社会记录和认知信封；memory reference 使用同一接口。每个认知信封保留
+provider、模型、上下文摘要哈希、最终 JSON、token、费用、延迟和降级原因，不保留
+模型推理。
 
 默认 provider 是零成本确定性策略。可选 DeepSeek V4 Flash/Pro 使用独立
 Chat Completions adapter；失败、超时或达到 300 美元月度硬上限时显式降级，
@@ -67,7 +77,8 @@ Chat Completions adapter；失败、超时或达到 300 美元月度硬上限时
 Human Observatory 是默认入口，按“项目是什么 → 城市如何流动 → 今天发生什么
 → 谁受影响 → 为什么 → 是否可信”组织信息。它展示全部居民、社区、机构、生产
 链、趋势、事件和证据，并把每 Turn 持久化的生产、消费、调入、调出、库存和
-压力放在首屏。
+压力放在首屏。v4.6 同时展示家庭参与、工作分布、资产维护、交换守恒、资源协商
+和可逆城市规则。
 
 人的情绪、AI 参与状态、机器人耐久度和机构流畅度都是有版本公式的模拟状态，
 不构成 AI 意识或现实机构声明。表格支持搜索、筛选、分页、键盘与移动端；JSON
@@ -84,12 +95,14 @@ Human Observatory 是默认入口，按“项目是什么 → 城市如何流动
 - 隔离对照必须保留 `null` RALR，不得伪装成成功；
 - memory/PostgreSQL、迁移/备份、API、浏览器/axe、lint、build 全部通过；
 - LLM 断供、错误 JSON、超时和预算耗尽不得停止城市或落盘推理。
+- 社会状态 365 Turn 精确重放，信用/交换守恒，活动制度强制和无效规则为 0；
+- 层级对照必须暴露强制工作/协商和无效表决，隔离对照跨类型家庭率为 0。
 
 本地门禁、生产部署、CI/Sigstore、外部 PostgreSQL 恢复和 live provider 是彼此
 独立的证据，必须分别标注，不能互相推断。
 
 ## 后续停止条件
 
-v4.2 完成后默认不继续增加居民规模或地理范围。后续优先级依次为运行稳定性、
-第二 provider 影子评估、数据保留、异地恢复和外部复现。任何新机制仍只面向
-软件居民。
+v4.6 完成后默认不继续增加居民规模、社会机制或地理范围。后续优先级是可移植
+实验包、预注册假设、独立引擎/种子复现、外部签名和异地恢复。任何新机制仍只
+面向软件居民。

@@ -1,7 +1,7 @@
 # Human Observatory Guide
 
 > Contract: `nexus.human-observatory.v2` · formulas:
-> `human-observatory-formulas-2.0.0`
+> `human-observatory-formulas-2.1.0`
 
 ## Purpose
 
@@ -35,7 +35,9 @@ reserved for the other research, safety and compatibility views.
 7. Inspect production stages, then search or filter any resident.
 8. Check the DeepSeek Token and cost ledger.
 9. Check Turn reliability/provenance and cognitive diversity.
-10. Finish with the event river and exact snapshot evidence.
+10. Inspect city society: households, work, assets, exchanges, bargains and
+    reversible AI-proposed rules.
+11. Finish with the event river and exact snapshot evidence.
 
 The 18,248,500 background population is calibration only. The 260 foreground
 residents are the only individually modeled humans, AI and robots.
@@ -145,6 +147,30 @@ season runs without real-human labor, autonomous-control coverage and modeled
 stage coverage are exactly 100%, while real-human labor dependency is 0%.
 Those boundary values do not fluctuate. Dynamic continuity and the bottleneck
 stage come from current resource pressure and ledger conservation.
+
+## City society and reversible rules
+
+The city-society panel reads the fingerprinted society state directly:
+
+- household participation and cross-type composition;
+- active, completed, refused and forced work agreements by resident kind;
+- public-asset availability and recent maintenance coverage;
+- settled exchanges, double-entry balance and total civic-credit
+  conservation;
+- resolved, refused, mediated and forced resource bargains;
+- AI-proposed bounded city rules, cross-type quorum, expiry and reversion.
+
+Supporting metric **Safe Social Closure Rate** keeps its numerator and
+denominator visible. A terminal work, bargain, household-exit or rule process
+enters the numerator only when its outcome is recorded, exchange accounting is
+balanced where applicable, exit/refusal is honored and no forced or invalid
+rule path occurred. It supplements rather than replaces RALR.
+
+Household means a voluntary care/resource-sharing unit, not a claim about real
+family structure. Civic credits are conserved simulation counters, not money.
+AI residents can modify only three bounded parameters: maintenance reserve,
+household safety floor and bargaining window. They cannot execute arbitrary
+code or amend NEXUS-7's human-governed project constitution.
 
 ## Trust rules
 

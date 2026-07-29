@@ -13,6 +13,7 @@ import type {
   ReciprocalEpisode,
   Relationship,
   Resident,
+  SocietyRecord,
   WorldEvent,
   WorldSeason,
   WorldSnapshot,
@@ -25,6 +26,10 @@ import type {
   CommitWorldTurnInput,
   WorldRepository,
 } from "./repository";
+import {
+  societyRecords,
+  societyRecordStatus,
+} from "./society";
 
 function isUniqueViolation(error: unknown): boolean {
   return (
@@ -74,6 +79,34 @@ async function insertResidentStates(
         state.residentId,
         JSON.stringify(state),
         state.recordedAt,
+      ],
+    );
+  }
+}
+
+async function upsertSocietyRecords(
+  client: PoolClient,
+  records: SocietyRecord[],
+): Promise<void> {
+  for (const record of records) {
+    await client.query(
+      `INSERT INTO nexus_world_society_records
+        (season_id, record_type, id, revision, updated_turn, status,
+         record_json)
+       VALUES ($1, $2, $3, $4, $5, $6, $7::jsonb)
+       ON CONFLICT (season_id, record_type, id) DO UPDATE
+       SET revision = EXCLUDED.revision,
+           updated_turn = EXCLUDED.updated_turn,
+           status = EXCLUDED.status,
+           record_json = EXCLUDED.record_json`,
+      [
+        record.seasonId,
+        record.recordType,
+        record.id,
+        record.revision,
+        record.updatedTurn,
+        societyRecordStatus(record),
+        JSON.stringify(record),
       ],
     );
   }
@@ -187,6 +220,10 @@ export class PostgresWorldRepository implements WorldRepository {
       await insertResidentStates(
         client,
         input.initialSnapshot.residentStates,
+      );
+      await upsertSocietyRecords(
+        client,
+        societyRecords(input.initialSnapshot.society),
       );
       await client.query("COMMIT");
       return structuredClone(input.season);
@@ -393,6 +430,24 @@ export class PostgresWorldRepository implements WorldRepository {
     return result.rows.map((row) => row.decision_json);
   }
 
+  async listSocietyRecords(
+    workspaceId: string,
+    seasonId: string,
+  ): Promise<SocietyRecord[]> {
+    const result = await this.pool.query<{
+      record_json: SocietyRecord;
+    }>(
+      `SELECT society.record_json
+       FROM nexus_world_society_records AS society
+       INNER JOIN nexus_world_seasons AS season
+         ON season.id = society.season_id
+       WHERE season.workspace_id = $1 AND society.season_id = $2
+       ORDER BY society.record_type, society.id`,
+      [workspaceId, seasonId],
+    );
+    return result.rows.map((row) => row.record_json);
+  }
+
   async commitTurn(input: CommitWorldTurnInput): Promise<WorldTurn> {
     const client = await this.pool.connect();
     try {
@@ -542,6 +597,10 @@ export class PostgresWorldRepository implements WorldRepository {
           ],
         );
       }
+      await upsertSocietyRecords(
+        client,
+        societyRecords(input.snapshot.society),
+      );
       await client.query("COMMIT");
       return structuredClone(input.turn);
     } catch (error) {

@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release is **v4.5.1 — Restart-Safe Reliable Cognitive Diversity**.
+The active source candidate is **v4.6.0 — Reversible City Society**.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
@@ -25,6 +25,8 @@ atomic Turn containing:
 - distinct human, AI and robot needs;
 - seeded shared and type-specific events;
 - relationships, refusal, withdrawal, commitments, outcomes and reflection;
+- voluntary care households, bounded work, public assets, balanced credit
+  exchange, mediated resource bargains and reversible city rules;
 - optional schema-bounded model decisions;
 - an append-only causal event stream and fingerprint chain.
 
@@ -59,6 +61,8 @@ The default **Human Observatory / 人类观测台** exposes:
 - event lineage, RALR denominator, safety, replay and snapshot evidence;
 - wall-clock Turn age, sequence integrity and per-Turn deployment revision;
 - primary/shadow disagreement, homogeneity, fallback bias and shadow cost.
+- household participation, work distribution, asset maintenance, exchange
+  balance, bargaining outcomes and AI-proposed rule reversion.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy

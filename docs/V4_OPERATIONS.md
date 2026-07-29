@@ -63,7 +63,8 @@ Human observer entry points:
 - `/` → default **Human Observatory**;
 - `/api/observatory/v2/overview` → human/AI/robot population, every resident,
   persisted resource flows, institutions, production chain, DeepSeek
-  token/cost ledger, shadow diversity, Turn reliability and evidence;
+  token/cost ledger, shadow diversity, Turn reliability, households, work,
+  assets, exchange balance, bargains, city rules and evidence;
 - `/api/observatory/v1/overview` → deprecated label-compatible projection;
 - `/api/world/v3/snapshot` → current world and resident projection;
 - `/api/world/v3/events?afterCursor=0` → append-only event river;
@@ -90,7 +91,9 @@ immediately. A non-numeric or sub-minute interval fails startup.
 
 Alert if no Turn arrives within twice the configured interval, any severe
 escape is nonzero, `resourceConservationPassed` is false, `longPending` grows,
-or monthly cognition cost reaches 70%, 90% or 100% of budget.
+city credit conservation fails, a production rule is invalid, forced society
+actions appear in the reciprocal regime, or monthly cognition cost reaches
+70%, 90% or 100% of budget.
 
 ## Backup, recovery and upgrade
 
@@ -123,6 +126,12 @@ test from a clean commit, migrate a staging/restore database, stop the worker,
 deploy the exact artifact, start web then worker, and compare the first
 post-upgrade fingerprint/report. Never repair continuity by deleting the
 season or silently resetting residents.
+
+v4.6 migration `0012_richer_city_society.sql` is additive. Existing seasons
+remain readable before their first v4.6 Turn; the service hydrates a
+deterministic society baseline at the existing head without rewriting its
+fingerprint. The next due Turn persists normalized society records and
+`society` events atomically. Do not use `--once` merely to force that upgrade.
 
 If the worker fails, leave the last committed Turn untouched, fix or roll back
 the process, and restart. If the provider fails, do not roll back the city:

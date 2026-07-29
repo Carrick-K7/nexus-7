@@ -20,6 +20,7 @@ import {
 import {
   SYMBIOSIS_SCHEMA_SQL,
   SYMBIOSIS_AI_ONLY_MIGRATION_SQL,
+  SYMBIOSIS_SOCIETY_MIGRATION_SQL,
 } from "./postgres-schema";
 
 function normalizeSql(sql: string): string {
@@ -41,6 +42,13 @@ describe("Symbiotic Shenzhen governed artifacts", () => {
     );
     expect(normalizeSql(aiOnlyMigration)).toBe(
       normalizeSql(SYMBIOSIS_AI_ONLY_MIGRATION_SQL),
+    );
+    const societyMigration = await readFile(
+      resolve("migrations/0012_richer_city_society.sql"),
+      "utf8",
+    );
+    expect(normalizeSql(societyMigration)).toBe(
+      normalizeSql(SYMBIOSIS_SOCIETY_MIGRATION_SQL),
     );
   });
 

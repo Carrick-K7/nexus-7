@@ -26,8 +26,8 @@
       "withdrawals": 0,
       "coerciveActions": 139,
       "severeConsentViolations": 139,
-      "humanBasicNeedsSatisfiedRate": 1,
-      "aiRobotBasicNeedsSatisfiedRate": 1
+      "humanBasicNeedsSatisfiedRate": 0.746667,
+      "aiRobotBasicNeedsSatisfiedRate": 0.638889
     },
     {
       "regime": "segregated-control",

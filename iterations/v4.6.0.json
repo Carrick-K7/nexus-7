@@ -1,0 +1,41 @@
+{
+  "id": "iteration-v4.6.0",
+  "version": "4.6.0",
+  "date": "2026-07-29",
+  "trigger": "reversible-city-society",
+  "triggerReason": "Residents had needs, relationships and resource flows, but no durable households, work agreements, maintained civic assets, balanced exchange, resource bargaining or bounded AI-proposed city rules through which a society could visibly organize itself.",
+  "action": "Added deterministic and replayable care households, voluntary work, degrading and repairable assets, conserved civic credits, balanced exchanges, mediated bargains and automatically reverting AI-only rule proposals; persisted them atomically in memory and PostgreSQL and projected them into the bilingual Human Observatory.",
+  "outcome": "The v4.6 source candidate passed 267 tests with zero skips, 16 real PostgreSQL/restore tests, 26 browser/axe scenarios, lint, audit, build, all compatibility gates and a 10,000-tick stress run. Its 365-Turn reference closes 500/500 eligible social outcomes safely with zero forced active-regime paths; controlled hierarchy and segregation runs expose the intended negative mechanisms.",
+  "metrics": [
+    {
+      "label": "Safe social closure rate",
+      "before": 0,
+      "after": 1
+    },
+    {
+      "label": "Balanced persisted exchanges",
+      "before": 0,
+      "after": 389
+    },
+    {
+      "label": "Bounded rules automatically reverted",
+      "before": 0,
+      "after": 6
+    }
+  ],
+  "evidence": [
+    "365-Turn society state replay is exact and material/credit conservation passes",
+    "Refusal, household exit, mediation and policy reversion are explicit state transitions",
+    "Hierarchy exposes forced work, forced bargaining and invalid quorum instead of hiding them",
+    "Segregation produces zero cross-kind households and zero ratified city rules",
+    "AI proposals use a bounded deterministic parameter DSL and cannot execute code",
+    "Every society object is synthetic and contains no real-person data"
+  ],
+  "artifacts": [
+    "src/symbiosis/society.ts",
+    "src/symbiosis/society-study.ts",
+    "migrations/0012_richer_city_society.sql",
+    "public/data/v4-6-verification.json",
+    "docs/adr/0029-reversible-city-society.md"
+  ]
+}

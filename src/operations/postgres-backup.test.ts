@@ -60,6 +60,7 @@ const SYMBIOSIS_BACKUP_TABLE_NAMES = [
   "nexus_world_commitments",
   "nexus_world_reciprocal_episodes",
   "nexus_world_model_decisions",
+  "nexus_world_society_records",
 ] as const;
 
 function refreshChecksum<T extends {
@@ -413,6 +414,9 @@ integrationDescribe("PostgreSQL backup and restore", () => {
     expect(
       backup.rowCounts.nexus_world_model_decisions,
     ).toBeGreaterThan(0);
+    expect(
+      backup.rowCounts.nexus_world_society_records,
+    ).toBeGreaterThan(300);
 
     const preAiOnlyBackup = structuredClone(backup);
     const preAiOnlyTables = preAiOnlyBackup.tables as unknown as Record<

@@ -20,6 +20,9 @@ import type {
   TurnSettlement,
   WorldEvent,
 } from "./contracts";
+import {
+  buildSocietyMetrics,
+} from "./society";
 
 function referenceReport(state: TurnSettlement): SymbiosisReport {
   const resolved = state.reciprocalEpisodes.filter(
@@ -80,6 +83,11 @@ function referenceReport(state: TurnSettlement): SymbiosisReport {
       delayed: 0,
       costUsd: 0,
     },
+    society: buildSocietyMetrics(
+      state.snapshot.society,
+      state.residents,
+      state.season.communities.length,
+    ),
     disclosures: [
       "All residents are synthetic software.",
       "No model reasoning is stored.",
@@ -268,6 +276,20 @@ describe("human observatory projection", () => {
     expect(projection.economy.production).toBeGreaterThan(0);
     expect(projection.economy.consumption).toBeGreaterThan(0);
     expect(projection.economy.transfers.length).toBeGreaterThan(0);
+    expect(projection.society).toMatchObject({
+      safeClosureRate: 1,
+      creditConservationPassed: true,
+      balancedExchangeRate: 1,
+      forcedWorkAgreements: 0,
+      forcedBargains: 0,
+      invalidProposals: 0,
+    });
+    expect(projection.society.households.total).toBeGreaterThan(50);
+    expect(projection.units[0]).toMatchObject({
+      householdId: expect.any(String),
+      civicCredits: expect.any(Number),
+      activeWorkAgreements: expect.any(Number),
+    });
     expect(projection.cognition).toMatchObject({
       configuredProvider: "deepseek-chat-completions",
       configuredShadowProvider: "deepseek-chat-completions",

@@ -93,6 +93,25 @@ describe("Symbiotic Shenzhen deterministic world", () => {
         (ledger) => ledger.closing <= ledger.capacity,
       ),
     ).toBe(true);
+    expect(first.snapshot.society.households.length).toBeGreaterThan(50);
+    expect(
+      first.snapshot.society.workAgreements.filter(
+        (agreement) => agreement.status === "completed",
+      ).length,
+    ).toBeGreaterThan(250);
+    expect(
+      first.snapshot.society.exchanges.every(
+        (exchange) => exchange.balanced,
+      ),
+    ).toBe(true);
+    expect(
+      first.snapshot.society.constitutionalProposals.every(
+        (proposal) =>
+          proposal.proposerKind === "ai" &&
+          proposal.reversible &&
+          !proposal.arbitraryCodeAllowed,
+      ),
+    ).toBe(true);
   }, 60_000);
 
   it("rejects a snapshot that is not the current season head", () => {

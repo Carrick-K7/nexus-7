@@ -125,21 +125,25 @@ Locks the production and repository boundary:
 - Rejects malformed or sub-minute Turn intervals instead of silently spinning.
 - Retains early-restart evidence for audit without treating it as on-time.
 
-Reference exit is complete. Actual 90-day production duration and encrypted
-off-host restore remain external evidence gates and are shown as pending.
+### v4.6 — Reversible City Society
+
+- Adds voluntary care households with formation, strain, honored exit and
+  dissolution.
+- Adds reversible work agreements, maintained community assets and
+  double-entry conserved civic-credit exchange.
+- Adds refusal, counteroffer, mediation and withdrawal to resource bargains.
+- Allows AI residents to propose only bounded, expiring city-rule parameters;
+  arbitrary code and project-constitution changes remain impossible.
+- Projects denominator-visible safe social closure, group work distribution,
+  asset condition, exchange balance, bargains and rule reversion.
+- Persists the same records in memory/PostgreSQL, backup/restore and the
+  fingerprinted Turn stream.
+- Compares reciprocal agency with hierarchy and segregation over three seeds.
+
+Reference exit is complete. Production promotion, actual 90-day duration and
+encrypted off-host restore remain distinct evidence gates.
 
 ## Next objectives
-
-### v4.6 — Richer city society
-
-- Add software-governed work, exchange, institution and household formation.
-- Model compute/energy ownership, maintenance labor and resource bargaining.
-- Add reversible constitutional proposals made by AI residents.
-- Expand repair, mediation and exit mechanisms before adding relationship
-  breadth.
-
-Exit: every new institution has state machines, failure paths, distribution
-metrics, memory/PostgreSQL parity and a controlled comparison.
 
 ### v4.7 — Scientific replication
 

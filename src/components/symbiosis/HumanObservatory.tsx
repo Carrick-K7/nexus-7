@@ -19,10 +19,14 @@ import {
   Download,
   Factory,
   HeartHandshake,
+  House,
+  Landmark,
   RefreshCw,
   Search,
   ShieldCheck,
+  Scale,
   Users,
+  Wrench,
   Zap,
 } from "lucide-react";
 import {
@@ -115,6 +119,46 @@ const copy = {
     shadowFailures: "Failures / budget skips",
     shadowCost: "Shadow cost",
     disabled: "Disabled",
+    societyTitle: "CITY SOCIETY & REVERSIBLE RULES",
+    societyDesc:
+      "Voluntary care households, work, public assets, balanced exchange, resource bargaining, and bounded city-rule proposals all settle inside the replayable Turn stream.",
+    societyClosure: "Safe social closure",
+    householdParticipation: "Household participation",
+    crossKindHouseholds: "Cross-type households",
+    workAgreements: "Work agreements",
+    active: "active",
+    completed: "completed",
+    refused: "refused",
+    assetAvailability: "Asset availability",
+    maintenanceCoverage: "Maintenance coverage",
+    balancedExchange: "Balanced exchanges",
+    creditConservation: "Credit conservation",
+    passed: "Pass",
+    failed: "Fail",
+    resourceBargains: "Resource bargains",
+    mediated: "mediated",
+    forced: "forced",
+    cityRules: "AI-PROPOSED CITY RULES",
+    cityRulesDesc:
+      "AI residents may propose bounded parameter changes. Cross-type quorum, expiry, and automatic reversion are recorded; arbitrary code is impossible.",
+    ratified: "ratified",
+    reverted: "reverted",
+    invalid: "invalid",
+    currentPolicy: "Current bounded policy",
+    maintenanceReserve: "Maintenance reserve",
+    householdSafety: "Household safety floor",
+    bargainingWindow: "Bargaining window",
+    recentProposals: "Recent proposals",
+    proposal: "Proposal",
+    proposer: "Proposer",
+    parameter: "Parameter",
+    change: "Change",
+    quorum: "Cross-type quorum",
+    noProposals: "No city-rule proposal has opened yet.",
+    laborDistribution: "Work distribution by resident type",
+    workload: "Workload",
+    careHousehold: "Care household",
+    civicCredits: "Civic credits",
     population: "POPULATION",
     populationDesc:
       "The current season models 260 individual residents. The background population is an aggregate scale reference, not generated people.",
@@ -274,6 +318,46 @@ const copy = {
     shadowFailures: "失败 / 预算跳过",
     shadowCost: "Shadow 开销",
     disabled: "未启用",
+    societyTitle: "城市社会与可逆规则",
+    societyDesc:
+      "自愿照护家庭、工作、公共资产、双录交换、资源协商和有界城市规则都在同一条可重放 Turn 事件流中结算。",
+    societyClosure: "安全社会闭环率",
+    householdParticipation: "家庭参与率",
+    crossKindHouseholds: "跨类型家庭",
+    workAgreements: "工作协议",
+    active: "活跃",
+    completed: "已完成",
+    refused: "已拒绝",
+    assetAvailability: "公共资产可用率",
+    maintenanceCoverage: "维护覆盖率",
+    balancedExchange: "双录平衡交换",
+    creditConservation: "信用守恒",
+    passed: "通过",
+    failed: "失败",
+    resourceBargains: "资源协商",
+    mediated: "经调解",
+    forced: "强制",
+    cityRules: "AI 居民提出的城市规则",
+    cityRulesDesc:
+      "AI 居民只能提出有界参数修改。跨类型法定人数、有效期和自动恢复都会记录，不能执行任意代码。",
+    ratified: "已通过",
+    reverted: "已恢复",
+    invalid: "无效",
+    currentPolicy: "当前有界规则",
+    maintenanceReserve: "维护储备率",
+    householdSafety: "家庭安全底线",
+    bargainingWindow: "协商窗口",
+    recentProposals: "最近规则提案",
+    proposal: "提案",
+    proposer: "提案者",
+    parameter: "参数",
+    change: "修改",
+    quorum: "跨类型法定人数",
+    noProposals: "尚未开启城市规则提案。",
+    laborDistribution: "各类居民工作分布",
+    workload: "工作量",
+    careHousehold: "照护家庭",
+    civicCredits: "城市信用",
     population: "人口信息",
     populationDesc:
       "当前 season 逐个建模 260 位居民。背景人口只是总量尺度参考，不是逐个生成的人。",
@@ -434,6 +518,51 @@ function evidenceState(
     : language === "zh"
       ? "未通过"
       : "Not met";
+}
+
+function proposalStatusLabel(
+  status: HumanObservatoryReport["society"]["recentProposals"][number]["status"],
+  language: Language,
+): string {
+  const labels = {
+    proposed: { en: "Proposed", zh: "已提出" },
+    deliberating: { en: "Deliberating", zh: "讨论中" },
+    ratified: { en: "Ratified", zh: "已通过" },
+    rejected: { en: "Rejected", zh: "未通过" },
+    withdrawn: { en: "Withdrawn", zh: "已撤回" },
+    reverted: { en: "Reverted", zh: "已恢复" },
+  } as const;
+  return labels[status][language];
+}
+
+function policyParameterLabel(
+  parameter: HumanObservatoryReport["society"]["recentProposals"][number]["parameter"],
+  language: Language,
+): string {
+  const labels = {
+    "maintenance-reserve-rate": {
+      en: "Maintenance reserve",
+      zh: "维护储备率",
+    },
+    "household-safety-floor": {
+      en: "Household safety floor",
+      zh: "家庭安全底线",
+    },
+    "bargaining-window-turns": {
+      en: "Bargaining window",
+      zh: "协商窗口",
+    },
+  } as const;
+  return labels[parameter][language];
+}
+
+function policyValue(
+  parameter: HumanObservatoryReport["society"]["recentProposals"][number]["parameter"],
+  value: number,
+): string {
+  return parameter === "bargaining-window-turns"
+    ? `${value} Turns`
+    : percent(value);
 }
 
 function statusClasses(status: ObservatoryHealth | UnitHealth): string {
@@ -1425,6 +1554,252 @@ export default function HumanObservatory() {
           </p>
         </section>
 
+        <section
+          className="rounded-2xl border border-cyber-purple/25 bg-cyber-darker/90 p-5"
+          data-testid="city-society"
+          aria-labelledby="city-society-title"
+        >
+          <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+            <div>
+              <div className="flex items-center gap-2">
+                <Landmark className="h-5 w-5 text-cyber-purple" />
+                <h2
+                  id="city-society-title"
+                  className="font-orbitron text-sm text-cyber-purple"
+                >
+                  {text.societyTitle}
+                </h2>
+              </div>
+              <p className="mt-2 max-w-5xl text-sm text-cyber-text-dim">
+                {text.societyDesc}
+              </p>
+            </div>
+            <span
+              className={`self-start rounded-full border px-3 py-1 text-xs ${
+                data.society.invalidProposals === 0 &&
+                data.society.forcedBargains === 0 &&
+                data.society.creditConservationPassed
+                  ? statusClasses("healthy")
+                  : statusClasses("strained")
+              }`}
+            >
+              {data.society.invalidProposals === 0 &&
+              data.society.forcedBargains === 0 &&
+              data.society.creditConservationPassed
+                ? text.passed
+                : text.failed}
+            </span>
+          </div>
+
+          <div className="mt-5 grid gap-3 sm:grid-cols-2 xl:grid-cols-3">
+            {[
+              {
+                icon: HeartHandshake,
+                label: text.societyClosure,
+                value: percent(data.society.safeClosureRate),
+                detail: `${data.society.closureNumerator} / ${data.society.closureDenominator}`,
+              },
+              {
+                icon: House,
+                label: text.householdParticipation,
+                value: percent(data.society.householdParticipationRate),
+                detail: `${data.society.households.active} ${text.active} · ${percent(data.society.crossKindHouseholdRate)} ${text.crossKindHouseholds}`,
+              },
+              {
+                icon: Wrench,
+                label: text.workAgreements,
+                value: data.society.activeWorkAgreements.toLocaleString(),
+                detail: `${data.society.completedWorkAgreements} ${text.completed} · ${data.society.refusedWorkAgreements} ${text.refused}`,
+              },
+              {
+                icon: Building2,
+                label: text.assetAvailability,
+                value: percent(data.society.assetAvailabilityRate),
+                detail: `${percent(data.society.maintenanceCoverageRate)} ${text.maintenanceCoverage}`,
+              },
+              {
+                icon: Scale,
+                label: text.balancedExchange,
+                value: percent(data.society.balancedExchangeRate),
+                detail: `${data.society.settledExchanges} · ${text.creditConservation}: ${
+                  data.society.creditConservationPassed
+                    ? text.passed
+                    : text.failed
+                }`,
+              },
+              {
+                icon: Users,
+                label: text.resourceBargains,
+                value: data.society.resolvedBargains.toLocaleString(),
+                detail: `${data.society.refusedBargains} ${text.refused} · ${data.society.mediatedBargains} ${text.mediated} · ${data.society.forcedBargains} ${text.forced}`,
+              },
+            ].map(({ icon: Icon, label, value, detail }) => (
+              <article
+                key={label}
+                className="rounded-xl border border-cyber-gray-light bg-cyber-black/45 p-4"
+              >
+                <div className="flex items-center gap-2 text-xs text-cyber-text-dim">
+                  <Icon className="h-4 w-4 text-cyber-purple" />
+                  <h3>{label}</h3>
+                </div>
+                <p className="mt-2 font-mono text-2xl text-cyber-text">
+                  {value}
+                </p>
+                <p className="mt-1 text-xs text-cyber-text-dim">
+                  {detail}
+                </p>
+              </article>
+            ))}
+          </div>
+
+          <div className="mt-5 grid gap-4 xl:grid-cols-[0.85fr_1.15fr]">
+            <div className="rounded-xl border border-cyber-gray-light bg-cyber-black/45 p-4">
+              <h3 className="text-xs uppercase tracking-wider text-cyber-text-dim">
+                {text.laborDistribution}
+              </h3>
+              <dl className="mt-3 space-y-2">
+                {KIND_ORDER.map((entry) => {
+                  const labor = data.society.laborByKind[entry];
+                  return (
+                    <div
+                      key={entry}
+                      className="grid grid-cols-[1fr_auto] gap-3 rounded-lg bg-cyber-darker/70 px-3 py-2 text-sm"
+                    >
+                      <dt className="text-cyber-text">
+                        {kindLabel(entry, text)}
+                      </dt>
+                      <dd className="text-right font-mono text-cyber-text-dim">
+                        {labor.active} {text.active} ·{" "}
+                        {labor.completed} {text.completed} ·{" "}
+                        {labor.workload} {text.workload}
+                      </dd>
+                    </div>
+                  );
+                })}
+              </dl>
+              <h3 className="mt-5 text-xs uppercase tracking-wider text-cyber-text-dim">
+                {text.currentPolicy}
+              </h3>
+              <dl className="mt-3 space-y-2 text-sm">
+                {[
+                  [
+                    text.maintenanceReserve,
+                    percent(data.society.policy.maintenanceReserveRate),
+                  ],
+                  [
+                    text.householdSafety,
+                    percent(data.society.policy.householdSafetyFloor),
+                  ],
+                  [
+                    text.bargainingWindow,
+                    `${data.society.policy.bargainingWindowTurns} Turns`,
+                  ],
+                ].map(([label, value]) => (
+                  <div
+                    key={label}
+                    className="flex justify-between gap-4 rounded-lg bg-cyber-darker/70 px-3 py-2"
+                  >
+                    <dt className="text-cyber-text-dim">{label}</dt>
+                    <dd className="font-mono text-cyber-text">{value}</dd>
+                  </div>
+                ))}
+              </dl>
+            </div>
+
+            <div className="rounded-xl border border-cyber-gray-light bg-cyber-black/45">
+              <div className="border-b border-cyber-gray-light p-4">
+                <div className="flex items-center gap-2">
+                  <Landmark className="h-4 w-4 text-cyber-blue" />
+                  <h3 className="font-orbitron text-xs text-cyber-blue">
+                    {text.cityRules}
+                  </h3>
+                </div>
+                <p className="mt-2 text-xs leading-5 text-cyber-text-dim">
+                  {text.cityRulesDesc}
+                </p>
+                <p className="mt-2 font-mono text-xs text-cyber-text">
+                  {data.society.constitutionalProposals} {text.proposal} ·{" "}
+                  {data.society.ratifiedProposals} {text.ratified} ·{" "}
+                  {data.society.revertedProposals} {text.reverted} ·{" "}
+                  {data.society.invalidProposals} {text.invalid}
+                </p>
+              </div>
+              {data.society.recentProposals.length === 0 ? (
+                <p className="p-4 text-sm text-cyber-text-dim">
+                  {text.noProposals}
+                </p>
+              ) : (
+                <div
+                  className="overflow-x-auto"
+                  tabIndex={0}
+                  aria-label={text.recentProposals}
+                >
+                  <table className="w-full min-w-[680px] text-left text-xs">
+                    <thead className="text-cyber-text-dim">
+                      <tr>
+                        <th className="px-4 py-3">{text.proposal}</th>
+                        <th className="px-4 py-3">{text.parameter}</th>
+                        <th className="px-4 py-3">{text.change}</th>
+                        <th className="px-4 py-3">{text.state}</th>
+                        <th className="px-4 py-3">{text.quorum}</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {data.society.recentProposals.map((proposal) => (
+                        <tr
+                          key={proposal.id}
+                          className="border-t border-cyber-gray-light"
+                        >
+                          <td className="px-4 py-3">
+                            <span className="block text-cyber-text">
+                              {proposal.id}
+                            </span>
+                            <span className="font-mono text-[10px] text-cyber-text-dim">
+                              {text.proposer}: {proposal.proposerId}
+                            </span>
+                          </td>
+                          <td className="px-4 py-3 text-cyber-text">
+                            {policyParameterLabel(
+                              proposal.parameter,
+                              language,
+                            )}
+                          </td>
+                          <td className="px-4 py-3 font-mono text-cyber-text">
+                            {policyValue(
+                              proposal.parameter,
+                              proposal.priorValue,
+                            )}{" "}
+                            →{" "}
+                            {policyValue(
+                              proposal.parameter,
+                              proposal.proposedValue,
+                            )}
+                          </td>
+                          <td className="px-4 py-3">
+                            {proposalStatusLabel(
+                              proposal.status,
+                              language,
+                            )}
+                          </td>
+                          <td className="px-4 py-3 font-mono">
+                            {evidenceState(
+                              proposal.crossKindQuorumMet,
+                              language,
+                            )}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
+          <p className="mt-4 text-xs leading-5 text-cyber-text-dim">
+            {data.society.disclosure[language]}
+          </p>
+        </section>
+
         <section className="rounded-2xl border border-cyber-blue/25 bg-cyber-darker/90">
           <div className="border-b border-cyber-gray-light p-5">
             <div className="flex items-center gap-2">
@@ -1538,6 +1913,18 @@ export default function HumanObservatory() {
                   [
                     text.relationships,
                     `${selectedUnit.relationshipCount} · ${text.commitments} ${selectedUnit.activeCommitments}`,
+                  ],
+                  [
+                    text.careHousehold,
+                    selectedUnit.householdId ?? "—",
+                  ],
+                  [
+                    text.workAgreements,
+                    String(selectedUnit.activeWorkAgreements),
+                  ],
+                  [
+                    text.civicCredits,
+                    selectedUnit.civicCredits.toLocaleString(),
                   ],
                 ].map(([label, value]) => (
                   <div

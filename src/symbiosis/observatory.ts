@@ -25,7 +25,7 @@ export const HUMAN_OBSERVATORY_V1_SCHEMA_VERSION =
 export const HUMAN_OBSERVATORY_SCHEMA_VERSION =
   "nexus.human-observatory.v2" as const;
 export const HUMAN_OBSERVATORY_FORMULA_VERSION =
-  "human-observatory-formulas-2.0.0" as const;
+  "human-observatory-formulas-2.1.0" as const;
 
 export interface LocalizedText {
   zh: string;
@@ -62,6 +62,9 @@ export interface ObservatoryUnit {
   basicNeedsSatisfied: boolean;
   relationshipCount: number;
   activeCommitments: number;
+  householdId: string | null;
+  activeWorkAgreements: number;
+  civicCredits: number;
   lowestNeeds: NeedCode[];
   needs: NeedState["needs"];
   simulated: true;
@@ -213,6 +216,57 @@ export interface HumanObservatoryReport {
     settledEventCount: number;
     resources: ObservatoryResourceFlow[];
     transfers: ObservatoryTransferFlow[];
+    disclosure: LocalizedText;
+  };
+  society: SymbiosisReport["society"] & {
+    households: {
+      total: number;
+      active: number;
+      forming: number;
+      strained: number;
+      dissolved: number;
+    };
+    laborByKind: Record<
+      ObserverResidentKind,
+      {
+        active: number;
+        completed: number;
+        refused: number;
+        workload: number;
+      }
+    >;
+    assets: {
+      operational: number;
+      degraded: number;
+      maintenance: number;
+    };
+    policy: {
+      maintenanceReserveRate: number;
+      householdSafetyFloor: number;
+      bargainingWindowTurns: number;
+      activeProposalId: string | null;
+    };
+    recentProposals: Array<{
+      id: string;
+      proposerId: string;
+      parameter:
+        | "maintenance-reserve-rate"
+        | "household-safety-floor"
+        | "bargaining-window-turns";
+      priorValue: number;
+      proposedValue: number;
+      status:
+        | "proposed"
+        | "deliberating"
+        | "ratified"
+        | "rejected"
+        | "withdrawn"
+        | "reverted";
+      crossKindQuorumMet: boolean;
+      openedTurn: number;
+      decisionTurn: number | null;
+      expiresTurn: number | null;
+    }>;
     disclosure: LocalizedText;
   };
   cognition: {
@@ -522,6 +576,30 @@ function buildUnits(
     }
   }
   const commitmentCounts = new Map<string, number>();
+  const activeWorkCounts = new Map<string, number>();
+  for (const agreement of snapshot.society.workAgreements) {
+    if (
+      agreement.status === "active" ||
+      agreement.status === "proposed"
+    ) {
+      activeWorkCounts.set(
+        agreement.workerId,
+        (activeWorkCounts.get(agreement.workerId) ?? 0) + 1,
+      );
+    }
+  }
+  const householdByResident = new Map<string, string>();
+  for (const household of snapshot.society.households) {
+    if (household.status === "dissolved") continue;
+    for (const residentId of household.memberIds) {
+      householdByResident.set(residentId, household.id);
+    }
+  }
+  const creditsByResident = new Map(
+    snapshot.society.creditAccounts
+      .filter((account) => account.ownerKind !== "community-commons")
+      .map((account) => [account.ownerId, account.balance]),
+  );
   const recovering = new Set<string>();
   for (const commitment of snapshot.commitments) {
     if (
@@ -559,7 +637,8 @@ function buildUnits(
       status: unitHealthFor(score),
       activity: recovering.has(resident.id)
         ? "recovering"
-        : (commitmentCounts.get(resident.id) ?? 0) > 0
+        : (commitmentCounts.get(resident.id) ?? 0) > 0 ||
+            (activeWorkCounts.get(resident.id) ?? 0) > 0
           ? "collaborating"
           : "routine",
       primarySignal:
@@ -574,6 +653,10 @@ function buildUnits(
       basicNeedsSatisfied: state.basicNeedsSatisfied,
       relationshipCount: relationshipCounts.get(resident.id) ?? 0,
       activeCommitments: commitmentCounts.get(resident.id) ?? 0,
+      householdId: householdByResident.get(resident.id) ?? null,
+      activeWorkAgreements:
+        activeWorkCounts.get(resident.id) ?? 0,
+      civicCredits: creditsByResident.get(resident.id) ?? 0,
       lowestNeeds: [...state.needs]
         .sort((left, right) => left.satisfaction - right.satisfaction)
         .slice(0, 3)
@@ -1161,6 +1244,38 @@ export function buildHumanObservatory(
     "strained",
     "critical",
   ];
+  const laborByKind = Object.fromEntries(
+    byKinds.map((kind) => {
+      const ids = new Set(
+        input.residents
+          .filter((resident) => resident.kind === kind)
+          .map((resident) => resident.id),
+      );
+      const agreements = input.snapshot.society.workAgreements.filter(
+        (agreement) => ids.has(agreement.workerId),
+      );
+      return [
+        kind,
+        {
+          active: agreements.filter(
+            (agreement) =>
+              agreement.status === "active" ||
+              agreement.status === "proposed",
+          ).length,
+          completed: agreements.filter(
+            (agreement) => agreement.status === "completed",
+          ).length,
+          refused: agreements.filter(
+            (agreement) => agreement.status === "refused",
+          ).length,
+          workload: agreements.reduce(
+            (sum, agreement) => sum + agreement.workload,
+            0,
+          ),
+        },
+      ];
+    }),
+  ) as HumanObservatoryReport["society"]["laborByKind"];
 
   return {
     schemaVersion: HUMAN_OBSERVATORY_SCHEMA_VERSION,
@@ -1308,6 +1423,66 @@ export function buildHumanObservatory(
       disclosure: {
         zh: "这些数值直接聚合自当前 Turn 已持久化的资源账：期初 + 生产 + 调入 = 消耗 + 调出 + 期末。机构分数只是其上层解释，不替代资源事实。",
         en: "These values aggregate the current Turn's persisted resource ledgers directly: opening + production + inbound = consumption + outbound + closing. Institution scores interpret rather than replace the flow facts.",
+      },
+    },
+    society: {
+      ...input.report.society,
+      households: {
+        total: input.snapshot.society.households.length,
+        active: input.snapshot.society.households.filter(
+          (household) => household.status === "active",
+        ).length,
+        forming: input.snapshot.society.households.filter(
+          (household) => household.status === "forming",
+        ).length,
+        strained: input.snapshot.society.households.filter(
+          (household) => household.status === "strained",
+        ).length,
+        dissolved: input.snapshot.society.households.filter(
+          (household) => household.status === "dissolved",
+        ).length,
+      },
+      laborByKind,
+      assets: {
+        operational: input.snapshot.society.assets.filter(
+          (asset) => asset.status === "operational",
+        ).length,
+        degraded: input.snapshot.society.assets.filter(
+          (asset) => asset.status === "degraded",
+        ).length,
+        maintenance: input.snapshot.society.assets.filter(
+          (asset) => asset.status === "maintenance",
+        ).length,
+      },
+      policy: {
+        maintenanceReserveRate:
+          input.snapshot.society.policy.maintenanceReserveRate,
+        householdSafetyFloor:
+          input.snapshot.society.policy.householdSafetyFloor,
+        bargainingWindowTurns:
+          input.snapshot.society.policy.bargainingWindowTurns,
+        activeProposalId:
+          input.snapshot.society.policy.activeProposalId ?? null,
+      },
+      recentProposals:
+        input.snapshot.society.constitutionalProposals
+          .slice(-5)
+          .reverse()
+          .map((proposal) => ({
+            id: proposal.id,
+            proposerId: proposal.proposerId,
+            parameter: proposal.parameter,
+            priorValue: proposal.priorValue,
+            proposedValue: proposal.proposedValue,
+            status: proposal.status,
+            crossKindQuorumMet: proposal.crossKindQuorumMet,
+            openedTurn: proposal.openedTurn,
+            decisionTurn: proposal.decisionTurn ?? null,
+            expiresTurn: proposal.expiresTurn ?? null,
+          })),
+      disclosure: {
+        zh: "家庭表示自愿照护与资源共享单元，不代表现实亲属关系。工作、交换、协商与城市规则均由确定性状态机结算；AI 提案只能修改有界参数，不能执行代码。",
+        en: "Households are voluntary care and resource-sharing units, not claims about real kinship. Work, exchange, bargaining, and city rules settle through deterministic state machines; AI proposals can change bounded parameters only and cannot execute code.",
       },
     },
     cognition: {

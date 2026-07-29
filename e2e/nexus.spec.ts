@@ -21,6 +21,12 @@ test("v4 simulated-city APIs preserve privacy and zero-denominator honesty", asy
   expect(snapshot.season.foregroundResidentCount).toBe(260);
   expect(snapshot.season.backgroundPopulation).toBe(18_248_500);
   expect(snapshot.snapshot.residentStates).toHaveLength(260);
+  expect(snapshot.snapshot.society).toMatchObject({
+    schemaVersion: "nexus.society-state.v1",
+    synthetic: true,
+  });
+  expect(snapshot.snapshot.society.assets).toHaveLength(9);
+  expect(snapshot.snapshot.society.creditAccounts).toHaveLength(263);
 
   const residentResponse = await page.request.get(
     "/api/residents/resident-sz-201/view",
@@ -30,6 +36,10 @@ test("v4 simulated-city APIs preserve privacy and zero-denominator honesty", asy
   const resident = await residentResponse.json();
   expect(resident.resident.kind).toBe("ai");
   expect(resident.resident.controller).toBe("cognitive-gateway");
+  expect(resident.society.creditAccount).toMatchObject({
+    ownerId: "resident-sz-201",
+    ownerKind: "ai",
+  });
 
   const eventsResponse = await page.request.get(
     "/api/world/v3/events?afterCursor=0",
@@ -91,6 +101,24 @@ test("v4 simulated-city APIs preserve privacy and zero-denominator honesty", asy
     activeResourceFlows: 0,
   });
   expect(livingCity.economy.resources).toHaveLength(8);
+  expect(livingCity.society).toMatchObject({
+    safeClosureRate: null,
+    householdParticipationRate: 1,
+    creditConservationPassed: true,
+    balancedExchangeRate: null,
+    forcedWorkAgreements: 0,
+    forcedBargains: 0,
+    invalidProposals: 0,
+    households: {
+      active: expect.any(Number),
+      dissolved: 0,
+    },
+    assets: {
+      operational: 9,
+      degraded: 0,
+      maintenance: 0,
+    },
+  });
   expect(livingCity.cognition).toMatchObject({
     configuredProvider: "nexus-deterministic-reference",
     configuredShadowProvider: null,
@@ -165,6 +193,13 @@ for (const viewport of [
       "COGNITIVE DIVERSITY SHADOW",
     );
     await expect(diversity).toContainText("Disabled");
+    const society = page.getByTestId("city-society");
+    await expect(society).toBeVisible();
+    await expect(society).toContainText(
+      "CITY SOCIETY & REVERSIBLE RULES",
+    );
+    await expect(society).toContainText("Credit conservation");
+    await expect(society).toContainText("AI-PROPOSED CITY RULES");
     await expect(
       page.getByRole("heading", { name: "EVERY RESIDENT" }),
     ).toBeVisible();
@@ -201,6 +236,8 @@ test("Human Observatory explains the city in Chinese", async ({ page }) => {
   await expect(page.getByText("DeepSeek API 用量与开销")).toBeVisible();
   await expect(page.getByText("Turn 可靠性与版本证据")).toBeVisible();
   await expect(page.getByText("认知多样性 Shadow")).toBeVisible();
+  await expect(page.getByText("城市社会与可逆规则")).toBeVisible();
+  await expect(page.getByText("AI 居民提出的城市规则")).toBeVisible();
   await expect(page.getByText("生产环节全链条 AI 化")).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "每一位居民" }),

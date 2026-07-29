@@ -1,6 +1,6 @@
 {
   "schemaVersion": "nexus.v45-verification.v1",
-  "generatedAt": "2026-07-29T12:38:22.693Z",
+  "generatedAt": "2026-07-29T13:33:16.066Z",
   "status": "implementation complete / external duration and off-host evidence pending",
   "reliabilityReference": {
     "days": 90,
@@ -15,9 +15,9 @@
     "turns": 365,
     "decisions": 730,
     "comparisons": 730,
-    "disagreements": 356,
-    "disagreementRate": 0.487671,
-    "homogeneityRate": 0.512329,
+    "disagreements": 352,
+    "disagreementRate": 0.482192,
+    "homogeneityRate": 0.517808,
     "failures": 0,
     "costUsd": 0,
     "worldFingerprintUnchanged": true,

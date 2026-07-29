@@ -20,6 +20,8 @@ resource / capability / consent / continuity / harm gates
              ↓
 bounded cognition ── structured preference only
              ↓
+household / work / asset / exchange / bargain / civic-rule state machines
+             ↓
 memory or PostgreSQL atomic commit
              ↓
 anonymous read-only projection ── Human Observatory / report APIs
@@ -29,7 +31,9 @@ Only the deterministic engine changes world state. Models cannot execute
 tools, SQL or shell; browser input cannot advance a Turn. PostgreSQL rejects a
 settlement whose expected head is stale and commits the Turn, snapshot,
 resource ledgers, events, relationships, commitments, episodes and cognitive
-decisions atomically.
+decisions atomically. v4.6 adds normalized society records to the same
+transaction; the snapshot and normalized projection cannot commit at
+different Turns.
 
 ## Runtime
 
@@ -75,6 +79,29 @@ budget exhaustion never invokes a hidden shadow fallback. The permanent
 `nexus-diversity-reference` provider supplies a zero-cost comparison control,
 and DeepSeek may be configured as shadow before any governed promotion.
 
+## Reversible city society
+
+`society.ts` owns six synthetic civic mechanisms:
+
+1. voluntary care households with forming, strain, honored exit and
+   dissolution states;
+2. reversible work agreements with proposal, refusal, completion and
+   termination paths;
+3. community energy storage, compute clusters and repair workshops whose
+   condition affects production and is restored by settled maintenance work;
+4. double-entry civic-credit exchanges whose total supply is conserved;
+5. resource bargains with refusal, counteroffer, mediation, withdrawal and
+   settlement paths;
+6. city-rule proposals made only by AI residents against a bounded parameter
+   DSL, with cross-type quorum evidence, expiry and automatic reversion.
+
+These are simulated institutions, not real households, jobs, property,
+currency or law. A city-rule proposal can change only maintenance reserve,
+household safety floor or bargaining window within hard bounds. It cannot
+execute code, alter the project constitution or approve a software release.
+Every transition emits a `society` world event and enters the snapshot
+fingerprint.
+
 ## Persistence
 
 Migration `0009_symbiotic_shenzhen_world.sql` defines the city schema.
@@ -82,7 +109,11 @@ Migration `0010_ai_only_world.sql` hardens databases created by the v3
 prototype: it refuses to proceed if any participant-avatar row exists, removes
 the unused human-intent/private-memory tables. Migration
 `0011_resident_taxonomy.sql` atomically migrates legacy labels and restricts
-resident kinds to `human`, `ai` and `robot`.
+resident kinds to `human`, `ai` and `robot`. Migration
+`0012_richer_city_society.sql` adds the society event layer and normalized
+record table. Legacy snapshots are deterministically hydrated at their
+existing Turn and gain fingerprinted society state only at the next atomic
+settlement.
 
 Checksum backup/restore covers only active tables. AES-256-GCM envelopes use a
 mode-0600 32-byte key file and authenticate the complete backup before
@@ -100,9 +131,10 @@ world contract. `nexus.human-observatory.v2` exposes every pseudonymous
 resident, the 24 persisted resource-ledger rows, inter-community transfer
 lanes, community institutions, production continuity, trends, event lineage,
 RALR, DeepSeek usage/cost, cognitive diversity, wall-clock reliability and
-evidence. Formula version
-`human-observatory-formulas-2.0.0` binds every derived score. V1 remains a
-read-only label compatibility projection.
+evidence. It also projects household participation, work distribution, asset
+maintenance, exchange balance, bargaining outcomes and reversible city rules.
+Formula version `human-observatory-formulas-2.1.0` binds every derived score.
+V1 remains a read-only label compatibility projection.
 
 Each Turn first settles local production and consumption, then balances
 resource reserve pressure between communities. Transfer lanes are included in

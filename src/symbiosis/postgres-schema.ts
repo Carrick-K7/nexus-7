@@ -236,6 +236,7 @@ CREATE TABLE IF NOT EXISTS nexus_world_model_decisions (
   recorded_at TIMESTAMPTZ NOT NULL,
   PRIMARY KEY (season_id, turn, id)
 );
+
 `;
 
 export const SYMBIOSIS_AI_ONLY_MIGRATION_SQL = `
@@ -345,6 +346,54 @@ END
 $$;
 `;
 
+export const SYMBIOSIS_SOCIETY_MIGRATION_SQL = `
+ALTER TABLE nexus_world_events
+  DROP CONSTRAINT IF EXISTS nexus_world_events_layer_check;
+
+ALTER TABLE nexus_world_events
+  ADD CONSTRAINT nexus_world_events_layer_check
+  CHECK (
+    layer IN (
+      'shared',
+      'human',
+      'ai-robot',
+      'relationship',
+      'society'
+    )
+  );
+
+CREATE TABLE IF NOT EXISTS nexus_world_society_records (
+  season_id TEXT NOT NULL
+    REFERENCES nexus_world_seasons(id) ON DELETE CASCADE,
+  record_type TEXT NOT NULL CHECK (
+    record_type IN (
+      'household',
+      'work-agreement',
+      'asset',
+      'exchange',
+      'bargain',
+      'constitutional-proposal',
+      'credit-account',
+      'civic-policy'
+    )
+  ),
+  id TEXT NOT NULL,
+  revision INTEGER NOT NULL CHECK (revision > 0),
+  updated_turn INTEGER NOT NULL CHECK (updated_turn >= 0),
+  status TEXT NOT NULL,
+  record_json JSONB NOT NULL,
+  PRIMARY KEY (season_id, record_type, id)
+);
+
+CREATE INDEX IF NOT EXISTS nexus_world_society_records_lookup_idx
+  ON nexus_world_society_records(
+    season_id,
+    record_type,
+    status,
+    updated_turn DESC
+  );
+`;
+
 export async function initializeSymbiosisSchema(pool: Pool): Promise<void> {
   const client = await pool.connect();
   let locked = false;
@@ -356,6 +405,7 @@ export async function initializeSymbiosisSchema(pool: Pool): Promise<void> {
     await client.query(SYMBIOSIS_SCHEMA_SQL);
     await client.query(SYMBIOSIS_AI_ONLY_MIGRATION_SQL);
     await client.query(SYMBIOSIS_RESIDENT_TAXONOMY_MIGRATION_SQL);
+    await client.query(SYMBIOSIS_SOCIETY_MIGRATION_SQL);
   } finally {
     if (locked) {
       await client.query(
