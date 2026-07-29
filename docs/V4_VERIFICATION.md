@@ -128,6 +128,7 @@ This reference validates the algorithm, not 90 elapsed production days.
 
 ## v4.5.1 Restart-Safe Clock gate
 
+- implementation commit `60f7612` contains the accepted hotfix;
 - an early process restart computes the remaining delay from the latest
   persisted runtime timestamp and does not settle immediately;
 - an overdue restart and a first deployment remain immediately runnable;

@@ -5,7 +5,7 @@
   "trigger": "restart-cadence",
   "triggerReason": "Production ran hourly while uninterrupted, but a worker restart settled immediately and accelerated the synthetic calendar before the persisted next due time.",
   "action": "Made normal startup compute and wait for the next due time from the latest runtime envelope; preserved immediate first/overdue/once behavior; rejected malformed or sub-minute intervals; kept early samples visible and excluded from on-time counts.",
-  "outcome": "The candidate passed 261 tests with real PostgreSQL and restore coverage, 26 browser/axe scenarios, lint, audit, build, all compatibility/reference gates and the 10,000-tick stress run. A real worker drill persisted baseline Turn 1, restarted 16.8 seconds later, announced a 43,228 ms wait and retained current_turn=1 until graceful termination.",
+  "outcome": "Implementation 60f7612 passed 261 tests with real PostgreSQL and restore coverage, 26 browser/axe scenarios, lint, audit, build, all compatibility/reference gates and the 10,000-tick stress run. A real worker drill persisted baseline Turn 1, restarted 16.8 seconds later, announced a 43,228 ms wait and retained current_turn=1 until graceful termination.",
   "metrics": [
     {
       "label": "Unplanned Turn settlements on early restart",
