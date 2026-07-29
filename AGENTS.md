@@ -105,8 +105,8 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 
 ## 外部边界
 
-- `c197f0f` (v4.5.0) 已部署并验证恢复/浏览器；v4.5.1 本地 261/261、26/26
-  和真实等待演练通过，尚待 Tag/部署。
+- `1226826` (v4.5.1) 已部署；本地 261/261、26/26，生产 Turn 255 重启等待
+  2,176,948 ms 且未提前结算。恢复/浏览器沿用已验证的 v4.5 additive contracts。
 - 尚无远端 Sigstore receipt；live DeepSeek、实际 90 天和 off-host 恢复待验证；
   生产既有 season 保留 v4.0 origin，v4.5 起新 Turn 绑定实际 revision。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。

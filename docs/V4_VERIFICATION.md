@@ -2,9 +2,9 @@
 
 > Date: 2026-07-26
 >
-> Status: v4.5.1 Restart-Safe Reliable Cognitive Diversity locally verified /
-> production upgrade, external duration, off-host restore, CI-Sigstore and
-> live-provider evidence pending
+> Status: v4.5.1 Restart-Safe Reliable Cognitive Diversity locally and
+> production-startup verified / external duration, off-host restore,
+> CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
 
@@ -137,6 +137,8 @@ This reference validates the algorithm, not 90 elapsed production days.
 - early restart samples remain visible and never count as on-time.
 - a real PostgreSQL worker drill announced a 43,228 ms startup wait and
   retained `current_turn=1` until graceful termination.
+- production announced a 2,176,948 ms wait from Turn 255 and did not create an
+  early Turn 256 during the restart verification window.
 
 The multi-season reference reports reciprocal RALR 73.33% across 525 resolved
 episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR
@@ -173,13 +175,14 @@ The production-built Playwright/axe suite must verify:
 ## Production evidence and trust boundary
 
 The reference values above are generated from tagged source and do not
-represent a claim about real humans. Annotated Tag `v4.5.0`, exact commit
-`c197f0f` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and the
+represent a claim about real humans. Annotated Tag `v4.5.1`, exact commit
+`1226826` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and the
 exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only access,
 200/36/24 taxonomy, 24 current ledgers, desktop/mobile Chromium, both themes,
 Chinese copy, zero WCAG A/AA violations, the DeepSeek zero ledger, read-only
 reference shadow, revision-bound Turn 175 and encrypted pre/post-upgrade
-backups were checked on 2026-07-26.
+backups were checked from 2026-07-26 through 2026-07-29. The v4.5.1 production
+restart wait was checked on 2026-07-29.
 Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 

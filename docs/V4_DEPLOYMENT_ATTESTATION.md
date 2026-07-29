@@ -1,12 +1,13 @@
 # v4 Production Deployment Attestation
 
-> Observed: 2026-07-26 · Asia/Shanghai
+> Observed: 2026-07-26 through 2026-07-29 · Asia/Shanghai
 
 ## Current artifact
 
-- Release: `v4.5.0` — Reliable Cognitive Diversity
-- Tag commit: `c197f0f5f3c0df2c536e615c1a46e341897c5021`
-- Implementation commit: `9da503f56e4c341f3d3aa909e205f31907242b35`
+- Release: `v4.5.1` — Restart-Safe Reliable Cognitive Diversity
+- Tag commit: `12268269045486e70837ec93bd70b401ef173aaf`
+- Hotfix commit: `60f7612954e64408badb193cfe3f9df89c7fdfe7`
+- v4.5 implementation commit: `9da503f56e4c341f3d3aa909e205f31907242b35`
 - Remote branch: `codex/ai-only-symbiotic-shenzhen-v4`
 - Public origin: `https://nexus7.carrick7.com`
 
@@ -58,13 +59,22 @@ The first v4.5 worker process atomically settled Turn 175 for simulated date
 RALR 74.2775%, 55 refusals, 34 withdrawals, zero coercive actions and zero
 severe consent, identity-continuity or irreversible-harm escapes.
 
-Turn 175 is the first Turn carrying `nexus.turn-runtime-evidence.v1`. It binds
+Turn 175 was the first Turn carrying `nexus.turn-runtime-evidence.v1`. It binds
 the complete release revision, worker, engine/Turn contract, predecessor and
 wall-clock timestamp. It is an honest baseline rather than an on-time sample.
-Production therefore reports `watch`: one of 176 stored Turns is
-revision-bound, the real observation window is below 90 days, and recovery is
-same-host rather than off-host. Missing, duplicate and predecessor mismatch
-counts are all zero, and the latest report was fresh.
+Production continued uninterrupted to Turn 254 at one-hour intervals, each
+with sub-second positive lag. A verification restart of v4.5.0 at 20:28 on
+2026-07-29 created Turn 255 early, exposing the startup behavior fixed by
+v4.5.1. The sample remains append-only and is not counted as on-time.
+
+At 20:52 the v4.5.1 worker read Turn 255's persisted timestamp and announced a
+2,176,948 ms wait instead of creating Turn 256. The public projection and
+database remained at Turn 255 during the verification window. Production
+therefore honestly reports `watch`: 81 of 256 Turns are revision-bound, the
+observed runtime window is 3.323 days, 79/80 comparable settlements were
+on-time, one was early, recovery evidence is stale/same-host, and the real
+window is below 90 days. Missing, duplicate and predecessor mismatch counts
+remain zero.
 
 ## Recovery points
 
@@ -101,8 +111,14 @@ and contains 176 Turn rows through Turn 175. Its 257,283,109-byte encrypted
 artifact has SHA-256
 `5b1c81e4e8378ab4158dafc1d37d38a7d2d53a1d23ef218736ce8f78db34869d`.
 
+Before the v4.5.1 cutover, the normal custom-format PostgreSQL backup completed
+at Turn 255 with SHA-256
+`3431b67e2dead71fc8693e91b31531455c482b47564bac646f8639c02799b7d5`.
+
 ## Superseded production states
 
+`v4.5.0` at `c197f0f` introduced runtime evidence and cognitive diversity but
+settled once on every restart; it is retained and superseded by v4.5.1.
 `v4.3.3` at `38bb514` introduced the DeepSeek cost ledger and remained active
 through Turn 174. `v4.3.2` at `c36f542` closed the chromatic contrast gate.
 `v4.3.1` at `0233ab7` is retained but superseded because its production audit
@@ -118,7 +134,7 @@ recovery points remain immutable.
 - recovery is same-host; no off-host restore is claimed;
 - cognition is deterministic/reference-shadow; no live DeepSeek call is
   claimed;
-- no remote CI/Sigstore receipt exists for v4.5.0;
+- no remote CI/Sigstore receipt exists for v4.5.1;
 - the public surface is anonymous read-only observation, not multi-user OIDC;
 - all residents and outcomes are synthetic and provide no evidence of real
   policy effects.
