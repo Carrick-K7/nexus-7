@@ -2,9 +2,9 @@
 
 > Date: 2026-07-26
 >
-> Status: v4.5.0 Reliable Cognitive Diversity locally verified /
-> production, external duration, off-host restore, CI-Sigstore and live-provider
-> evidence pending
+> Status: v4.5.0 Reliable Cognitive Diversity locally and production verified /
+> external duration, off-host restore, CI-Sigstore and live-provider evidence
+> pending
 
 ## Reference gate
 
@@ -160,18 +160,17 @@ The production-built Playwright/axe suite must verify:
 
 ## Production evidence and trust boundary
 
-The reference values above are generated from the tagged source and do not
-represent a claim about real humans. Annotated Tag `v4.3.3`, exact commit
-`38bb514` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote and the
-exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only identity,
-edge and application mutation denial, 200/36/24 taxonomy migration, 24 current
-resource ledgers, eight active flows, desktop/mobile Chromium, both color
-modes, Chinese copy, the visible zero-usage DeepSeek panel, zero WCAG A/AA
-violations, Turn 160/161 settlement, TLS and v4.3.3 pre/post-upgrade backups
-were checked on 2026-07-25.
+The reference values above are generated from tagged source and do not
+represent a claim about real humans. Annotated Tag `v4.5.0`, exact commit
+`c197f0f` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and the
+exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only access,
+200/36/24 taxonomy, 24 current ledgers, desktop/mobile Chromium, both themes,
+Chinese copy, zero WCAG A/AA violations, the DeepSeek zero ledger, read-only
+reference shadow, revision-bound Turn 175 and encrypted pre/post-upgrade
+backups were checked on 2026-07-26.
 Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 
 Remote CI/Sigstore, live DeepSeek, 90 elapsed production days and an off-host
-recovery drill remain pending and must not be inferred from local or production
-evidence.
+recovery drill remain pending and must not be inferred from local, same-host or
+production evidence.
