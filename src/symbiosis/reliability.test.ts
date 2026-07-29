@@ -12,6 +12,7 @@ import {
 import {
   attachTurnRuntimeEvidence,
   buildWorldReliabilityReport,
+  nextTurnScheduleDelayMs,
   RECOVERY_EVIDENCE_SCHEMA_VERSION,
   withRecoveryEvidenceChecksum,
   type SymbiosisRecoveryEvidence,
@@ -217,5 +218,46 @@ describe("world reliability evidence", () => {
     expect(report.earlyRestartSettlements).toBe(1);
     expect(report.onTimeSettlements).toBe(0);
     expect(report.onTimeRate).toBe(0);
+  });
+
+  it("waits for the persisted cadence after restart and runs overdue work immediately", () => {
+    const latest = turn(42, "fingerprint-41");
+    latest.runtimeEvidence = {
+      schemaVersion: TURN_RUNTIME_EVIDENCE_SCHEMA_VERSION,
+      recordedAt: "2026-01-01T00:00:00.000Z",
+      workerId: "worker-a",
+      deploymentRevision: revision,
+      engineVersion: "engine-v1",
+      engineContractVersion: TURN_SCHEMA_VERSION,
+      intervalMs,
+      previousTurn: 41,
+      previousFingerprint: "fingerprint-41",
+      timing: "on-time",
+    };
+
+    expect(
+      nextTurnScheduleDelayMs(
+        latest,
+        Date.parse("2026-01-01T00:30:00.000Z"),
+        intervalMs,
+      ),
+    ).toBe(1_800_000);
+    expect(
+      nextTurnScheduleDelayMs(
+        latest,
+        Date.parse("2026-01-01T01:30:00.000Z"),
+        intervalMs,
+      ),
+    ).toBe(0);
+    expect(
+      nextTurnScheduleDelayMs(
+        turn(0, "genesis"),
+        Date.parse("2026-01-01T00:00:00.000Z"),
+        intervalMs,
+      ),
+    ).toBe(0);
+    expect(() =>
+      nextTurnScheduleDelayMs(latest, Date.now(), Number.NaN),
+    ).toThrow("finite clock and interval");
   });
 });

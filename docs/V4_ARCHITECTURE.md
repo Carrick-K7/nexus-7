@@ -53,8 +53,10 @@ fingerprint, simulation date, final fingerprint, event count, cognition
 status and decision IDs. New Turns also carry an additive runtime envelope:
 wall-clock record time, expected time/lag, worker, interval, exact deployment
 revision and engine contract. This operational evidence does not enter the
-world fingerprint. Random draws use stable `(seed, turn, channel, sample)`
-coordinates. A saved model decision is an input artifact on replay; the
+world fingerprint. On startup, the latest envelope determines the next due
+time; an early worker waits while missing or overdue evidence runs immediately.
+An explicit `--once` drill bypasses waiting. Random draws use stable
+`(seed, turn, channel, sample)` coordinates. A saved model decision is an input artifact on replay; the
 provider is never called again.
 
 The default cognitive policy is deterministic and zero-cost. Optional

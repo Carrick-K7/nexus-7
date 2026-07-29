@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-26 · v2.0.0 安全内核 + v4.5.0 可靠认知多样性
+> 更新：2026-07-29 · v2.0.0 安全内核 + v4.5.1 restart-safe clock
 
 ## 定义与边界
 
@@ -50,8 +50,8 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 v2.0 本地/reference 已闭环；未获得远端 attestation 时只能写
 `implementation complete / external evidence pending`。
 
-v4.5.0 含 200 人、36 AI、24 机器人、Turn 资源流、Human Observatory、双主题、
-DeepSeek 成本账、逐 Turn 运行证据和只读影子认知。真人接入、身份映射、私人输入
+v4.5.1 含 200 人、36 AI、24 机器人、Human Observatory、DeepSeek 成本账、
+逐 Turn 证据、只读 shadow 和 restart-safe clock。真人接入、身份映射、私人输入
 和居民登录不在范围。
 
 ## 模块边界
@@ -83,9 +83,8 @@ Agent/模型不得执行任意 shell、SQL 或隐式代码。
 13. 不得增加真人席位、身份/意图/私人输入通道；模型推理不得持久化。
 14. 外部模型断供、超时或预算耗尽不得停止城市；同一运行不得静默换模。
 
-完成定义：领域对象/状态机/失败路径、workspace 隔离/最小权限、memory/PG、
-API/worker、双语可观测 UI、unit/integration/browser/axe/恢复测试、迁移/备份、
-机器证据、文档/ADR/manifest 缺一不可。
+完成定义：状态机/失败路径、权限、memory/PG、API/worker、双语 UI、unit/PG/
+browser/axe/恢复、迁移/备份、机器证据、文档/ADR/manifest 缺一不可。
 
 ## Git 提交后
 
@@ -98,7 +97,7 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 |---|---:|
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
-| unit / 条件跳过 | 259/259 / 0 |
+| unit / 条件跳过 | 261/261 / 0 |
 | PostgreSQL / Playwright+axe | 16/16 / 26/26 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
@@ -106,8 +105,8 @@ manifest/Evolution Log；重新评估退出门禁。不得把未提交结果写�
 
 ## 外部边界
 
-- v4.5.0 Tag/分支已 push；`c197f0f` 部署至 `nexus7.carrick7.com`。Turn 175
-  revision 绑定、reference shadow、加密备份/同机第二库恢复和生产浏览器已验证。
+- `c197f0f` (v4.5.0) 已部署并验证恢复/浏览器；v4.5.1 本地 261/261、26/26
+  和真实等待演练通过，尚待 Tag/部署。
 - 尚无远端 Sigstore receipt；live DeepSeek、实际 90 天和 off-host 恢复待验证；
   生产既有 season 保留 v4.0 origin，v4.5 起新 Turn 绑定实际 revision。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。

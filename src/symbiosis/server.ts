@@ -86,6 +86,18 @@ export function shadowProviderName(
   return configured;
 }
 
+export function symbiosisTurnIntervalMs(
+  value: string | undefined,
+): number {
+  const parsed = Number(value ?? 3_600_000);
+  if (!Number.isFinite(parsed) || parsed < 60_000) {
+    throw new Error(
+      "SYMBIOSIS_TURN_INTERVAL_MS must be a finite number of at least 60000",
+    );
+  }
+  return parsed;
+}
+
 function configuredRecoveryEvidence():
   | SymbiosisRecoveryEvidence
   | undefined {
@@ -173,12 +185,8 @@ export async function getWorldService(): Promise<WorldService> {
           deploymentRevision:
             process.env.NEXUS_RELEASE_REVISION ??
             "unbound-development",
-          intervalMs: Math.max(
-            60_000,
-            Number(
-              process.env.SYMBIOSIS_TURN_INTERVAL_MS ??
-                3_600_000,
-            ),
+          intervalMs: symbiosisTurnIntervalMs(
+            process.env.SYMBIOSIS_TURN_INTERVAL_MS,
           ),
         },
         recoveryEvidence: configuredRecoveryEvidence(),

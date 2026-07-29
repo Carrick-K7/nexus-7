@@ -54,6 +54,7 @@ untrusted until validated at their boundary.
 | Goodhart / hidden hard cases | fixed denominator, detection coverage, unresolved age, rollback/veto/group distributions | freeze release and inspect exclusions |
 | Minority harm hidden by averages | protected-group thresholds and severe-harm veto | reopen objective deliberation |
 | Deployment timeout or partial failure | environment ordering, idempotent adapter, bounded retries, canary telemetry, compensation and rollback | emergency-stop and controller drill |
+| Restart accelerates simulation time | startup reads persisted cadence and waits until due; explicit early/late classification; invalid intervals fail closed | pause worker and inspect Turn runtime lineage |
 | Delayed harm | independent windows, late-evidence revisions, lesson/playbook invalidation, case reopen | re-evaluate and roll back |
 | Notification suppression | durable delivery attempts, receipts, dead letter, escalation, governance red team | use alternate channel and incident review |
 | SSRF / secret disclosure | configured HTTPS endpoints, server-side tokens, no secrets in events/UI, network-isolated evaluator | rotate credential and inspect audit |

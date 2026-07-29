@@ -117,6 +117,14 @@ Locks the production and repository boundary:
 - Proves across 365 Turns that shadow observation leaves the world fingerprint
   unchanged and provider substitution preserves every safety invariant.
 
+### v4.5.1 — Restart-safe clock
+
+- Waits for the persisted next due time when the worker restarts.
+- Runs immediately only for first deployment, overdue work or explicit
+  `--once` recovery drills.
+- Rejects malformed or sub-minute Turn intervals instead of silently spinning.
+- Retains early-restart evidence for audit without treating it as on-time.
+
 Reference exit is complete. Actual 90-day production duration and encrypted
 off-host restore remain external evidence gates and are shown as pending.
 

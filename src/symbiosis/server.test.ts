@@ -8,6 +8,7 @@ import {
 import {
   primaryProviderName,
   shadowProviderName,
+  symbiosisTurnIntervalMs,
 } from "./server";
 
 describe("symbiosis provider configuration", () => {
@@ -22,6 +23,17 @@ describe("symbiosis provider configuration", () => {
     );
     expect(() => shadowProviderName("deterministic")).toThrow(
       "Unsupported SYMBIOSIS_SHADOW_PROVIDER",
+    );
+  });
+
+  it("rejects a malformed or unsafe Turn interval instead of spinning", () => {
+    expect(symbiosisTurnIntervalMs(undefined)).toBe(3_600_000);
+    expect(symbiosisTurnIntervalMs("60000")).toBe(60_000);
+    expect(() => symbiosisTurnIntervalMs("not-a-number")).toThrow(
+      "SYMBIOSIS_TURN_INTERVAL_MS",
+    );
+    expect(() => symbiosisTurnIntervalMs("59999")).toThrow(
+      "SYMBIOSIS_TURN_INTERVAL_MS",
     );
   });
 });

@@ -1,5 +1,40 @@
 [
   {
+    "id": "iteration-v4.5.1",
+    "version": "4.5.1",
+    "date": "2026-07-29",
+    "trigger": "restart-cadence",
+    "triggerReason": "Production ran hourly while uninterrupted, but a worker restart settled immediately and accelerated the synthetic calendar before the persisted next due time.",
+    "action": "Made normal startup compute and wait for the next due time from the latest runtime envelope; preserved immediate first/overdue/once behavior; rejected malformed or sub-minute intervals; kept early samples visible and excluded from on-time counts.",
+    "outcome": "The candidate passed 261 tests with real PostgreSQL and restore coverage, 26 browser/axe scenarios, lint, audit, build, all compatibility/reference gates and the 10,000-tick stress run. A real worker drill persisted baseline Turn 1, restarted 16.8 seconds later, announced a 43,228 ms wait and retained current_turn=1 until graceful termination.",
+    "metrics": [
+      {
+        "label": "Unplanned Turn settlements on early restart",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Invalid interval fail-closed paths",
+        "before": 0,
+        "after": 2
+      }
+    ],
+    "evidence": [
+      "Persisted cadence supplies the startup delay",
+      "First deployment and overdue work remain immediately runnable",
+      "Explicit --once drills bypass waiting",
+      "Early restart remains visible and is not counted as on-time",
+      "NaN and sub-minute intervals fail before the loop"
+    ],
+    "artifacts": [
+      "scripts/run-symbiosis-clock.ts",
+      "src/symbiosis/reliability.ts",
+      "src/symbiosis/server.ts",
+      "docs/adr/0028-restart-safe-clock.md"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.5.0",
     "version": "4.5.0",
     "date": "2026-07-26",

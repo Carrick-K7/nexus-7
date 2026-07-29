@@ -182,6 +182,35 @@ export function attachTurnRuntimeEvidence(
   };
 }
 
+export function nextTurnScheduleDelayMs(
+  latestTurn: WorldTurn,
+  nowMs: number,
+  intervalMs: number,
+): number {
+  if (
+    !Number.isFinite(nowMs) ||
+    !Number.isFinite(intervalMs) ||
+    intervalMs < 60_000
+  ) {
+    throw new Error(
+      "Turn schedule requires a finite clock and interval of at least 60 seconds",
+    );
+  }
+  if (!latestTurn.runtimeEvidence) return 0;
+  const recordedAt = finiteDate(
+    latestTurn.runtimeEvidence.recordedAt,
+  );
+  if (recordedAt === null) {
+    throw new Error(
+      "Latest Turn runtime evidence has an invalid recordedAt",
+    );
+  }
+  return Math.max(
+    0,
+    Math.ceil(recordedAt + intervalMs - nowMs),
+  );
+}
+
 export function buildWorldReliabilityReport(
   turns: WorldTurn[],
   options: {

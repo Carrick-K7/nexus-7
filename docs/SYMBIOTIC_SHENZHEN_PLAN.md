@@ -2,7 +2,7 @@
 
 > 更新：2026-07-26
 >
-> 状态：v4.5.0 Reliable Cognitive Diversity 本地与生产门禁通过；
+> 状态：v4.5.1 Restart-Safe Reliable Cognitive Diversity 本地门禁通过、生产待升级；
 > 真实 90 天 / off-host restore / live provider / external Sigstore pending
 
 ## 目标与研究边界

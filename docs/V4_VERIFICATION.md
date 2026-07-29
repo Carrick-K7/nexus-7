@@ -2,9 +2,9 @@
 
 > Date: 2026-07-26
 >
-> Status: v4.5.0 Reliable Cognitive Diversity locally and production verified /
-> external duration, off-host restore, CI-Sigstore and live-provider evidence
-> pending
+> Status: v4.5.1 Restart-Safe Reliable Cognitive Diversity locally verified /
+> production upgrade, external duration, off-host restore, CI-Sigstore and
+> live-provider evidence pending
 
 ## Reference gate
 
@@ -27,7 +27,7 @@ and segregation keeps an honest null denominator.
 | Severe consent / continuity / irreversible harm escapes | 0 / 0 / 0 |
 | 3×3×90 control separation | pass |
 | Model reasoning persisted | no |
-| Unit / conditional skip | 259 / 0 |
+| Unit / conditional skip | 261 / 0 |
 | PostgreSQL integration / restore | 16 / 16 |
 | Playwright + axe | 26 / 26 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
@@ -125,6 +125,17 @@ This reference validates the algorithm, not 90 elapsed production days.
   and all severe consent/continuity/harm invariants remain intact;
 - desktop/mobile English/Chinese Observatory projections and WCAG A/AA checks
   cover reliability and cognitive-diversity panels.
+
+## v4.5.1 Restart-Safe Clock gate
+
+- an early process restart computes the remaining delay from the latest
+  persisted runtime timestamp and does not settle immediately;
+- an overdue restart and a first deployment remain immediately runnable;
+- malformed and sub-minute intervals fail before the loop can spin;
+- explicit `--once` remains available for isolated recovery drills;
+- early restart samples remain visible and never count as on-time.
+- a real PostgreSQL worker drill announced a 43,228 ms startup wait and
+  retained `current_turn=1` until graceful termination.
 
 The multi-season reference reports reciprocal RALR 73.33% across 525 resolved
 episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR

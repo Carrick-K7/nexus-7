@@ -83,6 +83,11 @@ Each worker log line is JSON and includes Turn, simulation date, fingerprint,
 event count, deployment revision/timing/lag, cognition and shadow status,
 RALR, safety and accumulated model cost.
 
+On normal startup the worker reads the latest persisted runtime envelope and
+waits until its configured next due time. Restarts therefore do not create
+extra simulated days. `--once` is an explicit drill override and settles
+immediately. A non-numeric or sub-minute interval fails startup.
+
 Alert if no Turn arrives within twice the configured interval, any severe
 escape is nonzero, `resourceConservationPassed` is false, `longPending` grows,
 or monthly cognition cost reaches 70%, 90% or 100% of budget.
