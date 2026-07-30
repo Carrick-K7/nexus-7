@@ -97,9 +97,10 @@ remain zero. Twenty-five production Turns carry the v4.6 revision.
 
 The Turn 281 production browser audit also exposed 325px mobile document
 overflow once the first populated city-rule table appeared. This is a real
-v4.6.0 presentation defect, not a world-state or API failure. The v4.6.1 source
-candidate contains the table within its card and adds the missing populated
-fixture; no production-fix claim is made before that patch Tag is deployed.
+v4.6.0 presentation defect, not a world-state or API failure. v4.6.1
+implementation `71f550c` contains the table within its card and adds the
+missing populated fixture; no production-fix claim is made before that patch
+Tag is deployed.
 
 ## Recovery points
 

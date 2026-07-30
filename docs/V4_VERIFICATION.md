@@ -174,6 +174,8 @@ synthetic mechanisms, not real households, labor, markets or public policy.
 
 ## v4.6.1 Populated Evidence Containment gate
 
+- implementation commit `71f550c` contains the accepted layout fix, populated
+  browser fixture and deterministic-test budget corrections;
 - production observation found that the first 680px AI-rule evidence table
   imposed its intrinsic width on the society grid and created 325px of
   document overflow at a 390px viewport;
