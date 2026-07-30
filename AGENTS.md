@@ -1,15 +1,14 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-29 · v2.0.0 安全内核 + v4.6 可逆城市社会
+> 更新：2026-07-30 · v2.0.0 安全内核 + v4.6.1 移动端证据约束
 
 ## 定义与边界
 
 NEXUS-7 是以合成城市为环境、多智能体为受约束干预者、人类为最终治理者的
 可验证自主实验室。高风险变更须经证据、审批、灰度、监控和回滚。
 
-v4 运行可重放、可审计的模拟深圳，用于研究人、AI 和机器人在不同物质条件下的
-互惠能动性。当前居民均由软件模拟，不含真人参与或 PII。它不是
-数字孪生；数据只校准尺度，居民、社区、机构、关系和事件均为合成。v2 是安全内核。
+v4 运行可重放、可审计的模拟深圳，研究人、AI 和机器人的互惠能动性。居民均由
+软件模拟，无真人或 PII；数据只校准尺度，不是数字孪生。v2 是安全内核。
 
 不得把合成结果描述成现实政策效果，不得展示或伪造模型隐藏思维链。
 
@@ -44,18 +43,17 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 ## 当前状态
 
-v2.0 本地/reference 已闭环；未获得远端 attestation 时只能写
-`implementation complete / external evidence pending`。
+v2.0 reference 已闭环；无远端 attestation 时只能写 `external evidence pending`。
 
-v4.6 含 200 人、36 AI、24 机器人、Human Observatory、DeepSeek 成本账、
-逐 Turn 证据、只读 shadow、restart-safe clock，以及可退出家庭、可拒绝工作、
-公共资产、守恒交换/协商和自动回退的有界城市规则。无真人、身份映射或私人输入。
+v4.6.1 含 200 人、36 AI、24 机器人、观测台、成本/Turn 证据、只读 shadow、
+restart-safe clock、可退出家庭/工作、公共资产、守恒交换/协商和有界城市规则。
+无真人、身份映射或私人输入。
 
 ## 模块边界
 
 `simulation` 负责 v1/v2 世界；`symbiosis` 负责 v4 居民/Turn；
 `city`、`diagnosis`、`planning`、`outcomes`、`participation` 仅保留 v2
-运营治理证据，不得成为城市输入；`closure` 只编排并链接其持久对象；
+治理证据，不得成为城市输入；`closure` 只编排并链接其持久对象；
 `lifecycle`/`experiments` 提供原子持久化；`governance`、`deployment`、
 `operations` 管身份、发布和恢复；UI 只做投影。
 
@@ -95,7 +93,7 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
 | unit / 条件跳过 | 267/267 / 0 |
-| PostgreSQL / Playwright+axe | 16/16 / 26/26 |
+| PostgreSQL / Playwright+axe | 16/16 / 27/27 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4 多季对照 | 3 regimes × 3 seeds × 90 Turns；mechanism separation pass |
@@ -103,8 +101,10 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 
 ## 外部边界
 
-- `1226826` (v4.5.1) 已部署；生产 Turn 256 按持久到期时间结算，lag 306 ms。
-- v4.6 implementation `a8ba2bd` 本地 267/267、PG 16/16、browser 26/26；
-  尚未 Tag/部署，不得写成线上事实。
-- 尚无远端 Sigstore receipt；live DeepSeek、实际 90 天和 off-host 恢复待验证。
+- `75eda1b` (v4.6.0) 已部署；Turn 257–281 均按时并绑定 revision；生产现有
+  society 426 records/107 events，43/43 safe closure，强制/无效规则 0。
+- v4.6.1 修复 populated-rule 移动端 325 px 溢出，本地 browser 27/27；尚未
+  Tag/部署，不得写成线上事实。v4.6 implementation `a8ba2bd` 为既有领域基线。
+- 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
+  恢复待验证。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。

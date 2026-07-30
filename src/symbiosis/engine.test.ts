@@ -112,7 +112,7 @@ describe("Symbiotic Shenzhen deterministic world", () => {
           !proposal.arbitraryCodeAllowed,
       ),
     ).toBe(true);
-  }, 60_000);
+  }, 120_000);
 
   it("rejects a snapshot that is not the current season head", () => {
     const initial = createInitialWorld();

@@ -225,6 +225,58 @@ for (const viewport of [
   });
 }
 
+test("mobile populated city-rule evidence stays inside its scroll container", async ({
+  page,
+}) => {
+  const response = await page.request.get(
+    "/api/observatory/v2/overview",
+  );
+  expect(response.ok()).toBe(true);
+  const report = await response.json();
+  report.society.constitutionalProposals = 1;
+  report.society.ratifiedProposals = 1;
+  report.society.policy = {
+    ...report.society.policy,
+    maintenanceReserveRate: 0.22,
+    activeProposalId: "proposal-mobile-containment",
+  };
+  report.society.recentProposals = [
+    {
+      id: "symbiotic-shenzhen-season-2026-q3-constitutional-proposal-001",
+      proposerId: "resident-sz-204",
+      parameter: "maintenance-reserve-rate",
+      priorValue: 0.15,
+      proposedValue: 0.22,
+      status: "ratified",
+      crossKindQuorumMet: true,
+      openedTurn: 10,
+      decisionTurn: 12,
+      expiresTurn: 32,
+    },
+  ];
+  await page.route(
+    "**/api/observatory/v2/overview",
+    async (route) => {
+      await route.fulfill({
+        status: 200,
+        contentType: "application/json",
+        body: JSON.stringify(report),
+      });
+    },
+  );
+
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  const society = page.getByTestId("city-society");
+  await expect(society).toContainText(
+    "symbiotic-shenzhen-season-2026-q3-constitutional-proposal-001",
+  );
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - window.innerWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(1);
+});
+
 test("Human Observatory explains the city in Chinese", async ({ page }) => {
   await page.goto("/");
   await page.getByRole("button", { name: "Change language" }).click();
@@ -324,7 +376,7 @@ test("redundant status labels stay hidden and both color themes remain accessibl
     .analyze();
   expect(mobileLightAccessibility.violations).toEqual([]);
 
-  await page.evaluate(() => {
+  await page.addInitScript(() => {
     const raw = localStorage.getItem("nexus-store");
     if (!raw) throw new Error("Expected persisted NEXUS state");
     const persisted = JSON.parse(raw) as {

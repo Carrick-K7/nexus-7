@@ -160,6 +160,10 @@ The city-society panel reads the fingerprinted society state directly:
 - resolved, refused, mediated and forced resource bargains;
 - AI-proposed bounded city rules, cross-type quorum, expiry and reversion.
 
+Wide evidence tables scroll inside their cards. The mobile gate must include a
+production-length populated rule identifier; an empty-proposal fixture does not
+prove document-level containment.
+
 Supporting metric **Safe Social Closure Rate** keeps its numerator and
 denominator visible. A terminal work, bargain, household-exit or rule process
 enters the numerator only when its outcome is recorded, exchange accounting is

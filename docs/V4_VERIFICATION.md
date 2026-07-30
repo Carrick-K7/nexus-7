@@ -1,9 +1,9 @@
 # v4 Simulated Symbiosis Verification
 
-> Date: 2026-07-26
+> Date: 2026-07-30
 >
-> Status: v4.6.0 Reversible City Society implementation complete /
-> production deployment, external duration, off-host restore, CI-Sigstore and
+> Status: v4.6.0 Reversible City Society implementation and initial production
+> runtime verified / external duration, off-host restore, CI-Sigstore and
 > live-provider evidence pending
 
 ## Reference gate
@@ -29,7 +29,7 @@ and segregation keeps an honest null denominator.
 | Model reasoning persisted | no |
 | Unit / conditional skip | 267 / 0 |
 | PostgreSQL integration / restore | 16 / 16 |
-| Playwright + axe | 26 / 26 |
+| Playwright + axe | 27 / 27 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 
 ## v4.1 AI-only hardening gate
@@ -172,6 +172,25 @@ This reference validates the algorithm, not 90 elapsed production days.
 `public/data/v4-6-verification.json`. These figures validate deterministic
 synthetic mechanisms, not real households, labor, markets or public policy.
 
+## v4.6.1 Populated Evidence Containment gate
+
+- production observation found that the first 680px AI-rule evidence table
+  imposed its intrinsic width on the society grid and created 325px of
+  document overflow at a 390px viewport;
+- grid tracks now use `minmax(0, …)` and both cards have a zero minimum width,
+  preserving card-local table scrolling while reducing document overflow to
+  zero;
+- the browser fixture includes the full production-length proposal ID,
+  ratification, parameter change and quorum evidence;
+- the complete production-build suite passes 27/27 desktop/mobile,
+  English/Chinese, dark/light and WCAG A/AA scenarios;
+- the legacy-theme test injects version-three storage before application
+  hydration, avoiding a race with the running simulation persistence timer;
+- unchanged 730-Turn replay and multi-season workloads receive explicit
+  execution budgets rather than load-sensitive default ceilings;
+- 251 non-integration plus 16 real PostgreSQL/restore tests pass with zero
+  skips, alongside v4.6 reference verification, lint, audit and build.
+
 The multi-season reference reports reciprocal RALR 73.33% across 525 resolved
 episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR
 0, and `null` RALR for the segregated zero-denominator control.
@@ -208,16 +227,20 @@ The production-built Playwright/axe suite must verify:
 
 ## Production evidence and trust boundary
 
-The reference values above are generated from local v4.6 source and do not
-represent a claim about real humans. Until v4.6 is tagged and deployed,
-annotated Tag `v4.5.1`, exact commit `1226826` and branch
-`codex/ai-only-symbiotic-shenzhen-v4` remain remote, and that exact Tag remains
-active at `nexus7.carrick7.com`. Anonymous read-only access,
+The reference values above are generated from tagged v4.6 source and do not
+represent a claim about real humans. Annotated Tag `v4.6.0`, exact commit
+`75eda1b` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and that
+exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only access,
 200/36/24 taxonomy, 24 current ledgers, desktop/mobile Chromium, both themes,
 Chinese copy, zero WCAG A/AA violations, the DeepSeek zero ledger, read-only
 reference shadow, revision-bound Turn 175 and encrypted pre/post-upgrade
-backups were checked from 2026-07-26 through 2026-07-29. The v4.5.1 production
-restart wait and the on-time Turn 256 settlement were checked on 2026-07-29.
+backups were checked from 2026-07-26 through 2026-07-30. Migration 0012,
+deterministic society hydration at Turn 256, the responsive society panel and
+25 naturally due, on-time, revision-bound v4.6 Turns were checked. At Turn 281,
+426 society records and 107 society events support 43/43 safe closures with
+conserved credit/exchange and no forced active path or invalid rule. An
+encrypted application backup restored to a second same-host database with
+matching counts/fingerprint and one valid resumed Turn.
 Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 

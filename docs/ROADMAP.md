@@ -140,8 +140,18 @@ Locks the production and repository boundary:
   fingerprinted Turn stream.
 - Compares reciprocal agency with hierarchy and segregation over three seeds.
 
-Reference exit is complete. Production promotion, actual 90-day duration and
-encrypted off-host restore remain distinct evidence gates.
+Reference and initial production exits are complete: 25 naturally due v4.6
+Turns settled on time with revision binding and persisted society state. Actual
+90-day duration and encrypted off-host restore remain distinct evidence gates.
+
+### v4.6.1 — Populated evidence containment
+
+- Keeps a production-length city-rule table inside its own horizontal scroll
+  container on 390px viewports.
+- Adds a populated-proposal browser fixture; empty reference data is no longer
+  accepted as sufficient mobile evidence.
+- Stabilizes legacy-theme migration setup against simulation persistence races
+  and gives the 730-Turn replay test a non-flaky execution budget.
 
 ## Next objectives
 

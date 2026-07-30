@@ -1,12 +1,47 @@
 [
   {
+    "id": "iteration-v4.6.1",
+    "version": "4.6.1",
+    "date": "2026-07-30",
+    "trigger": "production-observation",
+    "triggerReason": "The first persisted AI city-rule proposal made a 680px evidence table impose its intrinsic width on the society grid, producing 325px document-level overflow on a 390px production viewport; the empty-proposal reference fixture could not reveal it.",
+    "action": "Changed both society grid tracks to minmax(0, …), marked their cards min-width zero, and added a production-shaped browser fixture containing the full proposal identifier and ratified rule evidence. Moved legacy-theme storage injection before app hydration and gave long deterministic replay/study tests explicit non-flaky execution budgets without changing their workloads.",
+    "outcome": "The populated production-shaped regression reports zero document overflow at 390px. Acceptance passes 251 non-integration plus 16 real PostgreSQL/restore tests with zero skips, 27/27 production-build browser/axe scenarios, v4.6 reference verification, lint, audit and build; exact implementation revision, Tag and deployment remain pending.",
+    "metrics": [
+      {
+        "label": "390px viewport document overflow",
+        "before": 325,
+        "after": 0
+      },
+      {
+        "label": "Populated city-rule browser fixtures",
+        "before": 0,
+        "after": 1
+      }
+    ],
+    "evidence": [
+      "The proposal table remains horizontally scrollable within its own card",
+      "The containing society grid can shrink below the table intrinsic width",
+      "The regression fixture uses the production-length proposal identifier",
+      "No world state, API contract or v4.6.0 Tag is rewritten"
+    ],
+    "artifacts": [
+      "src/components/symbiosis/HumanObservatory.tsx",
+      "e2e/nexus.spec.ts",
+      "src/symbiosis/engine.test.ts",
+      "src/symbiosis/study.test.ts",
+      "docs/V4_DEPLOYMENT_ATTESTATION.md"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.6.0",
     "version": "4.6.0",
     "date": "2026-07-29",
     "trigger": "reversible-city-society",
     "triggerReason": "Residents had needs, relationships and resource flows, but no durable households, work agreements, maintained civic assets, balanced exchange, resource bargaining or bounded AI-proposed city rules through which a society could visibly organize itself.",
     "action": "Added deterministic and replayable care households, voluntary work, degrading and repairable assets, conserved civic credits, balanced exchanges, mediated bargains and automatically reverting AI-only rule proposals; persisted them atomically in memory and PostgreSQL and projected them into the bilingual Human Observatory.",
-    "outcome": "Implementation a8ba2bd passed 267 tests with zero skips, 16 real PostgreSQL/restore tests, 26 browser/axe scenarios, lint, audit, build, all compatibility gates and a 10,000-tick stress run. Its 365-Turn reference closes 500/500 eligible social outcomes safely with zero forced active-regime paths; controlled hierarchy and segregation runs expose the intended negative mechanisms.",
+    "outcome": "Implementation a8ba2bd passed 267 tests with zero skips, 16 real PostgreSQL/restore tests, 26 browser/axe scenarios, lint, audit, build, all compatibility gates and a 10,000-tick stress run. Tag v4.6.0 at 75eda1b is deployed; Turns 257–281 settled naturally on time with exact revision binding. Turn 281 persists 426 society records and 107 society events, 43/43 safe closures, conserved credits/exchanges and no forced active path or invalid rule. Encrypted same-host second-database restore, exact row/fingerprint checks and resumed write pass.",
     "metrics": [
       {
         "label": "Safe social closure rate",

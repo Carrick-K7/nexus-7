@@ -1,9 +1,9 @@
 # 共生深圳 v4 | AI-Only Symbiotic Shenzhen
 
-> 更新：2026-07-29
+> 更新：2026-07-30
 >
-> 状态：v4.6 Reversible City Society source candidate；
-> 完整发布、真实 90 天 / off-host restore / live provider / external Sigstore pending
+> 状态：v4.6 Reversible City Society 已发布；
+> 真实 90 天 / off-host restore / live provider / external Sigstore pending
 
 ## 目标与研究边界
 

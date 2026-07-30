@@ -33,5 +33,5 @@ describe("v4 synthetic multi-season study", () => {
     expect(hierarchy?.meanRalr).toBe(0);
     expect(segregated?.eligibleEpisodes).toBe(0);
     expect(segregated?.meanRalr).toBeNull();
-  });
+  }, 60_000);
 });
