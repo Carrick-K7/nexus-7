@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release is **v4.6.0 — Reversible City Society**.
+The active release is **v4.6.1 — Populated Society Containment**.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.

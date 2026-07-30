@@ -4,9 +4,10 @@
 
 ## Current artifact
 
-- Release: `v4.6.0` — Reversible City Society
-- Tag commit: `75eda1ba2da450b2e52de4b41ac0433122c48e1e`
-- Implementation commit: `a8ba2bd3022cdfd45cfdad31ead6cde3167d2c38`
+- Release: `v4.6.1` — Populated Society Containment
+- Tag commit: `6c90112ceb9514344962ecdae4e5c283b754b338`
+- Implementation commit: `71f550c079d4d5c9c62bfcc6f1b0a337bf5d1e43`
+- v4.6 implementation commit: `a8ba2bd3022cdfd45cfdad31ead6cde3167d2c38`
 - Hotfix commit: `60f7612954e64408badb193cfe3f9df89c7fdfe7`
 - v4.5 implementation commit: `9da503f56e4c341f3d3aa909e205f31907242b35`
 - Remote branch: `codex/ai-only-symbiotic-shenzhen-v4`
@@ -33,7 +34,7 @@ returned HTTP 405.
 
 `/api/observatory/v2/overview` returned
 `nexus.human-observatory.v2`, formula version 2.1.0, 200 humans, 36 AI, 24
-robots, 24 current resource ledgers and Turn 281. The three resident kinds are
+robots, 24 current resource ledgers and Turn 282. The three resident kinds are
 software state; these are synthetic results, not live Shenzhen data.
 
 The primary provider is `nexus-deterministic-reference`. The configured
@@ -46,7 +47,7 @@ Production Chromium checked the v4.6 society panel at 1440 px and 390 px. It
 rendered 69 active care households, nine operational assets, 12 initial work
 agreements, conserved credits, bounded policy values and an honest 0/0 safe
 closure denominator. Mobile horizontal overflow and console errors were zero.
-The full tagged build separately passed all 26 desktop/mobile, dark/light,
+The full tagged build separately passed all 27 desktop/mobile, dark/light,
 Chinese and WCAG A/AA scenarios.
 
 ## Existing season and live Turn
@@ -90,17 +91,29 @@ four refused work agreements, 38 balanced exchanges, seven resolved bargains,
 one ratified bounded proposal, conserved civic credits, and zero forced work,
 forced bargain or invalid proposal.
 
-Production remains honestly `watch`: the observed window is 4.407 days,
-105/106 comparable settlements are on time, the one historical early-restart
-sample remains visible, and missing, duplicate and predecessor mismatch counts
-remain zero. Twenty-five production Turns carry the v4.6 revision.
-
-The Turn 281 production browser audit also exposed 325px mobile document
+The Turn 281 production browser audit exposed 325px mobile document
 overflow once the first populated city-rule table appeared. This is a real
-v4.6.0 presentation defect, not a world-state or API failure. v4.6.1
-implementation `71f550c` contains the table within its card and adds the
-missing populated fixture; no production-fix claim is made before that patch
-Tag is deployed.
+v4.6.0 presentation defect, not a world-state or API failure. v4.6.1 contains
+the table within its card and adds the missing populated fixture. The exact Tag
+was deployed before Turn 282; with the real proposal, a 390px Chromium viewport
+reported `scrollWidth=390`, zero overflow and zero post-load console errors.
+The worker read Turn 281 and announced a 337,880 ms remaining wait instead of
+settling early.
+
+Turn 282 then settled naturally with 332 ms lag, exact v4.6.1 revision
+`6c90112ceb9514344962ecdae4e5c283b754b338`, fingerprint `eaa7a03b`,
+resource conservation, zero coercive actions and zero severe consent,
+identity-continuity or irreversible-harm escapes. The database contains 429
+current society records and 111 society events. The live Observatory reports
+44/44 safe closures, 32 completed and four refused work agreements, 39
+balanced exchanges, seven resolved bargains, one ratified bounded rule,
+conserved civic credits and zero forced or invalid paths.
+
+Production remains honestly `watch`: the observed window is 4.448 days,
+106/107 comparable settlements are on time, the one historical early-restart
+sample remains visible, and missing, duplicate and predecessor mismatch counts
+remain zero. Twenty-five Turns carry the v4.6.0 revision and one carries the
+v4.6.1 revision.
 
 ## Recovery points
 
@@ -169,7 +182,9 @@ it explicitly records `offHost=false`.
 
 ## Superseded production states
 
-`v4.5.1` at `1226826` fixed restart cadence and proved the first on-time
+`v4.6.0` at `75eda1b` introduced reversible city society and persisted the
+first 25 society Turns; it is retained and superseded by v4.6.1 for mobile
+containment. `v4.5.1` at `1226826` fixed restart cadence and proved the first on-time
 post-restart settlement; it is retained and superseded by v4.6.0.
 `v4.5.0` at `c197f0f` introduced runtime evidence and cognitive diversity but
 settled once on every restart; it is retained and superseded by v4.5.1.
@@ -188,7 +203,7 @@ recovery points remain immutable.
 - recovery is same-host; no off-host restore is claimed;
 - cognition is deterministic/reference-shadow; no live DeepSeek call is
   claimed;
-- no remote CI/Sigstore receipt exists for v4.6.0;
+- no remote CI/Sigstore receipt exists for v4.6.1;
 - the public surface is anonymous read-only observation, not multi-user OIDC;
 - all residents and outcomes are synthetic and provide no evidence of real
   policy effects.

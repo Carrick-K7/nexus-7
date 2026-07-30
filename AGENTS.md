@@ -101,10 +101,10 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 
 ## 外部边界
 
-- `75eda1b` (v4.6.0) 已部署；Turn 257–281 均按时并绑定 revision；生产现有
-  society 426 records/107 events，43/43 safe closure，强制/无效规则 0。
-- v4.6.1 implementation `71f550c` 修复 populated-rule 移动端 325 px 溢出，
-  本地 browser 27/27；尚未 Tag/部署，不得写成线上事实。
+- `6c90112` (v4.6.1) 已部署；实际 populated-rule 390 px overflow 0，公网
+  200/写 405/console 0；Turn 282 按时（lag 332 ms）并精确绑定 revision。
+- v4.6.0 Turn 257–281 均按时；当前 429 society records/111 events，
+  44/44 safe closure，强制/无效规则 0。
 - 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
   恢复待验证。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。

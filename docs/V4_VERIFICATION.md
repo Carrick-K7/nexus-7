@@ -2,7 +2,7 @@
 
 > Date: 2026-07-30
 >
-> Status: v4.6.0 Reversible City Society implementation and initial production
+> Status: v4.6.1 Populated Society Containment implementation and production
 > runtime verified / external duration, off-host restore, CI-Sigstore and
 > live-provider evidence pending
 
@@ -230,8 +230,8 @@ The production-built Playwright/axe suite must verify:
 ## Production evidence and trust boundary
 
 The reference values above are generated from tagged v4.6 source and do not
-represent a claim about real humans. Annotated Tag `v4.6.0`, exact commit
-`75eda1b` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and that
+represent a claim about real humans. Annotated Tag `v4.6.1`, exact commit
+`6c90112` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and that
 exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only access,
 200/36/24 taxonomy, 24 current ledgers, desktop/mobile Chromium, both themes,
 Chinese copy, zero WCAG A/AA violations, the DeepSeek zero ledger, read-only
@@ -243,6 +243,12 @@ deterministic society hydration at Turn 256, the responsive society panel and
 conserved credit/exchange and no forced active path or invalid rule. An
 encrypted application backup restored to a second same-host database with
 matching counts/fingerprint and one valid resumed Turn.
+The v4.6.1 production page then rendered that populated proposal at 390px with
+zero document overflow and zero post-load console errors. Its first naturally
+due Turn settled on time with 332 ms lag, fingerprint `eaa7a03b`, exact
+`6c90112` revision, resource and civic-credit conservation, and no severe
+escape or forced path. At Turn 282, production holds 429 society records and
+111 society events supporting 44/44 safe closures.
 Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 

@@ -6,7 +6,7 @@
     "trigger": "production-observation",
     "triggerReason": "The first persisted AI city-rule proposal made a 680px evidence table impose its intrinsic width on the society grid, producing 325px document-level overflow on a 390px production viewport; the empty-proposal reference fixture could not reveal it.",
     "action": "Changed both society grid tracks to minmax(0, …), marked their cards min-width zero, and added a production-shaped browser fixture containing the full proposal identifier and ratified rule evidence. Moved legacy-theme storage injection before app hydration and gave long deterministic replay/study tests explicit non-flaky execution budgets without changing their workloads.",
-    "outcome": "Implementation 71f550c reduces populated-rule document overflow from 325px to zero at 390px. Acceptance passes 251 non-integration plus 16 real PostgreSQL/restore tests with zero skips, 27/27 production-build browser/axe scenarios, v4.6 reference verification, lint, audit and build; Tag and deployment remain pending.",
+    "outcome": "Implementation 71f550c reduces populated-rule document overflow from 325px to zero at 390px. Acceptance passes 251 non-integration plus 16 real PostgreSQL/restore tests with zero skips, 27/27 production-build browser/axe scenarios, v4.6 reference verification, lint, audit and build. Tag v4.6.1 at 6c90112 is deployed; the populated production proposal renders at zero document overflow with HTTP 200, mutation 405 and zero post-load console errors. Naturally due Turn 282 settled on time with 332 ms lag, exact release revision, conserved resources and credits, and zero severe escape or forced path.",
     "metrics": [
       {
         "label": "390px viewport document overflow",
