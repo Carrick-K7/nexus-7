@@ -2,7 +2,8 @@
 
 > 更新：2026-07-30
 >
-> 状态：v4.8.5 Evidence Readiness 候选；本地/托管复现已验证；
+> 状态：v4.8.7 Atomic Delivery Closure 候选；v4.8.5 已部署；
+> 本地/托管复现已验证；
 > 真实 90 天 / off-host restore / live provider / external Sigstore pending
 
 ## 目标与研究边界
@@ -90,7 +91,8 @@ stale；没有加权总分。本地结果、参考 Provider 和加速 Turn 均�
 
 人的情绪、AI 参与状态、机器人耐久度和机构流畅度都是有版本公式的模拟状态，
 不构成 AI 意识或现实机构声明。表格支持搜索、筛选、分页、键盘与移动端；JSON
-导出绑定 Turn、fingerprint、事件 cursor 和公式版本。
+导出绑定 Turn、fingerprint、事件 cursor 和公式版本。英文/中文切换同时更新根
+文档语言，并在偏好恢复后保持 `en` / `zh-CN` 一致，避免按错误语言朗读。
 
 ## v4 退出门禁
 

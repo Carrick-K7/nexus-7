@@ -23,6 +23,8 @@ section of the navigation.
 The interface does not repeat deployment-mode badges. Its light and dark
 palettes preserve the same reading order; the denser cyberpunk atmosphere is
 reserved for the other research, safety and compatibility views.
+English/Chinese selection also updates the root document language to `en` or
+`zh-CN` and preserves that match after reload for assistive technology.
 
 ## One-minute reading order
 

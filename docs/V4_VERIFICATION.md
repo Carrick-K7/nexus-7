@@ -2,7 +2,7 @@
 
 > Date: 2026-08-01
 >
-> Status: v4.8.5 Evidence Readiness release candidate; v4.8.4 deployed;
+> Status: v4.8.7 Atomic Delivery Closure release candidate; v4.8.5 deployed;
 > external replication, duration, off-host restore,
 > CI-Sigstore and live-provider evidence pending
 
@@ -427,6 +427,52 @@ implementation commit `2cba9c3` in 12m45s. It passed 264 non-PostgreSQL tests,
 reproductions, all deterministic gates, 10,000 ticks and the isolated quality
 evaluation. Artifact `8805853743` is unsigned because the PR remains Draft;
 both attestation steps correctly skipped and no external lane is promoted.
+
+Exact v4.8.5 release run `30663080947` then repeated the complete pipeline for
+commit `2e7fa16` and uploaded unsigned artifact `8806201361`. Production was
+cut over without replacing PostgreSQL; Web and worker resumed with zero
+restarts and the worker preserved the due time after Turn 311.
+
+### v4.8.6 accessible-language-state gate
+
+The v4.8.5 production audit rendered and translated the Chinese Observatory
+correctly, but the document root remained `lang="en"`. v4.8.6 applies the
+persisted interface language to the root as `en` or `zh-CN` in the same shell
+effect as the color scheme. The browser contract requires `zh-CN` immediately
+after selection and after a reload. This patch changes no API, database,
+simulation, model or trust calculation.
+
+Local acceptance passes 264 non-PostgreSQL tests, 16/16 real PostgreSQL and
+backup/restore tests, all deterministic gates, 28/28 Playwright/axe scenarios,
+the TypeScript production build and 10,000 ticks with zero lint warnings or
+dependency vulnerabilities. The pinned Node 24.15.0 isolated evaluator also
+passes lint, 264 tests, model regression and build with network disabled,
+read-only frozen source and dropped capabilities.
+
+GitHub-hosted candidate run `30666453468` repeated the combined v4.8.6 and
+automatic-main-delivery tree for commit `909e37b` in 12m43s. It passed all
+280 unit/real-PostgreSQL tests, 28/28 browser/axe scenarios, exact v4.7
+reproduction, deterministic gates, 10,000 ticks and isolated evaluation, then
+uploaded unsigned artifact `8807413233`. Draft-PR attestation and deployment
+correctly remained skipped, so no external trust lane is promoted.
+
+Exact v4.8.6 run `30667304216` then repeated the full pipeline for immutable
+Tag commit `6b463c2` in 12m06s and uploaded unsigned artifact `8807693232`.
+Before deployment, `main` independently gained serialized-backup and
+ref-isolated concurrency corrections. v4.8.6 therefore remains immutable and
+v4.8.7 integrates those delivery changes instead of moving the tested Tag.
+
+### v4.8.7 atomic-delivery-closure gate
+
+The `main` workflow must test and archive one exact revision before a distinct
+deploy job can invoke the repository-specific restricted SSH command. The host
+must serialize and verify PostgreSQL copies, migrate, atomically activate Web
+and worker, preserve the existing volume, expose the same `.deploy-sha`, and
+roll application files back if health fails. Pull requests never deploy, and
+per-ref concurrency prevents their verification from blocking `main` delivery.
+The combined candidate passes zero-warning lint, the TypeScript production
+build and the persisted-language Playwright regression locally before its
+complete remote gate.
 
 ## Provider and persistence gates
 

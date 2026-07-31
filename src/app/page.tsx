@@ -82,7 +82,7 @@ function getStoreHydrationSnapshot() {
 }
 
 export default function Home() {
-  const { activeView, theme } = useNexusStore();
+  const { activeView, language, theme } = useNexusStore();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const storeHydrated = useSyncExternalStore(
     subscribeToStoreHydration,
@@ -94,6 +94,7 @@ export default function Home() {
 
   useLayoutEffect(() => {
     const root = document.documentElement;
+    root.lang = language === "zh" ? "zh-CN" : "en";
     root.dataset.themeSwitching = "true";
     root.dataset.theme = theme;
     root.style.colorScheme = theme;
@@ -105,7 +106,7 @@ export default function Home() {
       window.cancelAnimationFrame(frame);
       delete root.dataset.themeSwitching;
     };
-  }, [theme]);
+  }, [language, theme]);
 
   const cyberpunkShell = activeView !== "symbiosis";
 

@@ -154,3 +154,10 @@ off-host receipt is failed even when the recovery evidence file is absent;
 removing a companion artifact cannot downgrade already supplied bad evidence
 to pending. A repository test also prevents the explicit environment template
 from silently excluding a supported signer workflow.
+
+## v4.8.6 accessibility correction
+
+The production v4.8.5 browser audit found that translated Chinese content
+could retain `lang="en"` at the document root. v4.8.6 synchronizes the root
+language with the persisted display language and verifies it after selection
+and reload. Trust calculations and all five lane states are unchanged.
