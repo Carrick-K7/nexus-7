@@ -449,6 +449,13 @@ dependency vulnerabilities. The pinned Node 24.15.0 isolated evaluator also
 passes lint, 264 tests, model regression and build with network disabled,
 read-only frozen source and dropped capabilities.
 
+GitHub-hosted candidate run `30666453468` repeated the combined v4.8.6 and
+automatic-main-delivery tree for commit `909e37b` in 12m43s. It passed all
+280 unit/real-PostgreSQL tests, 28/28 browser/axe scenarios, exact v4.7
+reproduction, deterministic gates, 10,000 ticks and isolated evaluation, then
+uploaded unsigned artifact `8807413233`. Draft-PR attestation and deployment
+correctly remained skipped, so no external trust lane is promoted.
+
 ## Provider and persistence gates
 
 The cognitive contract tests validate DeepSeek Chat Completions JSON output,

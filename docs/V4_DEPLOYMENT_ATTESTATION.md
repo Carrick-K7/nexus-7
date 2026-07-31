@@ -4,8 +4,10 @@
 
 ## Current artifact
 
-- Release: `v4.8.4` — Independent Replication Path
-- Tag commit: `ace250c3318ebbe60f60694ee841ddc73fd180f4`
+- Release: `v4.8.5` — Evidence Readiness
+- Tag commit: `2e7fa1608bc536dbe1d84aa4d45592ed17467263`
+- v4.8.5 implementation commit: `2cba9c37a532516da3b5830e466b87810767c403`
+- v4.8.4 Tag commit: `ace250c3318ebbe60f60694ee841ddc73fd180f4`
 - v4.8.4 implementation commit: `43a62b18548255a3af528dc58d593540b0241581`
 - v4.8.3 Tag commit: `467c91fcfe1eaf41c23244c01279fe055898865f`
 - v4.8.3 implementation commit: `a535a29a6d3fb9ed97ae35b72ec4815697569b77`
@@ -104,6 +106,15 @@ palettes: four axe scans found zero WCAG A/AA violations, console
 warnings/errors were zero, and the mobile document remained 390/390px. The
 public Trust projection binds release revision `ace250c` and remains honestly
 1/5; deployment does not manufacture an external receipt.
+
+The v4.8.5 production checkout is clean and detached at annotated Tag
+`2e7fa16`. PostgreSQL remained active while only Web and worker stopped; the
+worker resumed from Turn 311 with 2,566,906 ms remaining rather than settling
+early. Root, Overview and Trust returned 200 while Trust mutation returned
+405. Production Chromium verified the full release revision and bilingual
+human trust reasons; the audit then exposed that Chinese visible content still
+declared document language `en`, which is corrected by v4.8.6. The matrix
+remained honestly 1/5 with zero DeepSeek calls, Tokens or cost.
 
 ## Existing season and live Turn
 
@@ -210,12 +221,20 @@ bargains, zero invalid proposals and zero severe consent, identity-continuity
 or irreversible-harm escapes. The persisted chain reports no predecessor
 mismatch.
 
-Production remains honestly `watch`: the observed window is 5.615 days,
-134/135 comparable settlements are on time, the one historical early-restart
+Turns 311 and 312 then settled naturally under v4.8.5. Turn 312 settled at
+`2026-07-31T21:29:27.572Z`, on time with 312 ms lag, exact revision
+`2e7fa1608bc536dbe1d84aa4d45592ed17467263` and fingerprint `0a2b8f4b`.
+It recorded RALR 454/618, 106 refusals, 58 withdrawals, 86/86 safe society
+closures, resource and civic-credit conservation, zero coercive/forced paths,
+zero invalid proposals and zero severe escapes.
+
+Production remains honestly `watch`: the observed window is 5.699 days,
+136/137 comparable settlements are on time, the one historical early-restart
 sample remains visible, and missing, duplicate and predecessor mismatch counts
 remain zero. Twenty-five Turns carry the v4.6.0 revision, 22 carry v4.6.1, one
 carries v4.7.0, two carry v4.8.1, one carries v4.8.2, two carry v4.8.3 and one
-carries v4.8.4. All runtime-observed Turns are revision-bound.
+carries v4.8.4 and one carries v4.8.5. All runtime-observed Turns are
+revision-bound.
 
 ## Recovery points
 
@@ -309,6 +328,14 @@ Both have SHA-256
 `fb04dd36f9e539043e7a9a1bcef83131422b044689640aa3e7ab669e0d3fea31`.
 PostgreSQL stayed active throughout the application cutover. These two copies
 are still same-host replication and do not satisfy the off-host restore lane.
+
+Immediately before the v4.8.5 cutover, matching mode-0600 local and mounted
+artifacts were 9,466,891 bytes with SHA-256
+`668869cea11985b126f726787e418926e2eb0bd023e0412d1335d4ad3dbf9e35`.
+After the COS-safe serialized-copy correction, another verified pair at Turn
+312 was 9,466,890 bytes with SHA-256
+`652f583b2d308ec0db6172e1fe17134b1544d6d53ca9e43b317a6b6cc3390b81`.
+Both remain replicated backup evidence, not a distinct-host restore.
 
 ## Superseded production states
 

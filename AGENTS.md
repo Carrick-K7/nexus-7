@@ -107,10 +107,10 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 
 ## 外部边界
 
-- `ace250c` (v4.8.4) 已部署；Turn 310 按时（lag 307 ms），指纹 `1ce6eebe`；
+- `2e7fa16` (v4.8.5) 已部署；Turn 312 按时（lag 312 ms），指纹 `0a2b8f4b`；
   390 px overflow/console/axe 0，API 200、写 405。
-- 当前 safe closure 84/84，强制/无效规则 0；参考 shadow 272 次，DeepSeek
-  实际调用/Token/费用仍为 0；真实观测 5.615 天。
+- 当前 safe closure 86/86，强制/无效规则 0；参考 shadow 276 次，DeepSeek
+  实际调用/Token/费用仍为 0；真实观测 5.699 天。
 - 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
   恢复待验证。
-- candidate CI `30662205587` 全绿（280 tests；28/28 browser）；未签名，不计 external lane。
+- v4.8.6 CI `30666453468` 全绿（280 tests；28/28 browser）；未签名，不计 external lane。
