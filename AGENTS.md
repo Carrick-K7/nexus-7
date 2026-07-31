@@ -107,10 +107,10 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 
 ## 外部边界
 
-- `268c1f2` (v4.8.1) 已部署；Turn 305 按时、lag 348 ms、精确绑定 revision；
+- `6bbc31b` (v4.8.2) 已部署；Turn 306 在切换前按时，worker 保留后继截止时间；
   390 px overflow/console/axe 0，API 200、写 405。
 - 当前 safe closure 100%，强制/无效规则 0；参考 shadow 262 次，DeepSeek
-  实际调用/Token/费用仍为 0；真实观测 5.407 天。
+  实际调用/Token/费用仍为 0；真实观测 5.449 天。
 - 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
   恢复待验证。
 - GitHub PR CI `30641290821` 全绿且 Node 20 warning 0；未签名，不计 external lane。

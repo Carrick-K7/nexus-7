@@ -4,8 +4,10 @@
 
 ## Current artifact
 
-- Release: `v4.8.1` — Independent Trust Matrix, Evidence Isolation
-- Tag commit: `268c1f26fcfd161b1dcfbf0be37ec89ca0c72c15`
+- Release: `v4.8.2` — Reproducible Evolution Evidence
+- Tag commit: `6bbc31bff951a9cef5d53661e2032fc1949b2ee8`
+- v4.8.2 implementation commit: `bd9e8787eea27adaba2959c6a3709c02a8682f76`
+- Node 24 workflow commit: `ce52c74622d05522e07447a9805cbae1f299283f`
 - Implementation commit: `77ae73f57982c0091bbe3d17520ba59706c254cd`
 - v4.8 implementation commit: `7182378d7319d6d4aedfba24c6a498989f988c69`
 - v4.7 implementation commit: `ebe3cafbff62fc8d27b3f9c13d4b1493f2b67da3`
@@ -37,12 +39,12 @@ returned HTTP 405.
 
 `/api/observatory/v2/overview` returned
 `nexus.human-observatory.v2`, formula version 2.1.0, 200 humans, 36 AI, 24
-robots, 24 current resource ledgers and Turn 305. The three resident kinds are
+robots, 24 current resource ledgers and Turn 306. The three resident kinds are
 software state; these are synthetic results, not live Shenzhen data.
 
 The primary provider is `nexus-deterministic-reference`. The configured
-read-only shadow is `nexus-diversity-reference`: it recorded 262 comparisons
-and 131 disagreements without entering settlement.
+read-only shadow is `nexus-diversity-reference`: it recorded 264 comparisons
+and 132 disagreements without entering settlement.
 DeepSeek remained at zero external attempts, zero Tokens and USD 0 across the
 season. This is an observed NEXUS-7 ledger total, not a provider-account claim.
 
@@ -68,6 +70,15 @@ reference shadow reached 262 comparisons. Production Chromium at 390px showed
 `1/5` and `0 comparisons`, with document width 390px, zero console issues and
 zero axe WCAG A/AA violations. Root and trust GET returned 200; trust POST
 returned 405.
+
+The v4.8.2 production checkout is clean and detached at its exact annotated
+Tag. Both service processes expose that complete revision, the worker resumed
+from persisted Turn 306 with 3,213,220 ms remaining rather than settling early,
+and loopback/public roots returned 200. A real dark-theme 390px Chromium run
+rendered the current v4.8.2 and historical v0.3.0 Evolution Log cards at
+390/390 document/viewport width, with zero console issues and zero axe WCAG
+A/AA violations. The trust matrix remained honestly 1/5 with zero DeepSeek
+calls, comparisons, Tokens and cost; trust mutation returned 405.
 
 ## Existing season and live Turn
 
@@ -148,11 +159,16 @@ and exact revision `268c1f26fcfd161b1dcfbf0be37ec89ca0c72c15`. It recorded
 RALR 444/605, 103 refusals, 58 withdrawals, conserved society exchange, 100%
 safe closure, and zero coercive actions or severe escapes.
 
-Production remains honestly `watch`: the observed window is 5.407 days,
-129/130 comparable settlements are on time, the one historical early-restart
+Turn 306 also settled naturally under v4.8.1 at
+`2026-07-31T15:29:23.200Z`, on time with 2,070 ms lag, fingerprint `addb2434`,
+RALR 446/607 and zero coercive actions or severe escapes. The v4.8.2 cutover
+then preserved Turn 306 and its next due time; no v4.8.2 Turn is claimed yet.
+
+Production remains honestly `watch`: the observed window is 5.449 days,
+130/131 comparable settlements are on time, the one historical early-restart
 sample remains visible, and missing, duplicate and predecessor mismatch counts
 remain zero. Twenty-five Turns carry the v4.6.0 revision and 22 carry the
-v4.6.1 revision; one each carries v4.7.0 and v4.8.1.
+v4.6.1 revision; one carries v4.7.0 and two carry v4.8.1.
 
 ## Recovery points
 
@@ -230,8 +246,15 @@ Both have SHA-256
 `e577d92711e1783d13dae1928d4c0f09df0ae817a27f75cd05e20c58aafe3f84`.
 This is a replicated backup artifact, not an off-host restore claim.
 
+Immediately before the v4.8.2 cutover, the same service wrote matching
+mode-0600, 9,208,771-byte local and mounted artifacts with SHA-256
+`f401e4bbdbccb9cde4e952a2552e4d3c2be817e0be12184b4e0be20ce31cfc98`.
+This is also replication, not an independently restored off-host proof.
+
 ## Superseded production states
 
+`v4.8.1` at `268c1f2` isolated live DeepSeek evidence and ran through Turn 306;
+it is retained and superseded by v4.8.2 for reproducible build evidence.
 `v4.8.0` at `e3aa5ab` introduced the five-lane matrix but its DeepSeek card
 could display reference comparisons; it settled no Turn and is superseded by
 v4.8.1. `v4.7.0` at `2362ee8` ran through Turn 304 and is retained.
@@ -258,7 +281,7 @@ recovery points remain immutable.
 - recovery is same-host; no off-host restore is claimed;
 - cognition is deterministic/reference-shadow; no live DeepSeek call is
   claimed;
-- no remote CI/Sigstore receipt exists for the current replication claim;
+- hosted PR CI is green but unsigned; no governed Sigstore receipt exists;
 - the public surface is anonymous read-only observation, not multi-user OIDC;
 - all residents and outcomes are synthetic and provide no evidence of real
   policy effects.

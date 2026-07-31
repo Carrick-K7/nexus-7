@@ -5,7 +5,7 @@
   "trigger": "external-ci-environment-regression",
   "triggerReason": "The first GitHub-hosted CI run used a shallow checkout, so the build-time Evolution Log generator discarded committed Git-derived history and the v0.3.0 evidence card disappeared even though local full-history browser tests passed.",
   "action": "Made complete Git history authoritative while preserving committed Git-derived entries only for shallow or Git-less builds, deduplicated current entries ahead of fallbacks, added a focused merge-order regression test, and upgraded official GitHub Actions to their Node 24-native major versions.",
-  "outcome": "GitHub Actions run 30641290821 passed the complete quality pipeline from a shallow pull-request checkout and repeated the unit/build gate without Git metadata. It retained all 14 committed Git evidence entries, restored 27/27 browser scenarios, and emitted no Node 20 action warning. The unsigned PR artifact remains supporting evidence rather than a verified external-replication receipt.",
+  "outcome": "GitHub Actions runs 30641290821 and 30642404042 passed the complete quality pipeline from shallow pull-request checkouts and repeated the unit/build gate without Git metadata. The build retained committed Evolution Log history, restored 27/27 browser scenarios, and emitted no Node 20 action warning. Exact Tag 6bbc31b is active in production; its unsigned PR artifact remains supporting evidence rather than a verified external-replication receipt.",
   "metrics": [
     { "label": "GitHub browser scenarios", "before": 26, "after": 27 },
     { "label": "Missing historical version cards", "before": 1, "after": 0 },
@@ -16,6 +16,8 @@
     "GitHub Actions run 30639268795 failed only the missing v0.3.0 browser assertion after 26/27 scenarios",
     "GitHub Actions run 30640312118 first proved the generator fix with 27/27 browser scenarios and complete Git-less quality evaluation",
     "GitHub Actions run 30641290821 passed 259 non-PostgreSQL and 16 real PostgreSQL/restore tests, 27/27 browser/axe scenarios, exact v4.7 Tag reproduction, 10,000-tick stability and isolated Git-less quality evaluation",
+    "Exact release commit 6bbc31b passed run 30642404042, was tagged v4.8.2 and deployed after a checksum-matching backup; worker preserved Turn 306's due time",
+    "Production 390px Chromium rendered v4.8.2 and v0.3.0 with document width 390, console 0 and axe WCAG A/AA violations 0; root/trust GET 200 and trust POST 405",
     "Run 30641290821 uploaded artifact 8797892137 with internally matching SHA-256 entries; no Sigstore attestation exists for its CI evidence subject because PR workflows cannot self-attest",
     "ESLint passes with zero warnings, dependency audit reports zero vulnerabilities, and Node 20 action warnings are zero"
   ],

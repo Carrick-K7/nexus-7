@@ -339,8 +339,8 @@ The production-built Playwright/axe suite must verify:
 ## Production evidence and trust boundary
 
 The reference values above are generated from tagged v4 source and do not
-represent a claim about real humans. Annotated Tag `v4.8.1`, exact commit
-`268c1f2` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and that
+represent a claim about real humans. Annotated Tag `v4.8.2`, exact commit
+`6bbc31b` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and that
 exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only access,
 200/36/24 taxonomy, 24 current ledgers, desktop/mobile Chromium, both themes,
 Chinese copy, zero WCAG A/AA violations, the DeepSeek zero ledger, read-only
@@ -372,6 +372,14 @@ the reference shadow held 262 comparisons while the isolated DeepSeek lane
 correctly showed zero comparisons, calls, Tokens and cost. The public matrix
 was 1/5 with four pending lanes; 390px Chromium reported zero overflow,
 console issues and axe WCAG A/AA violations, GET returned 200 and POST 405.
+Turn 306 then settled naturally under v4.8.1 with 2,070 ms lag, fingerprint
+`addb2434`, RALR 446/607 and zero severe or coercive action. The v4.8.2 cutover
+preserved its next due time. Both processes expose exact `6bbc31b`; public and
+loopback roots return 200, mutation 405, and the trust matrix remains honestly
+1/5 with zero live DeepSeek calls, comparisons, Tokens and cost. Production
+390px Chromium shows v4.8.2 and historical v0.3.0 cards with 390px document
+width, console 0 and axe WCAG A/AA violations 0. No v4.8.2 Turn is claimed
+before its persisted due time.
 Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 
