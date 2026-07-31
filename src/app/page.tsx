@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState, useSyncExternalStore } from "react";
+import { useLayoutEffect, useState, useSyncExternalStore } from "react";
 import { useNexusStore } from "@/stores/nexus-store";
 import { useCitySimulation } from "@/hooks/useCitySimulation";
 import Sidebar from "@/components/layout/Sidebar";
@@ -92,9 +92,19 @@ export default function Home() {
   const ActiveComponent = viewComponents[activeView] || Dashboard;
   useCitySimulation(activeView !== "symbiosis");
 
-  useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    document.documentElement.style.colorScheme = theme;
+  useLayoutEffect(() => {
+    const root = document.documentElement;
+    root.dataset.themeSwitching = "true";
+    root.dataset.theme = theme;
+    root.style.colorScheme = theme;
+    void root.offsetWidth;
+    const frame = window.requestAnimationFrame(() => {
+      delete root.dataset.themeSwitching;
+    });
+    return () => {
+      window.cancelAnimationFrame(frame);
+      delete root.dataset.themeSwitching;
+    };
   }, [theme]);
 
   const cyberpunkShell = activeView !== "symbiosis";

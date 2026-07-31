@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import {
@@ -133,6 +134,7 @@ const copy = {
     trustMatrixDesc:
       "Five gates that cannot substitute for one another. A local pass never implies an external run, off-host recovery, live provider exercise, or elapsed production time.",
     trustVerifiedCount: "independent gates verified",
+    releaseRevision: "Deployed release revision",
     trustLocal: "Local replication",
     trustExternal: "External CI + Sigstore",
     trustRecovery: "Off-host PostgreSQL recovery",
@@ -276,6 +278,9 @@ const copy = {
     noConsciousness: "No consciousness claim",
     loading: "Loading the simulated city…",
     unavailable: "The Human Observatory is temporarily unavailable.",
+    refreshFailed:
+      "Live refresh failed. The values below are the last successfully loaded snapshot.",
+    lastSuccessfulRefresh: "Last successful refresh",
     healthy: "Healthy",
     watch: "Watch",
     strained: "Strained",
@@ -362,6 +367,7 @@ const copy = {
     trustMatrixDesc:
       "五条门禁互不替代。本地通过不代表外部运行、异机恢复、真实 Provider 演练或真实生产时长已经发生。",
     trustVerifiedCount: "条独立门禁已验证",
+    releaseRevision: "当前部署 revision",
     trustLocal: "本地复现实验",
     trustExternal: "外部 CI + Sigstore",
     trustRecovery: "异机 PostgreSQL 恢复",
@@ -505,6 +511,8 @@ const copy = {
     noConsciousness: "不主张 AI 意识",
     loading: "正在加载模拟城市……",
     unavailable: "人类观测台暂时不可用。",
+    refreshFailed: "实时刷新失败。以下数值为最后一次成功加载的快照。",
+    lastSuccessfulRefresh: "最后成功刷新",
     healthy: "健康",
     watch: "关注",
     strained: "承压",
@@ -586,6 +594,112 @@ function evidenceState(
     : language === "zh"
       ? "未通过"
       : "Not met";
+}
+
+const trustReasonLabels: Record<
+  string,
+  Record<Language, string>
+> = {
+  "replication-bundle-missing": {
+    en: "The local replication bundle is missing.",
+    zh: "本地复现实验包缺失。",
+  },
+  "replication-bundle-invalid": {
+    en: "The local replication bundle failed validation.",
+    zh: "本地复现实验包未通过校验。",
+  },
+  "receipt-missing": {
+    en: "A signed evidence receipt has not been supplied.",
+    zh: "尚未提供签名证据回执。",
+  },
+  "receipt-envelope-invalid": {
+    en: "The supplied receipt envelope is malformed.",
+    zh: "已提供的回执封装格式无效。",
+  },
+  "receipt-public-key-missing": {
+    en: "The receipt public key has not been configured.",
+    zh: "尚未配置回执验证公钥。",
+  },
+  "receipt-expired": {
+    en: "The signed receipt has expired and must be refreshed.",
+    zh: "签名回执已过期，需要刷新。",
+  },
+  "receipt-kind-mismatch": {
+    en: "The receipt describes the wrong evidence kind.",
+    zh: "回执绑定的证据类型不匹配。",
+  },
+  "receipt-release-revision-mismatch": {
+    en: "The receipt does not bind the deployed revision.",
+    zh: "回执未绑定当前部署 revision。",
+  },
+  "expected-subject-digest-missing": {
+    en: "The expected evidence digest is unavailable.",
+    zh: "缺少待验证证据的预期摘要。",
+  },
+  "receipt-subject-digest-mismatch": {
+    en: "The receipt subject digest does not match the artifact.",
+    zh: "回执 subject 摘要与工件不匹配。",
+  },
+  "local-replication-not-verified": {
+    en: "External proof cannot replace a failed local replication.",
+    zh: "外部证明不能替代未通过的本地复现。",
+  },
+  "recovery-evidence-missing": {
+    en: "Off-host recovery evidence has not been supplied.",
+    zh: "尚未提供异机恢复证据。",
+  },
+  "recovery-evidence-invalid": {
+    en: "The recovery evidence failed checksum or replay validation.",
+    zh: "恢复证据未通过校验和或续写验证。",
+  },
+  "off-host-recovery-not-demonstrated": {
+    en: "A restore on a distinct host has not been demonstrated.",
+    zh: "尚未证明在不同主机完成恢复。",
+  },
+  "deepseek-shadow-not-configured": {
+    en: "Live DeepSeek is not configured as the read-only shadow.",
+    zh: "尚未把真实 DeepSeek 配置为只读 Shadow。",
+  },
+  "deepseek-shadow-not-exercised": {
+    en: "The DeepSeek shadow has not made an external call.",
+    zh: "DeepSeek Shadow 尚未发起外部调用。",
+  },
+  "deepseek-shadow-no-successful-comparison": {
+    en: "DeepSeek was attempted but produced no billable comparison.",
+    zh: "DeepSeek 已尝试调用，但没有可计费的成功对照。",
+  },
+  "production-runtime-evidence-missing": {
+    en: "No persisted wall-clock runtime evidence is available.",
+    zh: "尚无持久化墙钟运行证据。",
+  },
+  "production-reliability-gate-failed": {
+    en: "Runtime continuity, freshness, revision, or timing failed.",
+    zh: "运行连续性、新鲜度、revision 或时序门禁失败。",
+  },
+  "ninety-days-not-yet-observed": {
+    en: "Ninety real production days have not elapsed.",
+    zh: "真实生产观测尚未达到 90 天。",
+  },
+};
+
+function trustReasonLabel(
+  reason: string,
+  language: Language,
+): string {
+  if (reason.startsWith("receipt-invalid:")) {
+    return language === "zh"
+      ? "签名回执验证失败。"
+      : "The signed receipt failed verification.";
+  }
+  if (reason.startsWith("receipt-summary-mismatch:")) {
+    return language === "zh"
+      ? "回执摘要与证据内容不匹配。"
+      : "The receipt summary does not match the evidence.";
+  }
+  return trustReasonLabels[reason]?.[language] ??
+    (language === "zh"
+      ? "证据未通过校验。"
+      : "The evidence failed validation.");
 }
 
 function proposalStatusLabel(
@@ -778,6 +892,9 @@ export default function HumanObservatory() {
   const [trust, setTrust] = useState<SymbiosisTrustMatrix | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastSuccessfulRefreshAt, setLastSuccessfulRefreshAt] =
+    useState<string | null>(null);
+  const refreshSequence = useRef(0);
   const [query, setQuery] = useState("");
   const [kind, setKind] = useState<ObserverResidentKind | "all">("all");
   const [unitStatus, setUnitStatus] = useState<UnitHealth | "all">("all");
@@ -787,6 +904,7 @@ export default function HumanObservatory() {
   const [selectedUnitId, setSelectedUnitId] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
+    const sequence = ++refreshSequence.current;
     try {
       const [response, replicationResponse, trustResponse] = await Promise.all([
         fetch("/api/observatory/v2/overview", { cache: "no-store" }),
@@ -802,16 +920,23 @@ export default function HumanObservatory() {
       if (!trustResponse.ok) {
         throw new Error(`trust-${trustResponse.status}`);
       }
-      setData(await response.json() as HumanObservatoryReport);
-      setReplication(
-        await replicationResponse.json() as SymbiosisReplicationBundle,
-      );
-      setTrust(await trustResponse.json() as SymbiosisTrustMatrix);
+      const [report, replicationBundle, trustMatrix] = await Promise.all([
+        response.json() as Promise<HumanObservatoryReport>,
+        replicationResponse.json() as Promise<SymbiosisReplicationBundle>,
+        trustResponse.json() as Promise<SymbiosisTrustMatrix>,
+      ]);
+      if (sequence !== refreshSequence.current) return;
+      setData(report);
+      setReplication(replicationBundle);
+      setTrust(trustMatrix);
+      setLastSuccessfulRefreshAt(new Date().toISOString());
       setError(null);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "unknown-error");
+      if (sequence !== refreshSequence.current) return;
+      const reason = caught instanceof Error ? caught.message : "unknown-error";
+      setError(reason.replace(/\s+/g, " ").slice(0, 120));
     } finally {
-      setLoading(false);
+      if (sequence === refreshSequence.current) setLoading(false);
     }
   }, []);
 
@@ -819,6 +944,7 @@ export default function HumanObservatory() {
     const initial = window.setTimeout(() => void refresh(), 0);
     const timer = window.setInterval(() => void refresh(), 15_000);
     return () => {
+      refreshSequence.current += 1;
       window.clearTimeout(initial);
       window.clearInterval(timer);
     };
@@ -996,6 +1122,23 @@ export default function HumanObservatory() {
             </div>
           </div>
         </header>
+
+        {error ? (
+          <div
+            role="alert"
+            data-testid="observatory-refresh-alert"
+            className="rounded-2xl border border-cyber-red/45 bg-cyber-red/10 px-4 py-3 text-sm text-cyber-text"
+          >
+            <p className="font-semibold text-cyber-red">
+              {text.refreshFailed}
+            </p>
+            <p className="mt-1 break-words text-xs text-cyber-text-dim">
+              {text.lastSuccessfulRefresh}: {lastSuccessfulRefreshAt ?? "—"}
+              {" · "}
+              <span className="font-mono">{error}</span>
+            </p>
+          </div>
+        ) : null}
 
         <section className="rounded-2xl border border-cyber-purple/25 bg-cyber-darker/90 p-5">
           <div className="flex items-center gap-2">
@@ -1385,6 +1528,15 @@ export default function HumanObservatory() {
                 <p className="mt-2 text-sm leading-6 text-cyber-text-dim">
                   {text.trustMatrixDesc}
                 </p>
+                <p
+                  className="mt-2 text-xs leading-5 text-cyber-text-dim"
+                  data-testid="trust-release-revision"
+                >
+                  {text.releaseRevision}: {" "}
+                  <code className="break-all text-cyber-text">
+                    {trust.releaseRevision}
+                  </code>
+                </p>
               </div>
               <span
                 className={`self-start rounded-full border px-3 py-1 text-xs ${
@@ -1468,9 +1620,16 @@ export default function HumanObservatory() {
                     {detail}
                   </p>
                   {lane.reasonCodes.length > 0 && (
-                    <p className="mt-2 break-all font-mono text-[10px] leading-4 text-cyber-text-dim">
-                      {lane.reasonCodes.join(" · ")}
-                    </p>
+                    <ul className="mt-2 space-y-1 text-[10px] leading-4 text-cyber-text-dim">
+                      {lane.reasonCodes.map((reason) => (
+                        <li key={reason}>
+                          <span>{trustReasonLabel(reason, language)}</span>{" "}
+                          <code className="break-all text-cyber-text-dim">
+                            [{reason}]
+                          </code>
+                        </li>
+                      ))}
+                    </ul>
                   )}
                 </article>
               ))}

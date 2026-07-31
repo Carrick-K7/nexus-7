@@ -154,6 +154,10 @@ The matrix reads immutable bundle/recovery artifacts, fresh signed receipts,
 persisted DeepSeek usage and restart-safe Turn runtime evidence. It never
 settles the city. Missing credentials, provider outage, expired receipts or an
 unfinished duration stay visible while the deterministic city continues.
+The header shows the exact deployed revision used for receipt matching. Every
+lane keeps its stable machine reason code and adds an English/Chinese human
+explanation; invalid supplied evidence is shown as failed rather than being
+downgraded because a companion file is missing.
 The DeepSeek lane uses only persisted DeepSeek shadow records; the ordinary
 reference-shadow comparison counter remains visible elsewhere and cannot be
 misread as live-provider evidence.

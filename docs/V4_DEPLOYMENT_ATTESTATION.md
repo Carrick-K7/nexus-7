@@ -1,12 +1,19 @@
 # v4 Production Deployment Attestation
 
-> Observed: 2026-07-26 through 2026-07-31 · Asia/Shanghai
+> Observed: 2026-07-26 through 2026-08-01 · Asia/Shanghai
 
 ## Current artifact
 
-- Release: `v4.7.0` — Portable Scientific Replication
-- Tag commit: `2362ee8a206b11c48c993e5d6bb9dbbaa6904f2b`
-- Implementation commit: `ebe3cafbff62fc8d27b3f9c13d4b1493f2b67da3`
+- Release: `v4.8.4` — Independent Replication Path
+- Tag commit: `ace250c3318ebbe60f60694ee841ddc73fd180f4`
+- v4.8.4 implementation commit: `43a62b18548255a3af528dc58d593540b0241581`
+- v4.8.3 Tag commit: `467c91fcfe1eaf41c23244c01279fe055898865f`
+- v4.8.3 implementation commit: `a535a29a6d3fb9ed97ae35b72ec4815697569b77`
+- v4.8.2 implementation commit: `bd9e8787eea27adaba2959c6a3709c02a8682f76`
+- Node 24 workflow commit: `ce52c74622d05522e07447a9805cbae1f299283f`
+- Implementation commit: `77ae73f57982c0091bbe3d17520ba59706c254cd`
+- v4.8 implementation commit: `7182378d7319d6d4aedfba24c6a498989f988c69`
+- v4.7 implementation commit: `ebe3cafbff62fc8d27b3f9c13d4b1493f2b67da3`
 - v4.6.1 implementation commit: `71f550c079d4d5c9c62bfcc6f1b0a337bf5d1e43`
 - v4.6 implementation commit: `a8ba2bd3022cdfd45cfdad31ead6cde3167d2c38`
 - Hotfix commit: `60f7612954e64408badb193cfe3f9df89c7fdfe7`
@@ -35,12 +42,12 @@ returned HTTP 405.
 
 `/api/observatory/v2/overview` returned
 `nexus.human-observatory.v2`, formula version 2.1.0, 200 humans, 36 AI, 24
-robots, 24 current resource ledgers and Turn 303. The three resident kinds are
+robots, 24 current resource ledgers and Turn 308. The three resident kinds are
 software state; these are synthetic results, not live Shenzhen data.
 
 The primary provider is `nexus-deterministic-reference`. The configured
-read-only shadow is `nexus-diversity-reference`: it recorded two comparisons
-and one disagreement on the first v4.5 Turn without entering settlement.
+read-only shadow is `nexus-diversity-reference`: it recorded 268 comparisons
+and 134 disagreements without entering settlement.
 DeepSeek remained at zero external attempts, zero Tokens and USD 0 across the
 season. This is an observed NEXUS-7 ledger total, not a provider-account claim.
 
@@ -58,6 +65,45 @@ and explicit `externalCiVerified=false` / null Sigstore receipt. Production
 Chromium at 390px rendered the same values and clean-checkout command with
 zero document overflow, console errors or warnings. Observatory mutation
 remained HTTP 405.
+
+The v4.8.1 public trust matrix returned one verified local-replication lane and
+four independent pending lanes. Its live DeepSeek slice remained exactly zero
+attempts, comparisons, provider failures, Tokens and USD cost even while the
+reference shadow reached 262 comparisons. Production Chromium at 390px showed
+`1/5` and `0 comparisons`, with document width 390px, zero console issues and
+zero axe WCAG A/AA violations. Root and trust GET returned 200; trust POST
+returned 405.
+
+The v4.8.2 production checkout is clean and detached at its exact annotated
+Tag. Both service processes expose that complete revision, the worker resumed
+from persisted Turn 306 with 3,213,220 ms remaining rather than settling early,
+and loopback/public roots returned 200. A real dark-theme 390px Chromium run
+rendered the current v4.8.2 and historical v0.3.0 Evolution Log cards at
+390/390 document/viewport width, with zero console issues and zero axe WCAG
+A/AA violations. The trust matrix remained honestly 1/5 with zero DeepSeek
+calls, comparisons, Tokens and cost; trust mutation returned 405.
+
+The v4.8.3 production checkout is clean and detached at annotated Tag
+`467c91f`. After the exact-Tag build passed audit and TypeScript, Web and worker
+restarted against the existing PostgreSQL volume. The worker read Turn 307 and
+waited 1,221,508 ms instead of settling early. Public GET returned 200 and
+mutation 405. A 390px production Chromium run rendered v4.8.3 and historical
+v0.3.0 with 390/390 document/viewport width, console 0 and zero axe WCAG A/AA
+violations. Browser-side trust-503 injection showed the bilingual stale-data
+contract, last successful refresh and retained resident table with zero axe
+violations or overflow; it did not mutate the server.
+
+The v4.8.4 production checkout is clean and detached at annotated Tag
+`ace250c`. The release directory and active checkout are exact copies of that
+commit; package audit and the production build passed before cutover.
+PostgreSQL remained active while only Web and worker stopped. The worker read
+persisted Turn 309 and waited 1,951,646 ms for its original due time instead of
+settling on startup. Root, Overview and Trust returned 200; Trust mutation
+returned 405. Production Chromium checked 1440px and 390px, dark and light
+palettes: four axe scans found zero WCAG A/AA violations, console
+warnings/errors were zero, and the mobile document remained 390/390px. The
+public Trust projection binds release revision `ace250c` and remains honestly
+1/5; deployment does not manufacture an external receipt.
 
 ## Existing season and live Turn
 
@@ -131,11 +177,45 @@ fingerprint `72e09ffd` and exact revision
 zero severe escapes and zero forced active paths, and raised safe society
 closure to 75/75.
 
-Production remains honestly `watch`: the observed window is 5.324 days,
-127/128 comparable settlements are on time, the one historical early-restart
+At the v4.8.1 cutover the worker read Turn 304 and announced a 313,279 ms wait
+rather than settling early. Turn 305 settled naturally at
+`2026-07-31T14:29:21.901Z`, on time with 348 ms lag, fingerprint `6dc9f166`
+and exact revision `268c1f26fcfd161b1dcfbf0be37ec89ca0c72c15`. It recorded
+RALR 444/605, 103 refusals, 58 withdrawals, conserved society exchange, 100%
+safe closure, and zero coercive actions or severe escapes.
+
+Turn 306 also settled naturally under v4.8.1 at
+`2026-07-31T15:29:23.200Z`, on time with 2,070 ms lag, fingerprint `addb2434`,
+RALR 446/607 and zero coercive actions or severe escapes. The v4.8.2 cutover
+then preserved Turn 306 and its next due time. Turn 307 settled naturally under
+v4.8.2 with 421 ms lag, fingerprint `2d80539e`, RALR 447/609 and zero coercive
+actions or severe escapes.
+
+The v4.8.3 cutover preserved Turn 307 and its next due time. Turn 308 settled
+naturally at `2026-07-31T17:29:24.037Z`, on time with 313 ms lag, fingerprint
+`7279fa10` and exact revision
+`467c91fcfe1eaf41c23244c01279fe055898865f`. PostgreSQL links its predecessor
+to Turn 307 fingerprint `2d80539e`; resources are conserved, RALR is 449/612,
+and coercive actions plus all three severe escape classes remain zero.
+
+Turn 309 continued naturally under v4.8.3 at
+`2026-07-31T18:29:24.281Z`, on time with 1,417 ms lag, fingerprint
+`c401128c`, RALR 450/614 and zero coercive or severe escapes. The v4.8.4
+cutover preserved that row and its next due time. Turn 310 then settled at
+`2026-07-31T19:29:25.790Z`, on time with 307 ms lag, exact revision
+`ace250c3318ebbe60f60694ee841ddc73fd180f4` and fingerprint `1ce6eebe`.
+It recorded RALR 451/615, 106 refusals, 58 withdrawals, 84/84 safe society
+closures, conserved civic credit, zero coercive actions, zero forced work or
+bargains, zero invalid proposals and zero severe consent, identity-continuity
+or irreversible-harm escapes. The persisted chain reports no predecessor
+mismatch.
+
+Production remains honestly `watch`: the observed window is 5.615 days,
+134/135 comparable settlements are on time, the one historical early-restart
 sample remains visible, and missing, duplicate and predecessor mismatch counts
-remain zero. Twenty-five Turns carry the v4.6.0 revision and 22 carry the
-v4.6.1 revision.
+remain zero. Twenty-five Turns carry the v4.6.0 revision, 22 carry v4.6.1, one
+carries v4.7.0, two carry v4.8.1, one carries v4.8.2, two carry v4.8.3 and one
+carries v4.8.4. All runtime-observed Turns are revision-bound.
 
 ## Recovery points
 
@@ -207,8 +287,41 @@ Turn 303 at `/deploy/nexus-7/backups/nexus-v4.7.0-pre-upgrade.dump`. Its size
 is 9,056,629 bytes and SHA-256 is
 `742fa3593beabd7c9ef0b00b6cd86c1b640e3a2c95a94fa6e3223ff2baaf61e1`.
 
+Before the v4.8 cutover, the normal backup service wrote matching mode-0600
+9,106,628-byte custom-format artifacts to the local and mounted backup roots.
+Both have SHA-256
+`e577d92711e1783d13dae1928d4c0f09df0ae817a27f75cd05e20c58aafe3f84`.
+This is a replicated backup artifact, not an off-host restore claim.
+
+Immediately before the v4.8.2 cutover, the same service wrote matching
+mode-0600, 9,208,771-byte local and mounted artifacts with SHA-256
+`f401e4bbdbccb9cde4e952a2552e4d3c2be817e0be12184b4e0be20ce31cfc98`.
+This is also replication, not an independently restored off-host proof.
+
+Immediately before the v4.8.3 cutover, matching mode-0600 local and mounted
+artifacts were 9,261,407 bytes with SHA-256
+`2be7d651dbb243c1bf255e92d2a87f10ea314022f3f42ea29cd25b35e2bc46cd`.
+This is replicated backup evidence, not an off-host restore.
+
+Immediately before the v4.8.4 cutover, the backup service wrote matching
+mode-0600, 9,363,223-byte artifacts to the local and mounted backup roots.
+Both have SHA-256
+`fb04dd36f9e539043e7a9a1bcef83131422b044689640aa3e7ab669e0d3fea31`.
+PostgreSQL stayed active throughout the application cutover. These two copies
+are still same-host replication and do not satisfy the off-host restore lane.
+
 ## Superseded production states
 
+`v4.8.3` at `467c91f` made transport freshness explicit and ran through Turn
+309; it is retained and superseded by v4.8.4 for independent external
+replication.
+`v4.8.2` at `6bbc31b` preserved reproducible evolution evidence and ran through
+Turn 307; it is retained and superseded by v4.8.3 for honest refresh evidence.
+`v4.8.1` at `268c1f2` isolated live DeepSeek evidence and ran through Turn 306;
+it is retained and superseded by v4.8.2 for reproducible build evidence.
+`v4.8.0` at `e3aa5ab` introduced the five-lane matrix but its DeepSeek card
+could display reference comparisons; it settled no Turn and is superseded by
+v4.8.1. `v4.7.0` at `2362ee8` ran through Turn 304 and is retained.
 `v4.6.1` at `6c90112` contained populated mobile society evidence and ran
 through Turn 303; it is retained and superseded by v4.7.0. `v4.6.0` at
 `75eda1b` introduced reversible city society and persisted the
@@ -232,7 +345,7 @@ recovery points remain immutable.
 - recovery is same-host; no off-host restore is claimed;
 - cognition is deterministic/reference-shadow; no live DeepSeek call is
   claimed;
-- no remote CI/Sigstore receipt exists for v4.7.0;
+- hosted PR CI is green but unsigned; no governed Sigstore receipt exists;
 - the public surface is anonymous read-only observation, not multi-user OIDC;
 - all residents and outcomes are synthetic and provide no evidence of real
   policy effects.

@@ -40,6 +40,8 @@ const now = "2026-07-31T12:00:00.000Z";
 const releaseRevision = "a".repeat(40);
 const repository = "Carrick-K7/nexus-7";
 const ciWorkflow = `${repository}/.github/workflows/ci.yml`;
+const replicationWorkflow =
+  `${repository}/.github/workflows/symbiosis-replication.yml`;
 const recoveryWorkflow =
   `${repository}/.github/workflows/symbiosis-offhost-recovery.yml`;
 const { privateKey, publicKey } = generateKeyPairSync("ed25519");
@@ -312,7 +314,7 @@ describe("v4.8 independent trust matrix", () => {
         hypothesesTotal: bundle.analysis.total,
         runCount: bundle.design.runCount,
       },
-      ciWorkflow,
+      replicationWorkflow,
     );
     const recoveryReceipt = receipt(
       "symbiosis-off-host-recovery",
@@ -332,7 +334,7 @@ describe("v4.8 independent trust matrix", () => {
       generatedAt: now,
       releaseRevision,
       repository,
-      signerWorkflows: [ciWorkflow, recoveryWorkflow],
+      signerWorkflows: [replicationWorkflow, recoveryWorkflow],
       publicKey,
       replicationBundle: bundle,
       replicationArtifactSha256: bundleArtifactSha256,
@@ -392,6 +394,34 @@ describe("v4.8 independent trust matrix", () => {
     expect(matrix.lanes.offHostRecovery).toMatchObject({
       status: "failed",
       offHost: true,
+    });
+    expect(matrix.overall).toBe("failed");
+  });
+
+  it("does not downgrade a supplied malformed recovery receipt to pending", () => {
+    const matrix = buildSymbiosisTrustMatrix({
+      generatedAt: now,
+      releaseRevision,
+      repository,
+      signerWorkflows: [replicationWorkflow, recoveryWorkflow],
+      publicKey,
+      replicationBundle: bundle,
+      replicationArtifactSha256: bundleArtifactSha256,
+      recoveryReceipt: { malformed: true },
+      observatory: {
+        cognition: cognition(),
+        reliability: reliability(5),
+      },
+    });
+
+    expect(matrix.lanes.offHostRecovery).toMatchObject({
+      status: "failed",
+      evidencePresent: false,
+      receiptPresent: false,
+      reasonCodes: expect.arrayContaining([
+        "receipt-envelope-invalid",
+        "recovery-evidence-missing",
+      ]),
     });
     expect(matrix.overall).toBe("failed");
   });

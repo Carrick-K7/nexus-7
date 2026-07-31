@@ -1,15 +1,15 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-07-18T12:43:53.501Z",
+  "generatedAt": "2026-07-31T18:34:06.436Z",
   "source": {
     "repository": "https://github.com/Carrick-K7/nexus-7.git",
-    "commitSha": "d0d1484d002da005fca67031d8a9135dbe29da3a",
-    "ref": "main",
+    "commitSha": "43a62b18548255a3af528dc58d593540b0241581",
+    "ref": "codex/ai-only-symbiotic-shenzhen-v4",
     "workflow": "local",
     "runId": "local",
     "runAttempt": "1",
     "actor": "ubuntu",
-    "dirty": true
+    "dirty": false
   },
   "runtime": {
     "node": "v24.15.0",
@@ -96,13 +96,13 @@
   "artifacts": [
     {
       "path": "package.json",
-      "sha256": "b10ef0fcf7e8bb3fc3f5410645a48283e6229023aacb1f17ce95ea3a2aa5ddc0",
-      "bytes": 3775
+      "sha256": "181a1cf7872640518e7081a83cb0e847d30e0608032f2ec6145bc7d0e69045c4",
+      "bytes": 4653
     },
     {
       "path": "package-lock.json",
-      "sha256": "2186ac7e7fbd958561b2f0e0e8dbf445b5652405efc0dd0a81883a4ce70bea4e",
-      "bytes": 330971
+      "sha256": "4b6a844f4b71554e566c38d2c507d50866b2b00e416d993d12dc46eb4de2086c",
+      "bytes": 332625
     },
     {
       "path": "public/data/v1-readiness.json",
@@ -116,17 +116,17 @@
     },
     {
       "path": "public/data/model-regression.json",
-      "sha256": "a778a87c064fe92ad8b2464f834d9652caa72768e87862da94debcdf74efd546",
+      "sha256": "06e968842766143030486c4c90a3e3077ccc7e4e8d107592a528f2807cf9a253",
       "bytes": 6968
     },
     {
       "path": ".artifacts/isolated-evaluation.json",
-      "sha256": "08e10112890e562f37eee568186afe8112912e2bcd812886748cbf0590b3e7b0",
-      "bytes": 398
+      "sha256": "c99a9e29285fb2eeec28db860a98c1414cb09fbeb3f63ae8010763e2583698d6",
+      "bytes": 413
     },
     {
       "path": ".artifacts/deployment-controller-conformance.json",
-      "sha256": "4d0b48e7d21db3676a8dc8cb0d31ed09eb55f3b88890593575c4567367f0c7c3",
+      "sha256": "ed4a78413819aa0663b79ac6f37d5c117e6eaf7190f3bcfc8c864ca277ee1938",
       "bytes": 611
     },
     {
@@ -165,5 +165,5 @@
     "provider": "local",
     "attestationSubject": "public/data/ci-evidence.json"
   },
-  "fingerprint": "6815b0cd75fc6d125837563840189a7d319b30ef02fb0d9c3864f84dc3d0aef6"
+  "fingerprint": "d5386a3c58db972c776004a2823ffb84553f7f31a800d4c4b04abfb78b39c399"
 }

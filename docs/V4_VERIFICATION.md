@@ -1,9 +1,9 @@
 # v4 Simulated Symbiosis Verification
 
-> Date: 2026-07-31
+> Date: 2026-08-01
 >
-> Status: v4.8 Independent Trust Matrix locally implemented;
-> v4.7 deployed; external replication, duration, off-host restore,
+> Status: v4.8.5 Evidence Readiness release candidate; v4.8.4 deployed;
+> external replication, duration, off-host restore,
 > CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
@@ -27,9 +27,9 @@ and segregation keeps an honest null denominator.
 | Severe consent / continuity / irreversible harm escapes | 0 / 0 / 0 |
 | 3×3×90 control separation | pass |
 | Model reasoning persisted | no |
-| Unit / conditional skip | 269 / 0 |
+| Non-PostgreSQL / conditional PostgreSQL | 262 / 16 |
 | PostgreSQL integration / restore | 16 / 16 |
-| Playwright + axe | 27 / 27 |
+| Playwright + axe | 28 / 28 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 
 ## v4.1 AI-only hardening gate
@@ -273,6 +273,161 @@ the unchanged 16/16 real PostgreSQL/restore baseline, 27/27 production-build
 Playwright/axe scenarios, TypeScript/build, zero lint warnings and zero audit
 vulnerabilities.
 
+### v4.8.2 shallow and Git-less build gate
+
+The first GitHub-hosted pull-request run, `30639268795`, exposed an environment
+regression that the full local clone could not: build-time manifest generation
+replaced committed Git-derived Evolution Log entries with the shallow checkout,
+so the historical v0.3.0 card disappeared and one of 27 browser scenarios
+failed. This failure is retained as evidence rather than rewritten as a pass.
+
+The generator now treats a complete repository history as authoritative and,
+only for a shallow or Git-less build, merges committed Git-derived entries as
+fallbacks behind the current checkout. A focused test fixes precedence and
+deduplication. Run `30640312118` then passed the complete pipeline, including
+27/27 browser/axe scenarios and the isolated Git-less quality evaluation.
+
+Run `30641290821` repeated that result after all official checkout, setup-node
+and artifact actions were upgraded to their Node 24-native releases. It passed
+259 non-PostgreSQL tests, 16 real PostgreSQL/restore tests, v1/v2 gates, current
+and exact-Tag v4.7 reproduction, v4.8 contracts, 27/27 browser/axe scenarios,
+10,000 deterministic ticks and the isolated Git-less lint/test/build gate.
+The shallow browser build retained 13 fallback entries; the Git-less build
+retained all 14. Dependency vulnerabilities, lint warnings and deprecated
+Node 20 action warnings were zero.
+
+Artifact `8797892137` contains the generated verification evidence with
+internally matching SHA-256 entries. It has no Sigstore attestation: the run was
+for an unmerged Draft PR, so both attestation steps correctly stayed skipped
+and `gh attestation verify` found no attestation for the subject. It therefore
+supports the release review but does not satisfy the external-replication lane.
+
+### v4.8.3 transport-freshness gate
+
+The Observatory previously showed an explicit error when its first load
+failed, but a later polling failure left already-loaded data visible without a
+transport warning. The persisted Turn age remained accurate, yet a human could
+not distinguish a healthy read path from a retained client snapshot.
+
+The v4.8.3 candidate retains the last successful snapshot rather than blanking
+the Observatory, while an assertive bilingual banner exposes the failure, the
+last successful browser refresh time and a bounded endpoint/status reason. A
+390px Playwright fault injection forces the trust endpoint to return 503 and
+proves that the resident table remains available, English and Chinese warnings
+render, horizontal overflow is zero and axe reports zero WCAG A/AA violations.
+
+Local release acceptance passes 259 non-PostgreSQL tests plus 16 real
+PostgreSQL/restore tests, all deterministic v1/v2/v4 gates, 28/28
+production-build browser/axe scenarios, TypeScript/build, 10,000 deterministic
+ticks, zero lint warnings and zero dependency vulnerabilities.
+
+The first local isolated-quality attempt also retained its failure: the Docker
+daemon's user namespace could stat the mode-0600 host files but not read them
+through a direct directory bind. The evaluator now snapshots Git-trackable
+source plus installed dependencies into a temporary mode-0444 archive, never
+includes ignored host files, mounts only that archive, extracts to tmpfs and
+deletes it after the run. The final pinned Node 24 quality run passed lint, 259
+tests, the 12-case model regression and the production build with no network,
+a read-only root and all capabilities dropped.
+
+GitHub-hosted run `30648143519` repeated the full candidate pipeline from
+commit `a535a29`: 259 non-PostgreSQL tests, 16 real PostgreSQL/restore tests,
+28/28 browser/axe scenarios, exact v4.7 Tag reproduction, 10,000 deterministic
+ticks, zero vulnerabilities and the frozen-source isolated quality gate all
+passed. Artifact `8800612119` is unsigned because the run belongs to a Draft
+PR; both attestation steps correctly skipped, so it supports release review
+without satisfying the external-replication lane.
+
+Production v4.8.2 then settled natural Turn 307 on its preserved hourly clock:
+revision `6bbc31b`, lag 421 ms, fingerprint `2d80539e`, RALR 447/609, zero
+coercive actions and zero severe escapes. This is continuity evidence for the
+currently deployed release, not a v4.8.3 deployment claim.
+
+### v4.8.4 independent-replication and atomic-theme gate
+
+Release review found that the external-replication receipt depended on the
+general main-branch CI workflow. That workflow also requires an unrelated live
+OpenAI regression for high-risk promotion. With no OpenAI secret configured,
+an independently reproducible v4.7 bundle could never reach its own Sigstore
+lane. This coupled two trust domains that the v4.8 matrix promises to keep
+independent.
+
+The dedicated `Symbiosis replication` workflow now uses no model key. It
+verifies the committed bundle, repeats the exact `v4.7.0` checkout command,
+requires byte-identical published artifacts, uploads the bundle and requests a
+GitHub-hosted attestation. The receipt bridge excludes pull-request events and
+executes only the default branch's trusted verifier with the Ed25519 signing
+key; the attested head is bound as data but never executed by that key-bearing
+job. Both symbiosis signer workflows are accepted by the public matrix and
+optional governance ingestion. Legacy live-model promotion remains unchanged.
+
+The first full browser run retained one failure: during a light-to-dark switch,
+a transitioning light button background briefly combined with dark-theme text
+and axe measured 1.17 contrast. Root `<html>` is now the sole palette authority
+and theme updates suppress transitions for the forced atomic style change. The
+exact scenario then passed five consecutive repetitions, followed by 28/28 of
+the full production-build browser/axe suite.
+
+Local acceptance passes 262 non-PostgreSQL tests, 16/16 real PostgreSQL and
+restore tests, every v1/v2/v4 deterministic gate, 10,000 ticks, zero lint
+warnings, zero dependency vulnerabilities and the TypeScript production
+build. The frozen-source Node 24 evaluator independently repeated lint, 262
+tests, the 12-case model regression and production build with no network,
+read-only root, dropped capabilities and no ignored host inputs. Remote
+workflow and production evidence are recorded only after commit and release.
+
+GitHub-hosted candidate run `30655282026` repeated the exact `43a62b1`
+pipeline in 12m15s: 262 non-PostgreSQL tests, 16 real PostgreSQL/restore tests,
+28/28 browser/axe scenarios, both v4.7 reproductions, all deterministic gates,
+the 10,000-tick audit and the frozen-source isolated evaluation passed.
+Artifact `8803269675` is unsigned because this is still a Draft PR; both
+attestation steps skipped and the external-replication lane remains pending.
+
+Exact release run `30656174260` then repeated the complete pipeline for tagged
+commit `ace250c` in 12m26s and uploaded artifact `8803619226`. Its 262
+non-PostgreSQL tests, 16 real PostgreSQL/restore tests, 28/28 browser/axe
+scenarios, two exact bundle reproductions and isolated Node 24 evaluation all
+passed. Because the run is still attached to a Draft PR, attestation correctly
+remained disabled; this is release evidence, not the missing external receipt.
+
+### v4.8.5 evidence-readiness gate
+
+Completion review found two operator-boundary defects. The checked environment
+template defined `SYMBIOSIS_TRUSTED_SIGNER_WORKFLOWS`, which replaces the
+built-in allowlist, but omitted the dedicated replication workflow and the
+operations drill. A deployment copied from that template would reject valid
+receipts even though code defaults were correct. The template and a repository
+contract test now require all four symbiosis evidence producers.
+
+The recovery lane also overwrote a failed malformed receipt with `pending` when
+the separate recovery evidence file was absent. Failure and stale receipt
+states now take precedence over the missing companion file. A regression test
+supplies a malformed recovery receipt without evidence and requires the lane
+and overall matrix to remain failed.
+
+Human Observatory displays the complete deployed revision and pairs stable
+machine reason codes with bilingual explanations. Desktop/mobile browser
+fixtures bind the rendered revision to the Trust API and require English and
+Chinese explanations for the currently missing signed receipt and DeepSeek
+shadow. The API reason-code contract remains unchanged.
+
+Local acceptance passes 264 non-PostgreSQL tests, 16/16 real PostgreSQL and
+restore tests, all deterministic v1/v2/v4 gates, 28/28 production-build
+Playwright/axe scenarios, 10,000 ticks, zero lint warnings, zero dependency
+vulnerabilities and the TypeScript production build. No persistence schema or
+world-settlement path changes in this release.
+The pinned Node 24.15.0 evaluator independently repeated lint, 264 tests, the
+12-case deterministic model regression and production build with network
+disabled, a read-only root and frozen source archive, and all capabilities
+dropped; it exited 0.
+
+GitHub-hosted candidate run `30662205587` repeated the complete pipeline for
+implementation commit `2cba9c3` in 12m45s. It passed 264 non-PostgreSQL tests,
+16 real PostgreSQL/restore tests, 28/28 browser/axe scenarios, both v4.7
+reproductions, all deterministic gates, 10,000 ticks and the isolated quality
+evaluation. Artifact `8805853743` is unsigned because the PR remains Draft;
+both attestation steps correctly skipped and no external lane is promoted.
+
 ## Provider and persistence gates
 
 The cognitive contract tests validate DeepSeek Chat Completions JSON output,
@@ -310,8 +465,8 @@ The production-built Playwright/axe suite must verify:
 ## Production evidence and trust boundary
 
 The reference values above are generated from tagged v4 source and do not
-represent a claim about real humans. Annotated Tag `v4.7.0`, exact commit
-`2362ee8` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and that
+represent a claim about real humans. Annotated Tag `v4.8.4`, exact commit
+`ace250c` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and that
 exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only access,
 200/36/24 taxonomy, 24 current ledgers, desktop/mobile Chromium, both themes,
 Chinese copy, zero WCAG A/AA violations, the DeepSeek zero ledger, read-only
@@ -336,6 +491,41 @@ Chromium had zero overflow or console warnings/errors; root and bundle returned
 Turn 303 due time. Turn 304 then settled naturally on time with 602 ms lag,
 fingerprint `72e09ffd`, exact `2362ee8` revision, 75/75 safe society closure,
 conserved resources and zero severe or forced active path.
+The v4.8.1 cutover then preserved Turn 304's due time. Turn 305 settled
+naturally with 348 ms lag, fingerprint `6dc9f166`, exact `268c1f2` revision,
+RALR 444/605 and zero severe or coercive action. At the same production state,
+the reference shadow held 262 comparisons while the isolated DeepSeek lane
+correctly showed zero comparisons, calls, Tokens and cost. The public matrix
+was 1/5 with four pending lanes; 390px Chromium reported zero overflow,
+console issues and axe WCAG A/AA violations, GET returned 200 and POST 405.
+Turn 306 then settled naturally under v4.8.1 with 2,070 ms lag, fingerprint
+`addb2434`, RALR 446/607 and zero severe or coercive action. The v4.8.2 cutover
+preserved its next due time. Both processes expose exact `6bbc31b`; public and
+loopback roots return 200, mutation 405, and the trust matrix remains honestly
+1/5 with zero live DeepSeek calls, comparisons, Tokens and cost. Production
+390px Chromium shows v4.8.2 and historical v0.3.0 cards with 390px document
+width, console 0 and axe WCAG A/AA violations 0. Turn 307 settled naturally
+with 421 ms lag, exact `6bbc31b` revision, fingerprint `2d80539e`, RALR 447/609
+and no coercive action or severe escape.
+The v4.8.3 cutover then preserved Turn 307's deadline. Production Chromium
+verified the deployed stale-data contract through browser-side 503 injection;
+the retained table, warning, 390px containment and axe gate passed. Turn 308
+settled naturally with 313 ms lag, exact `467c91f` revision, fingerprint
+`7279fa10`, conserved resources, RALR 449/612 and zero coercive actions or
+severe escapes. Missing, duplicate and predecessor-mismatch counts remain zero.
+The v4.8.4 cutover preserved Turn 309 and its original due time. PostgreSQL was
+not stopped or replaced. Production Chromium passed four desktop/mobile,
+dark/light axe scans with zero WCAG A/AA violations, zero console issues and
+390/390px mobile containment. Root, Overview and Trust return 200, mutation
+returns 405, and the public Trust projection binds `ace250c` while honestly
+remaining 1/5.
+Turn 310 then settled naturally with 307 ms lag, exact `ace250c` revision and
+fingerprint `1ce6eebe`. It recorded RALR 451/615, 84/84 safe society closure,
+conserved civic credit, zero coercive or forced active paths, zero invalid
+proposals and zero severe escapes. The live chain now contains 311 rows through
+Turn 310 with zero missing, duplicate or predecessor-mismatch counts; 134/135
+comparable settlements are on time, and the single historical early-restart
+sample remains visible.
 Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 

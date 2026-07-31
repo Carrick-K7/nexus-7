@@ -1,12 +1,239 @@
 [
   {
+    "id": "iteration-v4.8.5",
+    "version": "4.8.5",
+    "date": "2026-08-01",
+    "trigger": "evidence-readiness-audit",
+    "triggerReason": "Completion review found that the checked environment template replaced the built-in trusted-workflow defaults while omitting the independent replication signer. It also found that an invalid supplied recovery receipt could be downgraded from failed to pending when the companion evidence file was absent, while the Human Observatory exposed machine reason codes without the exact deployed revision or bilingual explanations.",
+    "action": "Align the explicit signer override with all accepted symbiosis evidence producers and test it as a repository contract. Preserve failed or stale receipt precedence over a missing recovery file. Project the full deployed revision and bilingual human explanations alongside stable machine reason codes in Human Observatory, with desktop, mobile and Chinese browser assertions.",
+    "outcome": "Local acceptance passes 264 non-PostgreSQL tests, 16 real PostgreSQL/restore tests, all deterministic v1/v2/v4 gates, 28/28 production-build Playwright/axe scenarios, 10,000 ticks, zero lint warnings, zero dependency vulnerabilities and the TypeScript production build. The pinned networkless Node 24.15.0 evaluator independently repeats lint, 264 tests, model regression and build from a frozen read-only source archive with dropped capabilities. GitHub-hosted candidate run 30662205587 repeats the complete pipeline for implementation commit 2cba9c3 and uploads unsigned artifact 8805853743. The malformed-receipt regression, checked signer override, exact revision and bilingual reasons all pass; exact release and production evidence remain to be recorded.",
+    "metrics": [
+      {
+        "label": "Accepted signer workflows omitted by the explicit template",
+        "before": 2,
+        "after": 0
+      },
+      {
+        "label": "Malformed recovery receipt without evidence",
+        "before": "pending",
+        "after": "failed"
+      },
+      {
+        "label": "Trust reasons with bilingual human explanations",
+        "before": 0,
+        "after": 20
+      },
+      {
+        "label": "Deployed revision visible in Human Observatory",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "label": "External trust lanes locally promoted",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Malformed recovery receipt regression keeps the lane and matrix failed",
+      "Environment-template contract includes CI, replication, operations and off-host recovery signers",
+      "Human Observatory preserves machine codes and adds English/Chinese explanations",
+      "Trust panel binds the displayed release revision to the API contract",
+      "264 non-PostgreSQL and 16 real PostgreSQL/restore tests pass",
+      "Production-build Playwright/axe passes 28/28 across desktop, mobile, English, Chinese and both palettes",
+      "All deterministic gates and the 10,000-tick audit pass with zero lint warnings or dependency vulnerabilities",
+      "Pinned Node 24.15.0 isolated lint/test/model/build passes with network none, read-only root, frozen source and dropped capabilities",
+      "GitHub Actions run 30662205587 passes the complete candidate pipeline and uploads unsigned artifact 8805853743"
+    ],
+    "artifacts": [
+      ".env.example",
+      "src/symbiosis/trust.ts",
+      "src/symbiosis/trust.test.ts",
+      "src/evidence/symbiosis-replication-workflow.test.ts",
+      "src/components/symbiosis/HumanObservatory.tsx",
+      "e2e/nexus.spec.ts",
+      "docs/adr/0033-evidence-readiness-contract.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.8.4",
+    "version": "4.8.4",
+    "date": "2026-08-01",
+    "trigger": "external-replication-live-model-coupling",
+    "triggerReason": "The five-lane trust matrix defines external replication and live-provider operation as independent claims, but the original receipt path depended on a general main-branch CI run whose legacy promotion evidence requires an unrelated OpenAI credential. The repository has no such secret, so a reproducible symbiosis bundle could not reach GitHub attestation or receipt issuance. Release browser acceptance also caught a theme-switch frame that combined a light button background with dark-theme text and temporarily failed contrast.",
+    "action": "Create a dedicated GitHub-hosted symbiosis-replication workflow with no model key. Reproduce the bundle at the attested revision and from exact tag v4.7.0, require byte identity, upload and attest it, reject pull-request receipt triggers, run the key-bearing verifier only from the default branch, and add the dedicated replication and off-host workflows to the default trust allowlists without weakening the legacy promotion gate. Make the root the sole palette authority and suppress transitions during the atomic root-theme update.",
+    "outcome": "Local implementation acceptance passes 262 non-PostgreSQL tests, 16 real PostgreSQL/restore tests, every deterministic v1/v2/v4 gate, 28/28 browser/axe scenarios, a five-repeat theme-switch regression, 10,000 ticks, zero lint warnings, zero dependency vulnerabilities, TypeScript/build and the pinned networkless Node 24 evaluator. GitHub-hosted candidate run 30655282026 and exact release run 30656174260 repeated the complete pipeline; release artifact 8803619226 is unsigned because the PR remains Draft. Annotated Tag v4.8.4 at ace250c is deployed with PostgreSQL continuity, preserved hourly cadence, read-only public access and four zero-violation production axe scans. Natural Turn 310 binds the exact release revision with 307 ms lag, fingerprint 1ce6eebe, RALR 451/615, 84/84 safe society closure and zero severe or forced active paths. Human-governed signing material, exact-revision receipt ingestion and the other external trust lanes remain independent prerequisites.",
+    "metrics": [
+      {
+        "label": "External replication dependence on live-model credentials",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Exact bundle reproductions per remote run",
+        "before": 1,
+        "after": 2
+      },
+      {
+        "label": "PR runs eligible for signed receipt issuance",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Candidate-code paths exposed to the receipt-signing key",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Theme-switch frames with WCAG contrast violations",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "High-risk promotion gates removed",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Dedicated workflow contract verifies two v4.7 reproductions, byte identity and GitHub attestation",
+      "Receipt workflow explicitly excludes pull_request events",
+      "Receipt workflow executes the verifier from the default branch rather than the attested head",
+      "Light/dark theme changes use one root palette and an atomic transition-free update",
+      "Trust projection and governance registry accept the dedicated signed workflow",
+      "262 non-PostgreSQL and 16 real PostgreSQL/restore tests pass",
+      "Full production-build Playwright/axe passes 28/28 after a five-repeat theme-switch regression",
+      "Pinned Node 24 isolated lint/test/model/build passes with network none and read-only root",
+      "GitHub Actions run 30655282026 passes the complete candidate pipeline and uploads unsigned artifact 8803269675",
+      "GitHub Actions run 30656174260 passes the exact ace250c release pipeline and uploads unsigned artifact 8803619226",
+      "Annotated Tag v4.8.4 at ace250c is deployed from a clean detached checkout without replacing PostgreSQL",
+      "Production desktop/mobile and dark/light Chromium reports zero console issues, zero overflow and four zero-violation axe scans",
+      "Natural production Turn 310 binds ace250c with 307 ms lag, fingerprint 1ce6eebe, RALR 451/615 and 84/84 safe society closure"
+    ],
+    "artifacts": [
+      ".github/workflows/symbiosis-replication.yml",
+      ".github/workflows/evidence-receipts.yml",
+      "src/evidence/symbiosis-replication-workflow.test.ts",
+      "src/symbiosis/trust-server.ts",
+      "src/governance/evidence-service.ts",
+      "src/app/page.tsx",
+      "src/app/globals.css",
+      "docs/adr/0032-independent-replication-workflow.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.8.3",
+    "version": "4.8.3",
+    "date": "2026-08-01",
+    "trigger": "observatory-stale-data-and-isolated-input-ambiguity",
+    "triggerReason": "After a successful initial load, a later Observatory refresh failure retained the last snapshot without telling the human observer that the live read path had failed. Release review also found that a direct source-directory bind was not portable across Docker user namespaces and could expose ignored host files to evaluated code.",
+    "action": "Keep the last successful snapshot for continuity, but surface a bilingual assertive stale-data warning with the last successful browser refresh time and bounded endpoint failure reason. Add a mobile fault-injection scenario covering retained data, English and Chinese copy, WCAG A/AA and horizontal containment. Freeze only Git-trackable source plus installed dependencies into a mode-0444 archive before starting the networkless, read-only evaluator, then remove the archive after evaluation.",
+    "outcome": "The targeted and complete production-build browser suites pass. Full local acceptance covers 259 non-PostgreSQL tests, 16 real PostgreSQL/restore tests, all deterministic gates, 28 browser/axe scenarios and 10,000-tick stability. GitHub-hosted candidate run 30648143519 and exact release commit run 30649142382 repeated the complete pipeline, including the pinned Node 24 evaluator with no network, a read-only root, dropped capabilities and a read-only frozen source archive. Annotated Tag v4.8.3 is deployed; its first naturally due Turn settled on time with exact revision, conserved resources and zero severe escapes. Draft-PR artifacts remain unsigned and outside the external-replication lane.",
+    "metrics": [
+      {
+        "label": "Visible warning after failed live refresh",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "label": "Last successful snapshot retained",
+        "before": 1,
+        "after": 1
+      },
+      {
+        "label": "Browser scenarios",
+        "before": 27,
+        "after": 28
+      },
+      {
+        "label": "Ignored host files in evaluator input",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "World-settling paths changed",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Targeted 390px production-build Playwright fault injection passes",
+      "English and Chinese stale-data warnings preserve the last loaded resident table",
+      "Injected failure state has zero axe WCAG A/AA violations and zero horizontal overflow",
+      "TypeScript production build and ESLint with zero warnings pass",
+      "Pinned Node 24 isolated quality evaluation passes with network none, read-only root, dropped capabilities and read-only frozen source",
+      "GitHub Actions run 30648143519 passes the complete pipeline with 28/28 browser/axe scenarios and uploads unsigned artifact 8800612119",
+      "Exact release commit run 30649142382 passes and uploads unsigned artifact 8800884727",
+      "Production 390px Chromium passes version/history, stale-data injection, console, overflow and axe checks",
+      "Natural Turn 308 binds revision 467c91fcfe1eaf41c23244c01279fe055898865f with 313 ms lag and fingerprint 7279fa10"
+    ],
+    "artifacts": [
+      "src/components/symbiosis/HumanObservatory.tsx",
+      "e2e/nexus.spec.ts",
+      "scripts/run-isolated-evaluation.ts",
+      "src/evidence/isolated-executor.ts",
+      "src/evidence/isolated-executor.test.ts"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.8.2",
+    "version": "4.8.2",
+    "date": "2026-07-31",
+    "trigger": "external-ci-environment-regression",
+    "triggerReason": "The first GitHub-hosted CI run used a shallow checkout, so the build-time Evolution Log generator discarded committed Git-derived history and the v0.3.0 evidence card disappeared even though local full-history browser tests passed.",
+    "action": "Made complete Git history authoritative while preserving committed Git-derived entries only for shallow or Git-less builds, deduplicated current entries ahead of fallbacks, added a focused merge-order regression test, and upgraded official GitHub Actions to their Node 24-native major versions.",
+    "outcome": "GitHub Actions runs 30641290821 and 30642404042 passed the complete quality pipeline from shallow pull-request checkouts and repeated the unit/build gate without Git metadata. The build retained committed Evolution Log history, restored 27/27 browser scenarios, and emitted no Node 20 action warning. Exact Tag 6bbc31b is active in production; its unsigned PR artifact remains supporting evidence rather than a verified external-replication receipt.",
+    "metrics": [
+      {
+        "label": "GitHub browser scenarios",
+        "before": 26,
+        "after": 27
+      },
+      {
+        "label": "Missing historical version cards",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "New generator regression tests",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "label": "Deprecated Node 20 action warnings",
+        "before": 7,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "GitHub Actions run 30639268795 failed only the missing v0.3.0 browser assertion after 26/27 scenarios",
+      "GitHub Actions run 30640312118 first proved the generator fix with 27/27 browser scenarios and complete Git-less quality evaluation",
+      "GitHub Actions run 30641290821 passed 259 non-PostgreSQL and 16 real PostgreSQL/restore tests, 27/27 browser/axe scenarios, exact v4.7 Tag reproduction, 10,000-tick stability and isolated Git-less quality evaluation",
+      "Exact release commit 6bbc31b passed run 30642404042, was tagged v4.8.2 and deployed after a checksum-matching backup; worker preserved Turn 306's due time",
+      "Production 390px Chromium rendered v4.8.2 and v0.3.0 with document width 390, console 0 and axe WCAG A/AA violations 0; root/trust GET 200 and trust POST 405",
+      "Run 30641290821 uploaded artifact 8797892137 with internally matching SHA-256 entries; no Sigstore attestation exists for its CI evidence subject because PR workflows cannot self-attest",
+      "ESLint passes with zero warnings, dependency audit reports zero vulnerabilities, and Node 20 action warnings are zero"
+    ],
+    "artifacts": [
+      "scripts/inject-git-log.js",
+      "scripts/iteration-manifest-utils.cjs",
+      "src/evidence/iteration-manifest-generator.test.ts",
+      ".github/workflows/ci.yml",
+      "public/data/iteration-manifests.json"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.8.1",
     "version": "4.8.1",
     "date": "2026-07-31",
     "trigger": "production-observability-regression",
     "triggerReason": "The v4.8.0 DeepSeek lane stayed pending correctly but reused the aggregate diversity comparison count, so 260 reference-shadow comparisons could be read by a human as 260 live DeepSeek comparisons.",
     "action": "Split persisted DeepSeek shadow evidence from combined provider usage and generic cognitive diversity, bind the trust lane only to that exact slice, add reference-shadow contamination tests at API and browser layers, and document the correction.",
-    "outcome": "Pushed implementation 77ae73f prevents a reference shadow from contributing attempts, comparisons, failures, Tokens, price versions, models or cost to the live DeepSeek trust lane. The deterministic city and its PostgreSQL contracts are unchanged; missing live-provider evidence remains visibly pending.",
+    "outcome": "Pushed implementation 77ae73f prevents a reference shadow from contributing attempts, comparisons, failures, Tokens, price versions, models or cost to the live DeepSeek trust lane. Exact Tag 268c1f2 is active in production: Turn 305 settled naturally on time while 262 reference comparisons remained separate from zero live DeepSeek evidence.",
     "metrics": [
       {
         "label": "Reference comparisons displayed as DeepSeek",
@@ -33,7 +260,8 @@
       "258/258 non-PostgreSQL tests pass; the unchanged 16/16 PostgreSQL and restore baseline remains applicable",
       "v4.8 trust contract 5/5 including a 260-reference-comparison contamination regression",
       "TypeScript production build, lint with zero warnings and dependency audit with zero vulnerabilities",
-      "27/27 production-build Playwright/axe scenarios pass across API, desktop, mobile, Chinese and both themes"
+      "27/27 production-build Playwright/axe scenarios pass across API, desktop, mobile, Chinese and both themes",
+      "Production 390px Chromium: 1/5, 0 DeepSeek comparisons, overflow/console/axe 0; Turn 305 lag 348 ms on exact Tag"
     ],
     "artifacts": [
       "src/symbiosis/observatory.ts",
@@ -1724,6 +1952,72 @@
       "docs/adr/0001-deterministic-simulation-core.md"
     ],
     "source": "manifest"
+  },
+  {
+    "id": "a535a29a",
+    "version": "unreleased",
+    "date": "2026-08-01",
+    "trigger": "bug",
+    "triggerReason": "fix: make observatory freshness explicit",
+    "action": "fix: make observatory freshness explicit",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "ce52c746",
+    "version": "unreleased",
+    "date": "2026-07-31",
+    "trigger": "observation",
+    "triggerReason": "ci: upgrade official actions to Node 24 runtimes",
+    "action": "ci: upgrade official actions to Node 24 runtimes",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "bd9e8787",
+    "version": "unreleased",
+    "date": "2026-07-31",
+    "trigger": "bug",
+    "triggerReason": "fix: preserve evolution evidence in shallow builds",
+    "action": "fix: preserve evolution evidence in shallow builds",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "a936641f",
+    "version": "unreleased",
+    "date": "2026-07-31",
+    "trigger": "observation",
+    "triggerReason": "docs: refresh reconciled evolution evidence",
+    "action": "docs: refresh reconciled evolution evidence",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "7ade982b",
+    "version": "unreleased",
+    "date": "2026-07-31",
+    "trigger": "observation",
+    "triggerReason": "merge: reconcile production authority from main",
+    "action": "merge: reconcile production authority from main",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "b91e696c",
+    "version": "unreleased",
+    "date": "2026-07-23",
+    "trigger": "observation",
+    "triggerReason": "docs: define NEXUS production authority",
+    "action": "docs: define NEXUS production authority",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
   },
   {
     "id": "355bec9f",

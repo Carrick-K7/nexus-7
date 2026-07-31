@@ -359,7 +359,12 @@ export function buildSymbiosisTrustMatrix(
   let recoveryStatus = recoveryReceipt.status;
   const recoveryReasons = [...recoveryReceipt.reasonCodes];
   if (!recovery) {
-    recoveryStatus = malformedRecovery ? "failed" : "pending";
+    recoveryStatus =
+      malformedRecovery || recoveryReceipt.status === "failed"
+        ? "failed"
+        : recoveryReceipt.status === "stale"
+          ? "stale"
+          : "pending";
     recoveryReasons.push(
       malformedRecovery
         ? "recovery-evidence-invalid"

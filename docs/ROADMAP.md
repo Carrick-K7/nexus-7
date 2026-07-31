@@ -192,6 +192,36 @@ live-provider and elapsed-time lanes remain pending until their independent
 systems actually produce evidence. That pending state is the intended honest
 result, not a local verification failure.
 
+v4.8.2 hardens this boundary across build environments: committed Evolution
+Log evidence survives shallow and Git-less builds, current checkout entries
+take precedence, and unsigned PR artifacts remain outside the external-CI
+lane. GitHub-hosted quality is green; governed Sigstore receipt issuance is
+still pending.
+
+v4.8.3 closes a human-observation ambiguity: a failed periodic or manual live
+refresh may retain the last successful snapshot for continuity only when the
+UI marks it stale, exposes the last successful refresh time and a bounded
+failure reason, and remains bilingual, mobile-contained and WCAG A/AA clean.
+The release gate also replaces the direct repository bind with a frozen,
+Git-trackable source archive so ignored host files stay outside evaluated code.
+GitHub-hosted run `30648143519` passed the complete pipeline; its Draft-PR
+artifact remains unsigned and therefore does not satisfy the external lane.
+
+v4.8.4 removes an operational coupling between two independent trust domains.
+Portable symbiosis replication now has a dedicated GitHub-hosted workflow that
+uses no live-model credential, repeats both the current and exact v4.7
+reproduction, requires byte-identical bundles and attests the result. The
+receipt bridge rejects pull-request runs and trusts the new signer. Legacy
+live-model promotion requirements remain unchanged.
+
+v4.8.5 closes the operator handoff around those workflows. The explicit
+deployment signer override must contain every accepted symbiosis evidence
+producer, and a supplied malformed recovery receipt remains failed even when
+its companion evidence is absent. Human Observatory shows the exact deployed
+revision and translates every current trust reason while retaining stable
+machine codes. Missing evidence is still pending; bad evidence cannot be made
+less severe by removing another file.
+
 ## Next objectives
 
 No new city feature milestone is scheduled. Operate v4.8 until all five trust

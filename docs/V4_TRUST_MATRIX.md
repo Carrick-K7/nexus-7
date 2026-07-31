@@ -40,12 +40,20 @@ violation is failed. None of these states stops the deterministic city clock.
 
 ## External replication receipt
 
-The normal `CI` workflow checks out tag `v4.7.0` in an isolated directory,
-executes its exact reproduction command, then uploads and attests the unchanged
-`public/data/v4-7-replication-bundle.json`. After a successful push to `main`,
-`Remote evidence receipts` downloads that exact artifact, verifies its GitHub
-attestation with self-hosted runners denied, recomputes the internal hashes and
-issues `symbiosis-replication-receipt.json`.
+The `Symbiosis replication` workflow runs independently of live-model release
+promotion. It verifies the bundle from the attested revision, checks out tag
+`v4.7.0` in an isolated directory, repeats its exact reproduction command and
+requires the two bundle files to be byte-identical. After a successful push to
+`main` or governed manual run, it uploads and attests that unchanged artifact.
+`Remote evidence receipts` ignores pull-request runs, downloads the artifact,
+executes only the default branch's trusted verifier, verifies the artifact's
+GitHub attestation with self-hosted runners denied, recomputes the internal
+hashes and issues `symbiosis-replication-receipt.json`. The attested revision
+is bound as data but its code never receives the receipt-signing key.
+
+This separation does not relax the legacy live-model promotion gate. It only
+prevents an absent OpenAI promotion credential from blocking the independent
+scientific-replication lane.
 
 The repository must provide:
 
@@ -53,6 +61,12 @@ The repository must provide:
 NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64  # GitHub Actions secret
 NEXUS_ATTESTATION_RECEIPT_PUBLIC_KEY_BASE64   # web-process environment
 ```
+
+`SYMBIOSIS_TRUSTED_SIGNER_WORKFLOWS` is optional. When present it replaces,
+rather than extends, the built-in allowlist. An explicit deployment value must
+therefore contain `ci.yml`, `symbiosis-replication.yml`,
+`operations-drills.yml` and `symbiosis-offhost-recovery.yml`; the checked
+`.env.example` value is the conformance reference.
 
 Download the receipt artifact to a mode-0600 server file and configure:
 
@@ -130,3 +144,13 @@ removes that ambiguity: the lane now reads a dedicated DeepSeek-shadow slice
 for attempts, successful comparisons, provider failures, Token use, cost,
 models and pricing versions. A regression fixture with 260 reference
 comparisons and zero DeepSeek calls must still render zero DeepSeek evidence.
+
+## v4.8.5 evidence-readiness correction
+
+The public Observatory now pairs each stable reason code with a bilingual
+human explanation and displays the exact release revision against which signed
+receipts are checked. The API keeps the unchanged machine codes. A malformed
+off-host receipt is failed even when the recovery evidence file is absent;
+removing a companion artifact cannot downgrade already supplied bad evidence
+to pending. A repository test also prevents the explicit environment template
+from silently excluding a supported signer workflow.

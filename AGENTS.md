@@ -1,16 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-31 · v2.0.0 安全内核 + v4.8.1 独立证据矩阵
-
-## 生产发布
-
-- `main` 是生产代码与发布入口，`https://nexus7.carrick7.com/` 是公开生产服务。
-- 每次 push 到 `main` 由 `.github/workflows/ci.yml` 完成验证、构建、产物封装和自动发布。
-- GitHub Actions 使用仓库专用受限 SSH key，只能提交 `deploy <40-character-SHA>` 和对应归档。
-- 生产主机只校验产物、备份数据库、执行迁移、切换原子 release、重启 Web/worker 并检查健康状态。
-- 数据库使用 `nexus7-postgres` 容器与 `nexus7-postgres-data` volume；应用发布保持该 volume。
-- Caddy、systemd、数据库容器、备份和监控由私有 `Carrick-K7/carrick-ops` 仓库管理。
-- 每次发布完成后核验 exact revision、Web/worker、数据库连接与公开主路径。
+> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.5 证据就绪
 
 ## 定义与边界
 
@@ -33,7 +23,17 @@ v4 运行可重放、可审计的模拟深圳，研究人、AI 和机器人的�
 - 治理/扩展：`docs/GOVERNANCE.md`、`docs/EXTENSIONS.md`
 - 版本事实/架构：`iterations/*.json`、`docs/adr/*.md`
 
-本文件只保留执行规则和最近基线，不复制详细历史、API 或设计。
+本文件仅保留执行规则和最近基线。
+
+## 生产发布
+
+- `main` 是生产代码与发布入口，公网是 `nexus7.carrick7.com`。
+- 每次 push 到 `main` 由 `.github/workflows/ci.yml` 完成验证、构建、产物封装和自动发布。
+- GitHub Actions 使用仓库专用受限 SSH key，只能提交 `deploy <40-character-SHA>` 和对应归档。
+- 生产主机校验产物、备份数据库、执行迁移、切换原子 release、重启 Web/worker 并检查健康状态。
+- 数据库使用 `nexus7-postgres` 与 `nexus7-postgres-data`；应用发布保持该 volume。
+- 共享基础设施归 `Carrick-K7/carrick-ops`；环境、数据库 URL、密码、模型密钥和签名材料保持私密。
+- 每次发布完成后核验 exact revision、Web/worker、数据库和公网主路径。
 
 ## 北极星
 
@@ -53,10 +53,10 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 ## 当前状态
 
-v2.0 reference 已闭环；无远端 attestation 时只能写 `external evidence pending`。
+v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
-v4.8.1 含 200 人、36 AI、24 机器人、可逆城市及五路证据矩阵；DeepSeek 轨道
-不混入参考比较。无真人、身份映射或私人输入。
+v4.8.5 含 200 人、36 AI、24 机器人及五路证据矩阵；坏回执 fail closed，
+部署 revision/失败原因可读。无真人、身份映射或私人输入。
 
 ## 模块边界
 
@@ -66,7 +66,7 @@ v4.8.1 含 200 人、36 AI、24 机器人、可逆城市及五路证据矩阵；
 `lifecycle`/`experiments` 提供原子持久化；`governance`、`deployment`、
 `operations` 管身份、发布和恢复；UI 只做投影。
 
-运营 Incident 与合成城市 Incident 分属不同 bounded context。世界只能由确定性
+运营与合成城市 Incident 分属不同 bounded context。世界只能由确定性
 simulation/event 流改变；shadow 不得进入结算或 fallback；城市规则只能修改
 白名单参数，Agent/模型不得执行 shell、SQL 或隐式代码。
 
@@ -101,19 +101,19 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 |---|---:|
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
-| unit / 条件跳过 | 274/274 / 0 |
-| PostgreSQL / Playwright+axe | 16/16 / 27/27 |
+| unit+PG / 条件跳过 | 280/280 / 0 |
+| PostgreSQL / Playwright+axe | 16/16 / 28/28 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
-| v4.8.1 证据契约 | 5 lanes；篡改/同机/过期/参考混入 fail closed |
+| v4.8.5 信任契约 | 5 lanes；signer 配置/坏回执 fail closed |
 
 ## 外部边界
 
-- `2362ee8` (v4.7.0) 已部署；Turn 304 按时、lag 602 ms、精确绑定 revision；
-  390 px overflow/console 0，bundle/API 200、写 405。
-- 当前 483 society records、75/75 safe closure，强制/无效规则 0；DeepSeek
-  实际 Token/费用仍为 0；真实观测 5.365 天。
+- `ace250c` (v4.8.4) 已部署；Turn 310 按时（lag 307 ms），指纹 `1ce6eebe`；
+  390 px overflow/console/axe 0，API 200、写 405。
+- 当前 safe closure 84/84，强制/无效规则 0；参考 shadow 272 次，DeepSeek
+  实际调用/Token/费用仍为 0；真实观测 5.615 天。
 - 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
   恢复待验证。
-- evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。
+- candidate CI `30662205587` 全绿（280 tests；28/28 browser）；未签名，不计 external lane。

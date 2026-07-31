@@ -2,7 +2,7 @@
 
 > 更新：2026-07-30
 >
-> 状态：v4.8 Independent Trust Matrix 已实现；本地复现已验证；
+> 状态：v4.8.5 Evidence Readiness 候选；本地/托管复现已验证；
 > 真实 90 天 / off-host restore / live provider / external Sigstore pending
 
 ## 目标与研究边界

@@ -32,6 +32,7 @@ describe("remote governance evidence registry", () => {
     "Carrick-K7/nexus-7/.github/workflows/operations-drills.yml";
   const { privateKey, publicKey } = generateKeyPairSync("ed25519");
   let registry: EvidenceRegistryService;
+  let repository: InMemoryExperimentRepository;
   let actor: ExperimentActor;
   let sequence: number;
 
@@ -61,7 +62,7 @@ describe("remote governance evidence registry", () => {
   }
 
   beforeEach(async () => {
-    const repository = new InMemoryExperimentRepository();
+    repository = new InMemoryExperimentRepository();
     sequence = 0;
     const experiments = new ExperimentService(repository, {
       now: () => now,
@@ -119,6 +120,39 @@ describe("remote governance evidence registry", () => {
         "deployment-drill",
       ]),
     );
+  });
+
+  it("accepts the dedicated symbiosis workflows in the default trust set", async () => {
+    const defaultRegistry = new EvidenceRegistryService(repository, {
+      now: () => now,
+      id: () => `default-registry-${++sequence}`,
+      publicKey,
+      repository: repositoryName,
+    });
+    const workflows = [
+      "symbiosis-replication.yml",
+      "symbiosis-offhost-recovery.yml",
+    ];
+
+    for (const [index, workflow] of workflows.entries()) {
+      const kind = index === 0
+        ? "symbiosis-replication"
+        : "symbiosis-off-host-recovery";
+      await expect(
+        defaultRegistry.ingest(
+          createRemoteEvidenceReceipt(
+            payload({
+              kind,
+              signerWorkflow:
+                `${repositoryName}/.github/workflows/${workflow}`,
+              runId: `symbiosis-${index}`,
+            }),
+            privateKey,
+          ),
+          actor,
+        ),
+      ).resolves.toMatchObject({ kind });
+    }
   });
 
   it("marks old-but-still-signed drill evidence stale", async () => {

@@ -61,8 +61,10 @@ interface EvidenceRegistryOptions {
 function defaultSignerWorkflows(repository: string): string[] {
   return [
     `${repository}/.github/workflows/ci.yml`,
+    `${repository}/.github/workflows/symbiosis-replication.yml`,
     `${repository}/.github/workflows/model-regression.yml`,
     `${repository}/.github/workflows/operations-drills.yml`,
+    `${repository}/.github/workflows/symbiosis-offhost-recovery.yml`,
   ];
 }
 

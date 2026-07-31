@@ -2,10 +2,14 @@
 const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
+const { mergeGitEntries } = require('./iteration-manifest-utils.cjs');
 
 const repoRoot = path.resolve(__dirname, '..');
+const outDir = path.resolve(repoRoot, 'public', 'data');
+const outPath = path.join(outDir, 'iteration-manifests.json');
 
 let gitLogRaw;
+let completeGitHistory = false;
 try {
   gitLogRaw = execSync(
     'git log --format=%H%n%ai%n%s%n%b---END---',
@@ -15,6 +19,14 @@ try {
       stdio: ['ignore', 'pipe', 'ignore'],
     }
   );
+  completeGitHistory = execSync(
+    'git rev-parse --is-shallow-repository',
+    {
+      cwd: repoRoot,
+      encoding: 'utf-8',
+      stdio: ['ignore', 'pipe', 'ignore'],
+    }
+  ).trim() === 'false';
 } catch {
   gitLogRaw = '';
 }
@@ -78,19 +90,36 @@ const manifestEntries = fs.existsSync(manifestDir)
   : [];
 
 const manifestVersions = new Set(manifestEntries.map(entry => entry.version));
+let existingGitEntries = [];
+if (!completeGitHistory && fs.existsSync(outPath)) {
+  try {
+    const existingEntries = JSON.parse(fs.readFileSync(outPath, 'utf-8'));
+    if (Array.isArray(existingEntries)) {
+      existingGitEntries = existingEntries.filter(
+        entry => entry?.source === 'git' && entry.id && entry.triggerReason
+      );
+    }
+  } catch {
+    existingGitEntries = [];
+  }
+}
+
+const availableGitEntries = mergeGitEntries(
+  gitEntries,
+  existingGitEntries
+);
 const entries = [
   ...manifestEntries,
-  ...gitEntries
+  ...availableGitEntries
     .filter(entry => !manifestVersions.has(entry.version))
     .map(entry => ({ ...entry, source: 'git' })),
 ];
 
-const outDir = path.resolve(repoRoot, 'public', 'data');
 fs.mkdirSync(outDir, { recursive: true });
 fs.writeFileSync(
-  path.join(outDir, 'iteration-manifests.json'),
+  outPath,
   JSON.stringify(entries, null, 2)
 );
 console.log(
-  `Wrote ${manifestEntries.length} manifests and ${gitEntries.length} git entries to public/data/iteration-manifests.json`
+  `Wrote ${manifestEntries.length} manifests, ${gitEntries.length} current git entries and ${existingGitEntries.length} shallow-build fallbacks to public/data/iteration-manifests.json`
 );

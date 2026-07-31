@@ -28,10 +28,10 @@ jobs:
 
     steps:
       - name: Checkout exact recovery code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -86,7 +86,7 @@ jobs:
           --off-host
 
       - name: Upload off-host recovery evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nexus-symbiosis-offhost-recovery
           path: .artifacts/symbiosis-offhost-recovery.json

@@ -34,10 +34,10 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -101,7 +101,7 @@ jobs:
         run: npm run verify:v47
 
       - name: Checkout exact v4.7 replication release
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: v4.7.0
           path: .verified/v47-release
@@ -139,7 +139,7 @@ jobs:
         run: npm run verify:closure
 
       - name: Upload verification evidence
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nexus-verification-evidence
           include-hidden-files: true
