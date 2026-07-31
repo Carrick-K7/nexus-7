@@ -1,11 +1,12 @@
 # v4 Production Deployment Attestation
 
-> Observed: 2026-07-26 through 2026-07-31 · Asia/Shanghai
+> Observed: 2026-07-26 through 2026-08-01 · Asia/Shanghai
 
 ## Current artifact
 
-- Release: `v4.8.2` — Reproducible Evolution Evidence
-- Tag commit: `6bbc31bff951a9cef5d53661e2032fc1949b2ee8`
+- Release: `v4.8.3` — Honest Freshness
+- Tag commit: `467c91fcfe1eaf41c23244c01279fe055898865f`
+- v4.8.3 implementation commit: `a535a29a6d3fb9ed97ae35b72ec4815697569b77`
 - v4.8.2 implementation commit: `bd9e8787eea27adaba2959c6a3709c02a8682f76`
 - Node 24 workflow commit: `ce52c74622d05522e07447a9805cbae1f299283f`
 - Implementation commit: `77ae73f57982c0091bbe3d17520ba59706c254cd`
@@ -39,12 +40,12 @@ returned HTTP 405.
 
 `/api/observatory/v2/overview` returned
 `nexus.human-observatory.v2`, formula version 2.1.0, 200 humans, 36 AI, 24
-robots, 24 current resource ledgers and Turn 306. The three resident kinds are
+robots, 24 current resource ledgers and Turn 308. The three resident kinds are
 software state; these are synthetic results, not live Shenzhen data.
 
 The primary provider is `nexus-deterministic-reference`. The configured
-read-only shadow is `nexus-diversity-reference`: it recorded 264 comparisons
-and 132 disagreements without entering settlement.
+read-only shadow is `nexus-diversity-reference`: it recorded 268 comparisons
+and 134 disagreements without entering settlement.
 DeepSeek remained at zero external attempts, zero Tokens and USD 0 across the
 season. This is an observed NEXUS-7 ledger total, not a provider-account claim.
 
@@ -79,6 +80,16 @@ rendered the current v4.8.2 and historical v0.3.0 Evolution Log cards at
 390/390 document/viewport width, with zero console issues and zero axe WCAG
 A/AA violations. The trust matrix remained honestly 1/5 with zero DeepSeek
 calls, comparisons, Tokens and cost; trust mutation returned 405.
+
+The v4.8.3 production checkout is clean and detached at annotated Tag
+`467c91f`. After the exact-Tag build passed audit and TypeScript, Web and worker
+restarted against the existing PostgreSQL volume. The worker read Turn 307 and
+waited 1,221,508 ms instead of settling early. Public GET returned 200 and
+mutation 405. A 390px production Chromium run rendered v4.8.3 and historical
+v0.3.0 with 390/390 document/viewport width, console 0 and zero axe WCAG A/AA
+violations. Browser-side trust-503 injection showed the bilingual stale-data
+contract, last successful refresh and retained resident table with zero axe
+violations or overflow; it did not mutate the server.
 
 ## Existing season and live Turn
 
@@ -162,13 +173,22 @@ safe closure, and zero coercive actions or severe escapes.
 Turn 306 also settled naturally under v4.8.1 at
 `2026-07-31T15:29:23.200Z`, on time with 2,070 ms lag, fingerprint `addb2434`,
 RALR 446/607 and zero coercive actions or severe escapes. The v4.8.2 cutover
-then preserved Turn 306 and its next due time; no v4.8.2 Turn is claimed yet.
+then preserved Turn 306 and its next due time. Turn 307 settled naturally under
+v4.8.2 with 421 ms lag, fingerprint `2d80539e`, RALR 447/609 and zero coercive
+actions or severe escapes.
 
-Production remains honestly `watch`: the observed window is 5.449 days,
-130/131 comparable settlements are on time, the one historical early-restart
+The v4.8.3 cutover preserved Turn 307 and its next due time. Turn 308 settled
+naturally at `2026-07-31T17:29:24.037Z`, on time with 313 ms lag, fingerprint
+`7279fa10` and exact revision
+`467c91fcfe1eaf41c23244c01279fe055898865f`. PostgreSQL links its predecessor
+to Turn 307 fingerprint `2d80539e`; resources are conserved, RALR is 449/612,
+and coercive actions plus all three severe escape classes remain zero.
+
+Production remains honestly `watch`: the observed window is 5.532 days,
+132/133 comparable settlements are on time, the one historical early-restart
 sample remains visible, and missing, duplicate and predecessor mismatch counts
-remain zero. Twenty-five Turns carry the v4.6.0 revision and 22 carry the
-v4.6.1 revision; one carries v4.7.0 and two carry v4.8.1.
+remain zero. Twenty-five Turns carry the v4.6.0 revision, 22 carry v4.6.1, one
+carries v4.7.0, two carry v4.8.1, one carries v4.8.2 and one carries v4.8.3.
 
 ## Recovery points
 
@@ -251,8 +271,15 @@ mode-0600, 9,208,771-byte local and mounted artifacts with SHA-256
 `f401e4bbdbccb9cde4e952a2552e4d3c2be817e0be12184b4e0be20ce31cfc98`.
 This is also replication, not an independently restored off-host proof.
 
+Immediately before the v4.8.3 cutover, matching mode-0600 local and mounted
+artifacts were 9,261,407 bytes with SHA-256
+`2be7d651dbb243c1bf255e92d2a87f10ea314022f3f42ea29cd25b35e2bc46cd`.
+This is replicated backup evidence, not an off-host restore.
+
 ## Superseded production states
 
+`v4.8.2` at `6bbc31b` preserved reproducible evolution evidence and ran through
+Turn 307; it is retained and superseded by v4.8.3 for honest refresh evidence.
 `v4.8.1` at `268c1f2` isolated live DeepSeek evidence and ran through Turn 306;
 it is retained and superseded by v4.8.2 for reproducible build evidence.
 `v4.8.0` at `e3aa5ab` introduced the five-lane matrix but its DeepSeek card
