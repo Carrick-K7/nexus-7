@@ -1,0 +1,25 @@
+{
+  "id": "iteration-v4.8.2",
+  "version": "4.8.2",
+  "date": "2026-07-31",
+  "trigger": "external-ci-environment-regression",
+  "triggerReason": "The first GitHub-hosted CI run used a shallow checkout, so the build-time Evolution Log generator discarded committed Git-derived history and the v0.3.0 evidence card disappeared even though local full-history browser tests passed.",
+  "action": "Made complete Git history authoritative while preserving committed Git-derived entries only for shallow or Git-less builds, deduplicated current entries ahead of fallbacks, and added a focused merge-order regression test.",
+  "outcome": "The same committed evidence history is now available in full clones, shallow CI clones and packaged builds without fabricating a successful external run. Remote CI rerun remains the acceptance authority.",
+  "metrics": [
+    { "label": "GitHub browser scenarios", "before": 26, "after": 26 },
+    { "label": "Missing historical version cards", "before": 1, "after": 0 },
+    { "label": "New generator regression tests", "before": 0, "after": 1 }
+  ],
+  "evidence": [
+    "GitHub Actions run 30639268795 failed only the missing v0.3.0 browser assertion after 26/27 scenarios",
+    "Focused shallow-history merge-order test passes",
+    "ESLint passes with zero warnings"
+  ],
+  "artifacts": [
+    "scripts/inject-git-log.js",
+    "scripts/iteration-manifest-utils.cjs",
+    "src/evidence/iteration-manifest-generator.test.ts",
+    "public/data/iteration-manifests.json"
+  ]
+}
