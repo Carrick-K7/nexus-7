@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release is **v4.8.2 — Reproducible Evolution Evidence**.
+The active release is **v4.8.3 — Honest Freshness**.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
@@ -77,10 +77,12 @@ Git-less packaged builds. A GitHub-hosted pull-request run passed the complete
 quality pipeline, but its unsigned artifact is not promoted to the external-CI
 trust lane; that still requires the governed receipt and Sigstore path.
 
-The v4.8.3 candidate makes transport freshness explicit: if a later live
+v4.8.3 makes transport freshness explicit: if a later live
 refresh fails, the Observatory retains the last successful snapshot for
 continuity while visibly marking it stale with the last successful refresh
-time and bounded failure reason.
+time and bounded failure reason. Its isolated evaluator also consumes only a
+temporary frozen archive of Git-trackable source and installed dependencies;
+ignored host files never enter the evaluation container.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy

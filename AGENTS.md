@@ -52,7 +52,7 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
-v4.8.3 候选含 200 人、36 AI、24 机器人及五路证据矩阵；DeepSeek 不混入参考
+v4.8.3 含 200 人、36 AI、24 机器人及五路证据矩阵；DeepSeek 不混入参考
 比较，浅克隆/Git-less 保留证据，刷新失败显式标陈旧。无真人、身份映射或私人输入。
 
 ## 模块边界
@@ -113,4 +113,4 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
   实际调用/Token/费用仍为 0；真实观测 5.49 天。
 - 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
   恢复待验证。
-- PR CI `30641290821` 全绿且 Node 20 warning 0；未签名，不计 external lane。
+- PR CI `30648143519` 全绿（28/28 browser）；未签名，不计 external lane。

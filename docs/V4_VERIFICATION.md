@@ -319,8 +319,7 @@ render, horizontal overflow is zero and axe reports zero WCAG A/AA violations.
 Local release acceptance passes 259 non-PostgreSQL tests plus 16 real
 PostgreSQL/restore tests, all deterministic v1/v2/v4 gates, 28/28
 production-build browser/axe scenarios, TypeScript/build, 10,000 deterministic
-ticks, zero lint warnings and zero dependency vulnerabilities. Remote CI, Tag
-and deployment remain separate release gates.
+ticks, zero lint warnings and zero dependency vulnerabilities.
 
 The first local isolated-quality attempt also retained its failure: the Docker
 daemon's user namespace could stat the mode-0600 host files but not read them
@@ -330,6 +329,14 @@ includes ignored host files, mounts only that archive, extracts to tmpfs and
 deletes it after the run. The final pinned Node 24 quality run passed lint, 259
 tests, the 12-case model regression and the production build with no network,
 a read-only root and all capabilities dropped.
+
+GitHub-hosted run `30648143519` repeated the full candidate pipeline from
+commit `a535a29`: 259 non-PostgreSQL tests, 16 real PostgreSQL/restore tests,
+28/28 browser/axe scenarios, exact v4.7 Tag reproduction, 10,000 deterministic
+ticks, zero vulnerabilities and the frozen-source isolated quality gate all
+passed. Artifact `8800612119` is unsigned because the run belongs to a Draft
+PR; both attestation steps correctly skipped, so it supports release review
+without satisfying the external-replication lane.
 
 Production v4.8.2 then settled natural Turn 307 on its preserved hourly clock:
 revision `6bbc31b`, lag 421 ms, fingerprint `2d80539e`, RALR 447/609, zero

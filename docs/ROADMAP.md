@@ -202,6 +202,10 @@ v4.8.3 closes a human-observation ambiguity: a failed periodic or manual live
 refresh may retain the last successful snapshot for continuity only when the
 UI marks it stale, exposes the last successful refresh time and a bounded
 failure reason, and remains bilingual, mobile-contained and WCAG A/AA clean.
+The release gate also replaces the direct repository bind with a frozen,
+Git-trackable source archive so ignored host files stay outside evaluated code.
+GitHub-hosted run `30648143519` passed the complete pipeline; its Draft-PR
+artifact remains unsigned and therefore does not satisfy the external lane.
 
 ## Next objectives
 
