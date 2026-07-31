@@ -47,9 +47,10 @@ OPENAI_API_KEY=... \
 ```
 
 Both write a machine-readable report. Main-branch CI requires the live report
-before it can generate promotion evidence. A separate daily workflow repeats
-the live evaluation, retains the report for 30 days, and creates a Sigstore
-attestation so provider or prompt drift is visible between releases.
+when `NEXUS_LIVE_MODEL_ENABLED=true`; deployments with that lane disabled keep
+the external evidence state pending. A separate daily workflow repeats the
+live evaluation when configured, retains the report for 30 days, and creates a
+Sigstore attestation so provider or prompt drift is visible between releases.
 
 The implementation uses the Responses API with strict JSON Schema output and
 explicit refusal handling:

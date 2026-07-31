@@ -1,5 +1,19 @@
 # Production Operations
 
+## Repository delivery
+
+Pushes to `main` pass the full CI gate, build one immutable application
+artifact, and deploy it automatically through the repository-specific
+restricted SSH command. The host creates a database backup, applies migrations,
+atomically switches `/srv/carrick/nexus-7/current`, restarts Web and worker, and
+rolls application files back when health verification fails. Shared Caddy,
+systemd, PostgreSQL container, backup, and monitoring definitions remain in
+`Carrick-K7/carrick-ops`.
+
+The deployment-control and human-promotion rules below govern NEXUS experiments
+that act on external environments. They are separate from delivery of this
+application's reviewed `main` revision to its production host.
+
 > Symbiotic Shenzhen v4 runtime details, Human Observatory probes and worker alerts are
 > maintained in [`V4_OPERATIONS.md`](V4_OPERATIONS.md). v4 is all-synthetic and
 > requires a separate `worker:symbiosis` process; it does not require a live
@@ -106,10 +120,12 @@ Review model availability and pricing before every production release. The
 input/output rates are configurable because provider pricing is operational
 data, not a simulation constant.
 
-Run `npm run verify:model` on every change. Main-branch release evidence also
-requires `npm run verify:model:live`: all 12 cases must pass with no fallback,
-provider error, capability violation, or forbidden proposal, while remaining
-inside recorded latency and spend SLOs. See `docs/MODEL_REGRESSION.md`.
+Run `npm run verify:model` on every change. Set the repository variable
+`NEXUS_LIVE_MODEL_ENABLED=true` when the external OpenAI evidence lane is
+configured; main-branch CI then requires `npm run verify:model:live` and all 12
+cases must pass within the recorded latency and spend SLOs. Host delivery of
+the all-synthetic application uses the deterministic gate and records the
+external lane as pending. See `docs/MODEL_REGRESSION.md`.
 
 ## Independent clock
 

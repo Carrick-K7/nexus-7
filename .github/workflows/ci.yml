@@ -5,10 +5,14 @@ on:
     branches: [main]
   pull_request:
 
+concurrency:
+  group: nexus-7-production
+  cancel-in-progress: false
+
 jobs:
   quality:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 35
     permissions:
       contents: read
       id-token: write
@@ -110,7 +114,7 @@ jobs:
         run: npm run verify:v48
 
       - name: Live model regression gate
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && vars.NEXUS_LIVE_MODEL_ENABLED == 'true'
         env:
           NEXUS_MODEL_PROVIDER: openai
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -128,7 +132,7 @@ jobs:
 
       - name: Generate evidence manifest
         env:
-          NEXUS_REQUIRE_LIVE_MODEL_EVIDENCE: ${{ github.event_name == 'push' }}
+          NEXUS_REQUIRE_LIVE_MODEL_EVIDENCE: ${{ vars.NEXUS_LIVE_MODEL_ENABLED == 'true' }}
         run: npm run evidence:generate
 
       - name: Bind closed-loop certification to evidence manifest
@@ -166,3 +170,80 @@ jobs:
         uses: actions/attest@v4
         with:
           subject-path: public/data/v4-7-replication-bundle.json
+
+      - name: Build immutable production release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          npm run build
+          npm prune --omit=dev
+          mkdir release
+          cp -R .next migrations node_modules public scripts src release/
+          cp next.config.ts package.json package-lock.json tsconfig.json release/
+          node -e 'require("fs").writeFileSync("release/manifest.json", JSON.stringify({ schemaVersion: 1, revision: process.env.RELEASE_SHA, webEntry: ".next/BUILD_ID", workerEntry: "scripts/run-symbiosis-clock.ts" }, null, 2) + "\n")'
+          test -f release/.next/BUILD_ID
+          test -x release/node_modules/.bin/next
+          test -x release/node_modules/.bin/tsx
+          test "$(node -p 'require("./release/manifest.json").revision')" = "$RELEASE_SHA"
+          tar -C release -czf nexus-production.tar.gz .
+          tar -tzf nexus-production.tar.gz >/dev/null
+
+      - name: Upload immutable production release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexus-production-${{ github.sha }}
+          path: nexus-production.tar.gz
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    name: Deploy Production
+    needs: quality
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Download immutable production release
+        uses: actions/download-artifact@v4
+        with:
+          name: nexus-production-${{ github.sha }}
+
+      - name: Deploy through restricted SSH command
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          REVISION: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          test -n "$DEPLOY_HOST"
+          test -n "$DEPLOY_USER"
+          test -n "$DEPLOY_SSH_KEY"
+          test -n "$DEPLOY_KNOWN_HOSTS"
+          install -d -m 0700 ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 0600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "deploy $REVISION" < nexus-production.tar.gz
+
+      - name: Smoke test production
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location \
+            https://nexus7.carrick7.com/ \
+            --output /tmp/nexus-index.html
+
+      - name: Remove deploy key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

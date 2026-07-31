@@ -25,12 +25,15 @@ v4 运行可重放、可审计的模拟深圳，研究人、AI 和机器人的�
 
 本文件仅保留执行规则和最近基线。
 
-## 生产权限
+## 生产发布
 
-公网是 `nexus7.carrick7.com`；`main` 对齐前生产沿用 v4 分支。普通 push 不授权
-生产变更。不得重建/删除 `nexus7-postgres-data`；共享基础设施归
-`Carrick-K7/carrick-ops`。不得输出环境、数据库 URL、密码、模型密钥或签名材料。
-获授权发布后核验 revision、Web/worker、数据库和公网主路径。
+- `main` 是生产代码与发布入口，公网是 `nexus7.carrick7.com`。
+- 每次 push 到 `main` 由 `.github/workflows/ci.yml` 完成验证、构建、产物封装和自动发布。
+- GitHub Actions 使用仓库专用受限 SSH key，只能提交 `deploy <40-character-SHA>` 和对应归档。
+- 生产主机校验产物、备份数据库、执行迁移、切换原子 release、重启 Web/worker 并检查健康状态。
+- 数据库使用 `nexus7-postgres` 与 `nexus7-postgres-data`；应用发布保持该 volume。
+- 共享基础设施归 `Carrick-K7/carrick-ops`；环境、数据库 URL、密码、模型密钥和签名材料保持私密。
+- 每次发布完成后核验 exact revision、Web/worker、数据库和公网主路径。
 
 ## 北极星
 
