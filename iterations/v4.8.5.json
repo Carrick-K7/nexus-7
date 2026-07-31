@@ -5,7 +5,7 @@
   "trigger": "evidence-readiness-audit",
   "triggerReason": "Completion review found that the checked environment template replaced the built-in trusted-workflow defaults while omitting the independent replication signer. It also found that an invalid supplied recovery receipt could be downgraded from failed to pending when the companion evidence file was absent, while the Human Observatory exposed machine reason codes without the exact deployed revision or bilingual explanations.",
   "action": "Align the explicit signer override with all accepted symbiosis evidence producers and test it as a repository contract. Preserve failed or stale receipt precedence over a missing recovery file. Project the full deployed revision and bilingual human explanations alongside stable machine reason codes in Human Observatory, with desktop, mobile and Chinese browser assertions.",
-  "outcome": "Local acceptance passes 264 non-PostgreSQL tests, 16 real PostgreSQL/restore tests, all deterministic v1/v2/v4 gates, 28/28 production-build Playwright/axe scenarios, 10,000 ticks, zero lint warnings, zero dependency vulnerabilities and the TypeScript production build. The pinned networkless Node 24.15.0 evaluator independently repeats lint, 264 tests, model regression and build from a frozen read-only source archive with dropped capabilities. The malformed-receipt regression, checked signer override, exact revision and bilingual reasons all pass; remote and production evidence remain to be recorded after commit.",
+  "outcome": "Local acceptance passes 264 non-PostgreSQL tests, 16 real PostgreSQL/restore tests, all deterministic v1/v2/v4 gates, 28/28 production-build Playwright/axe scenarios, 10,000 ticks, zero lint warnings, zero dependency vulnerabilities and the TypeScript production build. The pinned networkless Node 24.15.0 evaluator independently repeats lint, 264 tests, model regression and build from a frozen read-only source archive with dropped capabilities. GitHub-hosted candidate run 30662205587 repeats the complete pipeline for implementation commit 2cba9c3 and uploads unsigned artifact 8805853743. The malformed-receipt regression, checked signer override, exact revision and bilingual reasons all pass; exact release and production evidence remain to be recorded.",
   "metrics": [
     { "label": "Accepted signer workflows omitted by the explicit template", "before": 2, "after": 0 },
     { "label": "Malformed recovery receipt without evidence", "before": "pending", "after": "failed" },
@@ -21,7 +21,8 @@
     "264 non-PostgreSQL and 16 real PostgreSQL/restore tests pass",
     "Production-build Playwright/axe passes 28/28 across desktop, mobile, English, Chinese and both palettes",
     "All deterministic gates and the 10,000-tick audit pass with zero lint warnings or dependency vulnerabilities",
-    "Pinned Node 24.15.0 isolated lint/test/model/build passes with network none, read-only root, frozen source and dropped capabilities"
+    "Pinned Node 24.15.0 isolated lint/test/model/build passes with network none, read-only root, frozen source and dropped capabilities",
+    "GitHub Actions run 30662205587 passes the complete candidate pipeline and uploads unsigned artifact 8805853743"
   ],
   "artifacts": [
     ".env.example",

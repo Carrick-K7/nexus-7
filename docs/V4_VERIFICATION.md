@@ -2,7 +2,7 @@
 
 > Date: 2026-08-01
 >
-> Status: v4.8.5 Evidence Readiness locally implemented; v4.8.4 deployed;
+> Status: v4.8.5 Evidence Readiness release candidate; v4.8.4 deployed;
 > external replication, duration, off-host restore,
 > CI-Sigstore and live-provider evidence pending
 
@@ -420,6 +420,13 @@ The pinned Node 24.15.0 evaluator independently repeated lint, 264 tests, the
 12-case deterministic model regression and production build with network
 disabled, a read-only root and frozen source archive, and all capabilities
 dropped; it exited 0.
+
+GitHub-hosted candidate run `30662205587` repeated the complete pipeline for
+implementation commit `2cba9c3` in 12m45s. It passed 264 non-PostgreSQL tests,
+16 real PostgreSQL/restore tests, 28/28 browser/axe scenarios, both v4.7
+reproductions, all deterministic gates, 10,000 ticks and the isolated quality
+evaluation. Artifact `8805853743` is unsigned because the PR remains Draft;
+both attestation steps correctly skipped and no external lane is promoted.
 
 ## Provider and persistence gates
 
