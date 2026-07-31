@@ -10,30 +10,27 @@ NEXUS-7 是以合成城市为环境、多智能体为受约束干预者、人类
 v4 运行可重放、可审计的模拟深圳，研究人、AI 和机器人的互惠能动性。居民均由
 软件模拟，无真人或 PII；数据只校准尺度，不是数字孪生。v2 是安全内核。
 
-不得把合成结果描述成现实政策效果，不得展示或伪造模型隐藏思维链。
+不得声称现实政策效果，不得展示或伪造模型隐藏思维链。
 
 ## 权威来源
 
 - v4 宪法/路线：`docs/SYMBIOSIS_CONSTITUTION.md`、`docs/SYMBIOTIC_SHENZHEN_PLAN.md`
-- v4 架构/数据/验证：`docs/V4_ARCHITECTURE.md`、`docs/V4_DATA_GOVERNANCE.md`、
+- v4 架构/验证：`docs/V4_ARCHITECTURE.md`、`docs/V4_DATA_GOVERNANCE.md`、
   `docs/V4_VERIFICATION.md`、`docs/V4_TRUST_MATRIX.md`
 - 能力/闭环/认证：`README.md`、`docs/CLOSED_LOOP_PLAN.md`、
   `docs/VERIFICATION.md`、`docs/V2_VERIFICATION.md`
 - 生产/安全：`docs/PRODUCTION.md`、`docs/THREAT_MODEL.md`
-- 治理/扩展：`docs/GOVERNANCE.md`、`docs/EXTENSIONS.md`
-- 版本事实/架构：`iterations/*.json`、`docs/adr/*.md`
-
-本文件仅保留执行规则和最近基线。
+- 治理/扩展/版本：`docs/GOVERNANCE.md`、`docs/EXTENSIONS.md`、
+  `iterations/*.json`、`docs/adr/*.md`
 
 ## 生产发布
 
-- `main` 是生产代码与发布入口，公网是 `nexus7.carrick7.com`。
-- 每次 push 到 `main` 由 `.github/workflows/ci.yml` 完成验证、构建、产物封装和自动发布。
-- GitHub Actions 使用仓库专用受限 SSH key，只能提交 `deploy <40-character-SHA>` 和对应归档。
-- 生产主机校验产物、备份数据库、执行迁移、切换原子 release、重启 Web/worker 并检查健康状态。
-- 数据库使用 `nexus7-postgres` 与 `nexus7-postgres-data`；应用发布保持该 volume。
-- 共享基础设施归 `Carrick-K7/carrick-ops`；环境、数据库 URL、密码、模型密钥和签名材料保持私密。
-- 每次发布完成后核验 exact revision、Web/worker、数据库和公网主路径。
+- `main` 经 `.github/workflows/ci.yml` 验证、构建并自动发布到
+  `nexus7.carrick7.com`；专用 SSH key 只能提交 `deploy <40-char SHA>` 及归档。
+- 主机校验/备份/迁移后原子切换 release，重启 Web/worker 并检查健康。
+- 必须保留 `nexus7-postgres-data`；共享设施归 `Carrick-K7/carrick-ops`。
+- 不得输出环境、数据库 URL、密码、模型密钥或签名材料；发布后核验 exact
+  revision、服务、数据库和公网主路径。
 
 ## 北极星
 
@@ -56,7 +53,7 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
 v4.8.6 含 200 人、36 AI、24 机器人及五路证据矩阵；坏回执 fail closed，
-revision/失败原因可读且文档语言同步。无真人、身份映射或私人输入。
+revision/原因可读且 lang 同步。无真人、身份映射或私人输入。
 
 ## 模块边界
 
@@ -66,7 +63,7 @@ revision/失败原因可读且文档语言同步。无真人、身份映射或�
 `lifecycle`/`experiments` 提供原子持久化；`governance`、`deployment`、
 `operations` 管身份、发布和恢复；UI 只做投影。
 
-运营与合成城市 Incident 分属不同 bounded context。世界只能由确定性
+运营与城市 Incident 分属不同 context。世界只能由确定性
 simulation/event 流改变；shadow 不得进入结算或 fallback；城市规则只能修改
 白名单参数，Agent/模型不得执行 shell、SQL 或隐式代码。
 
