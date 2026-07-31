@@ -199,6 +199,8 @@ episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR
 
 ## v4.7 Scientific Replication gate
 
+Implementation commit `ebe3caf` contains the replication protocol, portable
+bundle, verifier, Human Observatory card, tests and CI attestation path.
 `npm ci && npm run verify:v47` needs no database, production secret or model
 key. It re-runs the committed portable bundle and fails on any input, result or
 envelope hash mismatch.

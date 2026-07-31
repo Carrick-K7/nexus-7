@@ -5,7 +5,7 @@
   "trigger": "roadmap-scientific-replication",
   "triggerReason": "The v4.6 reference and production evidence were replayable inside NEXUS-7, but there was no credential-free held-out package binding hypotheses, inputs, per-run outcomes and proof status for reproduction in another environment.",
   "action": "Froze seven prospective replication hypotheses for the exploratory v4.6 results; ran four held-out seeds across reciprocal, hierarchy and segregation controls twice each; added deterministic/diversity provider controls; hashed source, calibration, results and bundle envelopes; exposed the artifact and missing external proof in the bilingual Human Observatory; and added CI upload/Sigstore attestation steps.",
-  "outcome": "Local implementation produces 12/12 exact held-out replays with resource conservation and 7/7 hypothesis passes. Reciprocal pooled RALR is 559/697 with zero coercion or severe escape; hierarchy exposes 188 coercive episodes at RALR 0; segregation preserves a zero denominator and null RALR. The local bundle is reproducible without secrets; external runner and Sigstore receipts remain pending.",
+  "outcome": "Implementation ebe3caf produces 12/12 exact held-out replays with resource conservation and 7/7 hypothesis passes. Reciprocal pooled RALR is 559/697 with zero coercion or severe escape; hierarchy exposes 188 coercive episodes at RALR 0; segregation preserves a zero denominator and null RALR. The local bundle is reproducible without secrets; external runner, Tag, deployment and Sigstore receipts remain pending.",
   "metrics": [
     { "label": "Held-out exact replays", "before": 0, "after": 12 },
     { "label": "Frozen replication hypotheses passed", "before": 0, "after": 7 },
