@@ -9,6 +9,8 @@ atomically switches `/srv/carrick/nexus-7/current`, restarts Web and worker, and
 rolls application files back when health verification fails. Shared Caddy,
 systemd, PostgreSQL container, backup, and monitoring definitions remain in
 `Carrick-K7/carrick-ops`.
+The host backup command serializes concurrent runs and verifies both local and
+offsite copies before migration or release activation begins.
 
 The deployment-control and human-promotion rules below govern NEXUS experiments
 that act on external environments. They are separate from delivery of this
