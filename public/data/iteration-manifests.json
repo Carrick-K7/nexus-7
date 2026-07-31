@@ -6,7 +6,7 @@
     "trigger": "production-observability-regression",
     "triggerReason": "The v4.8.0 DeepSeek lane stayed pending correctly but reused the aggregate diversity comparison count, so 260 reference-shadow comparisons could be read by a human as 260 live DeepSeek comparisons.",
     "action": "Split persisted DeepSeek shadow evidence from combined provider usage and generic cognitive diversity, bind the trust lane only to that exact slice, add reference-shadow contamination tests at API and browser layers, and document the correction.",
-    "outcome": "Pushed implementation 77ae73f prevents a reference shadow from contributing attempts, comparisons, failures, Tokens, price versions, models or cost to the live DeepSeek trust lane. The deterministic city and its PostgreSQL contracts are unchanged; missing live-provider evidence remains visibly pending.",
+    "outcome": "Pushed implementation 77ae73f prevents a reference shadow from contributing attempts, comparisons, failures, Tokens, price versions, models or cost to the live DeepSeek trust lane. Exact Tag 268c1f2 is active in production: Turn 305 settled naturally on time while 262 reference comparisons remained separate from zero live DeepSeek evidence.",
     "metrics": [
       {
         "label": "Reference comparisons displayed as DeepSeek",
@@ -33,7 +33,8 @@
       "258/258 non-PostgreSQL tests pass; the unchanged 16/16 PostgreSQL and restore baseline remains applicable",
       "v4.8 trust contract 5/5 including a 260-reference-comparison contamination regression",
       "TypeScript production build, lint with zero warnings and dependency audit with zero vulnerabilities",
-      "27/27 production-build Playwright/axe scenarios pass across API, desktop, mobile, Chinese and both themes"
+      "27/27 production-build Playwright/axe scenarios pass across API, desktop, mobile, Chinese and both themes",
+      "Production 390px Chromium: 1/5, 0 DeepSeek comparisons, overflow/console/axe 0; Turn 305 lag 348 ms on exact Tag"
     ],
     "artifacts": [
       "src/symbiosis/observatory.ts",

@@ -4,9 +4,11 @@
 
 ## Current artifact
 
-- Release: `v4.7.0` — Portable Scientific Replication
-- Tag commit: `2362ee8a206b11c48c993e5d6bb9dbbaa6904f2b`
-- Implementation commit: `ebe3cafbff62fc8d27b3f9c13d4b1493f2b67da3`
+- Release: `v4.8.1` — Independent Trust Matrix, Evidence Isolation
+- Tag commit: `268c1f26fcfd161b1dcfbf0be37ec89ca0c72c15`
+- Implementation commit: `77ae73f57982c0091bbe3d17520ba59706c254cd`
+- v4.8 implementation commit: `7182378d7319d6d4aedfba24c6a498989f988c69`
+- v4.7 implementation commit: `ebe3cafbff62fc8d27b3f9c13d4b1493f2b67da3`
 - v4.6.1 implementation commit: `71f550c079d4d5c9c62bfcc6f1b0a337bf5d1e43`
 - v4.6 implementation commit: `a8ba2bd3022cdfd45cfdad31ead6cde3167d2c38`
 - Hotfix commit: `60f7612954e64408badb193cfe3f9df89c7fdfe7`
@@ -35,12 +37,12 @@ returned HTTP 405.
 
 `/api/observatory/v2/overview` returned
 `nexus.human-observatory.v2`, formula version 2.1.0, 200 humans, 36 AI, 24
-robots, 24 current resource ledgers and Turn 303. The three resident kinds are
+robots, 24 current resource ledgers and Turn 305. The three resident kinds are
 software state; these are synthetic results, not live Shenzhen data.
 
 The primary provider is `nexus-deterministic-reference`. The configured
-read-only shadow is `nexus-diversity-reference`: it recorded two comparisons
-and one disagreement on the first v4.5 Turn without entering settlement.
+read-only shadow is `nexus-diversity-reference`: it recorded 262 comparisons
+and 131 disagreements without entering settlement.
 DeepSeek remained at zero external attempts, zero Tokens and USD 0 across the
 season. This is an observed NEXUS-7 ledger total, not a provider-account claim.
 
@@ -58,6 +60,14 @@ and explicit `externalCiVerified=false` / null Sigstore receipt. Production
 Chromium at 390px rendered the same values and clean-checkout command with
 zero document overflow, console errors or warnings. Observatory mutation
 remained HTTP 405.
+
+The v4.8.1 public trust matrix returned one verified local-replication lane and
+four independent pending lanes. Its live DeepSeek slice remained exactly zero
+attempts, comparisons, provider failures, Tokens and USD cost even while the
+reference shadow reached 262 comparisons. Production Chromium at 390px showed
+`1/5` and `0 comparisons`, with document width 390px, zero console issues and
+zero axe WCAG A/AA violations. Root and trust GET returned 200; trust POST
+returned 405.
 
 ## Existing season and live Turn
 
@@ -131,11 +141,18 @@ fingerprint `72e09ffd` and exact revision
 zero severe escapes and zero forced active paths, and raised safe society
 closure to 75/75.
 
-Production remains honestly `watch`: the observed window is 5.324 days,
-127/128 comparable settlements are on time, the one historical early-restart
+At the v4.8.1 cutover the worker read Turn 304 and announced a 313,279 ms wait
+rather than settling early. Turn 305 settled naturally at
+`2026-07-31T14:29:21.901Z`, on time with 348 ms lag, fingerprint `6dc9f166`
+and exact revision `268c1f26fcfd161b1dcfbf0be37ec89ca0c72c15`. It recorded
+RALR 444/605, 103 refusals, 58 withdrawals, conserved society exchange, 100%
+safe closure, and zero coercive actions or severe escapes.
+
+Production remains honestly `watch`: the observed window is 5.407 days,
+129/130 comparable settlements are on time, the one historical early-restart
 sample remains visible, and missing, duplicate and predecessor mismatch counts
 remain zero. Twenty-five Turns carry the v4.6.0 revision and 22 carry the
-v4.6.1 revision.
+v4.6.1 revision; one each carries v4.7.0 and v4.8.1.
 
 ## Recovery points
 
@@ -207,8 +224,17 @@ Turn 303 at `/deploy/nexus-7/backups/nexus-v4.7.0-pre-upgrade.dump`. Its size
 is 9,056,629 bytes and SHA-256 is
 `742fa3593beabd7c9ef0b00b6cd86c1b640e3a2c95a94fa6e3223ff2baaf61e1`.
 
+Before the v4.8 cutover, the normal backup service wrote matching mode-0600
+9,106,628-byte custom-format artifacts to the local and mounted backup roots.
+Both have SHA-256
+`e577d92711e1783d13dae1928d4c0f09df0ae817a27f75cd05e20c58aafe3f84`.
+This is a replicated backup artifact, not an off-host restore claim.
+
 ## Superseded production states
 
+`v4.8.0` at `e3aa5ab` introduced the five-lane matrix but its DeepSeek card
+could display reference comparisons; it settled no Turn and is superseded by
+v4.8.1. `v4.7.0` at `2362ee8` ran through Turn 304 and is retained.
 `v4.6.1` at `6c90112` contained populated mobile society evidence and ran
 through Turn 303; it is retained and superseded by v4.7.0. `v4.6.0` at
 `75eda1b` introduced reversible city society and persisted the
@@ -232,7 +258,7 @@ recovery points remain immutable.
 - recovery is same-host; no off-host restore is claimed;
 - cognition is deterministic/reference-shadow; no live DeepSeek call is
   claimed;
-- no remote CI/Sigstore receipt exists for v4.7.0;
+- no remote CI/Sigstore receipt exists for the current replication claim;
 - the public surface is anonymous read-only observation, not multi-user OIDC;
 - all residents and outcomes are synthetic and provide no evidence of real
   policy effects.

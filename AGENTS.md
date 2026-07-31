@@ -100,10 +100,10 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 
 ## 外部边界
 
-- `2362ee8` (v4.7.0) 已部署；Turn 304 按时、lag 602 ms、精确绑定 revision；
-  390 px overflow/console 0，bundle/API 200、写 405。
-- 当前 483 society records、75/75 safe closure，强制/无效规则 0；DeepSeek
-  实际 Token/费用仍为 0；真实观测 5.365 天。
+- `268c1f2` (v4.8.1) 已部署；Turn 305 按时、lag 348 ms、精确绑定 revision；
+  390 px overflow/console/axe 0，API 200、写 405。
+- 当前 safe closure 100%，强制/无效规则 0；参考 shadow 262 次，DeepSeek
+  实际调用/Token/费用仍为 0；真实观测 5.407 天。
 - 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
   恢复待验证。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。
