@@ -82,7 +82,7 @@ export default function SocialHub() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -100,7 +100,7 @@ export default function SocialHub() {
         </div>
       </motion.div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {([
           { id: "feed", label: t("communityFeed"), icon: MessageSquare },
           { id: "events", label: t("events"), icon: Calendar },
@@ -174,7 +174,7 @@ export default function SocialHub() {
       )}
 
       {activeTab === "events" && (
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {events.map((event, index) => (
             <motion.div
               key={event.id}

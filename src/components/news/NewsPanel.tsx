@@ -2,52 +2,110 @@
 
 import { motion } from "framer-motion";
 import { useTranslation } from "@/hooks/useTranslation";
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 import { Newspaper, Radio, AlertTriangle, TrendingUp, Clock } from "lucide-react";
+import { useNexusStore } from "@/stores/nexus-store";
+import type { DomainEvent } from "@/simulation";
 
 interface NewsItem {
   id: string;
   title: string;
   category: "news" | "alert" | "update";
-  timestamp: number;
+  tick: number;
   content: string;
   priority: "low" | "medium" | "high";
 }
 
-const mockNews: NewsItem[] = [
-  { id: "1", title: "Neo Downtown Power Grid Upgrade Complete", category: "news", timestamp: Date.now() - 300000, content: "The power grid in Neo Downtown has been successfully upgraded to handle 20% more load.", priority: "low" },
-  { id: "2", title: "Security Breach Attempt in Iron Works", category: "alert", timestamp: Date.now() - 600000, content: "Unauthorized access attempt detected and blocked by ATLAS security system.", priority: "high" },
-  { id: "3", title: "New Transit Line Opening", category: "update", timestamp: Date.now() - 1200000, content: "Hyperloop transit line connecting Chrome Heights to Silicon Valley II opens tomorrow.", priority: "medium" },
-  { id: "4", title: "Air Quality Index Improved", category: "news", timestamp: Date.now() - 1800000, content: "Green Sector air quality improved by 15% following new filtration systems.", priority: "low" },
-  { id: "5", title: "Market Volatility Alert", category: "alert", timestamp: Date.now() - 2400000, content: "ECONOMICA reports unusual trading patterns in PWR and DAT markets.", priority: "medium" },
-  { id: "6", title: "Satellite NEXUS-12 Maintenance Scheduled", category: "update", timestamp: Date.now() - 3600000, content: "Routine maintenance for NEXUS-12 will occur during off-peak hours.", priority: "low" },
-];
-
 export default function NewsPanel() {
   const { t } = useTranslation();
-  const [news] = useState<NewsItem[]>(mockNews);
+  const simulation = useNexusStore((state) => state.simulation);
+  const cityStats = useNexusStore((state) => state.cityStats);
   const [filter, setFilter] = useState<"all" | "news" | "alert" | "update">("all");
-  const [now, setNow] = useState(() => Date.now());
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setNow(Date.now());
-    }, 60000);
-    return () => clearInterval(interval);
-  }, []);
+  const news = useMemo(() => {
+    const toNewsItem = (event: DomainEvent): NewsItem | null => {
+      if (event.type === "city.mechanism.applied") {
+        return {
+          id: event.id,
+          title: t("domainMechanismApplied"),
+          category: "alert",
+          tick: event.tick,
+          content: `${String(event.payload.mechanism)} · ${String(event.payload.causeMetric)} → ${String(event.payload.effectMetric)} Δ${String(event.payload.delta)}`,
+          priority: "medium",
+        };
+      }
+      if (event.type === "observation.threshold") {
+        return {
+          id: event.id,
+          title: t("thresholdObservationNews"),
+          category: "alert",
+          tick: event.tick,
+          content: `${String(event.payload.metric)} ${String(event.payload.value)} · ${String(event.payload.assignedAgent).toUpperCase()}`,
+          priority:
+            event.payload.riskTier === "high" ? "high" : "medium",
+        };
+      }
+      if (event.type === "agent.action") {
+        return {
+          id: event.id,
+          title: t("governedActionNews"),
+          category: "update",
+          tick: event.tick,
+          content: `${String(event.payload.actorId).toUpperCase()} · ${String(event.payload.metric)} ${String(event.payload.before)} → ${String(event.payload.after)}`,
+          priority: "low",
+        };
+      }
+      if (
+        event.type === "city.day.started" ||
+        (
+          event.type === "system.signal" &&
+          event.payload.category === "ambient"
+        )
+      ) {
+        return {
+          id: event.id,
+          title: t("worldEventNews"),
+          category: "news",
+          tick: event.tick,
+          content: String(
+            event.payload.message ??
+              `${t("simulationDay")} ${String(event.payload.day)}`,
+          ),
+          priority: "low",
+        };
+      }
+      return null;
+    };
+    const domainNews = simulation.events
+      .slice()
+      .reverse()
+      .map(toNewsItem)
+      .filter((item): item is NewsItem => item !== null)
+      .slice(0, 30);
+    return domainNews.length > 0
+      ? domainNews
+      : [
+          {
+            id: `world-${simulation.world.scenarioId}`,
+            title: t("sharedWorldInitialized"),
+            category: "news" as const,
+            tick: simulation.world.tick,
+            content: `${simulation.world.scenarioId} · ${t("ontologyVersion")} nexus.city-ontology.v1`,
+            priority: "low" as const,
+          },
+        ];
+  }, [
+    simulation.events,
+    simulation.world.scenarioId,
+    simulation.world.tick,
+    t,
+  ]);
 
   const filteredNews = filter === "all" 
     ? news 
     : news.filter(n => n.category === filter);
 
-  const getTimeAgo = (timestamp: number) => {
-    const seconds = Math.floor((now - timestamp) / 1000);
-    if (seconds < 60) return `${seconds}s ago`;
-    const minutes = Math.floor(seconds / 60);
-    if (minutes < 60) return `${minutes}m ago`;
-    const hours = Math.floor(minutes / 60);
-    return `${hours}h ago`;
-  };
+  const getTickAge = (tick: number) =>
+    `${Math.max(0, simulation.world.tick - tick)} ${t("ticksAgo")}`;
 
   const getCategoryIcon = (category: NewsItem["category"]) => {
     switch (category) {
@@ -66,7 +124,7 @@ export default function NewsPanel() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -84,7 +142,7 @@ export default function NewsPanel() {
         </div>
       </motion.div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {(["all", "news", "alert", "update"] as const).map((f) => (
           <button
             key={f}
@@ -116,7 +174,7 @@ export default function NewsPanel() {
                   <h3 className="text-cyber-text font-medium">{item.title}</h3>
                   <div className="flex items-center gap-2 text-cyber-text-dim text-xs">
                     <Clock className="w-3 h-3" />
-                    {getTimeAgo(item.timestamp)}
+                    {getTickAge(item.tick)}
                   </div>
                 </div>
                 <p className="text-cyber-text-dim text-sm">{item.content}</p>
@@ -135,9 +193,13 @@ export default function NewsPanel() {
           <TrendingUp className="w-5 h-5 text-cyber-green" />
           <div>
             <p className="text-cyber-text font-medium">{t('cityHappinessIndex')}</p>
-            <p className="text-cyber-text-dim text-sm">{t('cityHappinessChange')}</p>
+            <p className="text-cyber-text-dim text-sm">
+              {t("sharedWorldMetric")}
+            </p>
           </div>
-          <div className="ml-auto text-2xl font-orbitron font-bold text-cyber-green">72%</div>
+          <div className="ml-auto text-2xl font-orbitron font-bold text-cyber-green">
+            {cityStats.happiness.toFixed(1)}%
+          </div>
         </div>
       </motion.div>
     </div>

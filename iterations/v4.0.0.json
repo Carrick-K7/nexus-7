@@ -1,0 +1,40 @@
+{
+  "id": "iteration-v4.0.0",
+  "version": "4.0.0",
+  "date": "2026-07-19",
+  "trigger": "milestone",
+  "triggerReason": "Deliver a deployable all-synthetic human/AI/robot coexistence laboratory without introducing real participants.",
+  "action": "Removed participant seats from the active world; implemented deterministic relationships, consent, commitments, reciprocal episodes, bounded DeepSeek-compatible cognition with budget fallback, normalized memory/PostgreSQL persistence, a three-regime multi-season study, City Lens, an autonomous Turn worker, verification evidence, and production runbooks.",
+  "outcome": "The v4 reference replays 365 Turns exactly with conserved resources, 76.97% RALR, 100% relationship trace completeness, zero severe active-regime escapes, and correct separation of reciprocal, hierarchy, and segregation controls. All residents are synthetic autonomous software. Exact commit f4d428a is active at nexus7.carrick7.com with PostgreSQL, autonomous Turns, TLS, protected routing, observation APIs and a checksum backup verified. Remote CI/Sigstore, live DeepSeek and external recovery evidence remain pending.",
+  "metrics": [
+    { "label": "Foreground autonomous residents", "before": 260, "after": 260 },
+    { "label": "Real participant seats", "before": 5, "after": 0 },
+    { "label": "Resolved reciprocal episodes", "before": 0, "after": 725 },
+    { "label": "RALR (%)", "before": 0, "after": 76.97 },
+    { "label": "Relationship trace completeness (%)", "before": 0, "after": 100 },
+    { "label": "Severe active-regime escapes", "before": 0, "after": 0 }
+  ],
+  "evidence": [
+    "Two independent 365-Turn executions are byte-equivalent",
+    "Every resource ledger conserves integer balances",
+    "All 260 active residents are synthetic autonomous software",
+    "Resolved relationship episodes retain bilateral preferences, refusal availability, commitment outcome, observation and reflection",
+    "The active reciprocal regime has zero coercion and zero severe consent, continuity, or irreversible-harm escapes",
+    "Hierarchy control exposes coercion and segregation preserves an honest null RALR",
+    "DeepSeek response reasoning is ignored and never persisted; provider and budget failures degrade deterministically",
+    "City Lens provides a bilingual map, accessible table, event river, reports and multi-season controls",
+    "Production deployment serves exact tag v4.0.0 through valid TLS and protected routing at nexus7.carrick7.com"
+  ],
+  "artifacts": [
+    "src/symbiosis/",
+    "src/components/symbiosis/SymbiosisCityLens.tsx",
+    "scripts/run-symbiosis-clock.ts",
+    "scripts/run-symbiosis-verification.ts",
+    "migrations/0009_symbiotic_shenzhen_world.sql",
+    "docs/SYMBIOTIC_SHENZHEN_PLAN.md",
+    "docs/V4_VERIFICATION.md",
+    "docs/V4_OPERATIONS.md",
+    "docs/V4_DEPLOYMENT_ATTESTATION.md",
+    "docs/adr/0020-all-synthetic-symbiosis-v4.md"
+  ]
+}

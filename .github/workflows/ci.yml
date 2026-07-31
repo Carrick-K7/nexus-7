@@ -1,0 +1,249 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+concurrency:
+  group: nexus-7-production
+  cancel-in-progress: false
+
+jobs:
+  quality:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: nexus
+          POSTGRES_PASSWORD: nexus
+          POSTGRES_DB: nexus
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U nexus -d nexus"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Dependency audit
+        run: npm audit --audit-level=moderate
+
+      - name: Lint
+        run: npm run lint -- --max-warnings=0
+
+      - name: Unit tests
+        run: npm run test:run
+
+      - name: Create PostgreSQL recovery target
+        env:
+          PGPASSWORD: nexus
+        run: >-
+          psql -h 127.0.0.1 -U nexus -d nexus
+          -c "CREATE DATABASE nexus_restore"
+
+      - name: PostgreSQL repository and recovery integration
+        env:
+          TEST_DATABASE_URL: postgresql://nexus:nexus@127.0.0.1:5432/nexus
+          TEST_RESTORE_DATABASE_URL: postgresql://nexus:nexus@127.0.0.1:5432/nexus_restore
+        run: npm run test:integration
+
+      - name: Deterministic model regression gate
+        run: npm run verify:model
+
+      - name: Deployment controller contract gate
+        run: npm run verify:deployment-contract
+
+      - name: Operational intelligence acceptance gate
+        run: npm run verify:operations
+
+      - name: Coherent city model acceptance gate
+        run: npm run verify:city
+
+      - name: Causal diagnosis acceptance gate
+        run: npm run verify:diagnosis
+
+      - name: Goal-constrained planning acceptance gate
+        run: npm run verify:planning
+
+      - name: Outcome learning acceptance gate
+        run: npm run verify:outcomes
+
+      - name: Participatory governance acceptance gate
+        run: npm run verify:participation
+
+      - name: Closed-loop v2 certification gate
+        run: npm run verify:closure
+
+      - name: Portable v4.7 scientific replication gate
+        run: npm run verify:v47
+
+      - name: Checkout exact v4.7 replication release
+        uses: actions/checkout@v4
+        with:
+          ref: v4.7.0
+          path: .verified/v47-release
+
+      - name: Reproduce exact v4.7 release environment
+        working-directory: .verified/v47-release
+        run: npm ci && npm run verify:v47
+
+      - name: Independent v4.8 trust-domain contract gate
+        run: npm run verify:v48
+
+      - name: Live model regression gate
+        if: github.event_name == 'push'
+        env:
+          NEXUS_MODEL_PROVIDER: openai
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: gpt-5.6-luna
+        run: npm run verify:model:live
+
+      - name: End-to-end and accessibility tests
+        run: npm run test:e2e
+
+      - name: Long-horizon stability audit
+        run: npm run verify:stress
+
+      - name: Isolated quality evaluation
+        run: npm run evaluate:isolated -- quality
+
+      - name: Generate evidence manifest
+        env:
+          NEXUS_REQUIRE_LIVE_MODEL_EVIDENCE: ${{ github.event_name == 'push' }}
+        run: npm run evidence:generate
+
+      - name: Bind closed-loop certification to evidence manifest
+        run: npm run verify:closure
+
+      - name: Upload verification evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexus-verification-evidence
+          include-hidden-files: true
+          path: |
+            public/data/ci-evidence.json
+            public/data/v1-readiness.json
+            public/data/v1-1-stress.json
+            .artifacts/deployment-controller-conformance.json
+            .artifacts/operational-acceptance.json
+            .artifacts/city-model-acceptance.json
+            .artifacts/diagnosis-acceptance.json
+            .artifacts/planning-acceptance.json
+            .artifacts/outcome-learning-acceptance.json
+            .artifacts/participation-acceptance.json
+            .artifacts/closed-loop-certification.json
+            public/data/model-regression.json
+            public/data/v4-7-replication-bundle.json
+            .artifacts/isolated-evaluation.json
+
+      - name: Attest evidence provenance
+        if: github.event_name == 'push'
+        uses: actions/attest@v4
+        with:
+          subject-path: public/data/ci-evidence.json
+
+      - name: Attest portable replication bundle
+        if: github.event_name == 'push'
+        uses: actions/attest@v4
+        with:
+          subject-path: public/data/v4-7-replication-bundle.json
+
+      - name: Build immutable production release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        env:
+          RELEASE_SHA: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          npm run build
+          npm prune --omit=dev
+          mkdir release
+          cp -R .next migrations node_modules public scripts src release/
+          cp next.config.ts package.json package-lock.json tsconfig.json release/
+          node -e 'require("fs").writeFileSync("release/manifest.json", JSON.stringify({ schemaVersion: 1, revision: process.env.RELEASE_SHA, webEntry: ".next/BUILD_ID", workerEntry: "scripts/run-symbiosis-clock.ts" }, null, 2) + "\n")'
+          test -f release/.next/BUILD_ID
+          test -x release/node_modules/.bin/next
+          test -x release/node_modules/.bin/tsx
+          test "$(node -p 'require("./release/manifest.json").revision')" = "$RELEASE_SHA"
+          tar -C release -czf nexus-production.tar.gz .
+          tar -tzf nexus-production.tar.gz >/dev/null
+
+      - name: Upload immutable production release
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexus-production-${{ github.sha }}
+          path: nexus-production.tar.gz
+          if-no-files-found: error
+          retention-days: 7
+
+  deploy:
+    name: Deploy Production
+    needs: quality
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+    steps:
+      - name: Download immutable production release
+        uses: actions/download-artifact@v4
+        with:
+          name: nexus-production-${{ github.sha }}
+
+      - name: Deploy through restricted SSH command
+        env:
+          DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
+          DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
+          DEPLOY_SSH_KEY: ${{ secrets.DEPLOY_SSH_KEY }}
+          DEPLOY_KNOWN_HOSTS: ${{ secrets.DEPLOY_KNOWN_HOSTS }}
+          REVISION: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          test -n "$DEPLOY_HOST"
+          test -n "$DEPLOY_USER"
+          test -n "$DEPLOY_SSH_KEY"
+          test -n "$DEPLOY_KNOWN_HOSTS"
+          install -d -m 0700 ~/.ssh
+          printf '%s\n' "$DEPLOY_SSH_KEY" > ~/.ssh/deploy_key
+          printf '%s\n' "$DEPLOY_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 0600 ~/.ssh/deploy_key ~/.ssh/known_hosts
+          ssh -i ~/.ssh/deploy_key \
+            -o BatchMode=yes \
+            -o IdentitiesOnly=yes \
+            -o StrictHostKeyChecking=yes \
+            "$DEPLOY_USER@$DEPLOY_HOST" \
+            "deploy $REVISION" < nexus-production.tar.gz
+
+      - name: Smoke test production
+        run: |
+          set -euo pipefail
+          curl --fail --silent --show-error --location \
+            https://nexus7.carrick7.com/ \
+            --output /tmp/nexus-index.html
+
+      - name: Remove deploy key
+        if: always()
+        run: rm -f ~/.ssh/deploy_key

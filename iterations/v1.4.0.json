@@ -1,0 +1,37 @@
+{
+  "id": "iteration-v1.4.0",
+  "version": "1.4.0",
+  "date": "2026-07-18",
+  "trigger": "enhancement",
+  "triggerReason": "Federated identity and release state were durable, but operators could not follow degradation through one time-series, deduplicated incident, audited notification and temporary-access lifecycle.",
+  "action": "Added workspace-scoped SLO samples and hour/day traceability, alert and incident state machines, signed webhook retry/dead-letter/receipt handling, suppression and escalation, delegated access reviews, dual-approved break-glass, deployment-controller contract conformance, and an accessible Operations Center.",
+  "outcome": "NEXUS-7 can now explain when operational health changed, which raw evidence caused an incident, who was notified, whether temporary authority expired, and whether an external deployment adapter survives deterministic fault injection.",
+  "metrics": [
+    { "label": "Operational telemetry sources", "before": 0, "after": 6 },
+    { "label": "Synthetic acceptance window (days)", "before": 0, "after": 31 },
+    { "label": "Deployment controller conformance checks", "before": 0, "after": 9 },
+    { "label": "Break-glass human approvals", "before": 0, "after": 2 }
+  ],
+  "evidence": [
+    "744 hourly raw SLO samples aggregate into 744 hour and 31 day buckets with exact raw-ID traceability",
+    "Repeated matching alerts reuse one incident and preserve every causal occurrence",
+    "Signed webhook delivery is idempotent, retries with bounded backoff, records receipts, and exposes dead letters",
+    "Maintenance windows, explicit suppressions, storm budgets and delayed escalation have deterministic failure paths",
+    "Access review can auto-revoke overdue authority and break-glass disappears after its short TTL",
+    "Reference deployment-controller chaos covers timeout, retry, duplicate, partial payload, telemetry ordering and rollback",
+    "Operations Center passes bilingual component, desktop browser, mobile and WCAG A/AA checks",
+    "Memory and real PostgreSQL repositories, migrations, checksum backup and restore remain compatible with v1.0-v1.3 data",
+    "119 standard tests, 6 real PostgreSQL tests, 14 browser/axe tests, 12 model cases, a production build and 10,000-tick stress run pass"
+  ],
+  "artifacts": [
+    "src/operations/",
+    "src/governance/service.ts",
+    "src/deployment/",
+    "src/workers/operational-intelligence.ts",
+    "src/components/operations/OperationsCenter.tsx",
+    "migrations/0005_operational_intelligence.sql",
+    "migrations/0006_access_governance.sql",
+    "docs/OPERATIONAL_INTELLIGENCE.md",
+    "docs/adr/0011-operational-intelligence.md"
+  ]
+}

@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState } from "react";
 import { Satellite, Signal, Radio, MapPin, Battery, Thermometer, AlertTriangle } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import SandboxNotice from "@/components/sandbox/SandboxNotice";
 
 interface Satellite {
   id: string;
@@ -41,11 +42,13 @@ export default function SatelliteControl() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-orbitron font-bold text-cyber-blue cyber-text-glow">{t('satellite_title')}</h1>
         <p className="text-cyber-text-dim mt-1">{t('satellite_desc')}</p>
       </motion.div>
+
+      <SandboxNotice />
 
       <div className="grid grid-cols-5 gap-4">
         {[
@@ -66,8 +69,8 @@ export default function SatelliteControl() {
         ))}
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <div className="xl:col-span-2">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-6">
             <h3 className="text-lg font-orbitron text-cyber-text mb-4">{t('orbitalMap')}</h3>

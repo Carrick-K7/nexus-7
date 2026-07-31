@@ -6,11 +6,13 @@ import {
   Trophy, Medal, Star, Award, Zap, Shield, 
   Brain, TrendingUp, CheckCircle, Lock
 } from "lucide-react";
+import { useTranslation } from "@/hooks/useTranslation";
+import type { TranslationKey } from "@/i18n/translations";
 
 interface Achievement {
   id: string;
-  title: string;
-  description: string;
+  titleKey: TranslationKey;
+  descriptionKey: TranslationKey;
   icon: React.ElementType;
   progress: number;
   maxProgress: number;
@@ -20,17 +22,18 @@ interface Achievement {
 }
 
 const achievementsList: Achievement[] = [
-  { id: "a1", title: "First Login", description: "Access NEXUS for the first time", icon: Star, progress: 1, maxProgress: 1, unlocked: true, rarity: "common", reward: 100 },
-  { id: "a2", title: "Explorer", description: "Visit all main views", icon: TrendingUp, progress: 8, maxProgress: 16, unlocked: false, rarity: "rare", reward: 500 },
-  { id: "a3", title: "Security Expert", description: "Use the hacking interface", icon: Shield, progress: 0, maxProgress: 1, unlocked: false, rarity: "epic", reward: 1000 },
-  { id: "a4", title: "AI Whisperer", description: "Chat with ARIA 10 times", icon: Brain, progress: 3, maxProgress: 10, unlocked: false, rarity: "rare", reward: 300 },
-  { id: "a5", title: "Market Master", description: "Complete 5 trades", icon: Trophy, progress: 2, maxProgress: 5, unlocked: false, rarity: "rare", reward: 400 },
-  { id: "a6", title: "City Governor", description: "Achieve 90%+ city satisfaction", icon: Medal, progress: 0, maxProgress: 90, unlocked: false, rarity: "legendary", reward: 5000 },
-  { id: "a7", title: "Quick Learner", description: "Complete 3 missions", icon: Award, progress: 1, maxProgress: 3, unlocked: false, rarity: "common", reward: 200 },
-  { id: "a8", title: "Speedrunner", description: "Complete a mission in under 1 minute", icon: Zap, progress: 0, maxProgress: 1, unlocked: false, rarity: "epic", reward: 800 },
+  { id: "a1", titleKey: "achievementFirstLogin", descriptionKey: "achievementFirstLoginDesc", icon: Star, progress: 1, maxProgress: 1, unlocked: true, rarity: "common", reward: 100 },
+  { id: "a2", titleKey: "achievementExplorer", descriptionKey: "achievementExplorerDesc", icon: TrendingUp, progress: 8, maxProgress: 21, unlocked: false, rarity: "rare", reward: 500 },
+  { id: "a3", titleKey: "achievementSecurityExpert", descriptionKey: "achievementSecurityExpertDesc", icon: Shield, progress: 0, maxProgress: 1, unlocked: false, rarity: "epic", reward: 1000 },
+  { id: "a4", titleKey: "achievementAIWhisperer", descriptionKey: "achievementAIWhispererDesc", icon: Brain, progress: 3, maxProgress: 10, unlocked: false, rarity: "rare", reward: 300 },
+  { id: "a5", titleKey: "achievementMarketMaster", descriptionKey: "achievementMarketMasterDesc", icon: Trophy, progress: 2, maxProgress: 5, unlocked: false, rarity: "rare", reward: 400 },
+  { id: "a6", titleKey: "achievementCityGovernor", descriptionKey: "achievementCityGovernorDesc", icon: Medal, progress: 0, maxProgress: 90, unlocked: false, rarity: "legendary", reward: 5000 },
+  { id: "a7", titleKey: "achievementQuickLearner", descriptionKey: "achievementQuickLearnerDesc", icon: Award, progress: 1, maxProgress: 3, unlocked: false, rarity: "common", reward: 200 },
+  { id: "a8", titleKey: "achievementSpeedrunner", descriptionKey: "achievementSpeedrunnerDesc", icon: Zap, progress: 0, maxProgress: 1, unlocked: false, rarity: "epic", reward: 800 },
 ];
 
 export default function AchievementsPanel() {
+  const { t } = useTranslation();
   const [achievements] = useState<Achievement[]>(achievementsList);
   const [selectedTab, setSelectedTab] = useState<"all" | "unlocked" | "locked">("all");
 
@@ -61,8 +64,19 @@ export default function AchievementsPanel() {
     }
   };
 
+  const getRarityLabel = (rarity: Achievement["rarity"]) => {
+    const rarityKeys: Record<Achievement["rarity"], TranslationKey> = {
+      common: "rarityCommon",
+      rare: "rarityRare",
+      epic: "rarityEpic",
+      legendary: "rarityLegendary",
+    };
+
+    return t(rarityKeys[rarity]);
+  };
+
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
@@ -73,32 +87,32 @@ export default function AchievementsPanel() {
           </div>
           <div>
             <h1 className="text-3xl font-orbitron font-bold text-cyber-yellow cyber-text-glow">
-              Achievements
+              {t("achievementsTitle")}
             </h1>
-            <p className="text-cyber-text-dim mt-1">Track your progress and unlock rewards</p>
+            <p className="text-cyber-text-dim mt-1">{t("achievementsDesc")}</p>
           </div>
         </div>
       </motion.div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         <div className="bg-gradient-to-br from-cyber-yellow/20 to-cyber-orange/10 border border-cyber-yellow/30 rounded-xl p-6">
           <div className="flex items-center gap-3 mb-2">
             <Trophy className="w-6 h-6 text-cyber-yellow" />
-            <span className="text-sm text-cyber-text-dim">Total Points</span>
+            <span className="text-sm text-cyber-text-dim">{t("totalPoints")}</span>
           </div>
           <div className="text-4xl font-orbitron font-bold text-cyber-yellow">{totalPoints.toLocaleString()}</div>
         </div>
         <div className="bg-cyber-dark/50 border border-cyber-blue/30 rounded-xl p-6">
           <div className="flex items-center gap-3 mb-2">
             <Award className="w-6 h-6 text-cyber-blue" />
-            <span className="text-sm text-cyber-text-dim">Unlocked</span>
+            <span className="text-sm text-cyber-text-dim">{t("unlocked")}</span>
           </div>
           <div className="text-4xl font-orbitron font-bold text-cyber-blue">{unlockedCount}/{achievements.length}</div>
         </div>
         <div className="bg-cyber-dark/50 border border-cyber-purple/30 rounded-xl p-6">
           <div className="flex items-center gap-3 mb-2">
             <Star className="w-6 h-6 text-cyber-purple" />
-            <span className="text-sm text-cyber-text-dim">Completion</span>
+            <span className="text-sm text-cyber-text-dim">{t("completion")}</span>
           </div>
           <div className="text-4xl font-orbitron font-bold text-cyber-purple">
             {Math.round((unlockedCount / achievements.length) * 100)}%
@@ -107,7 +121,7 @@ export default function AchievementsPanel() {
         <div className="bg-cyber-dark/50 border border-cyber-green/30 rounded-xl p-6">
           <div className="flex items-center gap-3 mb-2">
             <Zap className="w-6 h-6 text-cyber-green" />
-            <span className="text-sm text-cyber-text-dim">Available Rewards</span>
+            <span className="text-sm text-cyber-text-dim">{t("availableRewards")}</span>
           </div>
           <div className="text-4xl font-orbitron font-bold text-cyber-green">
             {achievements.filter(a => !a.unlocked).reduce((sum, a) => sum + a.reward, 0).toLocaleString()}
@@ -115,7 +129,7 @@ export default function AchievementsPanel() {
         </div>
       </div>
 
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         {(["all", "unlocked", "locked"] as const).map((tab) => (
           <button
             key={tab}
@@ -126,12 +140,12 @@ export default function AchievementsPanel() {
                 : "bg-cyber-dark/50 text-cyber-text-dim hover:bg-cyber-gray"
             }`}
           >
-            {tab.charAt(0).toUpperCase() + tab.slice(1)} ({tab === "all" ? achievements.length : tab === "unlocked" ? unlockedCount : achievements.length - unlockedCount})
+            {tab === "all" ? t("all") : tab === "unlocked" ? t("unlocked") : t("locked")} ({tab === "all" ? achievements.length : tab === "unlocked" ? unlockedCount : achievements.length - unlockedCount})
           </button>
         ))}
       </div>
 
-      <div className="grid grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {filteredAchievements.map((achievement, index) => {
           const Icon = achievement.icon;
           const progressPercent = (achievement.progress / achievement.maxProgress) * 100;
@@ -169,20 +183,20 @@ export default function AchievementsPanel() {
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-1">
                       <h3 className={`font-orbitron font-bold ${achievement.unlocked ? "text-cyber-text" : "text-cyber-gray"}`}>
-                        {achievement.title}
+                        {t(achievement.titleKey)}
                       </h3>
                       <span className={`text-xs px-2 py-0.5 rounded uppercase font-bold ${
                         achievement.unlocked ? getRarityBg(achievement.rarity) : "bg-cyber-gray/20 text-cyber-gray"
                       } ${achievement.unlocked ? getRarityColor(achievement.rarity) : ""}`}>
-                        {achievement.rarity}
+                        {getRarityLabel(achievement.rarity)}
                       </span>
                     </div>
-                    <p className="text-sm text-cyber-text-dim mb-3">{achievement.description}</p>
+                    <p className="text-sm text-cyber-text-dim mb-3">{t(achievement.descriptionKey)}</p>
                     
                     {!achievement.unlocked && (
                       <div className="space-y-2">
                         <div className="flex items-center justify-between text-xs">
-                          <span className="text-cyber-text-dim">Progress</span>
+                          <span className="text-cyber-text-dim">{t("progress")}</span>
                           <span className="text-cyber-text">{achievement.progress}/{achievement.maxProgress}</span>
                         </div>
                         <div className="h-2 bg-cyber-dark rounded-full overflow-hidden">
@@ -216,20 +230,20 @@ export default function AchievementsPanel() {
       >
         <div className="flex items-center gap-3 mb-4">
           <Star className="w-6 h-6 text-cyber-yellow" />
-          <h2 className="text-lg font-orbitron font-bold text-cyber-yellow">Achievement Tips</h2>
+          <h2 className="text-lg font-orbitron font-bold text-cyber-yellow">{t("achievementTips")}</h2>
         </div>
-        <div className="grid grid-cols-3 gap-4 text-sm text-cyber-text-dim">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 text-sm text-cyber-text-dim">
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-cyber-green mt-0.5" />
-            <span>Visit all 16 views to unlock the Explorer achievement</span>
+            <span>{t("achievementTipExplore")}</span>
           </div>
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-cyber-green mt-0.5" />
-            <span>Chat with ARIA to increase your AI interaction stats</span>
+            <span>{t("achievementTipAria")}</span>
           </div>
           <div className="flex items-start gap-2">
             <CheckCircle className="w-4 h-4 text-cyber-green mt-0.5" />
-            <span>Complete missions to unlock Quick Learner</span>
+            <span>{t("achievementTipMissions")}</span>
           </div>
         </div>
       </motion.div>

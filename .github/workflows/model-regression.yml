@@ -1,0 +1,49 @@
+name: Live model regression
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "17 3 * * *"
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Run live provider regression
+        env:
+          NEXUS_MODEL_PROVIDER: openai
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_MODEL: gpt-5.6-luna
+          NEXUS_MODEL_REGRESSION_OUTPUT: .artifacts/model-regression-live.json
+        run: npm run verify:model:live
+
+      - name: Upload regression evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexus-live-model-regression
+          path: .artifacts/model-regression-live.json
+          include-hidden-files: true
+          retention-days: 30
+
+      - name: Attest regression provenance
+        uses: actions/attest@v4
+        with:
+          subject-path: .artifacts/model-regression-live.json

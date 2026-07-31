@@ -10,10 +10,20 @@ const quickQuestions = [
   "Show city status report",
   "Analyze traffic patterns",
   "Recommend optimal energy distribution",
+  "Explain the last coordinator decision",
 ];
 
 export default function AIAssistant() {
-  const { ariaMessages, addAriaMessage, aiAgents } = useNexusStore();
+  const {
+    ariaMessages,
+    addAriaMessage,
+    aiAgents,
+    cityStats,
+    simulation,
+    modelRuntime,
+    pauseSimulation,
+    resumeSimulation,
+  } = useNexusStore();
   const { t } = useTranslation();
   const [input, setInput] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -30,29 +40,53 @@ export default function AIAssistant() {
     addAriaMessage({ role: "user", content: text });
     setInput("");
     setIsTyping(true);
+    const normalized = text.toLowerCase();
     setTimeout(() => {
-      const responses = [
-        "Analyzing current city data... Traffic patterns show a 12% increase in downtown area.",
-        "Energy grid analysis complete. Solar output is at 78% capacity.",
-        "Threat assessment updated. Iron Works district shows elevated risk.",
-        "Processing your request... The city is operating at 87% efficiency.",
-      ];
-      const responseIndex = text.length % responses.length;
-      const response = responses[responseIndex];
+      const latestDecision = [...simulation.events]
+        .reverse()
+        .find((event) => event.type === "coordinator.decision");
+      const scheduled = Array.isArray(latestDecision?.payload.scheduled)
+        ? latestDecision.payload.scheduled
+        : [];
+      const rejected = Array.isArray(latestDecision?.payload.rejected)
+        ? latestDecision.payload.rejected
+        : [];
+      let response = `Analyzing current city data at tick ${simulation.world.tick}. Energy ${cityStats.energy.toFixed(1)}%, traffic ${cityStats.traffic.toFixed(1)}%, crime ${cityStats.crime.toFixed(1)}%, happiness ${cityStats.happiness.toFixed(1)}%.`;
+
+      if (normalized.includes("pause")) {
+        pauseSimulation();
+        response = `Simulation paused at tick ${simulation.world.tick}. No further autonomous commands will be scheduled until resumed.`;
+      } else if (normalized.includes("resume")) {
+        resumeSimulation();
+        response = `Simulation resumed from tick ${simulation.world.tick}. ARIA coordination and agent budgets are active.`;
+      } else if (
+        normalized.includes("why") ||
+        normalized.includes("decision") ||
+        normalized.includes("coordinator")
+      ) {
+        response = latestDecision
+          ? `At tick ${latestDecision.tick}, ARIA reviewed ${String(latestDecision.payload.observationCount)} observations and ${String(latestDecision.payload.proposalCount)} proposals. ${scheduled.length} command(s) were scheduled and ${rejected.length} rejected by cooldown, budget, risk, or conflict rules.`
+          : "No coordinator decision has been recorded yet. Advance the simulation to create one.";
+      } else if (normalized.includes("traffic")) {
+        response = `Traffic is ${cityStats.traffic.toFixed(1)}%. CIVITAS may propose a bounded reroute when its policy observes congestion, subject to cooldown and command budget.`;
+      } else if (normalized.includes("energy")) {
+        response = `Energy availability is ${cityStats.energy.toFixed(1)}%. CIVITAS has authority to adjust energy within guardrail limits; ARIA resolves competing proposals.`;
+      }
+
       addAriaMessage({ role: "aria", content: response });
       setIsTyping(false);
-    }, 1500);
+    }, 500);
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-orbitron font-bold text-cyber-pink cyber-text-glow">{t('aria_title')}</h1>
         <p className="text-cyber-text-dim mt-1">{t('aria_desc')}</p>
       </motion.div>
 
-      <div className="grid grid-cols-4 gap-6">
-        <div className="col-span-3">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-4">
+        <div className="xl:col-span-3">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl overflow-hidden h-[500px] flex flex-col">
             <div className="flex items-center justify-between px-4 py-3 bg-cyber-dark/80 border-b border-cyber-blue/20">
@@ -154,6 +188,41 @@ export default function AIAssistant() {
               </div>
               <div className="h-1.5 bg-cyber-gray rounded-full overflow-hidden">
                 <div className="h-full bg-cyber-pink" style={{ width: `${aria.mood}%` }} />
+              </div>
+              <div className="border-t border-cyber-gray/30 pt-3">
+                <div className="flex items-center justify-between text-xs">
+                  <span className="text-cyber-text-dim">{t("globalCommandBudget")}</span>
+                  <span className="text-cyber-blue">
+                    {simulation.configuration.agentRuntime?.globalCommandBudget ?? 2}/tick
+                  </span>
+                </div>
+                <div className="mt-2 flex items-center justify-between text-xs">
+                  <span className="text-cyber-text-dim">{t("policyVersion")}</span>
+                  <code className="text-cyber-blue">{simulation.policyVersion}</code>
+                </div>
+                {modelRuntime.lastExecution && (
+                  <div className="mt-3 space-y-2 border-t border-cyber-gray/30 pt-3 text-xs">
+                    <div className="flex items-center justify-between gap-2">
+                      <span className="text-cyber-text-dim">{t("modelProvider")}</span>
+                      <code className="truncate text-cyber-blue">
+                        {modelRuntime.lastExecution.providerId}/{modelRuntime.lastExecution.model}
+                      </code>
+                    </div>
+                    <div className="flex items-center justify-between">
+                      <span className="text-cyber-text-dim">{t("modelUsage")}</span>
+                      <span className="text-cyber-text">
+                        {modelRuntime.lastExecution.usage.tokenCount} tok · $
+                        {modelRuntime.lastExecution.usage.costUsd.toFixed(4)} ·{" "}
+                        {modelRuntime.lastExecution.usage.latencyMs}ms
+                      </span>
+                    </div>
+                    {modelRuntime.lastExecution.fallbackReason && (
+                      <p className="text-cyber-yellow">
+                        {t("fallback")}: {modelRuntime.lastExecution.fallbackReason}
+                      </p>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
           </motion.div>

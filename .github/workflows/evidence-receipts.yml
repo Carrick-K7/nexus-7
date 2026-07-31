@@ -1,0 +1,196 @@
+name: Remote evidence receipts
+
+on:
+  workflow_run:
+    workflows:
+      - CI
+      - Live model regression
+      - Operations drills
+      - Symbiosis off-host recovery
+    types: [completed]
+
+jobs:
+  issue:
+    if: github.event.workflow_run.conclusion == 'success'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      attestations: read
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout attested revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download portable replication evidence
+        if: github.event.workflow_run.name == 'CI'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: >-
+          gh run download "$RUN_ID"
+          --repo "${{ github.repository }}"
+          --name nexus-verification-evidence
+          --dir .verified/ci
+
+      - name: Verify portable replication provenance
+        if: github.event.workflow_run.name == 'CI'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEXUS_EVIDENCE_REPOSITORY: ${{ github.repository }}
+          NEXUS_EVIDENCE_SIGNER_WORKFLOW: ${{ github.repository }}/.github/workflows/ci.yml
+          NEXUS_EVIDENCE_SOURCE_COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}
+          NEXUS_EVIDENCE_RUN_ID: ${{ github.event.workflow_run.id }}
+          NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64: ${{ secrets.NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64 }}
+        run: >-
+          npm run evidence:verify-remote --
+          .verified/ci/public/data/v4-7-replication-bundle.json
+          symbiosis-replication
+          .artifacts/symbiosis-replication-receipt.json
+
+      - name: Download symbiosis off-host recovery evidence
+        if: github.event.workflow_run.name == 'Symbiosis off-host recovery'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: >-
+          gh run download "$RUN_ID"
+          --repo "${{ github.repository }}"
+          --name nexus-symbiosis-offhost-recovery
+          --dir .verified/symbiosis-recovery
+
+      - name: Verify symbiosis off-host recovery provenance
+        if: github.event.workflow_run.name == 'Symbiosis off-host recovery'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEXUS_EVIDENCE_REPOSITORY: ${{ github.repository }}
+          NEXUS_EVIDENCE_SIGNER_WORKFLOW: ${{ github.repository }}/.github/workflows/symbiosis-offhost-recovery.yml
+          NEXUS_EVIDENCE_SOURCE_COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}
+          NEXUS_EVIDENCE_RUN_ID: ${{ github.event.workflow_run.id }}
+          NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64: ${{ secrets.NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64 }}
+        run: >-
+          npm run evidence:verify-remote --
+          .verified/symbiosis-recovery/symbiosis-offhost-recovery.json
+          symbiosis-off-host-recovery
+          .artifacts/symbiosis-off-host-recovery-receipt.json
+
+      - name: Download live model evidence
+        if: github.event.workflow_run.name == 'Live model regression'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: >-
+          gh run download "$RUN_ID"
+          --repo "${{ github.repository }}"
+          --name nexus-live-model-regression
+          --dir .verified/model
+
+      - name: Verify live model provenance
+        if: github.event.workflow_run.name == 'Live model regression'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEXUS_EVIDENCE_REPOSITORY: ${{ github.repository }}
+          NEXUS_EVIDENCE_SIGNER_WORKFLOW: ${{ github.repository }}/.github/workflows/model-regression.yml
+          NEXUS_EVIDENCE_SOURCE_COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}
+          NEXUS_EVIDENCE_RUN_ID: ${{ github.event.workflow_run.id }}
+          NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64: ${{ secrets.NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64 }}
+        run: >-
+          npm run evidence:verify-remote --
+          .verified/model/model-regression-live.json
+          model-regression-live
+          .artifacts/model-regression-live-receipt.json
+
+      - name: Download operations evidence
+        if: github.event.workflow_run.name == 'Operations drills'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: |
+          gh run download "$RUN_ID" \
+            --repo "${{ github.repository }}" \
+            --name nexus-recovery-drill \
+            --dir .verified/recovery
+          gh run download "$RUN_ID" \
+            --repo "${{ github.repository }}" \
+            --name nexus-deployment-rollback-drill \
+            --dir .verified/deployment
+          gh run download "$RUN_ID" \
+            --repo "${{ github.repository }}" \
+            --name nexus-deployment-controller-conformance \
+            --dir .verified/conformance
+
+      - name: Verify recovery drill provenance
+        if: github.event.workflow_run.name == 'Operations drills'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEXUS_EVIDENCE_REPOSITORY: ${{ github.repository }}
+          NEXUS_EVIDENCE_SIGNER_WORKFLOW: ${{ github.repository }}/.github/workflows/operations-drills.yml
+          NEXUS_EVIDENCE_SOURCE_COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}
+          NEXUS_EVIDENCE_RUN_ID: ${{ github.event.workflow_run.id }}
+          NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64: ${{ secrets.NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64 }}
+        run: >-
+          npm run evidence:verify-remote --
+          .verified/recovery/recovery-drill.json
+          recovery-drill
+          .artifacts/recovery-drill-receipt.json
+
+      - name: Verify deployment drill provenance
+        if: github.event.workflow_run.name == 'Operations drills'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEXUS_EVIDENCE_REPOSITORY: ${{ github.repository }}
+          NEXUS_EVIDENCE_SIGNER_WORKFLOW: ${{ github.repository }}/.github/workflows/operations-drills.yml
+          NEXUS_EVIDENCE_SOURCE_COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}
+          NEXUS_EVIDENCE_RUN_ID: ${{ github.event.workflow_run.id }}
+          NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64: ${{ secrets.NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64 }}
+        run: >-
+          npm run evidence:verify-remote --
+          .verified/deployment/deployment-rollback-drill.json
+          deployment-drill
+          .artifacts/deployment-drill-receipt.json
+
+      - name: Verify deployment controller conformance provenance
+        if: github.event.workflow_run.name == 'Operations drills'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEXUS_EVIDENCE_REPOSITORY: ${{ github.repository }}
+          NEXUS_EVIDENCE_SIGNER_WORKFLOW: ${{ github.repository }}/.github/workflows/operations-drills.yml
+          NEXUS_EVIDENCE_SOURCE_COMMIT_SHA: ${{ github.event.workflow_run.head_sha }}
+          NEXUS_EVIDENCE_RUN_ID: ${{ github.event.workflow_run.id }}
+          NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64: ${{ secrets.NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64 }}
+        run: >-
+          npm run evidence:verify-remote --
+          .verified/conformance/deployment-controller-conformance.json
+          deployment-conformance
+          .artifacts/deployment-conformance-receipt.json
+
+      - name: Upload short-lived evidence receipts
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexus-remote-evidence-receipts-${{ github.event.workflow_run.id }}
+          path: .artifacts/*-receipt.json
+          include-hidden-files: true
+          retention-days: 7
+
+      - name: Ingest receipts with federated workload identity
+        if: vars.NEXUS_GOVERNANCE_BASE_URL != ''
+        env:
+          NEXUS_GOVERNANCE_BASE_URL: ${{ vars.NEXUS_GOVERNANCE_BASE_URL }}
+          NEXUS_OIDC_AUDIENCE: ${{ vars.NEXUS_OIDC_AUDIENCE || 'nexus-7' }}
+        run: |
+          for receipt in .artifacts/*-receipt.json; do
+            npm run evidence:ingest-remote -- "$receipt"
+          done

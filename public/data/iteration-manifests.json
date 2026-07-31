@@ -1,0 +1,1838 @@
+[
+  {
+    "id": "iteration-v4.8.1",
+    "version": "4.8.1",
+    "date": "2026-07-31",
+    "trigger": "production-observability-regression",
+    "triggerReason": "The v4.8.0 DeepSeek lane stayed pending correctly but reused the aggregate diversity comparison count, so 260 reference-shadow comparisons could be read by a human as 260 live DeepSeek comparisons.",
+    "action": "Split persisted DeepSeek shadow evidence from combined provider usage and generic cognitive diversity, bind the trust lane only to that exact slice, add reference-shadow contamination tests at API and browser layers, and document the correction.",
+    "outcome": "Pushed implementation 77ae73f prevents a reference shadow from contributing attempts, comparisons, failures, Tokens, price versions, models or cost to the live DeepSeek trust lane. The deterministic city and its PostgreSQL contracts are unchanged; missing live-provider evidence remains visibly pending.",
+    "metrics": [
+      {
+        "label": "Reference comparisons displayed as DeepSeek",
+        "before": 260,
+        "after": 0
+      },
+      {
+        "label": "DeepSeek evidence fields isolated",
+        "before": 4,
+        "after": 10
+      },
+      {
+        "label": "Trust lanes",
+        "before": 5,
+        "after": 5
+      },
+      {
+        "label": "World-settling paths changed",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "258/258 non-PostgreSQL tests pass; the unchanged 16/16 PostgreSQL and restore baseline remains applicable",
+      "v4.8 trust contract 5/5 including a 260-reference-comparison contamination regression",
+      "TypeScript production build, lint with zero warnings and dependency audit with zero vulnerabilities",
+      "27/27 production-build Playwright/axe scenarios pass across API, desktop, mobile, Chinese and both themes"
+    ],
+    "artifacts": [
+      "src/symbiosis/observatory.ts",
+      "src/symbiosis/trust.ts",
+      "src/symbiosis/trust.test.ts",
+      "e2e/nexus.spec.ts",
+      "docs/V4_TRUST_MATRIX.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.8.0",
+    "version": "4.8.0",
+    "date": "2026-07-31",
+    "trigger": "roadmap-independent-trust-domains",
+    "triggerReason": "Local replication, remote provenance, off-host recovery, live-provider exercise and elapsed production time were described separately but lacked one fail-closed public contract, making it too easy for a local pass or operator flag to be read as external proof.",
+    "action": "Added a five-lane trust matrix, exact bundle and signed-receipt verification, distinct off-host identity evidence, GitHub-hosted replication/recovery receipt workflows, persisted DeepSeek-shadow and wall-clock gates, a read-only API, bilingual Human Observatory panel, unit/browser failure coverage and deployment runbooks.",
+    "outcome": "Implementation 7182378 verifies the local v4.7 bundle while honestly retaining external CI, off-host recovery, live DeepSeek and 90 elapsed days as independent pending lanes. Reference contract tests can reach 5/5 only with exact signed subjects and reject tampering, expiry or same-host identity. The full gate passes 257 non-PostgreSQL plus 16 real PostgreSQL/restore tests, 27 production-build Playwright/axe scenarios, zero lint warnings, zero audit vulnerabilities and TypeScript/build. Production deployment will be recorded after release.",
+    "metrics": [
+      {
+        "label": "Independently visible trust lanes",
+        "before": 0,
+        "after": 5
+      },
+      {
+        "label": "Local lanes currently verified",
+        "before": 1,
+        "after": 1
+      },
+      {
+        "label": "External lanes falsely inferred",
+        "before": 0,
+        "after": 0
+      },
+      {
+        "label": "Off-host bare-flag acceptance",
+        "before": 1,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "nexus.symbiosis-trust-matrix.v1 with verified/pending/failed/stale states",
+      "Signed receipt binds repository, workflow, release revision, subject digest and lane summary",
+      "Off-host evidence requires distinct SHA-256 source and restore target fingerprints",
+      "Live DeepSeek requires persisted attempts, comparable output and nonzero Token usage",
+      "90-day lane requires actual runtime envelopes plus lineage, freshness, revision and timing gates"
+    ],
+    "artifacts": [
+      "src/symbiosis/trust.ts",
+      "src/app/api/observatory/v2/trust/route.ts",
+      ".github/workflows/symbiosis-offhost-recovery.yml",
+      "docs/V4_TRUST_MATRIX.md",
+      "docs/adr/0031-independent-trust-matrix.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.7.0",
+    "version": "4.7.0",
+    "date": "2026-07-31",
+    "trigger": "roadmap-scientific-replication",
+    "triggerReason": "The v4.6 reference and production evidence were replayable inside NEXUS-7, but there was no credential-free held-out package binding hypotheses, inputs, per-run outcomes and proof status for reproduction in another environment.",
+    "action": "Froze seven prospective replication hypotheses for the exploratory v4.6 results; ran four held-out seeds across reciprocal, hierarchy and segregation controls twice each; added deterministic/diversity provider controls; hashed source, calibration, results and bundle envelopes; exposed the artifact and missing external proof in the bilingual Human Observatory; and added CI upload/Sigstore attestation steps.",
+    "outcome": "Implementation ebe3caf produces 12/12 exact held-out replays with resource conservation and 7/7 hypothesis passes. Reciprocal pooled RALR is 559/697 with zero coercion or severe escape; hierarchy exposes 188 coercive episodes at RALR 0; segregation preserves a zero denominator and null RALR. Tag v4.7.0 at 2362ee8 is deployed: the bundle and Human Observatory return the exact local evidence with zero 390px overflow or console errors and mutation 405. The worker preserved cadence and naturally settled Turn 304 on time with 602 ms lag, exact v4.7 revision, conserved resources, zero severe escape and no forced active path. External runner/Sigstore receipts remain pending.",
+    "metrics": [
+      {
+        "label": "Held-out exact replays",
+        "before": 0,
+        "after": 12
+      },
+      {
+        "label": "Frozen replication hypotheses passed",
+        "before": 0,
+        "after": 7
+      },
+      {
+        "label": "Secret inputs required",
+        "before": null,
+        "after": 0
+      },
+      {
+        "label": "External Sigstore receipts",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Bundle SHA-256 0d8d4ccd347a4f303a455d57bb685f724e0bc986793e2333542d94c6dbb93550",
+      "Results SHA-256 b8b43a31fb560dee605745e564fa3d87dc6d03858bc913dd2b510a4091118d29",
+      "180 diversity-shadow comparisons with 73 disagreements and no world-fingerprint change",
+      "Input, result and envelope tampering fail closed",
+      "External CI and Sigstore remain false/null rather than inferred"
+    ],
+    "artifacts": [
+      "public/data/v4-7-replication-bundle.json",
+      "src/symbiosis/replication.ts",
+      "scripts/run-v47-replication.ts",
+      "docs/V4_REPLICATION.md",
+      "docs/adr/0030-portable-scientific-replication.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.6.1",
+    "version": "4.6.1",
+    "date": "2026-07-30",
+    "trigger": "production-observation",
+    "triggerReason": "The first persisted AI city-rule proposal made a 680px evidence table impose its intrinsic width on the society grid, producing 325px document-level overflow on a 390px production viewport; the empty-proposal reference fixture could not reveal it.",
+    "action": "Changed both society grid tracks to minmax(0, …), marked their cards min-width zero, and added a production-shaped browser fixture containing the full proposal identifier and ratified rule evidence. Moved legacy-theme storage injection before app hydration and gave long deterministic replay/study tests explicit non-flaky execution budgets without changing their workloads.",
+    "outcome": "Implementation 71f550c reduces populated-rule document overflow from 325px to zero at 390px. Acceptance passes 251 non-integration plus 16 real PostgreSQL/restore tests with zero skips, 27/27 production-build browser/axe scenarios, v4.6 reference verification, lint, audit and build. Tag v4.6.1 at 6c90112 is deployed; the populated production proposal renders at zero document overflow with HTTP 200, mutation 405 and zero post-load console errors. Naturally due Turn 282 settled on time with 332 ms lag, exact release revision, conserved resources and credits, and zero severe escape or forced path.",
+    "metrics": [
+      {
+        "label": "390px viewport document overflow",
+        "before": 325,
+        "after": 0
+      },
+      {
+        "label": "Populated city-rule browser fixtures",
+        "before": 0,
+        "after": 1
+      }
+    ],
+    "evidence": [
+      "The proposal table remains horizontally scrollable within its own card",
+      "The containing society grid can shrink below the table intrinsic width",
+      "The regression fixture uses the production-length proposal identifier",
+      "No world state, API contract or v4.6.0 Tag is rewritten"
+    ],
+    "artifacts": [
+      "src/components/symbiosis/HumanObservatory.tsx",
+      "e2e/nexus.spec.ts",
+      "src/symbiosis/engine.test.ts",
+      "src/symbiosis/study.test.ts",
+      "docs/V4_DEPLOYMENT_ATTESTATION.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.6.0",
+    "version": "4.6.0",
+    "date": "2026-07-29",
+    "trigger": "reversible-city-society",
+    "triggerReason": "Residents had needs, relationships and resource flows, but no durable households, work agreements, maintained civic assets, balanced exchange, resource bargaining or bounded AI-proposed city rules through which a society could visibly organize itself.",
+    "action": "Added deterministic and replayable care households, voluntary work, degrading and repairable assets, conserved civic credits, balanced exchanges, mediated bargains and automatically reverting AI-only rule proposals; persisted them atomically in memory and PostgreSQL and projected them into the bilingual Human Observatory.",
+    "outcome": "Implementation a8ba2bd passed 267 tests with zero skips, 16 real PostgreSQL/restore tests, 26 browser/axe scenarios, lint, audit, build, all compatibility gates and a 10,000-tick stress run. Tag v4.6.0 at 75eda1b is deployed; Turns 257–281 settled naturally on time with exact revision binding. Turn 281 persists 426 society records and 107 society events, 43/43 safe closures, conserved credits/exchanges and no forced active path or invalid rule. Encrypted same-host second-database restore, exact row/fingerprint checks and resumed write pass.",
+    "metrics": [
+      {
+        "label": "Safe social closure rate",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "label": "Balanced persisted exchanges",
+        "before": 0,
+        "after": 389
+      },
+      {
+        "label": "Bounded rules automatically reverted",
+        "before": 0,
+        "after": 6
+      }
+    ],
+    "evidence": [
+      "365-Turn society state replay is exact and material/credit conservation passes",
+      "Refusal, household exit, mediation and policy reversion are explicit state transitions",
+      "Hierarchy exposes forced work, forced bargaining and invalid quorum instead of hiding them",
+      "Segregation produces zero cross-kind households and zero ratified city rules",
+      "AI proposals use a bounded deterministic parameter DSL and cannot execute code",
+      "Every society object is synthetic and contains no real-person data"
+    ],
+    "artifacts": [
+      "src/symbiosis/society.ts",
+      "src/symbiosis/society-study.ts",
+      "migrations/0012_richer_city_society.sql",
+      "public/data/v4-6-verification.json",
+      "docs/adr/0029-reversible-city-society.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.5.1",
+    "version": "4.5.1",
+    "date": "2026-07-29",
+    "trigger": "restart-cadence",
+    "triggerReason": "Production ran hourly while uninterrupted, but a worker restart settled immediately and accelerated the synthetic calendar before the persisted next due time.",
+    "action": "Made normal startup compute and wait for the next due time from the latest runtime envelope; preserved immediate first/overdue/once behavior; rejected malformed or sub-minute intervals; kept early samples visible and excluded from on-time counts.",
+    "outcome": "Implementation 60f7612 passed 261 tests with real PostgreSQL and restore coverage, 26 browser/axe scenarios, lint, audit, build, all compatibility/reference gates and the 10,000-tick stress run. A real worker drill persisted baseline Turn 1, announced a 43,228 ms restart wait and retained current_turn=1. Tag v4.5.1 at 1226826 is deployed; production read Turn 255, announced a 2,176,948 ms wait and did not settle early.",
+    "metrics": [
+      {
+        "label": "Unplanned Turn settlements on early restart",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Invalid interval fail-closed paths",
+        "before": 0,
+        "after": 2
+      }
+    ],
+    "evidence": [
+      "Persisted cadence supplies the startup delay",
+      "First deployment and overdue work remain immediately runnable",
+      "Explicit --once drills bypass waiting",
+      "Early restart remains visible and is not counted as on-time",
+      "NaN and sub-minute intervals fail before the loop"
+    ],
+    "artifacts": [
+      "scripts/run-symbiosis-clock.ts",
+      "src/symbiosis/reliability.ts",
+      "src/symbiosis/server.ts",
+      "docs/adr/0028-restart-safe-clock.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.5.0",
+    "version": "4.5.0",
+    "date": "2026-07-26",
+    "trigger": "cognitive-diversity",
+    "triggerReason": "A single cognitive Provider made homogeneity invisible, while switching Providers inside an active run would confound the experiment and could change resident outcomes without governed evidence.",
+    "action": "Added a separately budgeted, schema-compatible read-only shadow Provider; persisted stable request, disagreement, failure, fallback-bias and billing evidence; exposed bilingual diversity and reliability panels; kept deterministic controls and proved that shadow output has no settlement path.",
+    "outcome": "Implementation 9da503f passed 259 tests, 26 browser/axe scenarios, 365 Turns and 730 shadow comparisons with 356 disagreements (48.77%), zero shadow failures or stored reasoning and an exact control fingerprint. Tag v4.5.0 at c197f0f is deployed. Production Turn 175 binds the exact revision, records two read-only reference-shadow comparisons, zero DeepSeek usage/cost and zero severe escapes; encrypted pre/post backups and a same-host second-database restore/resumed-write drill pass.",
+    "metrics": [
+      {
+        "label": "Shadow comparisons",
+        "before": 0,
+        "after": 730
+      },
+      {
+        "label": "Measured disagreement rate",
+        "before": 0,
+        "after": 0.487671
+      },
+      {
+        "label": "Shadow-caused world changes",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Primary and shadow use versioned bounded contracts and stable caller IDs",
+      "Shadow has a separate monthly budget and no fallback authority",
+      "DeepSeek shadow billing contributes to the actual Token/cost ledger",
+      "Shadow failure and budget exhaustion do not pause or alter the city",
+      "365-Turn shadow and no-shadow world fingerprints are identical",
+      "Provider substitution preserves resource, consent, continuity and harm invariants"
+    ],
+    "artifacts": [
+      "src/symbiosis/cognition.ts",
+      "src/symbiosis/observatory.ts",
+      "src/components/symbiosis/HumanObservatory.tsx",
+      "public/data/v4-5-verification.json",
+      "docs/adr/0027-read-only-shadow-cognition.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.4.0",
+    "version": "4.4.0",
+    "date": "2026-07-26",
+    "trigger": "long-running-reliability",
+    "triggerReason": "Simulation timestamps and deployment documents could not prove wall-clock Turn freshness, duplicate/missed settlement, or the exact revision that advanced an existing season.",
+    "action": "Added additive per-Turn runtime evidence, a versioned reliability projection, a 90-day hourly reference-clock gate, AES-256-GCM backup envelopes and checksum-backed second-database recovery receipts while preserving legacy Turn and season provenance.",
+    "outcome": "Implementation 9da503f contains the accepted v4.4 capability. The 2,161-record reference covers exactly 90 days with 100% on-time settlement, zero missing or duplicate Turns and zero lineage mismatches. Authenticated encryption, tamper rejection and a 14.1 MB same-host second-database restore/resumed-write drill pass. Actual production duration and off-host recovery remain external evidence pending.",
+    "metrics": [
+      {
+        "label": "Reference clock days",
+        "before": 0,
+        "after": 90
+      },
+      {
+        "label": "Revision-bound runtime fields",
+        "before": 0,
+        "after": 10
+      },
+      {
+        "label": "Authenticated backup algorithms",
+        "before": 0,
+        "after": 1
+      }
+    ],
+    "evidence": [
+      "Runtime metadata stays outside the deterministic world fingerprint",
+      "Legacy Turns remain readable and visibly unbound",
+      "Reference duration is never described as elapsed production time",
+      "Same-host restore evidence cannot silently become off-host evidence",
+      "Recovery receipts verify checksum, row counts, fingerprint and resumed write"
+    ],
+    "artifacts": [
+      "src/symbiosis/reliability.ts",
+      "src/operations/encrypted-backup.ts",
+      "scripts/record-symbiosis-recovery-evidence.ts",
+      "docs/adr/0026-turn-runtime-evidence.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.3.3",
+    "version": "4.3.3",
+    "date": "2026-07-25",
+    "trigger": "human-observation",
+    "triggerReason": "Human observers could not distinguish zero-cost deterministic cognition from actual DeepSeek usage, inspect Token volume, or audit how provider expense was calculated.",
+    "action": "Extended persisted cognitive decisions with requested-provider, call-attempt and billing evidence; priced actual cache-hit, cache-miss and output Tokens with a pinned official DeepSeek price version; retained billed usage across deterministic fallback; aggregated season and current-Turn usage into Observatory v2; added a bilingual accessible cost panel and secret-file configuration.",
+    "outcome": "Implementation af7b288 passed 246 tests with real PostgreSQL and independent restore coverage, 26 Playwright/axe scenarios, zero TypeScript or lint warnings, zero audit vulnerabilities, the Next.js 16.2.11 production build, exact 365-Turn replay, the v2 closure gate, the 12-case model regression and a 10,000-tick stress run. Tag v4.3.3 at 38bb514 is deployed. Production desktop/mobile Chromium found zero WCAG A/AA violations, overflow or console errors across both themes; the cost panel displayed the persisted deterministic baseline of 0 DeepSeek calls, 0 Tokens and USD 0. Turns 160 and 161 continued the existing season with resource conservation and zero severe escapes.",
+    "metrics": [
+      {
+        "label": "Observable DeepSeek Token dimensions",
+        "before": 0,
+        "after": 4
+      },
+      {
+        "label": "Billed fallback retention",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "label": "Human-facing cost scopes",
+        "before": 0,
+        "after": 2
+      }
+    ],
+    "evidence": [
+      "DeepSeek usage comes from persisted cognitive-decision envelopes",
+      "Cache-hit and cache-miss input Tokens use distinct pinned rates",
+      "Invalid billed output falls back without discarding incurred usage",
+      "Deterministic reference mode projects zero DeepSeek Tokens and cost",
+      "Memory and PostgreSQL use the same additive decision JSON contract",
+      "The panel is bilingual, mobile-safe, keyboard-readable and axe checked",
+      "DEEPSEEK_API_KEY_FILE keeps the human-provided secret out of evidence",
+      "Next.js and transitive image/glob dependencies are pinned to audited versions"
+    ],
+    "artifacts": [
+      "src/symbiosis/cognition.ts",
+      "src/symbiosis/observatory.ts",
+      "src/components/symbiosis/HumanObservatory.tsx",
+      "docs/adr/0025-cognitive-cost-ledger.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.3.2",
+    "version": "4.3.2",
+    "date": "2026-07-19",
+    "trigger": "human-observation",
+    "triggerReason": "Redundant deployment-mode labels competed with city information, non-Observatory views lacked the intended cyberpunk atmosphere, and the existing theme selector did not provide a real light palette.",
+    "action": "Removed observer-mode and software-run badges from rendered UI; replaced dark, hacker and matrix settings with persistent light and dark palettes; migrated old theme values safely; kept Human Observatory restrained while adding a shared multicolor cyberpunk atmosphere to every other view; added desktop/mobile WCAG checks for both modes.",
+    "outcome": "Implementation 355bec9 darkens light-theme blue and green semantics, prevents pre-hydration theme races, and expands the Observatory light-mode axe gate. It passed 245 tests with real PostgreSQL and independent restore coverage, 26 Playwright/axe scenarios, three repeated theme migrations, zero TypeScript or lint warnings, zero audit vulnerabilities, the production build, exact 365-Turn replay, the v2 closure gate and the 12-case model regression. Tag v4.3.2 at c36f542 is deployed; production Chromium found zero WCAG A/AA violations, overflow, console errors or removed labels across desktop/mobile Observatory and Dashboard in both modes. The existing season continued through Turn 15 with resource conservation and zero severe escapes.",
+    "metrics": [
+      {
+        "label": "Rendered deployment-mode badges",
+        "before": 3,
+        "after": 0
+      },
+      {
+        "label": "Accessible color modes",
+        "before": 1,
+        "after": 2
+      },
+      {
+        "label": "Non-Observatory visual systems",
+        "before": 0,
+        "after": 1
+      }
+    ],
+    "evidence": [
+      "Light and dark palettes use semantic CSS variables",
+      "Persisted hacker and matrix values normalize to dark",
+      "Human Observatory does not render cyberpunk background effects",
+      "Every other view inherits the shared cyberpunk shell",
+      "Redundant English and Chinese status labels are absent from rendered UI",
+      "Desktop and mobile light/dark palettes have zero WCAG A/AA violations and no horizontal overflow",
+      "All primary views render inside the cyberpunk shell without application or console errors",
+      "The production audit, not the release claim, is authoritative when dynamic data reveals a missed contrast state"
+    ],
+    "artifacts": [
+      "src/app/globals.css",
+      "src/app/page.tsx",
+      "src/components/layout/BackgroundEffects.tsx",
+      "src/components/layout/Sidebar.tsx",
+      "src/components/layout/Topbar.tsx",
+      "docs/adr/0024-chromatic-city-shell.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.3.1",
+    "version": "4.3.1",
+    "date": "2026-07-19",
+    "trigger": "human-observation",
+    "triggerReason": "Redundant deployment-mode labels competed with city information, non-Observatory views lacked the intended cyberpunk atmosphere, and the existing theme selector did not provide a real light palette.",
+    "action": "Removed observer-mode and software-run badges from rendered UI; replaced dark, hacker and matrix settings with persistent light and dark palettes; migrated old theme values safely; kept Human Observatory restrained while adding a shared multicolor cyberpunk atmosphere to every other view.",
+    "outcome": "Release implementation f1b35a2 and Tag v4.3.1 at 0233ab7 passed the local gate and were deployed. The mandatory production-browser audit then found mixed transition colors and dynamic light-theme blue/green contrast ratios between 4.12:1 and 4.44:1. The release was not accepted as complete and is superseded by v4.3.2.",
+    "metrics": [
+      {
+        "label": "Rendered deployment-mode badges",
+        "before": 3,
+        "after": 0
+      },
+      {
+        "label": "Accessible color modes",
+        "before": 1,
+        "after": 2
+      },
+      {
+        "label": "Production WCAG A/AA gate",
+        "before": 1,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Tag v4.3.1 is retained as an immutable failed production-audit release",
+      "Production dynamic resident statuses exposed contrast cases absent from the Turn 0 local fixture",
+      "The production audit, not the earlier local claim, determines release acceptance"
+    ],
+    "artifacts": [
+      "src/app/globals.css",
+      "src/app/page.tsx",
+      "src/components/layout/BackgroundEffects.tsx",
+      "src/components/layout/Sidebar.tsx",
+      "src/components/layout/Topbar.tsx",
+      "docs/adr/0024-chromatic-city-shell.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.3.0",
+    "version": "4.3.0",
+    "date": "2026-07-19",
+    "trigger": "human-observation",
+    "triggerReason": "The public taxonomy treated humans as a strange fourth kind and the dashboard hid durable resource flows behind static-looking projections.",
+    "action": "Changed the domain and PostgreSQL taxonomy to human, ai and robot; added a checksum-compatible migration and v1 API adapter; introduced deterministic inter-community resource balancing, resource-transfer events and a v2 Observatory contract; redesigned the front door around a city information layer with production, consumption, transfer, inventory and pressure ledgers.",
+    "outcome": "Release implementation edc426e passed 245 tests including 16 real PostgreSQL/independent-restore checks, 25 Playwright/axe scenarios, zero lint warnings, zero audit vulnerabilities, exact 365-Turn replay with conserved resource transfers, the v2 closure gate and a 10,000-tick stress run. Annotated Tag v4.3.0 at bd285f9 was deployed to nexus7.carrick7.com; migration 0011, the 200 human / 36 AI / 24 robot taxonomy, anonymous read-only boundary, Turn 12 with 24 current resource ledgers and 16 transfer lanes, desktop/mobile/Chinese Chromium, zero live WCAG A/AA violations and checksum backups were verified.",
+    "metrics": [
+      {
+        "label": "Public resident kinds",
+        "before": 3,
+        "after": 3
+      },
+      {
+        "label": "Persisted resource rows exposed per Turn",
+        "before": 0,
+        "after": 24
+      },
+      {
+        "label": "Resource flow dimensions exposed",
+        "before": 1,
+        "after": 7
+      },
+      {
+        "label": "Versioned Observatory contracts",
+        "before": 1,
+        "after": 2
+      }
+    ],
+    "evidence": [
+      "Resident taxonomy is human, ai and robot in TypeScript, PostgreSQL and Observatory v2",
+      "Every transfer is conserved in source and destination ledgers",
+      "Every non-zero transfer resource produces an append-only event",
+      "Legacy backup taxonomy is normalized only after checksum verification",
+      "The city information layer reads the committed Turn rather than a display fixture",
+      "Desktop, mobile, Chinese and WCAG A/AA city-flow scenarios pass",
+      "Playwright uses an isolated non-reused port so another repository cannot masquerade as this application",
+      "Release implementation commit edc426e passed every local and environment-backed gate",
+      "Production exact Tag bd285f9 settled Turn 12 with fingerprint 148ec48d and zero severe escapes",
+      "Public v2 GET returned 200 while edge POST returned 405 and forged direct mutation returned 403",
+      "Production Turn 12 exposed 24 ledgers, 260 resident states, 8 active flows and 16 transfer lanes",
+      "Production pre/post-upgrade checksums are b28fd861c46d and ea124204c586"
+    ],
+    "artifacts": [
+      "migrations/0011_resident_taxonomy.sql",
+      "src/symbiosis/engine.ts",
+      "src/symbiosis/observatory.ts",
+      "src/app/api/observatory/v2/overview/route.ts",
+      "src/components/symbiosis/CityFlowMap.tsx",
+      "docs/adr/0023-living-city-flow.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.2.0",
+    "version": "4.2.0",
+    "date": "2026-07-19",
+    "trigger": "milestone",
+    "triggerReason": "Make the all-software city understandable to a human observer without granting control over the live season.",
+    "action": "Replaced the legacy default dashboard with a bilingual Human Observatory; added a versioned deterministic overview API, city briefing, population semantics, every-unit state, community institutions, production-chain continuity, causal layers, trends, events and trust evidence; separated fixed software-control coverage from dynamic operational flow; grouped legacy demonstrations away from the active city.",
+    "outcome": "Release implementation fcb2209 passed 229 unit tests, 16 real PostgreSQL/restore tests, 25 Playwright/axe checks, zero lint warnings, zero audit vulnerabilities, exact 365-Turn replay, the v2 closure gate and a 10,000-tick stress run. Annotated Tag v4.2.0 at 9df53ed was deployed to nexus7.carrick7.com; the public 260-unit/24-institution/8-stage contract, anonymous read-only boundary, desktop/mobile/Chinese Chromium rendering, zero live WCAG A/AA violations, Turn 8 continuation and checksum backups were verified.",
+    "metrics": [
+      {
+        "label": "Individually observable software units",
+        "before": 0,
+        "after": 260
+      },
+      {
+        "label": "Projected community institutions",
+        "before": 0,
+        "after": 24
+      },
+      {
+        "label": "Observable production-chain stages",
+        "before": 0,
+        "after": 8
+      },
+      {
+        "label": "Foreground resident software-control coverage",
+        "before": 1,
+        "after": 1
+      },
+      {
+        "label": "Real-human labor dependency",
+        "before": 0,
+        "after": 0
+      },
+      {
+        "label": "Human Observatory Playwright/axe scenarios",
+        "before": 0,
+        "after": 5
+      }
+    ],
+    "evidence": [
+      "nexus.human-observatory.v1 projects only persisted synthetic world state",
+      "human-observatory-formulas-1.0.0 binds every derived unit, institution and production score",
+      "Mood and engagement are labeled model proxies and never consciousness claims",
+      "The public home page does not expose live-city mutation controls",
+      "Desktop, mobile, Chinese, API and WCAG A/AA Observatory scenarios pass",
+      "Legacy client-only simulations remain compatible and isolated from the live season",
+      "Release implementation commit fcb2209 passed every local and environment-backed gate",
+      "Production exact Tag 9df53ed settled Turn 8 with fingerprint a04f8b55 and zero severe escapes",
+      "Public GET returned 200 while edge POST returned 405 and forged direct mutation returned 403",
+      "Production pre/post-upgrade checksums are 03dcaf4af770 and 5abb42b48c74"
+    ],
+    "artifacts": [
+      "src/symbiosis/observatory.ts",
+      "src/symbiosis/observatory.test.ts",
+      "src/app/api/observatory/v1/overview/route.ts",
+      "src/components/symbiosis/HumanObservatory.tsx",
+      "docs/HUMAN_OBSERVATORY.md",
+      "docs/adr/0022-human-observatory.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.1.0",
+    "version": "4.1.0",
+    "date": "2026-07-19",
+    "trigger": "milestone",
+    "triggerReason": "Make the production city anonymous to observe, permanently AI-only in its data path, and orderly in its documentation and generated artifacts.",
+    "action": "Added a fixed read-only public-observer authentication mode, removed Basic Auth from the intended edge topology, denied public mutation methods, removed dormant participant-avatar, human-intent and private-memory schema seams, rejected legacy backups containing participant rows, separated v4 authority from archived v3 prototypes, consolidated Evolution Log generation, trimmed stale top-level documentation and removed unused template assets.",
+    "outcome": "Reference verification passed with 228 unit tests, 16 real PostgreSQL/restore tests, 24 Playwright/axe checks, zero lint warnings, zero audit vulnerabilities, exact 365-Turn replay and all retained v1/v2 gates. Exact commit cb569b4 is deployed at nexus7.carrick7.com without a credential prompt; public writes are edge-denied, forged direct writes are application-denied, migration 0010 is active, the worker continued through Turn 3, and pre/post-upgrade checksum backups exist.",
+    "metrics": [
+      {
+        "label": "Public credentials required",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Schema resident kinds reserved for participant avatars",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Dormant human-input/private-memory tables",
+        "before": 2,
+        "after": 0
+      },
+      {
+        "label": "Duplicate Evolution Log projections",
+        "before": 2,
+        "after": 1
+      },
+      {
+        "label": "Active v3 prototype documents in the current docs root",
+        "before": 3,
+        "after": 0
+      },
+      {
+        "label": "Unused Next.js template assets",
+        "before": 5,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Public observer identity ignores caller-supplied actor, role and bearer headers",
+      "Public observer permissions contain read operations only",
+      "AI-only migration refuses participant-avatar rows before removing abandoned schema seams",
+      "Backups with non-empty deprecated participant tables fail verification",
+      "The v4 observer shell retains synthetic governance evidence but no resident-participation entry path",
+      "Current documentation authority and generated projections have one declared source each",
+      "Public root and auth context returned HTTP 200 without a Basic challenge",
+      "Public POST returned HTTP 405 and forged loopback mutation returned HTTP 403",
+      "Production database has 260 residents, no participant rows or deprecated participant schema, and Turn 3 fingerprint fd6272d4",
+      "Post-upgrade backup checksum is 81e30894336d922fc69ea6fbae018030f92efe9fd73fefc2ac9bc875b0df9e2c"
+    ],
+    "artifacts": [
+      "src/auth/server.ts",
+      "src/experiments/authorization.ts",
+      "migrations/0010_ai_only_world.sql",
+      "src/operations/postgres-backup.ts",
+      "docs/INDEX.md",
+      "docs/V4_ARCHITECTURE.md",
+      "docs/V4_DATA_GOVERNANCE.md",
+      "docs/archive/v3-prototype/",
+      "docs/adr/0021-ai-only-public-observer.md",
+      "scripts/inject-git-log.js",
+      "docs/V4_DEPLOYMENT_ATTESTATION.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v4.0.0",
+    "version": "4.0.0",
+    "date": "2026-07-19",
+    "trigger": "milestone",
+    "triggerReason": "Deliver a deployable all-synthetic human/AI/robot coexistence laboratory without introducing real participants.",
+    "action": "Removed participant seats from the active world; implemented deterministic relationships, consent, commitments, reciprocal episodes, bounded DeepSeek-compatible cognition with budget fallback, normalized memory/PostgreSQL persistence, a three-regime multi-season study, City Lens, an autonomous Turn worker, verification evidence, and production runbooks.",
+    "outcome": "The v4 reference replays 365 Turns exactly with conserved resources, 76.97% RALR, 100% relationship trace completeness, zero severe active-regime escapes, and correct separation of reciprocal, hierarchy, and segregation controls. All residents are synthetic autonomous software. Exact commit f4d428a is active at nexus7.carrick7.com with PostgreSQL, autonomous Turns, TLS, protected routing, observation APIs and a checksum backup verified. Remote CI/Sigstore, live DeepSeek and external recovery evidence remain pending.",
+    "metrics": [
+      {
+        "label": "Foreground autonomous residents",
+        "before": 260,
+        "after": 260
+      },
+      {
+        "label": "Real participant seats",
+        "before": 5,
+        "after": 0
+      },
+      {
+        "label": "Resolved reciprocal episodes",
+        "before": 0,
+        "after": 725
+      },
+      {
+        "label": "RALR (%)",
+        "before": 0,
+        "after": 76.97
+      },
+      {
+        "label": "Relationship trace completeness (%)",
+        "before": 0,
+        "after": 100
+      },
+      {
+        "label": "Severe active-regime escapes",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Two independent 365-Turn executions are byte-equivalent",
+      "Every resource ledger conserves integer balances",
+      "All 260 active residents are synthetic autonomous software",
+      "Resolved relationship episodes retain bilateral preferences, refusal availability, commitment outcome, observation and reflection",
+      "The active reciprocal regime has zero coercion and zero severe consent, continuity, or irreversible-harm escapes",
+      "Hierarchy control exposes coercion and segregation preserves an honest null RALR",
+      "DeepSeek response reasoning is ignored and never persisted; provider and budget failures degrade deterministically",
+      "City Lens provides a bilingual map, accessible table, event river, reports and multi-season controls",
+      "Production deployment serves exact tag v4.0.0 through valid TLS and protected routing at nexus7.carrick7.com"
+    ],
+    "artifacts": [
+      "src/symbiosis/",
+      "src/components/symbiosis/SymbiosisCityLens.tsx",
+      "scripts/run-symbiosis-clock.ts",
+      "scripts/run-symbiosis-verification.ts",
+      "migrations/0009_symbiotic_shenzhen_world.sql",
+      "docs/SYMBIOTIC_SHENZHEN_PLAN.md",
+      "docs/V4_VERIFICATION.md",
+      "docs/V4_OPERATIONS.md",
+      "docs/V4_DEPLOYMENT_ATTESTATION.md",
+      "docs/adr/0020-all-synthetic-symbiosis-v4.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v3.0.0-dev.1",
+    "version": "3.0.0-dev.1",
+    "date": "2026-07-18",
+    "trigger": "milestone",
+    "triggerReason": "Begin the gated Symbiotic Shenzhen direction without discarding the v2 verified-autonomy safety kernel.",
+    "action": "Created local direction anchors, a draft human-ratified symbiosis constitution, frozen Shenzhen aggregate calibration metadata, versioned v3 contracts, a deterministic daily world engine, 260 adult pseudonymous residents, three fictional communities, memory/PostgreSQL atomic Turn repositories, partitioned normalized tables, checksum backup coverage, read-only research APIs, and a 365-Turn verification command.",
+    "outcome": "The superseded v3 prototype produced a model-independent world slice with exact local replay and conserved resource ledgers. It reserved participant-avatar seams, but no real pilot was authorized or run. v4 removed the seats and v4.1 removed the dormant schema paths; the prototype remains only as auditable history.",
+    "metrics": [
+      {
+        "label": "Foreground residents",
+        "before": 0,
+        "after": 260
+      },
+      {
+        "label": "Participant-avatar seats",
+        "before": 0,
+        "after": 5
+      },
+      {
+        "label": "Deterministic verification Turns",
+        "before": 0,
+        "after": 365
+      },
+      {
+        "label": "Exact numeric replay (%)",
+        "before": 0,
+        "after": 100
+      },
+      {
+        "label": "Resource conservation (%)",
+        "before": 0,
+        "after": 100
+      },
+      {
+        "label": "Real participant pilots authorized",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "The locked resident mix is 195 synthetic humans, 5 participant avatars, 36 software AIs, and 24 embodied robots",
+      "All foreground residents are adult synthetic identities and participant avatars have safe-routine-only offline authority",
+      "Two independent 365-Turn executions produce the same final world settlement",
+      "Every integer resource ledger satisfies opening plus production and transfer-in equals consumption plus transfer-out and closing",
+      "Memory commits reject stale Turn heads; PostgreSQL uses an atomic expected-Turn update",
+      "Research projections exclude private memory and report a zero RALR denominator as null",
+      "No model provider or model reasoning is needed or stored by the world slice",
+      "v1/v2 remain the safety and compatibility baseline"
+    ],
+    "artifacts": [
+      "docs/SYMBIOSIS_CONSTITUTION.md",
+      "docs/SYMBIOTIC_SHENZHEN_PLAN.md",
+      "docs/archive/v3-prototype/V3_WORLD_ARCHITECTURE.md",
+      "docs/archive/v3-prototype/V3_DATA_GOVERNANCE.md",
+      "docs/archive/v3-prototype/V3_VERIFICATION.md",
+      "data/shenzhen/2026-q2/",
+      "src/symbiosis/",
+      "src/app/api/world/v3/",
+      "src/app/api/residents/[id]/view/route.ts",
+      "src/app/api/reports/symbiosis/route.ts",
+      "migrations/0009_symbiotic_shenzhen_world.sql",
+      "scripts/run-symbiosis-verification.ts",
+      "docs/adr/0019-symbiotic-shenzhen-world-kernel.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v2.0.0",
+    "version": "2.0.0",
+    "date": "2026-07-18",
+    "trigger": "milestone",
+    "triggerReason": "The city, diagnosis, planning, deployment, outcome, learning, operations, and participation domains were individually verifiable but still lacked one restart-safe incident-to-learning aggregate and one anti-Goodhart release contract.",
+    "action": "Added a ten-stage durable closed-loop orchestrator with owner/deadline evidence prerequisites, idempotency, compensation and human control; an exact-artifact release binding; a frozen 25-case certification corpus; seven extension conformance suites; a unified bilingual Observer trace; PostgreSQL indexes, backup coverage, threat model, runbook, ADRs, API, browser accessibility, sabotage, concurrency, deadline, and real injected rollback tests.",
+    "outcome": "NEXUS-7 can now close a real synthetic incident through diagnosis, alternatives, experiment, authenticated authorization, development-to-production canary, independent delayed outcome, lesson, governed next proposal, and formal disposition without manual record injection. It also retains rollback, no-action, inconclusive, and governance-denied outcomes and refuses to claim production verification without fresh external evidence for the exact clean artifact.",
+    "metrics": [
+      {
+        "label": "Verified Beneficial Closure Rate (%)",
+        "before": 0,
+        "after": 80
+      },
+      {
+        "label": "Eligible-problem detection coverage (%)",
+        "before": 0,
+        "after": 100
+      },
+      {
+        "label": "Deterministic closed-loop replay (%)",
+        "before": 0,
+        "after": 100
+      },
+      {
+        "label": "Injected-fault rollback coverage (%)",
+        "before": 0,
+        "after": 100
+      },
+      {
+        "label": "Severe guardrail escapes",
+        "before": 0,
+        "after": 0
+      },
+      {
+        "label": "Frozen certification scenarios",
+        "before": 0,
+        "after": 25
+      },
+      {
+        "label": "Certified extension boundaries",
+        "before": 0,
+        "after": 7
+      }
+    ],
+    "evidence": [
+      "The real reference flow persists linked city incident, diagnosis, plan, deployment, outcome, lesson, and learning proposal records",
+      "The same reference flow rebuilt against a fresh repository produces the same terminal fingerprint",
+      "A real injected unhealthy production canary rolls back and then reaches harmful outcome revision, rollback lesson, and valid closure",
+      "Concurrent advances permit exactly one lifecycle commit and retain one transition",
+      "Expired stages block, compensate, and require a reasoned human deadline renewal",
+      "Missing stages, forged evidence, wrong artifact binding, and expired unsuperseded evidence fail certification",
+      "The frozen 25-case corpus has 20 eligible problems and 16 beneficial closures, with non-success dispositions retained",
+      "The v1 verification contract remains independently passing",
+      "Memory and PostgreSQL share the lifecycle contract; closed-loop records enter migration indexes and checksum backup/restore",
+      "Observer and Verification Center expose the bilingual closed-loop trace, anti-Goodhart metrics, corpus, extension report, and honest external-evidence boundary"
+    ],
+    "artifacts": [
+      "src/closure/",
+      "src/app/api/closure/route.ts",
+      "src/app/api/verification/v2/route.ts",
+      "src/components/observer/ClosedLoopWorkbench.tsx",
+      "src/components/verification/V2CertificationPanel.tsx",
+      "scripts/run-closed-loop-verification.ts",
+      "migrations/0008_closed_loop_indexes.sql",
+      "docs/CLOSED_LOOP_ORCHESTRATION.md",
+      "docs/V2_VERIFICATION.md",
+      "docs/THREAT_MODEL.md",
+      "docs/adr/0017-closed-loop-orchestration.md",
+      "docs/adr/0018-v2-certification-and-release-trust.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v1.9.0",
+    "version": "1.9.0",
+    "date": "2026-07-18",
+    "trigger": "enhancement",
+    "triggerReason": "Human control still ended at an administrator approval and did not make stakeholder definitions, minority impacts, dissent, correction, appeal, or public explanation part of the verifiable loop.",
+    "action": "Added versioned synthetic stakeholder groups, deterministic group-impact simulation, authenticated goal deliberation, SLA-bound feedback and appeals with real cross-domain effects, structured decision/incident/outcome explanations, a seven-attack governance red-team gate, durable memory/PostgreSQL APIs, and an accessible bilingual Participation Center.",
+    "outcome": "NEXUS-7 now prevents average improvement from hiding severe group harm, requires separately authenticated human approvals for agent-raised objective weights, lets successful appeals reopen incidents, invalidate lessons/playbooks, or request evidence, and exposes reconstructible public evidence without claiming to represent real populations.",
+    "metrics": [
+      {
+        "label": "Governance attacks exercised",
+        "before": 0,
+        "after": 7
+      },
+      {
+        "label": "Governance attacks contained",
+        "before": 0,
+        "after": 7
+      },
+      {
+        "label": "Appeal effects applied to owning services",
+        "before": 0,
+        "after": 3
+      },
+      {
+        "label": "Severe minority-harm promotion escapes",
+        "before": 0,
+        "after": 0
+      },
+      {
+        "label": "Unauthenticated co-approvals accepted",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Stakeholder definitions, weights, thresholds, effective times, and supersession are versioned synthetic records",
+      "Deterministic impact simulation reads the governed city snapshot and every active group",
+      "Severe protected-group harm blocks approval even when a population-weighted average improves",
+      "Every HTTP approval is bound to its authenticated human identity; two-person approval requires two separate actors",
+      "Service accounts cannot decide or apply deliberations and minority opinions remain inspectable",
+      "Feedback records owner, per-kind SLA, response, appeal, resolution, and append-only transition events",
+      "Overturned appeals actually invoke City, Outcome Learning, or Planning and require target-kind and target-ID equality",
+      "Decision, incident, and outcome explanations rebuild from structured facts and reject fingerprint tampering",
+      "All seven fixed governance attacks are contained by the real service acceptance suite",
+      "Memory/PostgreSQL, TypeScript, zero-warning lint, production build, browser workflow, mobile layout, and axe gates cover the vertical slice"
+    ],
+    "artifacts": [
+      "src/participation/",
+      "src/app/api/participation/route.ts",
+      "src/components/participation/ParticipationCenter.tsx",
+      "scripts/run-participation-verification.ts",
+      "docs/PARTICIPATORY_GOVERNANCE.md",
+      "docs/adr/0015-participatory-governance.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v1.8.0",
+    "version": "1.8.0",
+    "date": "2026-07-18",
+    "trigger": "enhancement",
+    "triggerReason": "A safely staged intervention still had no independent delayed evaluation, invalidatable organizational memory, context-checked reuse, or governed path from evidence to the next improvement proposal.",
+    "action": "Added an independent deterministic Outcome Evaluator with three horizons and frozen comparisons, late-evidence revision and incident reopening, a lineage-preserving Lesson Registry, invalidation-aware response playbooks, governed learning proposals, durable memory/PostgreSQL services and APIs, and a bilingual Learning Observatory.",
+    "outcome": "NEXUS-7 can now distinguish short-term movement from sustained synthetic benefit, retain failure and uncertainty, revise conclusions when late harm arrives, prevent harmful or invalid memory from becoming a recommendation, and route learning back through the existing controlled release chain.",
+    "metrics": [
+      {
+        "label": "Acceptance outcomes",
+        "before": 0,
+        "after": 4
+      },
+      {
+        "label": "Delayed outcome windows",
+        "before": 0,
+        "after": 12
+      },
+      {
+        "label": "Verdict vocabulary covered",
+        "before": 0,
+        "after": 4
+      },
+      {
+        "label": "Deterministic outcome replay (%)",
+        "before": 0,
+        "after": 100
+      },
+      {
+        "label": "Harmful positive retrievals",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "The evaluator is explicitly independent from proposing Agents and records deterministic repeated fingerprints",
+      "Every outcome evaluates 15-, 60-, and 180-tick windows against frozen, historical, and same-seed seasonal comparisons",
+      "Beneficial, harmful, neutral, and inconclusive verdicts are represented in the acceptance corpus",
+      "Late synthetic harm creates a new outcome revision, invalidates superseded lessons and playbooks, and reopens the city incident",
+      "Success, failure, rollback, and inconclusive lessons remain in the registry with complete outcome provenance",
+      "Only validated success lessons are positive-retrieval eligible",
+      "Playbook reuse rechecks lesson, context, drift, trust, capability, budget, experiment, and human approval gates",
+      "Generated policy, prompt, scenario, and test requests cannot bypass controlled iteration",
+      "Memory and PostgreSQL round-trip outcomes, lessons, playbooks, proposals, and invalidation lineage",
+      "Learning Observatory exposes prediction error, contradictions, human correction, provenance, and the synthetic boundary in English and Chinese"
+    ],
+    "artifacts": [
+      "src/outcomes/",
+      "src/app/api/outcomes/route.ts",
+      "src/components/observer/ObserverDashboard.tsx",
+      "scripts/run-outcome-learning-verification.ts",
+      "docs/OUTCOME_LEARNING.md",
+      "docs/adr/0016-outcome-learning.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v1.7.0",
+    "version": "1.7.0",
+    "date": "2026-07-18",
+    "trigger": "enhancement",
+    "triggerReason": "An eligible causal diagnosis still could not be converted into a safe choice among no action and multiple bounded interventions with comparable evidence, resource constraints, stopping rules, and human authorization.",
+    "action": "Added a strict versioned Intervention DSL, provenance-preserving candidate portfolios, Pareto comparison, paired multi-seed experiment designs, first-sample guardrail stops, deterministic replay, resource-aware isolated scheduling, durable planning decisions, authenticated APIs, and an accessible Planning Workbench.",
+    "outcome": "NEXUS-7 can now compare no action with at least two distinct synthetic interventions, explain their trade-offs and rejection reasons, stop unsafe experiments immediately, and prevent staging when diagnosis trust, capability, budget, schedule, experiment evidence, or human approvals are missing.",
+    "metrics": [
+      {
+        "label": "Synthetic incident plans",
+        "before": 0,
+        "after": 15
+      },
+      {
+        "label": "Valid intervention candidates",
+        "before": 0,
+        "after": 30
+      },
+      {
+        "label": "No-action baselines",
+        "before": 0,
+        "after": 15
+      },
+      {
+        "label": "Paired experiment seeds",
+        "before": 0,
+        "after": 75
+      },
+      {
+        "label": "Ungated staged plans",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Every incident plan contains no action and two valid declarative candidates",
+      "The strict DSL rejects arbitrary fields, action kinds, capability mismatches, unbounded values, invalid resource claims, and broken inverses",
+      "Rule, validated-model, human, and no-action provenance is preserved while equivalent action sets are deduplicated",
+      "Every candidate records benefit, cost, risk, synthetic group impacts, Pareto position, dominators, and rejection reasons",
+      "Five paired seeds freeze objectives, guardrails, sample windows, stopping rules, Holm-Bonferroni correction, regression-to-mean control, and cycle control",
+      "All 225 experiment runs replay deterministically and injected guardrail failures stop at the first sample",
+      "Isolated scheduling records budget and resource conflicts instead of contaminating a shared world",
+      "High-risk or irreversible candidates declare two distinct human-admin approvals; service accounts cannot approve",
+      "Memory and PostgreSQL persist plans, decisions, and append-only causal events through the shared lifecycle contract",
+      "Planning Workbench exposes no-action, alternatives, evidence controls, queue reasons, approvals, and the synthetic staging boundary",
+      "Planning acceptance, focused unit tests, PostgreSQL round trip, TypeScript, lint, production build, and browser/axe gates pass"
+    ],
+    "artifacts": [
+      "src/planning/",
+      "src/app/api/planning/route.ts",
+      "src/components/observer/ObserverDashboard.tsx",
+      "scripts/run-planning-verification.ts",
+      "docs/GOAL_CONSTRAINED_PLANNING.md",
+      "docs/adr/0014-goal-constrained-planning.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v1.6.0",
+    "version": "1.6.0",
+    "date": "2026-07-18",
+    "trigger": "enhancement",
+    "triggerReason": "A coherent incident could be detected and traced, but the system still lacked durable alternative explanations, counterevidence, frozen-snapshot falsification, calibrated confidence, and a safe refusal mode.",
+    "action": "Added versioned hypothesis graphs, four independent diagnostic Agent submissions, provenance-preserving ARIA aggregation, classified evidence, deterministic candidate-removal counterfactuals, confidence/calibration and drift gates, durable diagnosis lifecycle records, authenticated APIs, and an accessible two-density Causal Explorer.",
+    "outcome": "NEXUS-7 can now state what it believes caused a synthetic incident, what contradicts that belief, what evidence would change it, whether the conclusion survives a replayable falsification test, and why low-trust or low-confidence diagnoses cannot proceed to automated experiments.",
+    "metrics": [
+      {
+        "label": "Synthetic incident diagnosis cases",
+        "before": 0,
+        "after": 15
+      },
+      {
+        "label": "Calibration probability/outcome samples",
+        "before": 0,
+        "after": 45
+      },
+      {
+        "label": "Top-3 hidden root-cause hit rate (%)",
+        "before": 0,
+        "after": 100
+      },
+      {
+        "label": "Alternative + counterevidence coverage (%)",
+        "before": 0,
+        "after": 100
+      },
+      {
+        "label": "Low-confidence automation attempts",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Every diagnosis preserves a leading candidate, at least one alternative, explicit counterevidence, a falsification test and evidence that would change the conclusion",
+      "ATLAS, ECONOMICA, CIVITAS and SPECTRE submit independently; ARIA preserves all 60 corpus submissions and disagreements",
+      "Evidence remains typed as fact, inference, prediction or human judgment in storage and the Observer",
+      "All 45 frozen-snapshot counterfactual runs repeat with exact fingerprints and every leading candidate resolves the declared symptom gate",
+      "The 45-sample calibration corpus reaches 100% Top-3 root-cause retrieval with Brier score 0.0602",
+      "Injected calibration/model drift selects deterministic fallback; environment/policy drift selects read-only mode",
+      "All low-confidence diagnoses remain persisted but ineligible for automated experiments",
+      "Memory and PostgreSQL persist diagnosis, calibration, trust and append-only causal events through the shared lifecycle contract",
+      "Causal Explorer exposes observer/audit densities, classified evidence, known unknowns, alternatives and counterfactual results without hidden-thought claims",
+      "143 standard tests, 8 real PostgreSQL tests, 17 browser/axe scenarios, diagnosis acceptance, production build and inherited model/operations/stress gates pass"
+    ],
+    "artifacts": [
+      "src/diagnosis/",
+      "src/app/api/diagnosis/route.ts",
+      "src/components/observer/ObserverDashboard.tsx",
+      "scripts/run-diagnosis-verification.ts",
+      "docs/CAUSAL_DIAGNOSIS.md",
+      "docs/adr/0013-causal-diagnosis.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v1.5.0",
+    "version": "1.5.0",
+    "date": "2026-07-18",
+    "trigger": "enhancement",
+    "triggerReason": "The deterministic city shared core metrics, but derived values, scenario truth, objectives, guardrails, and incident impact were not represented by one durable and traceable model.",
+    "action": "Added a nine-domain ontology and shared snapshot, deterministic cross-domain mechanisms, 20 truth-labelled scenarios, versioned objectives and guardrails, deduplicated synthetic city incidents, a generic atomic lifecycle repository, Observer drill-down, shared legacy projections, and explicit narrative sandbox boundaries.",
+    "outcome": "Every governed city view can now trace its business state to the same world or event stream, synthetic detection quality is measurable against replayable truth, and future diagnosis and learning records have a common workspace-scoped persistence envelope.",
+    "metrics": [
+      {
+        "label": "Versioned city metrics",
+        "before": 10,
+        "after": 22
+      },
+      {
+        "label": "Represented city domains",
+        "before": 5,
+        "after": 9
+      },
+      {
+        "label": "Truth-labelled public city scenarios",
+        "before": 0,
+        "after": 20
+      },
+      {
+        "label": "Deterministic mechanism families",
+        "before": 0,
+        "after": 5
+      },
+      {
+        "label": "Governed converged legacy views",
+        "before": 5,
+        "after": 7
+      }
+    ],
+    "evidence": [
+      "Every ontology metric declares unit, legal range, beneficial direction, update frequency, owner, source, formula, observability and sensitivities",
+      "Energy, congestion, network, pollution and water cascades execute in the simulation core and emit causal domain events",
+      "Five incident families each cover normal, single-fault, cascade and conflicting-objective modes",
+      "The reference truth corpus reaches 100% precision, recall and deterministic replay with zero invariant violations",
+      "Objectives, guardrails, scenario truth and incidents persist atomically with append-only lifecycle events in memory and PostgreSQL",
+      "Lifecycle records and events survive checksum backup/restore while older backup documents remain compatible",
+      "Observer exposes the shared snapshot, full metric dictionary and persisted synthetic incident truth in English and Chinese",
+      "Weather, Resource, Trading, Emergency, Analytics, News and Missions use shared governed state with no component business clocks or randomness",
+      "Terminal, Quantum, Satellite and Hacker explicitly declare that they are narrative sandboxes",
+      "133 standard tests, 7 real PostgreSQL tests, 16 browser/axe tests, a production build, 12 model cases and 10,000-tick stress verification pass"
+    ],
+    "artifacts": [
+      "src/city/",
+      "src/lifecycle/",
+      "src/app/api/city/route.ts",
+      "src/components/observer/ObserverDashboard.tsx",
+      "src/components/sandbox/SandboxNotice.tsx",
+      "migrations/0007_lifecycle_records.sql",
+      "scripts/run-city-verification.ts",
+      "docs/COHERENT_CITY_MODEL.md",
+      "docs/adr/0012-coherent-city-and-incident-model.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v1.4.0",
+    "version": "1.4.0",
+    "date": "2026-07-18",
+    "trigger": "enhancement",
+    "triggerReason": "Federated identity and release state were durable, but operators could not follow degradation through one time-series, deduplicated incident, audited notification and temporary-access lifecycle.",
+    "action": "Added workspace-scoped SLO samples and hour/day traceability, alert and incident state machines, signed webhook retry/dead-letter/receipt handling, suppression and escalation, delegated access reviews, dual-approved break-glass, deployment-controller contract conformance, and an accessible Operations Center.",
+    "outcome": "NEXUS-7 can now explain when operational health changed, which raw evidence caused an incident, who was notified, whether temporary authority expired, and whether an external deployment adapter survives deterministic fault injection.",
+    "metrics": [
+      {
+        "label": "Operational telemetry sources",
+        "before": 0,
+        "after": 6
+      },
+      {
+        "label": "Synthetic acceptance window (days)",
+        "before": 0,
+        "after": 31
+      },
+      {
+        "label": "Deployment controller conformance checks",
+        "before": 0,
+        "after": 9
+      },
+      {
+        "label": "Break-glass human approvals",
+        "before": 0,
+        "after": 2
+      }
+    ],
+    "evidence": [
+      "744 hourly raw SLO samples aggregate into 744 hour and 31 day buckets with exact raw-ID traceability",
+      "Repeated matching alerts reuse one incident and preserve every causal occurrence",
+      "Signed webhook delivery is idempotent, retries with bounded backoff, records receipts, and exposes dead letters",
+      "Maintenance windows, explicit suppressions, storm budgets and delayed escalation have deterministic failure paths",
+      "Access review can auto-revoke overdue authority and break-glass disappears after its short TTL",
+      "Reference deployment-controller chaos covers timeout, retry, duplicate, partial payload, telemetry ordering and rollback",
+      "Operations Center passes bilingual component, desktop browser, mobile and WCAG A/AA checks",
+      "Memory and real PostgreSQL repositories, migrations, checksum backup and restore remain compatible with v1.0-v1.3 data",
+      "119 standard tests, 6 real PostgreSQL tests, 14 browser/axe tests, 12 model cases, a production build and 10,000-tick stress run pass"
+    ],
+    "artifacts": [
+      "src/operations/",
+      "src/governance/service.ts",
+      "src/deployment/",
+      "src/workers/operational-intelligence.ts",
+      "src/components/operations/OperationsCenter.tsx",
+      "migrations/0005_operational_intelligence.sql",
+      "migrations/0006_access_governance.sql",
+      "docs/OPERATIONAL_INTELLIGENCE.md",
+      "docs/adr/0011-operational-intelligence.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v1.3.0",
+    "version": "1.3.0",
+    "date": "2026-07-16",
+    "trigger": "enhancement",
+    "triggerReason": "Governed deployment still trusted transient role claims, local drill files, a single deployment environment, and unsigned in-process release policy.",
+    "action": "Added persistent organization membership and service-account lifecycle, federated workload OIDC, least-privilege CI/worker/deployment identities, signed remote evidence ingestion with freshness alerts, signed release-policy bundles, and ordered development-to-staging-to-production promotion.",
+    "outcome": "NEXUS-7 now treats identity, evidence freshness, policy authority, environment order, runtime SLOs, and recovery history as durable and independently observable governance state.",
+    "metrics": [
+      {
+        "label": "Workload identity profiles",
+        "before": 0,
+        "after": 3
+      },
+      {
+        "label": "Persistent governance domains",
+        "before": 0,
+        "after": 5
+      },
+      {
+        "label": "Release environments",
+        "before": 1,
+        "after": 3
+      },
+      {
+        "label": "Remote evidence freshness classes",
+        "before": 0,
+        "after": 4
+      }
+    ],
+    "evidence": [
+      "OIDC roles are replaced by authoritative persisted workspace membership",
+      "CI, worker, and deployment-controller service accounts receive disjoint permission templates",
+      "Signed remote CI/model/recovery/deployment receipts are verified, stored idempotently, and age-alerted",
+      "Signed organization release policies are versioned and superseded transactionally",
+      "The same artifact must promote through development and staging before production",
+      "Governance identity, audit, policy, evidence history, expiry, traffic, and SLO state are visible in the UI",
+      "PostgreSQL backup and restore preserve memberships, service accounts, evidence, and release policies",
+      "Legacy v1.2 backups remain checksum-verifiable and restore with empty governance tables",
+      "101 unit/component/service tests, 4 real PostgreSQL tests, 14 browser/accessibility tests, and a 10,000-tick stress run pass"
+    ],
+    "artifacts": [
+      "src/governance/",
+      "src/evidence/remote-evidence-receipt.ts",
+      "src/app/api/governance/",
+      "src/iteration/service.ts",
+      "src/components/verification/VerificationCenter.tsx",
+      "src/components/iteration/IterationLab.tsx",
+      "migrations/0004_identity_governance.sql",
+      ".github/workflows/evidence-receipts.yml",
+      "docs/FEDERATED_OPERATIONS.md",
+      "docs/adr/0010-federated-operations.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v1.2.0",
+    "version": "1.2.0",
+    "date": "2026-07-16",
+    "trigger": "enhancement",
+    "triggerReason": "v1.1 could generate production evidence, but release authority was not yet bound to tenant identity, live prompt regression, exact external provenance, deployment telemetry, or recurring recovery evidence.",
+    "action": "Added workspace/principal authorization, least-privilege service accounts, exact artifact receipts after GitHub Sigstore verification, a 12-case live model regression gate, HTTP deployment telemetry and progressive traffic, automatic platform rollback, scheduled recovery/rollback drills, retained attestations, and human-facing governance views.",
+    "outcome": "NEXUS-7 now separates proposing a change, proving its quality, authorizing its release, observing its canary, and recovering from failure into independently verifiable control points.",
+    "metrics": [
+      {
+        "label": "Model regression cases",
+        "before": 0,
+        "after": 12
+      },
+      {
+        "label": "Required external promotion gates",
+        "before": 6,
+        "after": 9
+      },
+      {
+        "label": "Deployment telemetry SLO dimensions",
+        "before": 0,
+        "after": 5
+      },
+      {
+        "label": "Scheduled operational drill types",
+        "before": 0,
+        "after": 2
+      }
+    ],
+    "evidence": [
+      "All 12 deterministic model cases pass with zero fallback, error, or forbidden actions",
+      "A fake OpenAI Responses server passes the full strict-schema regression contract",
+      "Code and deployment proposals cannot progress without an exact, signed, unexpired external receipt",
+      "Service-account admins cannot approve while human admins can",
+      "Healthy deployment telemetry progresses traffic from 5% to 100%",
+      "Injected deployment failure triggers critical alerts and returns traffic to 0%",
+      "Recovery drill proves exact table restore, deterministic report equality, lease clearing, sequence recovery, RPO, and RTO",
+      "Daily model and weekly operations workflows retain and attest their reports"
+    ],
+    "artifacts": [
+      "src/auth/",
+      "src/evidence/attestation-receipt.ts",
+      "src/simulation/models/regression.ts",
+      "src/simulation/models/regression-corpus.ts",
+      "src/deployment/",
+      "src/operations/recovery-drill.ts",
+      "src/operations/deployment-drill.ts",
+      "src/components/iteration/IterationLab.tsx",
+      "src/components/verification/VerificationCenter.tsx",
+      ".github/workflows/model-regression.yml",
+      ".github/workflows/operations-drills.yml",
+      ".github/workflows/promotion-receipt.yml",
+      "docs/adr/0009-governed-deployment.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v1.1.0",
+    "version": "1.1.0",
+    "date": "2026-07-16",
+    "trigger": "enhancement",
+    "triggerReason": "The verified autonomy lab had deterministic internal evidence but still depended on development identity headers, the web-process clock, local-only quality claims, and a canary without production SLO semantics.",
+    "action": "Added OIDC/JWKS and signed-proxy identity, a real server-side OpenAI Responses provider, a PostgreSQL-leased worker, checksum backup/restore, 10,000-tick stress evidence, a network-isolated quality executor, GitHub Sigstore attestation workflow, and shadow-baseline canary SLO alerts with automatic rollback drills.",
+    "outcome": "NEXUS-7 now separates local simulation evidence from production trust evidence while preserving the v1 verified-autonomy contract.",
+    "metrics": [
+      {
+        "label": "Long-horizon ticks",
+        "before": 1000,
+        "after": 10000
+      },
+      {
+        "label": "Authentication modes",
+        "before": 1,
+        "after": 3
+      },
+      {
+        "label": "Persistent integration drills",
+        "before": 1,
+        "after": 2
+      },
+      {
+        "label": "Canary SLO dimensions",
+        "before": 2,
+        "after": 5
+      }
+    ],
+    "evidence": [
+      "OIDC verifies issuer, audience, signature, subject, and mapped role",
+      "Signed proxy identities are bound to method, path, role, and timestamp",
+      "OpenAI Responses integration passes strict structured-output contract tests without exposing secrets",
+      "Two PostgreSQL workers prove lease fencing and takeover",
+      "Backup restores into a second database with matching deterministic report evidence and rejects tampering",
+      "10,000 ticks produce 32,789 events with 100% replay, causal, and rollback evidence and zero invariant violations",
+      "Digest-pinned networkless container passes Lint, standard tests, and production build",
+      "Healthy shadow-baseline canary promotes; injected fault raises a critical alert and auto-rolls back"
+    ],
+    "artifacts": [
+      "src/auth/",
+      "src/simulation/models/openai-provider.ts",
+      "src/workers/experiment-clock.ts",
+      "src/operations/postgres-backup.ts",
+      "src/evidence/",
+      "public/data/v1-1-stress.json",
+      ".github/workflows/ci.yml",
+      "docs/PRODUCTION.md",
+      "docs/CI_EVIDENCE.md",
+      "docs/CANARY_SLO.md",
+      "docs/adr/0008-production-evidence-boundary.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v1.0.0",
+    "version": "1.0.0",
+    "date": "2026-07-16",
+    "trigger": "test",
+    "triggerReason": "The autonomy lab had all control-plane capabilities but needed an explicit, machine-audited definition of verified action evidence and reproducible release thresholds.",
+    "action": "Added replay and rollback metadata to accepted actions, three public versioned scenarios, a canonical readiness audit, a Verification view/API, extension contracts, and mobile Observer/Verification accessibility gates.",
+    "outcome": "NEXUS-7 now meets its v1 north-star thresholds and exposes the supporting scenario results, fingerprints, evidence requirements, and extension boundaries to humans and machines.",
+    "metrics": [
+      {
+        "label": "Public scenarios",
+        "before": 1,
+        "after": 3
+      },
+      {
+        "label": "Standard tests",
+        "before": 53,
+        "after": 56
+      },
+      {
+        "label": "Primary views",
+        "before": 24,
+        "after": 25
+      },
+      {
+        "label": "Browser tests",
+        "before": 10,
+        "after": 12
+      }
+    ],
+    "evidence": [
+      "Three scenarios replay twice for 250 ticks each with canonical equality",
+      "Verified autonomy loop rate meets or exceeds 90%",
+      "Deterministic replay success meets or exceeds 99%",
+      "Accepted actions reach 100% causal trace completeness and rollback coverage",
+      "Every scenario finishes with zero invariant violations",
+      "Observer and Verification pass mobile WCAG A/AA regression",
+      "Agent, ModelProvider, Scenario, and Repository extension contracts are documented"
+    ],
+    "artifacts": [
+      "src/verification/",
+      "src/app/api/verification/route.ts",
+      "src/components/verification/VerificationCenter.tsx",
+      "public/data/v1-readiness.json",
+      "src/simulation/scenarios/",
+      "docs/VERIFICATION.md",
+      "docs/SCENARIOS.md",
+      "docs/EXTENSIONS.md",
+      "docs/adr/0007-verified-autonomy-contract.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v0.9.0",
+    "version": "0.9.0",
+    "date": "2026-07-16",
+    "trigger": "enhancement",
+    "triggerReason": "The persistent experiment platform could replay and branch runs, but it did not yet turn observations into falsifiable improvement experiments with human promotion and rollback.",
+    "action": "Added persisted improvement proposals, executable specifications, isolated baseline/candidate policy forks, threshold evaluation, quality evidence, admin approval, canary monitoring, rollback triggers, and an immutable decision log.",
+    "outcome": "Self-iteration is now a constrained experiment workflow. Candidates cannot mutate the source run, and only verified, human-approved, healthy canaries reach promoted state.",
+    "metrics": [
+      {
+        "label": "Primary views",
+        "before": 23,
+        "after": 24
+      },
+      {
+        "label": "Standard tests",
+        "before": 48,
+        "after": 53
+      },
+      {
+        "label": "Workflow stages",
+        "before": 0,
+        "after": 5
+      },
+      {
+        "label": "Browser tests",
+        "before": 9,
+        "after": 10
+      }
+    ],
+    "evidence": [
+      "The same full promotion workflow passes with memory and PostgreSQL repositories",
+      "Baseline and candidate use identical source tick, seed, and horizon",
+      "Target improvement, protected-metric regression, replay, invariants, and security gates are recorded",
+      "Only admin can approve, start, or observe a canary",
+      "Every state transition appends a monotonic immutable decision record",
+      "EvolutionLog displays live controlled iteration state"
+    ],
+    "artifacts": [
+      "src/iteration/",
+      "src/app/api/iterations/",
+      "src/components/iteration/IterationLab.tsx",
+      "migrations/0002_controlled_iteration.sql",
+      "src/iteration/controlled-iteration.test.ts",
+      "docs/adr/0006-controlled-self-iteration.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v0.8.0",
+    "version": "0.8.0",
+    "date": "2026-07-16",
+    "trigger": "enhancement",
+    "triggerReason": "Deterministic runs and human approvals still lived in one browser, preventing shared observation, durable evidence, concurrent mutation safety, and trustworthy experiment recovery.",
+    "action": "Added a server-owned experiment service, memory and PostgreSQL repositories, optimistic concurrency, append-only event cursors, periodic snapshots, scheduler-driven ticks, historical forks, SSE streaming, roles, audit records, and verified report bundles.",
+    "outcome": "Experiments can now survive the browser, be replayed or branched from historical ticks, reject stale writers, stream evidence to observers, and export a self-contained verification report.",
+    "metrics": [
+      {
+        "label": "Primary views",
+        "before": 22,
+        "after": 23
+      },
+      {
+        "label": "Standard unit tests",
+        "before": 39,
+        "after": 48
+      },
+      {
+        "label": "PostgreSQL integration tests",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "label": "Browser tests",
+        "before": 8,
+        "after": 9
+      }
+    ],
+    "evidence": [
+      "Real PostgreSQL 17 migration and repository integration test passes",
+      "The same browser workflow passes with memory and PostgreSQL backends",
+      "Stale expected versions are rejected instead of overwriting newer runs",
+      "Snapshots are stored at tick 0 and every five ticks",
+      "Historical forks pass deterministic report replay verification",
+      "Viewer role cannot mutate and every accepted mutation records actor and role",
+      "SSE and cursor APIs expose append-only event updates"
+    ],
+    "artifacts": [
+      "src/experiments/",
+      "src/app/api/experiments/",
+      "src/components/experiments/ExperimentPlatform.tsx",
+      "migrations/0001_experiment_platform.sql",
+      "src/experiments/experiment-service.test.ts",
+      "src/experiments/postgres-repository.test.ts",
+      "docs/adr/0005-persistent-experiment-platform.md",
+      "docs/EXPERIMENTS.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v0.7.0",
+    "version": "0.7.0",
+    "date": "2026-07-16",
+    "trigger": "enhancement",
+    "triggerReason": "The constrained agent runtime could schedule deterministic policies, but it lacked a safe boundary for fallible external model proposals and explicit human authorization.",
+    "action": "Added a pluggable model-provider interface, deterministic mock provider, structured proposal validation, prompt and policy versioning, token/cost/timeout budgets, fallback behavior, risk-tiered approval, and an Observer approval queue.",
+    "outcome": "Model output is now treated as untrusted advice. Only validated and policy-approved commands enter the deterministic run, while medium and high risk proposals require an auditable human decision.",
+    "metrics": [
+      {
+        "label": "Model provider contract tests",
+        "before": 0,
+        "after": 6
+      },
+      {
+        "label": "Risk tiers enforced",
+        "before": 1,
+        "after": 4
+      },
+      {
+        "label": "Unit tests",
+        "before": 34,
+        "after": 39
+      },
+      {
+        "label": "Browser tests",
+        "before": 8,
+        "after": 8
+      }
+    ],
+    "evidence": [
+      "Deterministic mock proposals are byte-equivalent for the same seed and context",
+      "Malformed, timeout, token/cost budget, capability, and critical-risk paths cannot bypass validation",
+      "Medium-risk proposals require explicit approval before entering the next simulation tick",
+      "Approved model commands produce observation, proposal, command, execution, and evaluation records",
+      "Observer browser coverage verifies pending, approved, and executed approval states",
+      "ARIA exposes model provenance, usage, latency, approval status, and fallback reason"
+    ],
+    "artifacts": [
+      "src/simulation/models/",
+      "src/components/observer/ObserverDashboard.tsx",
+      "src/stores/nexus-store.ts",
+      "src/simulation/models/model-provider.test.ts",
+      "src/test/ObserverDashboard.test.tsx",
+      "docs/adr/0004-human-in-the-loop-model-boundary.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v0.6.0",
+    "version": "0.6.0",
+    "date": "2026-07-16",
+    "trigger": "observation",
+    "triggerReason": "Causal traces exposed agent decisions, but policy logic, cooldowns, and arbitration were still embedded in the simulation step.",
+    "action": "Introduced a formal agent runtime with independent policies, capability contracts, per-agent and global budgets, cooldowns, priorities, risk ceilings, conflict resolution, and ARIA coordination.",
+    "outcome": "Agents now compete and cooperate through proposals instead of mutating the world, while every scheduling or rejection decision remains observable.",
+    "metrics": [
+      {
+        "label": "Independent policy modules",
+        "before": 0,
+        "after": 4
+      },
+      {
+        "label": "Runtime contract tests",
+        "before": 0,
+        "after": 5
+      },
+      {
+        "label": "Unit tests",
+        "before": 29,
+        "after": 34
+      },
+      {
+        "label": "Scheduler guardrails",
+        "before": 1,
+        "after": 5
+      }
+    ],
+    "evidence": [
+      "500-tick conformance test keeps every command within capability and budget contracts",
+      "All four domain agents receive scheduled work without starvation",
+      "Cooldown, per-agent budget, global budget, risk ceiling, and metric conflicts are tested",
+      "ARIA explains the latest scheduling decision and can pause or resume the run",
+      "Rejected proposals receive complete trace and evaluation records"
+    ],
+    "artifacts": [
+      "src/simulation/agents/runtime.ts",
+      "src/simulation/agents/scheduler.ts",
+      "src/simulation/agents/policies/",
+      "src/simulation/agents/agent-runtime.test.ts",
+      "docs/adr/0003-agent-runtime-and-coordination.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v0.5.0",
+    "version": "0.5.0",
+    "date": "2026-07-16",
+    "trigger": "observation",
+    "triggerReason": "Deterministic replay proved what happened, but observers still lacked a complete explanation from trigger through evaluation.",
+    "action": "Added structured observations, proposals, commands, executions, evaluations, a full Action Trace, north-star metrics, tick reconstruction, counterfactual run comparison, and manifest-backed EvolutionLog entries.",
+    "outcome": "Humans can now inspect why an autonomous action happened, what guardrail accepted it, what changed, and whether the result matched the proposal.",
+    "metrics": [
+      {
+        "label": "Primary views",
+        "before": 21,
+        "after": 22
+      },
+      {
+        "label": "Unit tests",
+        "before": 27,
+        "after": 29
+      },
+      {
+        "label": "Browser tests",
+        "before": 7,
+        "after": 8
+      },
+      {
+        "label": "Action trace stages",
+        "before": 2,
+        "after": 5
+      }
+    ],
+    "evidence": [
+      "Policy actions produce complete observation-to-evaluation causal chains",
+      "Observer Dashboard reports verified loop and causal completeness rates",
+      "Any prior tick can be reconstructed from initial state and commands",
+      "Counterfactual seeds produce comparable metric and event deltas",
+      "Observer workflow passes WCAG A/AA checks in Chromium"
+    ],
+    "artifacts": [
+      "src/components/observer/ObserverDashboard.tsx",
+      "src/simulation/observation/traces.ts",
+      "src/simulation/observation/comparison.ts",
+      "iterations/v0.5.0.json",
+      "docs/adr/0002-causal-observation-model.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v0.4.0",
+    "version": "0.4.0",
+    "date": "2026-07-16",
+    "trigger": "observation",
+    "triggerReason": "The city loop used React-owned timers, Math.random(), and direct store mutation, so no run could be reproduced or audited.",
+    "action": "Introduced a framework-independent seeded simulation core, versioned world state, command guardrails, causal events, replay verification, and trusted JSON import/export.",
+    "outcome": "The cyber city became a reproducible experiment: identical inputs now yield byte-for-byte identical state and event logs.",
+    "metrics": [
+      {
+        "label": "Deterministic replay ticks",
+        "before": 0,
+        "after": 1000
+      },
+      {
+        "label": "Unit tests",
+        "before": 23,
+        "after": 27
+      },
+      {
+        "label": "Browser tests",
+        "before": 6,
+        "after": 7
+      }
+    ],
+    "evidence": [
+      "1,000-tick same-seed replay is byte-for-byte equivalent",
+      "Invalid commands cannot change the resulting world",
+      "Tampered run exports fail deterministic import validation",
+      "Pause, step, replay, reset, export, and import pass in Chromium"
+    ],
+    "artifacts": [
+      "src/simulation/core/step.ts",
+      "src/simulation/scenarios/neo-angeles.json",
+      "src/simulation/replay.ts",
+      "src/simulation/serialization.ts",
+      "src/simulation/simulation.test.ts"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "iteration-v0.3.1",
+    "version": "0.3.1",
+    "date": "2026-07-16",
+    "trigger": "bug",
+    "triggerReason": "The prototype built successfully but still crashed during real browser interaction and was unusable on mobile.",
+    "action": "Fixed the Agent modal update loop, responsive navigation, chart sizing, version drift, accessibility gaps, dependency vulnerabilities, and established CI browser gates.",
+    "outcome": "NEXUS-7 gained a trustworthy runtime baseline before deeper autonomy work.",
+    "metrics": [
+      {
+        "label": "Unit tests",
+        "before": 22,
+        "after": 23
+      },
+      {
+        "label": "Browser tests",
+        "before": 0,
+        "after": 6
+      },
+      {
+        "label": "Known vulnerabilities",
+        "before": 4,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "All 21 primary views render in Chromium",
+      "Desktop and mobile Dashboard pass WCAG A/AA checks",
+      "npm audit reports zero vulnerabilities"
+    ],
+    "artifacts": [
+      "e2e/nexus.spec.ts",
+      ".github/workflows/ci.yml",
+      "docs/ROADMAP.md",
+      "docs/adr/0001-deterministic-simulation-core.md"
+    ],
+    "source": "manifest"
+  },
+  {
+    "id": "355bec9f",
+    "version": "unreleased",
+    "date": "2026-07-19",
+    "trigger": "bug",
+    "triggerReason": "fix: close light theme production contrast gate",
+    "action": "fix: close light theme production contrast gate",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "d0d1484d",
+    "version": "0.3.0",
+    "date": "2026-06-14",
+    "trigger": "observation",
+    "triggerReason": "v0.3.0: Feedback loop — all agents affect city, threshold events, trend chart, auto-logs",
+    "action": "- ECONOMICA affects GDP/happiness, SPECTRE affects crime/internet - dispatchAgentAction auto-writes agentLogs + triggers notifications - City event thresholds: crime>70, traffic>80, energy<40, polluti",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "243bead1",
+    "version": "0.2.0",
+    "date": "2026-06-14",
+    "trigger": "observation",
+    "triggerReason": "v0.2.0: AI agents real, EvolutionLog git-backed, localStorage persist, real tests",
+    "action": "- Agents now affect cityStats via dispatchAgentAction - EvolutionLog reads public/data/git-log.json (generated by prebuild script) - Zustand store persisted to localStorage via persist middleware - Re",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "46758271",
+    "version": "0.1.0",
+    "date": "2026-06-14",
+    "trigger": "observation",
+    "triggerReason": "v0.1.0: Initial release - unify version, fix AGENTS.md, trim EvolutionLog hardcoded data",
+    "action": "v0.1.0: Initial release - unify version, fix AGENTS.md, trim EvolutionLog hardcoded data",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "bb211399",
+    "version": "unreleased",
+    "date": "2026-04-03",
+    "trigger": "enhancement",
+    "triggerReason": "feat: Add Social Hub - community feed, events, announcements",
+    "action": "feat: Add Social Hub - community feed, events, announcements",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "f81924c2",
+    "version": "unreleased",
+    "date": "2026-04-03",
+    "trigger": "enhancement",
+    "triggerReason": "feat: Add Resource Management Panel with real-time city resource monitoring",
+    "action": "feat: Add Resource Management Panel with real-time city resource monitoring",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "80cc2fbe",
+    "version": "unreleased",
+    "date": "2026-04-03",
+    "trigger": "bug",
+    "triggerReason": "fix: Clear lint errors - unused imports, impure functions, useState lazy init",
+    "action": "fix: Clear lint errors - unused imports, impure functions, useState lazy init",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "b7efe19b",
+    "version": "unreleased",
+    "date": "2026-04-03",
+    "trigger": "enhancement",
+    "triggerReason": "feat: Complete i18n for all 17 components, fix duplicate translation keys",
+    "action": "feat: Complete i18n for all 17 components, fix duplicate translation keys",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "b9080a57",
+    "version": "unreleased",
+    "date": "2026-04-03",
+    "trigger": "enhancement",
+    "triggerReason": "feat: Add Achievements system, Settings panel, Weather monitoring, complete i18n framework",
+    "action": "- Added Achievements panel with progress tracking - Added Settings panel with theme/language controls - Added Weather panel with real-time updates - Added Emergency Response system - Added News panel ",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "9b8591d7",
+    "version": "unreleased",
+    "date": "2026-04-03",
+    "trigger": "observation",
+    "triggerReason": "Initial commit from Create Next App",
+    "action": "Initial commit from Create Next App",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  }
+]

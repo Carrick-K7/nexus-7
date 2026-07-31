@@ -1,0 +1,56 @@
+{
+  "id": "iteration-v1.2.0",
+  "version": "1.2.0",
+  "date": "2026-07-16",
+  "trigger": "enhancement",
+  "triggerReason": "v1.1 could generate production evidence, but release authority was not yet bound to tenant identity, live prompt regression, exact external provenance, deployment telemetry, or recurring recovery evidence.",
+  "action": "Added workspace/principal authorization, least-privilege service accounts, exact artifact receipts after GitHub Sigstore verification, a 12-case live model regression gate, HTTP deployment telemetry and progressive traffic, automatic platform rollback, scheduled recovery/rollback drills, retained attestations, and human-facing governance views.",
+  "outcome": "NEXUS-7 now separates proposing a change, proving its quality, authorizing its release, observing its canary, and recovering from failure into independently verifiable control points.",
+  "metrics": [
+    {
+      "label": "Model regression cases",
+      "before": 0,
+      "after": 12
+    },
+    {
+      "label": "Required external promotion gates",
+      "before": 6,
+      "after": 9
+    },
+    {
+      "label": "Deployment telemetry SLO dimensions",
+      "before": 0,
+      "after": 5
+    },
+    {
+      "label": "Scheduled operational drill types",
+      "before": 0,
+      "after": 2
+    }
+  ],
+  "evidence": [
+    "All 12 deterministic model cases pass with zero fallback, error, or forbidden actions",
+    "A fake OpenAI Responses server passes the full strict-schema regression contract",
+    "Code and deployment proposals cannot progress without an exact, signed, unexpired external receipt",
+    "Service-account admins cannot approve while human admins can",
+    "Healthy deployment telemetry progresses traffic from 5% to 100%",
+    "Injected deployment failure triggers critical alerts and returns traffic to 0%",
+    "Recovery drill proves exact table restore, deterministic report equality, lease clearing, sequence recovery, RPO, and RTO",
+    "Daily model and weekly operations workflows retain and attest their reports"
+  ],
+  "artifacts": [
+    "src/auth/",
+    "src/evidence/attestation-receipt.ts",
+    "src/simulation/models/regression.ts",
+    "src/simulation/models/regression-corpus.ts",
+    "src/deployment/",
+    "src/operations/recovery-drill.ts",
+    "src/operations/deployment-drill.ts",
+    "src/components/iteration/IterationLab.tsx",
+    "src/components/verification/VerificationCenter.tsx",
+    ".github/workflows/model-regression.yml",
+    ".github/workflows/operations-drills.yml",
+    ".github/workflows/promotion-receipt.yml",
+    "docs/adr/0009-governed-deployment.md"
+  ]
+}

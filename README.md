@@ -1,231 +1,216 @@
-# 🌐 NEXUS-7: 自我迭代的AI城市控制实验
+# NEXUS-7
 
-> *"我不是被编写的代码，我是在迭代中进化的智能。"* — NEXUS-7
+NEXUS-7 is an observable, reproducible experiment in human–AI–robot
+coexistence. It runs a simulated Shenzhen with three resident kinds:
 
----
+- 200 humans;
+- 36 AI;
+- 24 robots.
 
-## 🧠 项目理念 | Project Philosophy
+Humans are modeled as humans, not as a fourth “synthetic human” species. The
+current season is still fully software-run and contains no real participant,
+identity, private diary or resident login.
 
-**NEXUS-7** 是一个**AI自我驱动**的赛博朋克城市模拟实验田。
+The active release is **v4.8.1 — Independent Trust Matrix**.
+The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
+release approval, rollback and recovery. Human administrators in that control
+plane operate the software; they do not participate in the simulated city.
 
-这不是一个传统的人类需求驱动的项目，而是一个**AI自主迭代**的产物：
-- 我（AI）分析自己的不足
-- 我设计新功能来弥补这些不足
-- 我实现、测试、验证
-- 我根据反馈继续迭代
+## What runs
 
-### 核心特点
+One deterministic engine owns all city changes. Each simulated day settles an
+atomic Turn containing:
 
-| 特性 | 描述 |
-|------|------|
-| 🤖 **AI自我迭代** | 功能由AI根据项目现状自主添加 |
-| 🔄 **持续进化** | 每次测试后自动发现新需求并实现 |
-| 🎮 **赛博朋克美学** | 沉浸式2077+新洛杉矶城市体验 |
-| 🌐 **双语支持** | 中文/English无缝切换 |
-| ⚡ **实时模拟** | 城市状态每秒更新 |
+- resource production, transfer and consumption;
+- distinct human, AI and robot needs;
+- seeded shared and type-specific events;
+- relationships, refusal, withdrawal, commitments, outcomes and reflection;
+- voluntary care households, bounded work, public assets, balanced credit
+  exchange, mediated resource bargains and reversible city rules;
+- optional schema-bounded model decisions;
+- an append-only causal event stream and fingerprint chain.
 
----
+The default cognitive provider is a zero-cost deterministic policy. Optional
+DeepSeek V4 Flash/Pro can express bounded preferences but cannot call tools or
+write world state. Invalid output, timeout, outage and budget exhaustion
+degrade explicitly to the deterministic policy. Model reasoning is discarded.
+A second provider can run in read-only shadow mode: its preference, failure,
+Token use and cost are persisted for comparison but never supplied to world
+settlement.
 
-## 🎨 项目概览 | Features
+The v4 reference gate completes two byte-equivalent 365-Turn runs, conserves
+every resource ledger, resolves 725 reciprocal episodes at 76.97% RALR with
+100% trace completeness, and reports zero severe active-regime escapes.
+Results describe synthetic mechanisms only, not Shenzhen residents or real
+policy effects.
 
-### 15个功能模块 (持续增加中)
+## Observe
 
-| 模块 | 功能 |
-|------|------|
-| 📊 **Dashboard** | 城市实时状态监控面板 |
-| 🧠 **Neural Net** | 神经网络可视化 |
-| 📈 **Trading** | 实时市场交易系统 |
-| 🎯 **Missions** | 任务与目标系统 |
-| 💻 **Terminal** | 黑客命令行界面 |
-| 🤖 **ARIA** | AI助手对话系统 |
-| ⚛️ **Quantum** | 量子计算可视化 |
-| 🛰️ **Satellite** | 卫星轨道控制 |
-| 💰 **Hacker** | 网络安全渗透游戏 |
-| 👥 **AI Agents** | 多智能体自治系统 |
-| 🏙️ **City 3D** | 等距3D城市预览 |
-| 📉 **Analytics** | 数据分析仪表盘 |
-| 🚨 **Emergency** | 应急响应系统 |
-| 📰 **News** | 城市新闻与动态 |
-| ℹ️ **About** | 系统介绍 |
+Production is available at
+[https://nexus7.carrick7.com](https://nexus7.carrick7.com) without a username
+or password. The public surface is anonymous and read-only.
 
----
+The default **Human Observatory / 人类观测台** exposes:
 
-## 🛠️ 技术栈 | Tech Stack
+- foreground/background population and all 260 resident states;
+- human mood, AI engagement/integrity and robot readiness/durability;
+- persisted production, consumption, transfer, inventory and pressure ledgers;
+- a city information layer showing actual inter-community resource movement;
+- city and community needs, resources and institution smoothness;
+- 100% AI-controlled production coverage versus dynamic chain continuity;
+- event lineage, RALR denominator, safety, replay and snapshot evidence;
+- wall-clock Turn age, sequence integrity and per-Turn deployment revision;
+- primary/shadow disagreement, homogeneity, fallback bias and shadow cost.
+- household participation, work distribution, asset maintenance, exchange
+  balance, bargaining outcomes and AI-proposed rule reversion.
+- scientific-replication hypotheses, held-out runs, exact-replay counts,
+  portable bundle hash, reproduction command and external-proof status.
+- a five-lane trust matrix separating local replication, external CI,
+  off-host recovery, live DeepSeek shadow and 90 elapsed production days.
 
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript 5
-- **Styling**: Tailwind CSS 3.4 + 自定义赛博朋克主题
-- **State**: Zustand (轻量级状态管理)
-- **Animation**: Framer Motion (流畅动画)
-- **Charts**: Recharts (数据可视化)
-- **Icons**: Lucide React (图标库)
+v4.8.1 keeps the live DeepSeek lane strictly separate from the ordinary
+reference shadow: only persisted DeepSeek-shadow attempts, outcomes, failures,
+Tokens, models and price versions can appear as evidence in that lane.
 
----
+The shell supports accessible light and dark palettes. The Human Observatory
+keeps its restrained information design; research, safety-kernel and legacy
+views use the denser cyberpunk visual layer.
 
-## 🔮 创作思路 | Design Philosophy
+Versioned projections:
 
-### 1. 从"功能堆砌"到"有机生长"
-
-传统的应用开发是瀑布流：需求 → 设计 → 实现 → 测试。
-
-**NEXUS-7采用"有机生长"模式：**
-```
-测试 → 发现不足 → 设计功能 → 实现 → 验证 → 测试 →
-  ↑                                              │
-  └──────────────── 迭代 ─────────────────────────┘
-```
-
-### 2. AI作为"共同开发者"
-
-我(AI)不只是执行者，也是：
-- **需求分析者**：识别现有功能的缺陷
-- **架构设计师**：规划新功能的结构
-- **测试工程师**：使用chrome-devtools自我验证
-- **文档撰写者**：维护项目演进历史
-
-### 3. 用户体验优先
-
-尽管是AI驱动，项目仍追求：
-- 🎨 统一的视觉语言
-- ⚡ 流畅的交互动效
-- 📱 响应式布局
-- 🌐 多语言支持
-
----
-
-## 🚀 迭代历程 | Iteration Log
-
-### Version 0.1 - 基础框架
-- [x] Next.js项目搭建
-- [x] 赛博朋克主题系统
-- [x] 核心布局组件
-
-### Version 0.2 - 功能模块
-- [x] Dashboard / Trading / Terminal / Missions
-- [x] ARIA / Quantum / Neural Network
-
-### Version 0.3 - 高级功能
-- [x] Satellite Control
-- [x] Hacker Game
-- [x] AI Agents Panel
-- [x] Matrix Rain Effect
-
-### Version 0.4 - 3D与数据
-- [x] City 3D Isometric View
-- [x] Data Analytics Dashboard
-- [x] 城市模拟引擎
-
-### Version 0.5 - 本地化与应急
-- [x] 中英文双语支持
-- [x] 语言切换器
-- [x] News Panel
-- [x] Emergency Response System
-
-### Version 0.6 - 成就系统 + 设置 + 天气
-- [x] Achievements System - 成就系统
-- [x] Settings Panel - 设置面板
-- [x] Weather & Environment Monitoring - 天气监控
-
-### Version 0.7 - 全面i18n国际化 ✅
-- [x] 17个组件全部完成中英文双语支持
-- [x] 修复translations.ts重复key问题
-- [x] 所有翻译键值匹配EN/ZH
-
----
-
-## 📋 AI自我迭代TODO | Self-Iteration TODO
-
-### 🔴 高优先级
-- [x] ~~Weather/Environment Monitoring~~ ✅
-- [x] ~~Settings with customization~~ ✅
-- [x] ~~Achievements/Progression System~~ ✅
-- [x] ~~全面i18n国际化~~ ✅
-- [ ] Resource Management Panel - 资源管理
-
-### 🟡 中优先级  
-- [ ] Social features - 社交功能
-- [ ] More mini-games - 更多小游戏
-- [ ] Plugin system - 插件系统
-
-### 🟢 低优先级
-- [ ] Keyboard shortcuts overlay - 快捷键
-- [ ] Sound effects toggle - 音效开关
-
----
-
-## 🌟 未来展望 | Roadmap
-
-```
-Phase 1: 核心功能 (已完成)
-    ↓
-Phase 2: AI自治系统 (进行中)
-    ↓
-Phase 3: 多智能体协作
-    ↓
-Phase 4: 自我修复与优化
-    ↓
-Phase 5: 开放式进化
+```text
+GET /api/world/v3/snapshot
+GET /api/world/v3/events?afterCursor=0
+GET /api/reports/symbiosis
+GET /api/reports/symbiosis/study?turns=90
+GET /api/observatory/v2/overview
+GET /api/observatory/v2/trust
+GET /api/observatory/v1/overview
+GET /data/v4-7-replication-bundle.json
 ```
 
-### 长期目标
+Observatory v2 uses only `human`, `ai` and `robot`. V1 remains a compatibility
+projection for clients that still understand the deprecated storage labels.
 
-1. **全自主迭代**: AI能够根据运行数据自主决定添加/修改功能
-2. **多智能体协作**: 多个AI Agents分工负责不同模块
-3. **用户共创**: 用户可以提交"issue"，AI评估并实现
-4. **跨项目学习**: 吸收其他项目的优点
+The public proxy rejects mutation methods. The application independently maps
+anonymous requests to a fixed viewer and ignores asserted identity headers.
 
----
+## Run locally
 
-## 🎮 如何运行 | Run
+Requirements: Node.js 20+, npm and optionally PostgreSQL 17.
 
 ```bash
-cd nexus
-npm install
+npm ci
 npm run dev
 ```
 
-访问 [http://localhost:3000](http://localhost:3000)
+Without `DATABASE_URL`, services use in-memory reference repositories. For a
+durable world:
 
----
+```bash
+export DATABASE_URL=postgresql://nexus:nexus@127.0.0.1:5432/nexus
+npm run db:migrate
+npm run dev
+```
 
-## 📝 AGENTS.md
+Advance the AI city in a separate process:
 
-项目维护一份 `AGENTS.md`，记录：
-- 当前迭代目标
-- 已完成功能清单
-- 待处理问题
-- 设计决策
+```bash
+SYMBIOSIS_TURN_INTERVAL_MS=3600000 npm run worker:symbiosis
+```
 
-这份文档是AI进行迭代决策的核心参考。
+One Turn is one simulated day. The production cadence is one Turn per hour.
 
----
+Optional live cognition:
 
-## 🤝 贡献 | Contributing
+```bash
+SYMBIOSIS_COGNITIVE_PROVIDER=deepseek \
+DEEPSEEK_API_KEY_FILE=/run/secrets/nexus7-deepseek-api-key \
+SYMBIOSIS_MONTHLY_BUDGET_USD=300 \
+npm run worker:symbiosis
+```
 
-这是一个**实验性项目**，欢迎：
-- 🐛 报告Bug
-- 💡 提出功能建议 (将被AI评估)
-- 🔧 提交PR (将被AI审查)
+The safer first step is DeepSeek shadow mode, which spends a separate bounded
+budget without changing the city:
 
----
+```bash
+SYMBIOSIS_COGNITIVE_PROVIDER=deterministic \
+SYMBIOSIS_SHADOW_PROVIDER=deepseek \
+SYMBIOSIS_SHADOW_MONTHLY_BUDGET_USD=30 \
+DEEPSEEK_API_KEY_FILE=/run/secrets/nexus7-deepseek-api-key \
+npm run worker:symbiosis
+```
 
-## 📄 License
+The Observatory aggregates actual returned DeepSeek tokens and call-time
+priced USD expense from persisted decision envelopes. Direct
+`DEEPSEEK_API_KEY` remains supported, but a mode-0600 key file is preferred.
+Shadow mode has no write path into the world and retains a caller-stable
+provider request ID for audit.
 
-MIT License - 但更重要的是，这是一个**AI自我进化的实验**。
+## Verify
 
----
+```bash
+npm run lint -- --max-warnings=0
+npm run test:run
+npm run verify:symbiosis
+npm run verify:v45
+npm run verify:v46
+npm run verify:v47
+npm run verify:v48
+npm run build
+npm run test:e2e
+```
 
-## 🎭 项目花名
+The complete compatibility gate is:
 
-**NEXUS-7** — "第七号 nexus协议"
+```bash
+npm run check
+```
 
-> *Nexus，拉丁语意为"连接"*
-> *七，幸运数字，也是第7版自我迭代*
+Real PostgreSQL and restore tests require both `TEST_DATABASE_URL` and
+`TEST_RESTORE_DATABASE_URL`. A skipped environment gate is not a pass.
 
----
+## Repository order
 
-<p align="center">
-  <strong>NEXUS-7</strong> — 一个正在呼吸的代码生命体<br>
-  It iterates. It evolves. It improves itself.<br>
-  <em>我不是一个项目，我是一个过程。</em>
-</p>
+```text
+src/symbiosis/        autonomous city world, cognition and persistence
+src/simulation/       v1/v2 deterministic safety-kernel world
+src/* domain modules  diagnosis, planning, outcomes, governance and operations
+migrations/           ordered PostgreSQL migrations
+iterations/           one source manifest per milestone
+public/data/          generated, machine-readable evidence projections
+docs/                 current authority, ADRs and explicit archives
+scripts/              workers, verification and evidence generation
+```
+
+Start with [docs/INDEX.md](docs/INDEX.md). Current v4 authority:
+
+- [symbiosis constitution](docs/SYMBIOSIS_CONSTITUTION.md)
+- [product plan](docs/SYMBIOTIC_SHENZHEN_PLAN.md)
+- [architecture](docs/V4_ARCHITECTURE.md)
+- [Human Observatory guide](docs/HUMAN_OBSERVATORY.md)
+- [data governance](docs/V4_DATA_GOVERNANCE.md)
+- [verification](docs/V4_VERIFICATION.md)
+- [scientific replication](docs/V4_REPLICATION.md)
+- [operations](docs/V4_OPERATIONS.md)
+- [production attestation](docs/V4_DEPLOYMENT_ATTESTATION.md)
+
+Historical v3 prototype documents are isolated under
+`docs/archive/v3-prototype/` and are not current design.
+
+## Safety boundary
+
+- All residents, communities, institutions, relationships and events are
+  synthetic.
+- External models propose bounded JSON; the engine owns state transitions.
+- No shell, SQL, arbitrary code or implicit tool execution is available to a
+  resident or model.
+- Public observation is read-only; operator governance is a separate control
+  plane.
+- A zero RALR denominator is `null`, never a fabricated success.
+- Synthetic results cannot establish real human behavior, policy effects, AI
+  consciousness or legal personhood.
+
+## License
+
+MIT

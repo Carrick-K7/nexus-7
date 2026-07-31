@@ -1,0 +1,39 @@
+{
+  "id": "iteration-v4.3.1",
+  "version": "4.3.1",
+  "date": "2026-07-19",
+  "trigger": "human-observation",
+  "triggerReason": "Redundant deployment-mode labels competed with city information, non-Observatory views lacked the intended cyberpunk atmosphere, and the existing theme selector did not provide a real light palette.",
+  "action": "Removed observer-mode and software-run badges from rendered UI; replaced dark, hacker and matrix settings with persistent light and dark palettes; migrated old theme values safely; kept Human Observatory restrained while adding a shared multicolor cyberpunk atmosphere to every other view.",
+  "outcome": "Release implementation f1b35a2 and Tag v4.3.1 at 0233ab7 passed the local gate and were deployed. The mandatory production-browser audit then found mixed transition colors and dynamic light-theme blue/green contrast ratios between 4.12:1 and 4.44:1. The release was not accepted as complete and is superseded by v4.3.2.",
+  "metrics": [
+    {
+      "label": "Rendered deployment-mode badges",
+      "before": 3,
+      "after": 0
+    },
+    {
+      "label": "Accessible color modes",
+      "before": 1,
+      "after": 2
+    },
+    {
+      "label": "Production WCAG A/AA gate",
+      "before": 1,
+      "after": 0
+    }
+  ],
+  "evidence": [
+    "Tag v4.3.1 is retained as an immutable failed production-audit release",
+    "Production dynamic resident statuses exposed contrast cases absent from the Turn 0 local fixture",
+    "The production audit, not the earlier local claim, determines release acceptance"
+  ],
+  "artifacts": [
+    "src/app/globals.css",
+    "src/app/page.tsx",
+    "src/components/layout/BackgroundEffects.tsx",
+    "src/components/layout/Sidebar.tsx",
+    "src/components/layout/Topbar.tsx",
+    "docs/adr/0024-chromatic-city-shell.md"
+  ]
+}

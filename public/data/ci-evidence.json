@@ -1,0 +1,169 @@
+{
+  "schemaVersion": 1,
+  "generatedAt": "2026-07-18T12:43:53.501Z",
+  "source": {
+    "repository": "https://github.com/Carrick-K7/nexus-7.git",
+    "commitSha": "d0d1484d002da005fca67031d8a9135dbe29da3a",
+    "ref": "main",
+    "workflow": "local",
+    "runId": "local",
+    "runAttempt": "1",
+    "actor": "ubuntu",
+    "dirty": true
+  },
+  "runtime": {
+    "node": "v24.15.0",
+    "platform": "linux",
+    "architecture": "x64"
+  },
+  "gates": [
+    {
+      "name": "dependency-audit",
+      "command": "npm audit --audit-level=moderate",
+      "status": "passed"
+    },
+    {
+      "name": "lint",
+      "command": "npm run lint -- --max-warnings=0",
+      "status": "passed"
+    },
+    {
+      "name": "unit-integration",
+      "command": "npm run test:run",
+      "status": "passed"
+    },
+    {
+      "name": "model-regression",
+      "command": "npm run verify:model",
+      "status": "passed"
+    },
+    {
+      "name": "deployment-conformance",
+      "command": "npm run verify:deployment-contract",
+      "status": "passed"
+    },
+    {
+      "name": "operational-acceptance",
+      "command": "npm run verify:operations",
+      "status": "passed"
+    },
+    {
+      "name": "city-model-acceptance",
+      "command": "npm run verify:city",
+      "status": "passed"
+    },
+    {
+      "name": "diagnosis-acceptance",
+      "command": "npm run verify:diagnosis",
+      "status": "passed"
+    },
+    {
+      "name": "planning-acceptance",
+      "command": "npm run verify:planning",
+      "status": "passed"
+    },
+    {
+      "name": "outcome-learning-acceptance",
+      "command": "npm run verify:outcomes",
+      "status": "passed"
+    },
+    {
+      "name": "participation-acceptance",
+      "command": "npm run verify:participation",
+      "status": "passed"
+    },
+    {
+      "name": "closed-loop-certification",
+      "command": "npm run verify:closure",
+      "status": "passed"
+    },
+    {
+      "name": "browser-accessibility",
+      "command": "npm run test:e2e",
+      "status": "passed"
+    },
+    {
+      "name": "long-horizon",
+      "command": "npm run verify:stress",
+      "status": "passed"
+    },
+    {
+      "name": "isolated-evaluation",
+      "command": "npm run evaluate:isolated -- quality",
+      "status": "passed"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "package.json",
+      "sha256": "b10ef0fcf7e8bb3fc3f5410645a48283e6229023aacb1f17ce95ea3a2aa5ddc0",
+      "bytes": 3775
+    },
+    {
+      "path": "package-lock.json",
+      "sha256": "2186ac7e7fbd958561b2f0e0e8dbf445b5652405efc0dd0a81883a4ce70bea4e",
+      "bytes": 330971
+    },
+    {
+      "path": "public/data/v1-readiness.json",
+      "sha256": "54fa96d1a6ef81b5efd0b6f7491c2ccebbc489b9121f3f283f214228b6cf3d22",
+      "bytes": 1821
+    },
+    {
+      "path": "public/data/v1-1-stress.json",
+      "sha256": "825e5589a64f74317e70ca44f45f1536aa1bd3829943884600fbdf736b13f315",
+      "bytes": 465
+    },
+    {
+      "path": "public/data/model-regression.json",
+      "sha256": "a778a87c064fe92ad8b2464f834d9652caa72768e87862da94debcdf74efd546",
+      "bytes": 6968
+    },
+    {
+      "path": ".artifacts/isolated-evaluation.json",
+      "sha256": "08e10112890e562f37eee568186afe8112912e2bcd812886748cbf0590b3e7b0",
+      "bytes": 398
+    },
+    {
+      "path": ".artifacts/deployment-controller-conformance.json",
+      "sha256": "4d0b48e7d21db3676a8dc8cb0d31ed09eb55f3b88890593575c4567367f0c7c3",
+      "bytes": 611
+    },
+    {
+      "path": ".artifacts/operational-acceptance.json",
+      "sha256": "7b5ef08d977a0fe1b93f48490e4b72aa812f3467eb66decb386a2b176f2d45fc",
+      "bytes": 958
+    },
+    {
+      "path": ".artifacts/city-model-acceptance.json",
+      "sha256": "20fb288e6d5ee03afe71c5ad599cfca987eaf23f2f002d44daf3e6a4002d22c6",
+      "bytes": 895
+    },
+    {
+      "path": ".artifacts/diagnosis-acceptance.json",
+      "sha256": "77234bbefc4e724cdce45adaf3e50a1a44a8b90416b788f572068cd13f56f0e8",
+      "bytes": 1087
+    },
+    {
+      "path": ".artifacts/planning-acceptance.json",
+      "sha256": "a1381d3e0cc5737afeb8cab04bbe0be8d02e03483055ee9169aa16fec9d54b89",
+      "bytes": 1127
+    },
+    {
+      "path": ".artifacts/outcome-learning-acceptance.json",
+      "sha256": "2b266f8c77eed000335e99f98dc5824e784b89223e169e03bbdfaca6aff7bbeb",
+      "bytes": 1145
+    },
+    {
+      "path": ".artifacts/participation-acceptance.json",
+      "sha256": "31b508d3c3e98ab36cc56c28bfe42f7bf0171c86ece1f408a9e4159b46cb4ee1",
+      "bytes": 2872
+    }
+  ],
+  "provenance": {
+    "trustLevel": "local",
+    "provider": "local",
+    "attestationSubject": "public/data/ci-evidence.json"
+  },
+  "fingerprint": "6815b0cd75fc6d125837563840189a7d319b30ef02fb0d9c3864f84dc3d0aef6"
+}

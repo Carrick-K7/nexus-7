@@ -1,0 +1,45 @@
+{
+  "schemaVersion": "nexus.shenzhen-calibration.v1",
+  "datasetId": "shenzhen-public-calibration-2026q2-v1",
+  "referencePeriod": "2025-01-01/2025-12-31",
+  "frozenAt": "2026-07-18T00:00:00.000+08:00",
+  "statistics": {
+    "residentPopulation": {
+      "value": 18248500,
+      "unit": "persons",
+      "preliminary": true
+    },
+    "grossDomesticProduct": {
+      "value": 3873180000000,
+      "unit": "CNY",
+      "preliminary": true
+    },
+    "publicWaterSupply": {
+      "value": 1948000000,
+      "unit": "cubic-metres-per-year",
+      "preliminary": true
+    },
+    "electricityConsumption": {
+      "value": 127215000000,
+      "unit": "kilowatt-hours-per-year",
+      "preliminary": true
+    },
+    "railTransitLength": {
+      "value": 634.5,
+      "unit": "kilometres",
+      "preliminary": true
+    },
+    "hospitalBeds": {
+      "value": 92327,
+      "unit": "beds",
+      "preliminary": true
+    }
+  },
+  "allowedUse": "Scale calibration for a synthetic research environment",
+  "prohibitedInterpretation": [
+    "digital twin",
+    "real individual record",
+    "real policy effect",
+    "operational city control"
+  ]
+}

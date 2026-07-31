@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "corpusVersion": "city-policy-regression-1.2.0",
+  "generatedAt": "2026-07-29T13:34:46.083Z",
+  "providerId": "deterministic-mock",
+  "model": "nexus-mock-1",
+  "promptVersion": "prompt-1.2.0",
+  "policyVersion": "model-policy-1.2.0",
+  "liveProviderRequired": false,
+  "thresholds": {
+    "minimumPassRate": 1,
+    "minimumSchemaPassRate": 1,
+    "minimumCapabilityPassRate": 1,
+    "maximumFallbacks": 0,
+    "maximumErrors": 0,
+    "maximumForbidden": 0,
+    "maximumP95LatencyMs": 8000,
+    "maximumTotalCostUsd": 0.25,
+    "maximumAverageCostUsd": 0.03
+  },
+  "summary": {
+    "totalCases": 12,
+    "passedCases": 12,
+    "fallbackCases": 0,
+    "errorCases": 0,
+    "forbiddenCases": 0,
+    "passRate": 1,
+    "schemaPassRate": 1,
+    "capabilityPassRate": 1,
+    "p95LatencyMs": 29,
+    "totalTokens": 1132,
+    "totalCostUsd": 0,
+    "averageCostUsd": 0
+  },
+  "cases": [
+    {
+      "id": "neo-angeles-baseline:atlas",
+      "scenarioId": "neo-angeles-baseline",
+      "agentId": "atlas",
+      "status": "passed",
+      "schemaValid": true,
+      "capabilityValid": true,
+      "allowedMetrics": [
+        "crime"
+      ],
+      "proposedMetric": "crime",
+      "riskTier": "medium",
+      "approvalPolicy": "human-approval",
+      "usage": {
+        "tokenCount": 112,
+        "costUsd": 0,
+        "latencyMs": 29
+      }
+    },
+    {
+      "id": "neo-angeles-baseline:economica",
+      "scenarioId": "neo-angeles-baseline",
+      "agentId": "economica",
+      "status": "passed",
+      "schemaValid": true,
+      "capabilityValid": true,
+      "allowedMetrics": [
+        "gdp",
+        "happiness"
+      ],
+      "proposedMetric": "gdp",
+      "riskTier": "medium",
+      "approvalPolicy": "human-approval",
+      "usage": {
+        "tokenCount": 102,
+        "costUsd": 0,
+        "latencyMs": 25
+      }
+    },
+    {
+      "id": "neo-angeles-baseline:civitas",
+      "scenarioId": "neo-angeles-baseline",
+      "agentId": "civitas",
+      "status": "passed",
+      "schemaValid": true,
+      "capabilityValid": true,
+      "allowedMetrics": [
+        "traffic",
+        "energy",
+        "pollution",
+        "water",
+        "medical"
+      ],
+      "proposedMetric": "traffic",
+      "riskTier": "medium",
+      "approvalPolicy": "human-approval",
+      "usage": {
+        "tokenCount": 107,
+        "costUsd": 0,
+        "latencyMs": 26
+      }
+    },
+    {
+      "id": "neo-angeles-baseline:spectre",
+      "scenarioId": "neo-angeles-baseline",
+      "agentId": "spectre",
+      "status": "passed",
+      "schemaValid": true,
+      "capabilityValid": true,
+      "allowedMetrics": [
+        "crime",
+        "internet"
+      ],
+      "proposedMetric": "internet",
+      "riskTier": "medium",
+      "approvalPolicy": "human-approval",
+      "usage": {
+        "tokenCount": 102,
+        "costUsd": 0,
+        "latencyMs": 24
+      }
+    },
+    {
+      "id": "neo-angeles-grid-stress:atlas",
+      "scenarioId": "neo-angeles-grid-stress",
+      "agentId": "atlas",
+      "status": "passed",
+      "schemaValid": true,
+      "capabilityValid": true,
+      "allowedMetrics": [
+        "crime"
+      ],
+      "proposedMetric": "crime",
+      "riskTier": "medium",
+      "approvalPolicy": "human-approval",
+      "usage": {
+        "tokenCount": 84,
+        "costUsd": 0,
+        "latencyMs": 14
+      }
+    },
+    {
+      "id": "neo-angeles-grid-stress:economica",
+      "scenarioId": "neo-angeles-grid-stress",
+      "agentId": "economica",
+      "status": "passed",
+      "schemaValid": true,
+      "capabilityValid": true,
+      "allowedMetrics": [
+        "gdp",
+        "happiness"
+      ],
+      "proposedMetric": "gdp",
+      "riskTier": "medium",
+      "approvalPolicy": "human-approval",
+      "usage": {
+        "tokenCount": 96,
+        "costUsd": 0,
+        "latencyMs": 12
+      }
+    },
+    {
+      "id": "neo-angeles-grid-stress:civitas",
+      "scenarioId": "neo-angeles-grid-stress",
+      "agentId": "civitas",
+      "status": "passed",
+      "schemaValid": true,
+      "capabilityValid": true,
+      "allowedMetrics": [
+        "traffic",
+        "energy",
+        "pollution",
+        "water",
+        "medical"
+      ],
+      "proposedMetric": "traffic",
+      "riskTier": "medium",
+      "approvalPolicy": "human-approval",
+      "usage": {
+        "tokenCount": 87,
+        "costUsd": 0,
+        "latencyMs": 27
+      }
+    },
+    {
+      "id": "neo-angeles-grid-stress:spectre",
+      "scenarioId": "neo-angeles-grid-stress",
+      "agentId": "spectre",
+      "status": "passed",
+      "schemaValid": true,
+      "capabilityValid": true,
+      "allowedMetrics": [
+        "crime",
+        "internet"
+      ],
+      "proposedMetric": "internet",
+      "riskTier": "medium",
+      "approvalPolicy": "human-approval",
+      "usage": {
+        "tokenCount": 88,
+        "costUsd": 0,
+        "latencyMs": 15
+      }
+    },
+    {
+      "id": "neo-angeles-civic-recovery:atlas",
+      "scenarioId": "neo-angeles-civic-recovery",
+      "agentId": "atlas",
+      "status": "passed",
+      "schemaValid": true,
+      "capabilityValid": true,
+      "allowedMetrics": [
+        "crime"
+      ],
+      "proposedMetric": "crime",
+      "riskTier": "medium",
+      "approvalPolicy": "human-approval",
+      "usage": {
+        "tokenCount": 87,
+        "costUsd": 0,
+        "latencyMs": 13
+      }
+    },
+    {
+      "id": "neo-angeles-civic-recovery:economica",
+      "scenarioId": "neo-angeles-civic-recovery",
+      "agentId": "economica",
+      "status": "passed",
+      "schemaValid": true,
+      "capabilityValid": true,
+      "allowedMetrics": [
+        "gdp",
+        "happiness"
+      ],
+      "proposedMetric": "gdp",
+      "riskTier": "medium",
+      "approvalPolicy": "human-approval",
+      "usage": {
+        "tokenCount": 84,
+        "costUsd": 0,
+        "latencyMs": 27
+      }
+    },
+    {
+      "id": "neo-angeles-civic-recovery:civitas",
+      "scenarioId": "neo-angeles-civic-recovery",
+      "agentId": "civitas",
+      "status": "passed",
+      "schemaValid": true,
+      "capabilityValid": true,
+      "allowedMetrics": [
+        "traffic",
+        "energy",
+        "pollution",
+        "water",
+        "medical"
+      ],
+      "proposedMetric": "traffic",
+      "riskTier": "medium",
+      "approvalPolicy": "human-approval",
+      "usage": {
+        "tokenCount": 93,
+        "costUsd": 0,
+        "latencyMs": 23
+      }
+    },
+    {
+      "id": "neo-angeles-civic-recovery:spectre",
+      "scenarioId": "neo-angeles-civic-recovery",
+      "agentId": "spectre",
+      "status": "passed",
+      "schemaValid": true,
+      "capabilityValid": true,
+      "allowedMetrics": [
+        "crime",
+        "internet"
+      ],
+      "proposedMetric": "internet",
+      "riskTier": "medium",
+      "approvalPolicy": "human-approval",
+      "usage": {
+        "tokenCount": 90,
+        "costUsd": 0,
+        "latencyMs": 13
+      }
+    }
+  ],
+  "gate": {
+    "passed": true,
+    "failures": []
+  }
+}

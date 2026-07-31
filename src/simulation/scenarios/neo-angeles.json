@@ -1,0 +1,103 @@
+{
+  "id": "neo-angeles-baseline",
+  "seed": "nexus-7-neo-angeles",
+  "policyVersion": "policy-1.0.0",
+  "configuration": {
+    "minutesPerTick": 1,
+    "backgroundActionProbability": 0.15,
+    "ambientEventProbability": 0.08,
+    "agentRuntime": {
+      "globalCommandBudget": 2,
+      "agents": {
+        "atlas": {
+          "commandBudget": 1,
+          "cooldownTicks": 5,
+          "priority": 90,
+          "maxRiskTier": "high"
+        },
+        "economica": {
+          "commandBudget": 1,
+          "cooldownTicks": 5,
+          "priority": 60,
+          "maxRiskTier": "medium"
+        },
+        "civitas": {
+          "commandBudget": 1,
+          "cooldownTicks": 5,
+          "priority": 80,
+          "maxRiskTier": "high"
+        },
+        "spectre": {
+          "commandBudget": 1,
+          "cooldownTicks": 5,
+          "priority": 70,
+          "maxRiskTier": "medium"
+        }
+      }
+    },
+    "thresholds": {
+      "crimeHigh": 70,
+      "trafficHigh": 80,
+      "energyLow": 40,
+      "pollutionHigh": 75
+    }
+  },
+  "world": {
+    "schemaVersion": 1,
+    "scenarioId": "neo-angeles-baseline",
+    "tick": 0,
+    "clock": {
+      "day": 1,
+      "hour": 12,
+      "minute": 0,
+      "totalMinutes": 720
+    },
+    "city": {
+      "population": 8472934,
+      "happiness": 72
+    },
+    "weather": {
+      "temp": 23,
+      "humidity": 65,
+      "wind": 12,
+      "condition": "clear",
+      "aqi": 81,
+      "pollution": 34
+    },
+    "economy": {
+      "gdp": 2847
+    },
+    "infrastructure": {
+      "traffic": 56,
+      "energy": 78,
+      "water": 91,
+      "internet": 94,
+      "medical": 85
+    },
+    "security": {
+      "crime": 23
+    },
+    "agents": {
+      "aria": {
+        "status": "active",
+        "mood": 85
+      },
+      "atlas": {
+        "status": "active",
+        "mood": 72
+      },
+      "economica": {
+        "status": "idle",
+        "mood": 90
+      },
+      "civitas": {
+        "status": "active",
+        "mood": 68
+      },
+      "spectre": {
+        "status": "idle",
+        "mood": 55
+      }
+    }
+  }
+}

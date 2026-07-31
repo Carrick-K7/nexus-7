@@ -46,7 +46,7 @@ describe('i18n translations', () => {
     describe(`${lang} translations`, () => {
       it('should not have empty string values', () => {
         const trans = translations[lang];
-        for (const [_key, value] of Object.entries(trans)) {
+        for (const value of Object.values(trans)) {
           if (typeof value === 'string') {
             expect(value).not.toBe('');
           }

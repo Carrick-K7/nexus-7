@@ -105,7 +105,7 @@ export interface TerminalCommand {
   aliases: string[];
 }
 
-export type ThemeMode = 'dark' | 'matrix' | 'hacker';
+export type ThemeMode = "light" | "dark";
 
 export interface GameTime {
   hour: number;

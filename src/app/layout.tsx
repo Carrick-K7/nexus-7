@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NEXUS | OMNIScient City Control Center",
-  description: "Advanced cyberpunk city management and monitoring system",
+  title: "NEXUS-7 | Shenzhen Symbiosis City Observatory",
+  description:
+    "An observatory for a simulated city of humans, AI, and robots.",
 };
 
 export default function RootLayout({
@@ -12,7 +13,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" data-theme="dark">
       <body className="min-h-full antialiased">
         {children}
       </body>

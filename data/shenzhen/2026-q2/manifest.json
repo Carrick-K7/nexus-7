@@ -1,0 +1,50 @@
+{
+  "schemaVersion": "nexus.dataset-manifest.v1",
+  "datasetId": "shenzhen-public-calibration-2026q2-v1",
+  "title": "Shenzhen 2025 public aggregate calibration freeze",
+  "referencePeriod": "2025-01-01/2025-12-31",
+  "frozenAt": "2026-07-18T00:00:00.000+08:00",
+  "sources": [
+    {
+      "publisher": "Shenzhen Statistics Bureau and Survey Office of the National Bureau of Statistics in Shenzhen",
+      "title": "深圳市2025年国民经济和社会发展统计公报",
+      "url": "https://www.sz.gov.cn/cn/xxgk/zfxxgj/tjsj/tjgb/content/post_12805133.html",
+      "publishedAt": "2026-05-25",
+      "accessedAt": "2026-07-18",
+      "license": "Government publication; verify downstream reuse terms before redistribution",
+      "uncertainty": "The publication labels 2025 figures as preliminary."
+    },
+    {
+      "publisher": "Shenzhen Statistics Bureau",
+      "title": "深圳统计年鉴2025",
+      "url": "https://tjj.sz.gov.cn/gkmlpt/content/12/12647/post_12647191.html",
+      "publishedAt": "2026-05-08",
+      "accessedAt": "2026-07-18",
+      "license": "Government publication; dataset-specific reuse terms must be recorded before ingestion",
+      "uncertainty": "Catalogued as a future calibration source; no resident-level records are ingested."
+    },
+    {
+      "publisher": "Shenzhen Municipal Government",
+      "title": "深圳市政府数据开放平台",
+      "url": "https://opendata.sz.gov.cn/",
+      "accessedAt": "2026-07-18",
+      "license": "Per-dataset license required",
+      "uncertainty": "Catalog source only; no unfrozen live endpoint is used by the simulation."
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "data/shenzhen/2026-q2/calibration.json",
+      "sha256": "e97f378d2361dc70af9c8703babb08662117868b49580ac9b939923d6ca4c746",
+      "transformation": "Manual transcription of selected published aggregates, unit normalization, and prohibition metadata; reviewed against the cited official bulletin.",
+      "containsPersonalData": false
+    }
+  ],
+  "geography": {
+    "realTopologyUse": "District names and coarse topology only",
+    "foregroundCommunities": "Entirely fictional communities in Nanshan, Futian, and Longgang",
+    "preciseAddressesIncluded": false,
+    "restrictedGeographyIncluded": false
+  },
+  "boundary": "This freeze calibrates public aggregate scale only. It is not a Shenzhen digital twin and contains no real resident, address, institution, relationship, or event."
+}

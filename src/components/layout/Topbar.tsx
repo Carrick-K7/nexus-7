@@ -2,15 +2,51 @@
 
 import { useNexusStore } from '@/stores/nexus-store';
 import { motion } from 'framer-motion';
-import { Bell, Search, Clock, User, ChevronDown, Globe } from 'lucide-react';
+import {
+  Bell,
+  Search,
+  Clock,
+  Eye,
+  Globe,
+  Menu,
+  Moon,
+  Pause,
+  Play,
+  Sun,
+} from "lucide-react";
 import { useState } from 'react';
+import { useTranslation } from '@/hooks/useTranslation';
 
-export default function Topbar() {
-  const { gameTime, setGameTime, notifications, markAsRead, cityStats, language, setLanguage } = useNexusStore();
+interface TopbarProps {
+  onOpenMenu: () => void;
+  themeReady: boolean;
+}
+
+export default function Topbar({
+  onOpenMenu,
+  themeReady,
+}: TopbarProps) {
+  const {
+    gameTime,
+    setSimulationSpeed,
+    simulation,
+    pauseSimulation,
+    resumeSimulation,
+    notifications,
+    markAsRead,
+    cityStats,
+    language,
+    setLanguage,
+    activeView,
+    theme,
+    setTheme,
+  } = useNexusStore();
+  const { t } = useTranslation();
   const [showNotifications, setShowNotifications] = useState(false);
   const [showLangMenu, setShowLangMenu] = useState(false);
 
   const unreadCount = notifications.filter(n => !n.read).length;
+  const observingSymbiosis = activeView === "symbiosis";
 
   const formatTime = (hour: number, minute: number) => {
     return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
@@ -25,33 +61,61 @@ export default function Topbar() {
     <motion.header 
       initial={{ y: -60 }}
       animate={{ y: 0 }}
-      className="fixed top-0 left-64 right-0 h-16 bg-cyber-darker/95 border-b border-cyber-blue/20 flex items-center justify-between px-6 z-40"
+      className="fixed left-0 right-0 top-0 z-40 flex h-16 items-center justify-between border-b border-cyber-blue/20 bg-cyber-darker/95 px-3 sm:px-4 lg:left-64 xl:px-6"
     >
-      <div className="flex items-center gap-4">
-        <div className="relative">
+      <div className="flex min-w-0 items-center gap-3">
+        <button
+          type="button"
+          onClick={onOpenMenu}
+          aria-label="Open navigation"
+          className="rounded-lg p-2 text-cyber-text-dim hover:bg-cyber-gray hover:text-cyber-text lg:hidden"
+        >
+          <Menu className="h-5 w-5" />
+        </button>
+        {observingSymbiosis ? (
+          <div className="hidden items-center gap-2 text-sm text-cyber-text-dim sm:flex">
+            <Eye className="h-4 w-4 text-cyber-green" />
+            <span>
+              {language === "zh" ? "活动城市观测" : "Live city observation"}
+            </span>
+          </div>
+        ) : <div className="relative hidden 2xl:block">
           <Search className="w-4 h-4 text-cyber-text-dim absolute left-3 top-1/2 -translate-y-1/2" />
           <input 
             type="text"
-            placeholder="Search Nexus..."
+            aria-label={t('search')}
+            placeholder={t('search')}
             className="w-64 pl-10 pr-4 py-2 bg-cyber-dark border border-cyber-blue/20 rounded-lg text-sm text-cyber-text placeholder-cyber-text-dim focus:outline-none focus:border-cyber-blue/50 transition-colors"
           />
           <kbd className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-cyber-text-dim bg-cyber-gray px-1.5 py-0.5 rounded">⌘K</kbd>
-        </div>
+        </div>}
       </div>
 
-      <div className="flex items-center gap-6">
-        <div className="flex items-center gap-4 text-sm">
+      <div className="flex items-center gap-2 sm:gap-3 xl:gap-5">
+        {!observingSymbiosis && <div className="hidden items-center gap-3 text-sm md:flex">
           <div className="flex items-center gap-2 text-cyber-text-dim">
             <Clock className="w-4 h-4" />
             <span className="font-mono text-cyber-blue">{formatTime(gameTime.hour, gameTime.minute)}</span>
           </div>
-          <div className="text-cyber-text-dim">|</div>
-          <div className="text-cyber-text-dim">{formatDay(gameTime.day)}</div>
-          <div className="flex gap-1">
+          <div className="hidden text-cyber-text-dim lg:block">|</div>
+          <div className="hidden text-cyber-text-dim lg:block">{formatDay(gameTime.day)}</div>
+          <div className="hidden gap-1 xl:flex">
+            <button
+              type="button"
+              onClick={simulation.status === 'running' ? pauseSimulation : resumeSimulation}
+              aria-label={simulation.status === 'running' ? t('pauseSimulation') : t('resumeSimulation')}
+              className="rounded p-1 text-cyber-text-dim hover:bg-cyber-gray hover:text-cyber-blue"
+            >
+              {simulation.status === 'running' ? (
+                <Pause className="h-4 w-4" />
+              ) : (
+                <Play className="h-4 w-4" />
+              )}
+            </button>
             {[1, 2, 5, 10].map((speed) => (
               <button
                 key={speed}
-                onClick={() => setGameTime({ speed: speed as 1 | 2 | 5 | 10 })}
+                onClick={() => setSimulationSpeed(speed as 1 | 2 | 5 | 10)}
                 className={`px-2 py-1 text-xs rounded ${
                   gameTime.speed === speed 
                     ? 'bg-cyber-blue/20 text-cyber-blue' 
@@ -62,22 +126,23 @@ export default function Topbar() {
               </button>
             ))}
           </div>
-        </div>
+        </div>}
 
-        <div className="flex items-center gap-4">
+        {!observingSymbiosis && <div className="hidden items-center gap-4 xl:flex">
           <div className="flex items-center gap-2 px-3 py-1.5 bg-cyber-green/10 border border-cyber-green/30 rounded">
             <div className="w-2 h-2 rounded-full bg-cyber-green animate-pulse" />
             <span className="text-xs text-cyber-green font-medium">
               {(cityStats.population / 1000000).toFixed(1)}M Citizens
             </span>
           </div>
-        </div>
+        </div>}
 
-        <div className="relative">
+        {!observingSymbiosis && <div className="relative">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
             onClick={() => setShowNotifications(!showNotifications)}
+            aria-label="Open notifications"
             className="relative p-2 rounded-lg bg-cyber-gray hover:bg-cyber-gray-light transition-colors"
           >
             <Bell className="w-5 h-5 text-cyber-text-dim" />
@@ -85,7 +150,7 @@ export default function Topbar() {
               <motion.span 
                 initial={{ scale: 0 }}
                 animate={{ scale: 1 }}
-                className="absolute -top-1 -right-1 w-5 h-5 bg-cyber-red rounded-full text-xs flex items-center justify-center text-white font-bold"
+                className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-cyber-red text-xs font-bold text-cyber-black"
               >
                 {unreadCount > 9 ? '9+' : unreadCount}
               </motion.span>
@@ -96,21 +161,21 @@ export default function Topbar() {
             <motion.div 
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              className="absolute right-0 top-12 w-80 bg-cyber-dark border border-cyber-blue/30 rounded-xl shadow-xl overflow-hidden"
+              className="fixed left-3 right-3 top-16 overflow-hidden rounded-xl border border-cyber-blue/30 bg-cyber-dark shadow-xl sm:absolute sm:left-auto sm:right-0 sm:top-12 sm:w-80"
             >
               <div className="p-3 border-b border-cyber-blue/20 flex items-center justify-between">
-                <span className="text-sm font-medium text-cyber-text">Notifications</span>
+                <span className="text-sm font-medium text-cyber-text">{t('notificationsTitle')}</span>
                 <button 
                   onClick={() => notifications.forEach(n => markAsRead(n.id))}
                   className="text-xs text-cyber-blue hover:underline"
                 >
-                  Mark all read
+                  {t('markAllRead')}
                 </button>
               </div>
               <div className="max-h-64 overflow-y-auto">
                 {notifications.length === 0 ? (
                   <div className="p-4 text-center text-cyber-text-dim text-sm">
-                    No notifications
+                    {t('noNotifications')}
                   </div>
                 ) : (
                   notifications.slice(0, 5).map((notif) => (
@@ -137,22 +202,37 @@ export default function Topbar() {
               </div>
             </motion.div>
           )}
-        </div>
+        </div>}
 
-        <motion.button 
+        <motion.button
           whileHover={{ scale: 1.05 }}
-          className="flex items-center gap-2 p-2 rounded-lg hover:bg-cyber-gray transition-colors"
+          whileTap={{ scale: 0.95 }}
+          type="button"
+          onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
+          disabled={!themeReady}
+          aria-label={
+            theme === "dark"
+              ? language === "zh"
+                ? "切换到浅色模式"
+                : "Switch to light theme"
+              : language === "zh"
+                ? "切换到深色模式"
+                : "Switch to dark theme"
+          }
+          className="rounded-lg border border-cyber-purple/25 bg-cyber-gray p-2 text-cyber-purple transition-all hover:border-cyber-pink/50 hover:bg-cyber-gray-light hover:text-cyber-pink disabled:cursor-wait disabled:opacity-55"
         >
-          <div className="w-8 h-8 rounded-full bg-gradient-to-br from-cyber-purple to-cyber-pink flex items-center justify-center">
-            <User className="w-4 h-4 text-white" />
-          </div>
-          <ChevronDown className="w-4 h-4 text-cyber-text-dim" />
+          {theme === "dark" ? (
+            <Sun className="h-4 w-4" aria-hidden="true" />
+          ) : (
+            <Moon className="h-4 w-4" aria-hidden="true" />
+          )}
         </motion.button>
 
         <div className="relative">
           <motion.button
             whileHover={{ scale: 1.05 }}
             onClick={() => setShowLangMenu(!showLangMenu)}
+            aria-label="Change language"
             className="flex items-center gap-2 px-3 py-2 rounded-lg bg-cyber-gray hover:bg-cyber-gray-light transition-colors"
           >
             <Globe className="w-4 h-4 text-cyber-text-dim" />

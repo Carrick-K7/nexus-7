@@ -1,0 +1,63 @@
+name: Promotion receipt
+
+on:
+  workflow_run:
+    workflows: ["CI"]
+    types: [completed]
+
+jobs:
+  issue:
+    if: >-
+      github.event.workflow_run.conclusion == 'success' &&
+      github.event.workflow_run.event == 'push' &&
+      github.event.workflow_run.head_branch == 'main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    permissions:
+      actions: read
+      attestations: read
+      contents: read
+
+    steps:
+      - name: Checkout attested revision
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.workflow_run.head_sha }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download CI evidence
+        env:
+          GH_TOKEN: ${{ github.token }}
+          RUN_ID: ${{ github.event.workflow_run.id }}
+        run: >-
+          gh run download "$RUN_ID"
+          --repo "${{ github.repository }}"
+          --name nexus-verification-evidence
+          --dir .verified
+
+      - name: Verify provenance and issue receipt
+        env:
+          GH_TOKEN: ${{ github.token }}
+          NEXUS_ATTESTATION_REPOSITORY: ${{ github.repository }}
+          NEXUS_ATTESTATION_SIGNER_WORKFLOW: ${{ github.repository }}/.github/workflows/ci.yml
+          NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64: ${{ secrets.NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64 }}
+        run: >-
+          npm run evidence:verify --
+          .verified/public/data/ci-evidence.json
+          .artifacts/attestation-receipt.json
+
+      - name: Upload short-lived promotion receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexus-promotion-receipt-${{ github.event.workflow_run.head_sha }}
+          path: .artifacts/attestation-receipt.json
+          include-hidden-files: true
+          retention-days: 1

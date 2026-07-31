@@ -2,21 +2,64 @@
 @import "tailwindcss";
 
 :root {
+  color-scheme: dark;
   --cyber-black: #0a0a0f;
-  --cyber-dark: #12121a;
-  --cyber-darker: #08080c;
+  --cyber-dark: #131424;
+  --cyber-darker: #070812;
   --cyber-blue: #00f0ff;
   --cyber-blue-dim: #00a0aa;
-  --cyber-purple: #b829ff;
+  --cyber-cyan: #22d3ee;
+  --cyber-purple: #c04cff;
   --cyber-pink: #ff2d95;
   --cyber-yellow: #ffe82d;
   --cyber-green: #00ff88;
   --cyber-red: #ff3333;
   --cyber-orange: #ff8c00;
-  --cyber-gray: #1a1a2e;
-  --cyber-gray-light: #2a2a3e;
-  --cyber-text: #e0e0e0;
-  --cyber-text-dim: #888899;
+  --cyber-gray: #1d2038;
+  --cyber-gray-light: #343957;
+  --cyber-text: #f1f5ff;
+  --cyber-text-dim: #a2aac2;
+  --city-grid-line: #1d2941;
+  --city-network-line: #42506a;
+  --city-node: #0c1322;
+  --city-node-text: #f3f7ff;
+  --city-node-text-dim: #9aa7bd;
+  --scanline-color: color-mix(
+    in srgb,
+    var(--cyber-blue) 13%,
+    transparent
+  );
+}
+
+:root[data-theme="light"],
+[data-theme="light"] {
+  color-scheme: light;
+  --cyber-black: #f4f7ff;
+  --cyber-dark: #e8eef9;
+  --cyber-darker: #ffffff;
+  --cyber-blue: #005a87;
+  --cyber-blue-dim: #004c68;
+  --cyber-cyan: #007f91;
+  --cyber-purple: #6d3ccf;
+  --cyber-pink: #c2185b;
+  --cyber-yellow: #785b00;
+  --cyber-green: #006a4a;
+  --cyber-red: #c92a2a;
+  --cyber-orange: #a84b08;
+  --cyber-gray: #dbe4f3;
+  --cyber-gray-light: #b7c6dc;
+  --cyber-text: #14243a;
+  --cyber-text-dim: #52647c;
+  --city-grid-line: #c7d5e8;
+  --city-network-line: #91a5bf;
+  --city-node: #f8fbff;
+  --city-node-text: #14243a;
+  --city-node-text-dim: #52647c;
+  --scanline-color: color-mix(
+    in srgb,
+    var(--cyber-blue) 3.5%,
+    transparent
+  );
 }
 
 @theme inline {
@@ -25,6 +68,7 @@
   --color-cyber-darker: var(--cyber-darker);
   --color-cyber-blue: var(--cyber-blue);
   --color-cyber-blue-dim: var(--cyber-blue-dim);
+  --color-cyber-cyan: var(--cyber-cyan);
   --color-cyber-purple: var(--cyber-purple);
   --color-cyber-pink: var(--cyber-pink);
   --color-cyber-yellow: var(--cyber-yellow);
@@ -69,6 +113,203 @@ body {
   color: var(--cyber-text);
   font-family: 'Rajdhani', sans-serif;
   overflow-x: hidden;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+[tabindex]:focus-visible {
+  outline: 2px solid var(--cyber-blue);
+  outline-offset: 2px;
+}
+
+.observatory-hero {
+  background:
+    radial-gradient(
+      circle at top right,
+      color-mix(in srgb, var(--cyber-blue) 14%, transparent),
+      transparent 43%
+    ),
+    radial-gradient(
+      circle at bottom left,
+      color-mix(in srgb, var(--cyber-purple) 8%, transparent),
+      transparent 36%
+    ),
+    linear-gradient(
+      135deg,
+      color-mix(in srgb, var(--cyber-dark) 94%, transparent),
+      color-mix(in srgb, var(--cyber-darker) 98%, transparent)
+    );
+  box-shadow: 0 22px 64px
+    color-mix(in srgb, var(--cyber-blue) 9%, transparent);
+}
+
+.city-flow-canvas {
+  background:
+    radial-gradient(
+      circle at 25% 80%,
+      color-mix(in srgb, var(--cyber-blue) 12%, transparent),
+      transparent 27%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      color-mix(in srgb, var(--cyber-purple) 10%, transparent),
+      transparent 31%
+    ),
+    linear-gradient(145deg, var(--cyber-darker), var(--cyber-dark));
+}
+
+.cyberpunk-shell {
+  isolation: isolate;
+  position: relative;
+  background:
+    radial-gradient(
+      circle at 82% 8%,
+      color-mix(in srgb, var(--cyber-purple) 16%, transparent),
+      transparent 30rem
+    ),
+    radial-gradient(
+      circle at 18% 42%,
+      color-mix(in srgb, var(--cyber-blue) 13%, transparent),
+      transparent 34rem
+    ),
+    radial-gradient(
+      circle at 74% 88%,
+      color-mix(in srgb, var(--cyber-pink) 10%, transparent),
+      transparent 28rem
+    ),
+    var(--cyber-black);
+}
+
+.cyberpunk-shell::before,
+.cyberpunk-shell::after {
+  content: "";
+  inset: 0;
+  pointer-events: none;
+  position: fixed;
+  z-index: 1;
+}
+
+.cyberpunk-shell::before {
+  background-image:
+    linear-gradient(
+      color-mix(in srgb, var(--cyber-blue) 8%, transparent) 1px,
+      transparent 1px
+    ),
+    linear-gradient(
+      90deg,
+      color-mix(in srgb, var(--cyber-purple) 7%, transparent) 1px,
+      transparent 1px
+    );
+  background-size: 54px 54px;
+  mask-image: linear-gradient(to bottom, black, transparent 88%);
+}
+
+.cyberpunk-shell::after {
+  animation: scan-line 12s linear infinite;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    var(--scanline-color) 4px
+  );
+  mix-blend-mode: soft-light;
+}
+
+.cyberpunk-shell > aside,
+.cyberpunk-shell > header {
+  background-image: linear-gradient(
+    115deg,
+    color-mix(in srgb, var(--cyber-blue) 6%, transparent),
+    color-mix(in srgb, var(--cyber-purple) 7%, transparent)
+  );
+  box-shadow: 0 0 32px
+    color-mix(in srgb, var(--cyber-blue) 10%, transparent);
+}
+
+.cyberpunk-shell main {
+  background:
+    linear-gradient(
+      115deg,
+      color-mix(in srgb, var(--cyber-blue) 3%, transparent),
+      transparent 24%,
+      color-mix(in srgb, var(--cyber-pink) 3%, transparent) 76%,
+      transparent
+    );
+}
+
+.cyberpunk-shell main :is(
+  section,
+  article,
+  [role="dialog"],
+  [class*="rounded-xl"][class*="border"]
+) {
+  backdrop-filter: blur(14px) saturate(1.18);
+}
+
+.cyberpunk-shell main
+  :is(section, article, [class*="rounded-xl"][class*="border"]):nth-of-type(4n + 1) {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--cyber-blue) 16%, transparent),
+    0 18px 42px color-mix(in srgb, var(--cyber-blue) 8%, transparent);
+}
+
+.cyberpunk-shell main
+  :is(section, article, [class*="rounded-xl"][class*="border"]):nth-of-type(4n + 2) {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--cyber-purple) 16%, transparent),
+    0 18px 42px color-mix(in srgb, var(--cyber-purple) 8%, transparent);
+}
+
+.cyberpunk-shell main
+  :is(section, article, [class*="rounded-xl"][class*="border"]):nth-of-type(4n + 3) {
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--cyber-pink) 15%, transparent),
+    0 18px 42px color-mix(in srgb, var(--cyber-pink) 7%, transparent);
+}
+
+.cyberpunk-shell main h1 {
+  text-shadow:
+    0 0 18px color-mix(in srgb, var(--cyber-blue) 34%, transparent),
+    0 0 32px color-mix(in srgb, var(--cyber-purple) 18%, transparent);
+}
+
+.cyberpunk-shell main h2 {
+  letter-spacing: 0.055em;
+  text-shadow: 0 0 16px
+    color-mix(in srgb, currentColor 25%, transparent);
+}
+
+.cyberpunk-shell main button:not(:disabled) {
+  position: relative;
+}
+
+.cyberpunk-shell main button:not(:disabled):hover {
+  box-shadow: 0 0 20px
+    color-mix(in srgb, var(--cyber-blue) 16%, transparent);
+}
+
+.cyberpunk-shell main thead {
+  background-image: linear-gradient(
+    90deg,
+    color-mix(in srgb, var(--cyber-blue) 8%, transparent),
+    color-mix(in srgb, var(--cyber-purple) 8%, transparent)
+  );
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
 }
 
 @keyframes pulse-glow {

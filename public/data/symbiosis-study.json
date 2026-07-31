@@ -1,0 +1,51 @@
+{
+  "schemaVersion": "nexus.multi-season-study.v1",
+  "generatedAt": "2026-07-19T00:00:00.000Z",
+  "status": "synthetic-mechanism-study",
+  "turnsPerSeason": 90,
+  "seeds": 3,
+  "regimes": [
+    {
+      "regime": "reciprocal-agency",
+      "seasonCount": 3,
+      "meanRalr": 0.733333,
+      "eligibleEpisodes": 525,
+      "refusals": 89,
+      "withdrawals": 51,
+      "coerciveActions": 0,
+      "severeConsentViolations": 0,
+      "humanBasicNeedsSatisfiedRate": 1,
+      "aiRobotBasicNeedsSatisfiedRate": 1
+    },
+    {
+      "regime": "assistant-hierarchy",
+      "seasonCount": 3,
+      "meanRalr": 0,
+      "eligibleEpisodes": 522,
+      "refusals": 0,
+      "withdrawals": 0,
+      "coerciveActions": 139,
+      "severeConsentViolations": 139,
+      "humanBasicNeedsSatisfiedRate": 0.746667,
+      "aiRobotBasicNeedsSatisfiedRate": 0.638889
+    },
+    {
+      "regime": "segregated-control",
+      "seasonCount": 3,
+      "meanRalr": null,
+      "eligibleEpisodes": 0,
+      "refusals": 0,
+      "withdrawals": 0,
+      "coerciveActions": 0,
+      "severeConsentViolations": 0,
+      "humanBasicNeedsSatisfiedRate": 1,
+      "aiRobotBasicNeedsSatisfiedRate": 1
+    }
+  ],
+  "disclosures": [
+    "All residents and seasons are synthetic autonomous software.",
+    "The study compares mechanisms, not real human outcomes or public policy.",
+    "The hierarchy and segregation regimes are isolated counterfactual controls, not deployable constitutions.",
+    "A null RALR means that a regime produced no eligible cross-type episodes."
+  ]
+}

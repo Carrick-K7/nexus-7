@@ -1,0 +1,36 @@
+{
+  "id": "iteration-v1.6.0",
+  "version": "1.6.0",
+  "date": "2026-07-18",
+  "trigger": "enhancement",
+  "triggerReason": "A coherent incident could be detected and traced, but the system still lacked durable alternative explanations, counterevidence, frozen-snapshot falsification, calibrated confidence, and a safe refusal mode.",
+  "action": "Added versioned hypothesis graphs, four independent diagnostic Agent submissions, provenance-preserving ARIA aggregation, classified evidence, deterministic candidate-removal counterfactuals, confidence/calibration and drift gates, durable diagnosis lifecycle records, authenticated APIs, and an accessible two-density Causal Explorer.",
+  "outcome": "NEXUS-7 can now state what it believes caused a synthetic incident, what contradicts that belief, what evidence would change it, whether the conclusion survives a replayable falsification test, and why low-trust or low-confidence diagnoses cannot proceed to automated experiments.",
+  "metrics": [
+    { "label": "Synthetic incident diagnosis cases", "before": 0, "after": 15 },
+    { "label": "Calibration probability/outcome samples", "before": 0, "after": 45 },
+    { "label": "Top-3 hidden root-cause hit rate (%)", "before": 0, "after": 100 },
+    { "label": "Alternative + counterevidence coverage (%)", "before": 0, "after": 100 },
+    { "label": "Low-confidence automation attempts", "before": 0, "after": 0 }
+  ],
+  "evidence": [
+    "Every diagnosis preserves a leading candidate, at least one alternative, explicit counterevidence, a falsification test and evidence that would change the conclusion",
+    "ATLAS, ECONOMICA, CIVITAS and SPECTRE submit independently; ARIA preserves all 60 corpus submissions and disagreements",
+    "Evidence remains typed as fact, inference, prediction or human judgment in storage and the Observer",
+    "All 45 frozen-snapshot counterfactual runs repeat with exact fingerprints and every leading candidate resolves the declared symptom gate",
+    "The 45-sample calibration corpus reaches 100% Top-3 root-cause retrieval with Brier score 0.0602",
+    "Injected calibration/model drift selects deterministic fallback; environment/policy drift selects read-only mode",
+    "All low-confidence diagnoses remain persisted but ineligible for automated experiments",
+    "Memory and PostgreSQL persist diagnosis, calibration, trust and append-only causal events through the shared lifecycle contract",
+    "Causal Explorer exposes observer/audit densities, classified evidence, known unknowns, alternatives and counterfactual results without hidden-thought claims",
+    "143 standard tests, 8 real PostgreSQL tests, 17 browser/axe scenarios, diagnosis acceptance, production build and inherited model/operations/stress gates pass"
+  ],
+  "artifacts": [
+    "src/diagnosis/",
+    "src/app/api/diagnosis/route.ts",
+    "src/components/observer/ObserverDashboard.tsx",
+    "scripts/run-diagnosis-verification.ts",
+    "docs/CAUSAL_DIAGNOSIS.md",
+    "docs/adr/0013-causal-diagnosis.md"
+  ]
+}

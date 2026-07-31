@@ -1,0 +1,25 @@
+{
+  "id": "iteration-v0.3.1",
+  "version": "0.3.1",
+  "date": "2026-07-16",
+  "trigger": "bug",
+  "triggerReason": "The prototype built successfully but still crashed during real browser interaction and was unusable on mobile.",
+  "action": "Fixed the Agent modal update loop, responsive navigation, chart sizing, version drift, accessibility gaps, dependency vulnerabilities, and established CI browser gates.",
+  "outcome": "NEXUS-7 gained a trustworthy runtime baseline before deeper autonomy work.",
+  "metrics": [
+    { "label": "Unit tests", "before": 22, "after": 23 },
+    { "label": "Browser tests", "before": 0, "after": 6 },
+    { "label": "Known vulnerabilities", "before": 4, "after": 0 }
+  ],
+  "evidence": [
+    "All 21 primary views render in Chromium",
+    "Desktop and mobile Dashboard pass WCAG A/AA checks",
+    "npm audit reports zero vulnerabilities"
+  ],
+  "artifacts": [
+    "e2e/nexus.spec.ts",
+    ".github/workflows/ci.yml",
+    "docs/ROADMAP.md",
+    "docs/adr/0001-deterministic-simulation-core.md"
+  ]
+}

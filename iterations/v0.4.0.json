@@ -1,0 +1,27 @@
+{
+  "id": "iteration-v0.4.0",
+  "version": "0.4.0",
+  "date": "2026-07-16",
+  "trigger": "observation",
+  "triggerReason": "The city loop used React-owned timers, Math.random(), and direct store mutation, so no run could be reproduced or audited.",
+  "action": "Introduced a framework-independent seeded simulation core, versioned world state, command guardrails, causal events, replay verification, and trusted JSON import/export.",
+  "outcome": "The cyber city became a reproducible experiment: identical inputs now yield byte-for-byte identical state and event logs.",
+  "metrics": [
+    { "label": "Deterministic replay ticks", "before": 0, "after": 1000 },
+    { "label": "Unit tests", "before": 23, "after": 27 },
+    { "label": "Browser tests", "before": 6, "after": 7 }
+  ],
+  "evidence": [
+    "1,000-tick same-seed replay is byte-for-byte equivalent",
+    "Invalid commands cannot change the resulting world",
+    "Tampered run exports fail deterministic import validation",
+    "Pause, step, replay, reset, export, and import pass in Chromium"
+  ],
+  "artifacts": [
+    "src/simulation/core/step.ts",
+    "src/simulation/scenarios/neo-angeles.json",
+    "src/simulation/replay.ts",
+    "src/simulation/serialization.ts",
+    "src/simulation/simulation.test.ts"
+  ]
+}

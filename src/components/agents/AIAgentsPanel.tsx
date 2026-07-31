@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Shield, BarChart3, Building2, Eye, X, Activity, AlertTriangle, CheckCircle2, Brain } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
@@ -141,7 +141,11 @@ const AgentModal = ({ agent, config, onClose }: AgentModalProps) => {
   const { t } = useTranslation();
   void t;
   const Icon = config.icon;
-  const agentLogsForThisAgent = useNexusStore((s) => s.agentLogs.filter((l) => l.agentId === agent.id));
+  const agentLogs = useNexusStore((s) => s.agentLogs);
+  const agentLogsForThisAgent = useMemo(
+    () => agentLogs.filter((log) => log.agentId === agent.id),
+    [agent.id, agentLogs],
+  );
 
   return (
     <motion.div
@@ -150,6 +154,9 @@ const AgentModal = ({ agent, config, onClose }: AgentModalProps) => {
       exit={{ opacity: 0 }}
       className="fixed inset-0 z-50 flex items-center justify-center p-4"
       onClick={onClose}
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby={`agent-modal-${agent.id}`}
     >
       <div className="absolute inset-0 bg-black/70 backdrop-blur-sm" />
 
@@ -180,7 +187,7 @@ const AgentModal = ({ agent, config, onClose }: AgentModalProps) => {
                 <Icon className="w-10 h-10" style={{ color: config.color }} />
               </div>
               <div>
-                <h2 className="text-2xl font-orbitron font-bold tracking-wider" style={{ color: config.color }}>
+                <h2 id={`agent-modal-${agent.id}`} className="text-2xl font-orbitron font-bold tracking-wider" style={{ color: config.color }}>
                   {agent.name}
                 </h2>
                 <p className="text-cyber-text-dim mt-1">{agent.role}</p>
@@ -189,6 +196,7 @@ const AgentModal = ({ agent, config, onClose }: AgentModalProps) => {
 
             <button
               onClick={onClose}
+              aria-label={`Close ${agent.name} details`}
               className="p-2 rounded-lg bg-cyber-gray/20 hover:bg-cyber-gray/40 transition-colors"
             >
               <X className="w-5 h-5 text-cyber-text-dim" />
@@ -249,7 +257,7 @@ export default function AIAgentsPanel() {
   const selectedAgent = aiAgents.find((a) => a.id === selectedAgentId) ?? null;
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-orbitron font-bold text-cyber-purple cyber-text-glow">
           {t("agents")}

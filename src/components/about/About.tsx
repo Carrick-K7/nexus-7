@@ -49,7 +49,7 @@ export default function About() {
         <p className="text-cyber-text leading-relaxed mb-6">
           {t("about_intro")}
         </p>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           <div className="space-y-2">
             <div className="flex items-center gap-2 text-cyber-text">
               <Rocket className="w-4 h-4 text-cyber-cyan" />
@@ -88,7 +88,7 @@ export default function About() {
         className="max-w-4xl mx-auto"
       >
         <h2 className="text-2xl font-orbitron font-bold text-cyber-text mb-6">{t("features")}</h2>
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
           {features.map((feature, index) => {
             const Icon = feature.icon;
             return (

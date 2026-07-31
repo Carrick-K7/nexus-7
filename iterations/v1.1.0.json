@@ -1,0 +1,38 @@
+{
+  "id": "iteration-v1.1.0",
+  "version": "1.1.0",
+  "date": "2026-07-16",
+  "trigger": "enhancement",
+  "triggerReason": "The verified autonomy lab had deterministic internal evidence but still depended on development identity headers, the web-process clock, local-only quality claims, and a canary without production SLO semantics.",
+  "action": "Added OIDC/JWKS and signed-proxy identity, a real server-side OpenAI Responses provider, a PostgreSQL-leased worker, checksum backup/restore, 10,000-tick stress evidence, a network-isolated quality executor, GitHub Sigstore attestation workflow, and shadow-baseline canary SLO alerts with automatic rollback drills.",
+  "outcome": "NEXUS-7 now separates local simulation evidence from production trust evidence while preserving the v1 verified-autonomy contract.",
+  "metrics": [
+    { "label": "Long-horizon ticks", "before": 1000, "after": 10000 },
+    { "label": "Authentication modes", "before": 1, "after": 3 },
+    { "label": "Persistent integration drills", "before": 1, "after": 2 },
+    { "label": "Canary SLO dimensions", "before": 2, "after": 5 }
+  ],
+  "evidence": [
+    "OIDC verifies issuer, audience, signature, subject, and mapped role",
+    "Signed proxy identities are bound to method, path, role, and timestamp",
+    "OpenAI Responses integration passes strict structured-output contract tests without exposing secrets",
+    "Two PostgreSQL workers prove lease fencing and takeover",
+    "Backup restores into a second database with matching deterministic report evidence and rejects tampering",
+    "10,000 ticks produce 32,789 events with 100% replay, causal, and rollback evidence and zero invariant violations",
+    "Digest-pinned networkless container passes Lint, standard tests, and production build",
+    "Healthy shadow-baseline canary promotes; injected fault raises a critical alert and auto-rolls back"
+  ],
+  "artifacts": [
+    "src/auth/",
+    "src/simulation/models/openai-provider.ts",
+    "src/workers/experiment-clock.ts",
+    "src/operations/postgres-backup.ts",
+    "src/evidence/",
+    "public/data/v1-1-stress.json",
+    ".github/workflows/ci.yml",
+    "docs/PRODUCTION.md",
+    "docs/CI_EVIDENCE.md",
+    "docs/CANARY_SLO.md",
+    "docs/adr/0008-production-evidence-boundary.md"
+  ]
+}

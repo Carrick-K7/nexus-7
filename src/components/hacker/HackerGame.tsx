@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { useState, useEffect, useRef } from "react";
 import { Shield, Lock, Unlock, Zap, AlertTriangle, CheckCircle } from "lucide-react";
 import { useTranslation } from "@/hooks/useTranslation";
+import SandboxNotice from "@/components/sandbox/SandboxNotice";
 
 interface FirewallNode {
   id: string;
@@ -120,13 +121,15 @@ export default function HackerGame() {
   };
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="space-y-6 p-4 sm:p-6">
       <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
         <h1 className="text-3xl font-orbitron font-bold text-cyber-green cyber-text-glow">{t('hacker_title')}</h1>
         <p className="text-cyber-text-dim mt-1">{t('hacker_desc')}</p>
       </motion.div>
 
-      <div className="grid grid-cols-4 gap-4">
+      <SandboxNotice />
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {[
           { label: t('hackPower'), value: hackPower, color: "cyber-green" },
           { label: t('credits'), value: `$${resources.money.toLocaleString()}`, color: "cyber-yellow" },
@@ -141,8 +144,8 @@ export default function HackerGame() {
         ))}
       </div>
 
-      <div className="grid grid-cols-3 gap-6">
-        <div className="col-span-2 space-y-4">
+      <div className="grid grid-cols-1 gap-6 xl:grid-cols-3">
+        <div className="xl:col-span-2 space-y-4">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }}
             className="bg-cyber-dark/50 border border-cyber-blue/20 rounded-xl p-4">
             <div className="flex items-center justify-between mb-4">
