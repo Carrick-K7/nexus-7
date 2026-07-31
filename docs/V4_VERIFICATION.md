@@ -2,7 +2,7 @@
 
 > Date: 2026-08-01
 >
-> Status: v4.8.6 Accessible Language State release candidate; v4.8.5 deployed;
+> Status: v4.8.7 Atomic Delivery Closure release candidate; v4.8.5 deployed;
 > external replication, duration, off-host restore,
 > CI-Sigstore and live-provider evidence pending
 
@@ -455,6 +455,24 @@ automatic-main-delivery tree for commit `909e37b` in 12m43s. It passed all
 reproduction, deterministic gates, 10,000 ticks and isolated evaluation, then
 uploaded unsigned artifact `8807413233`. Draft-PR attestation and deployment
 correctly remained skipped, so no external trust lane is promoted.
+
+Exact v4.8.6 run `30667304216` then repeated the full pipeline for immutable
+Tag commit `6b463c2` in 12m06s and uploaded unsigned artifact `8807693232`.
+Before deployment, `main` independently gained serialized-backup and
+ref-isolated concurrency corrections. v4.8.6 therefore remains immutable and
+v4.8.7 integrates those delivery changes instead of moving the tested Tag.
+
+### v4.8.7 atomic-delivery-closure gate
+
+The `main` workflow must test and archive one exact revision before a distinct
+deploy job can invoke the repository-specific restricted SSH command. The host
+must serialize and verify PostgreSQL copies, migrate, atomically activate Web
+and worker, preserve the existing volume, expose the same `.deploy-sha`, and
+roll application files back if health fails. Pull requests never deploy, and
+per-ref concurrency prevents their verification from blocking `main` delivery.
+The combined candidate passes zero-warning lint, the TypeScript production
+build and the persisted-language Playwright regression locally before its
+complete remote gate.
 
 ## Provider and persistence gates
 

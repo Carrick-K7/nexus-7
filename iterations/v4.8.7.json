@@ -1,0 +1,28 @@
+{
+  "id": "iteration-v4.8.7",
+  "version": "4.8.7",
+  "date": "2026-08-01",
+  "trigger": "atomic-delivery-integration",
+  "triggerReason": "The v4.8.6 accessibility artifact passed twice, but main advanced with automatic delivery, serialized backup and branch-concurrency corrections before that Tag could fast-forward into production. Moving the immutable v4.8.6 Tag would make its evidence dishonest.",
+  "action": "Preserve v4.8.6 unchanged, integrate the reviewed main-delivery changes, document the restricted immutable artifact path and require the corrected serialized backup before atomic activation. Publish the combined tree as v4.8.7.",
+  "outcome": "The combined tree passes zero-warning lint, the TypeScript production build and the persisted-language Playwright regression locally. The v4.8.6 application behavior already passed 280 local tests, 28/28 browser scenarios and two complete GitHub pipelines; v4.8.7 exact release and production evidence remain to be recorded after their corresponding gates run.",
+  "metrics": [
+    { "label": "Immutable tags moved", "before": 0, "after": 0 },
+    { "label": "Production deploy sources", "before": 2, "after": 1 },
+    { "label": "Application releases replacing PostgreSQL volume", "before": 0, "after": 0 },
+    { "label": "Trust lanes promoted", "before": 0, "after": 0 }
+  ],
+  "evidence": [
+    "v4.8.6 remains an immutable tested accessibility Tag",
+    "Main workflow builds and transfers one revision-bound immutable archive",
+    "Restricted host command serializes verified backups before migration and atomic activation",
+    "Branch concurrency cannot block main delivery and Draft PRs cannot deploy",
+    "Combined v4.8.7 lint, production build and focused persisted-language browser regression pass"
+  ],
+  "artifacts": [
+    ".github/workflows/ci.yml",
+    "scripts/start-production.sh",
+    "docs/PRODUCTION.md",
+    "docs/adr/0035-atomic-main-delivery.md"
+  ]
+}

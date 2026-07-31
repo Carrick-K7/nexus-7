@@ -2,7 +2,7 @@
 
 > 更新：2026-07-30
 >
-> 状态：v4.8.6 Accessible Language State 候选；v4.8.5 已部署；
+> 状态：v4.8.7 Atomic Delivery Closure 候选；v4.8.5 已部署；
 > 本地/托管复现已验证；
 > 真实 90 天 / off-host restore / live provider / external Sigstore pending
 

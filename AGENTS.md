@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.6 语言无障碍
+> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.7 原子发布
 
 ## 定义与边界
 
@@ -52,8 +52,8 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
-v4.8.6 含 200 人、36 AI、24 机器人及五路证据矩阵；坏回执 fail closed，
-revision/原因可读且 lang 同步。无真人、身份映射或私人输入。
+v4.8.7 含 200 人、36 AI、24 机器人、五路证据矩阵和原子发布；坏回执
+fail closed，revision/原因可读且 lang 同步。无真人或私人输入。
 
 ## 模块边界
 
@@ -103,7 +103,7 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
-| v4.8.6 信任/语言 | 5 lanes；坏回执 fail closed；lang 同步 |
+| v4.8.7 发布/语言 | 原子 release；坏回执 fail closed；lang 同步 |
 
 ## 外部边界
 

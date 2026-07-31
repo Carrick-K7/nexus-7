@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release candidate is **v4.8.6 — Accessible Language State**.
+The active release candidate is **v4.8.7 — Atomic Delivery Closure**.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
@@ -101,6 +101,11 @@ v4.8.6 keeps the root document language synchronized with the persisted
 English/Chinese interface choice. Screen readers therefore receive `en` or
 `zh-CN` consistently after a switch and reload; city state and trust gates are
 unchanged.
+
+v4.8.7 preserves that accessibility Tag and integrates the reviewed automatic
+`main` delivery path: one tested immutable archive, a restricted host command,
+serialized verified backups, migration, atomic release activation and health
+rollback. Application delivery never replaces the PostgreSQL volume.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy
