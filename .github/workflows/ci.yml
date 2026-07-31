@@ -114,7 +114,7 @@ jobs:
         run: npm run verify:v48
 
       - name: Live model regression gate
-        if: github.event_name == 'push'
+        if: github.event_name == 'push' && vars.NEXUS_LIVE_MODEL_ENABLED == 'true'
         env:
           NEXUS_MODEL_PROVIDER: openai
           OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
@@ -132,7 +132,7 @@ jobs:
 
       - name: Generate evidence manifest
         env:
-          NEXUS_REQUIRE_LIVE_MODEL_EVIDENCE: ${{ github.event_name == 'push' }}
+          NEXUS_REQUIRE_LIVE_MODEL_EVIDENCE: ${{ vars.NEXUS_LIVE_MODEL_ENABLED == 'true' }}
         run: npm run evidence:generate
 
       - name: Bind closed-loop certification to evidence manifest

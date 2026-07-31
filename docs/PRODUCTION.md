@@ -120,10 +120,12 @@ Review model availability and pricing before every production release. The
 input/output rates are configurable because provider pricing is operational
 data, not a simulation constant.
 
-Run `npm run verify:model` on every change. Main-branch release evidence also
-requires `npm run verify:model:live`: all 12 cases must pass with no fallback,
-provider error, capability violation, or forbidden proposal, while remaining
-inside recorded latency and spend SLOs. See `docs/MODEL_REGRESSION.md`.
+Run `npm run verify:model` on every change. Set the repository variable
+`NEXUS_LIVE_MODEL_ENABLED=true` when the external OpenAI evidence lane is
+configured; main-branch CI then requires `npm run verify:model:live` and all 12
+cases must pass within the recorded latency and spend SLOs. Host delivery of
+the all-synthetic application uses the deterministic gate and records the
+external lane as pending. See `docs/MODEL_REGRESSION.md`.
 
 ## Independent clock
 
