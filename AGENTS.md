@@ -25,6 +25,13 @@ v4 运行可重放、可审计的模拟深圳，研究人、AI 和机器人的�
 
 本文件只保留执行规则和最近基线，不复制详细历史、API 或设计。
 
+## 生产权限
+
+公网是 `nexus7.carrick7.com`；`main` 对齐前生产沿用 v4 分支。普通 push 不授权
+生产变更。不得重建/删除 `nexus7-postgres-data`；共享基础设施归
+`Carrick-K7/carrick-ops`。不得输出环境、数据库 URL、密码、模型密钥或签名材料。
+获授权发布后须核验 revision、Web/worker、数据库和公网主路径。
+
 ## 北极星
 
 v1 门禁：verified loop ≥ 90%，replay ≥ 99%，因果完整性/rollback = 100%，
