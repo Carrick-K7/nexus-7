@@ -381,7 +381,6 @@ export function buildSymbiosisTrustMatrix(
   }
 
   const deepSeek = input.observatory.cognition.deepseek;
-  const diversity = input.observatory.cognition.diversity;
   const deepSeekConfigured =
     input.observatory.cognition.configuredShadowProvider ===
     DEEPSEEK_PROVIDER_ID;
@@ -389,12 +388,11 @@ export function buildSymbiosisTrustMatrix(
   const deepSeekReasons: string[] = [];
   if (!deepSeekConfigured) {
     deepSeekReasons.push("deepseek-shadow-not-configured");
-  } else if (diversity.externalCallAttempts === 0) {
+  } else if (deepSeek.shadow.externalCallAttempts === 0) {
     deepSeekReasons.push("deepseek-shadow-not-exercised");
   } else if (
-    diversity.comparisons === 0 ||
-    deepSeek.successfulDecisions === 0 ||
-    deepSeek.totalTokens === 0
+    deepSeek.shadow.successfulDecisions === 0 ||
+    deepSeek.shadow.totalTokens === 0
   ) {
     deepSeekStatus = "failed";
     deepSeekReasons.push("deepseek-shadow-no-successful-comparison");
@@ -500,21 +498,21 @@ export function buildSymbiosisTrustMatrix(
       status: deepSeekStatus,
       reasonCodes: deepSeekReasons,
       evidenceRefs: [
-        ...(deepSeek.latestBilledTurn === null
+        ...(deepSeek.shadow.latestBilledTurn === null
           ? []
-          : [`turn:${deepSeek.latestBilledTurn}`]),
-        ...deepSeek.models.map((model) => `model:${model}`),
-        ...deepSeek.pricingVersions.map(
+          : [`turn:${deepSeek.shadow.latestBilledTurn}`]),
+        ...deepSeek.shadow.models.map((model) => `model:${model}`),
+        ...deepSeek.shadow.pricingVersions.map(
           (version) => `pricing:${version}`,
         ),
       ],
       configured: deepSeekConfigured,
-      externalCallAttempts: diversity.externalCallAttempts,
-      successfulComparisons: diversity.comparisons,
-      providerFailures: diversity.providerFailures,
-      totalTokens: deepSeek.totalTokens,
-      costUsd: deepSeek.costUsd,
-      latestBilledTurn: deepSeek.latestBilledTurn,
+      externalCallAttempts: deepSeek.shadow.externalCallAttempts,
+      successfulComparisons: deepSeek.shadow.successfulDecisions,
+      providerFailures: deepSeek.shadow.providerFailures,
+      totalTokens: deepSeek.shadow.totalTokens,
+      costUsd: deepSeek.shadow.costUsd,
+      latestBilledTurn: deepSeek.shadow.latestBilledTurn,
       settlesWorld: false,
     },
     elapsedProduction: {

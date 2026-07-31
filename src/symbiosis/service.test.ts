@@ -124,6 +124,16 @@ describe("Symbiotic Shenzhen world service", () => {
         totalTokens: 0,
         costUsd: 0,
         latestBilledTurn: null,
+        shadow: {
+          externalCallAttempts: 0,
+          successfulDecisions: 0,
+          providerFailures: 0,
+          budgetSkipped: 0,
+          billedInvalid: 0,
+          totalTokens: 0,
+          costUsd: 0,
+          latestBilledTurn: null,
+        },
       },
     });
   });

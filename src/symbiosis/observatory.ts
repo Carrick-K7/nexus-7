@@ -284,6 +284,20 @@ export interface HumanObservatoryReport {
       totalTokens: number;
       costUsd: number;
       latestBilledTurn: number | null;
+      shadow: {
+        externalCallAttempts: number;
+        successfulDecisions: number;
+        providerFailures: number;
+        budgetSkipped: number;
+        billedInvalid: number;
+        inputTokens: number;
+        outputTokens: number;
+        totalTokens: number;
+        costUsd: number;
+        latestBilledTurn: number | null;
+        pricingVersions: string[];
+        models: string[];
+      };
       currentTurn: {
         externalCallAttempts: number;
         successfulDecisions: number;
@@ -943,6 +957,11 @@ function aggregateDeepSeekUsage(
   const current = billed.filter(
     ({ decision }) => decision.turn === currentTurn,
   );
+  const shadowBilled = billed.filter(
+    ({ decision, billing }) =>
+      decision.shadow?.billing === billing &&
+      billing.provider === DEEPSEEK_PROVIDER_ID,
+  );
   const sumBilling = (
     rows: typeof billed,
     key:
@@ -957,6 +976,8 @@ function aggregateDeepSeekUsage(
   const outputTokens = sumBilling(billed, "outputTokens");
   const currentInputTokens = sumBilling(current, "inputTokens");
   const currentOutputTokens = sumBilling(current, "outputTokens");
+  const shadowInputTokens = sumBilling(shadowBilled, "inputTokens");
+  const shadowOutputTokens = sumBilling(shadowBilled, "outputTokens");
 
   return {
     externalCallAttempts:
@@ -992,6 +1013,46 @@ function aggregateDeepSeekUsage(
       billed.length === 0
         ? null
         : Math.max(...billed.map(({ decision }) => decision.turn)),
+    shadow: {
+      externalCallAttempts: shadowRelevant.filter(
+        (decision) =>
+          decision.shadow?.externalCallAttempted === true,
+      ).length,
+      successfulDecisions: shadowRelevant.filter(
+        (decision) =>
+          decision.shadow?.status === "observed" &&
+          decision.shadow.provider === DEEPSEEK_PROVIDER_ID,
+      ).length,
+      providerFailures: shadowRelevant.filter(
+        (decision) => decision.shadow?.status === "provider-failed",
+      ).length,
+      budgetSkipped: shadowRelevant.filter(
+        (decision) => decision.shadow?.status === "budget-skipped",
+      ).length,
+      billedInvalid: shadowRelevant.filter(
+        (decision) => decision.shadow?.status === "billed-invalid",
+      ).length,
+      inputTokens: shadowInputTokens,
+      outputTokens: shadowOutputTokens,
+      totalTokens: shadowInputTokens + shadowOutputTokens,
+      costUsd: Number(
+        sumBilling(shadowBilled, "costUsd").toFixed(8),
+      ),
+      latestBilledTurn:
+        shadowBilled.length === 0
+          ? null
+          : Math.max(
+              ...shadowBilled.map(({ decision }) => decision.turn),
+            ),
+      pricingVersions: [
+        ...new Set(
+          shadowBilled.map(({ billing }) => billing.pricingVersion),
+        ),
+      ].sort(),
+      models: [
+        ...new Set(shadowBilled.map(({ billing }) => billing.model)),
+      ].sort(),
+    },
     currentTurn: {
       externalCallAttempts:
         primaryRelevant.filter(

@@ -129,6 +129,14 @@ test("v4 simulated-city APIs preserve privacy and zero-denominator honesty", asy
       totalTokens: 0,
       costUsd: 0,
       latestBilledTurn: null,
+      shadow: {
+        externalCallAttempts: 0,
+        successfulDecisions: 0,
+        providerFailures: 0,
+        totalTokens: 0,
+        costUsd: 0,
+        latestBilledTurn: null,
+      },
     },
     diversity: {
       shadowEnabled: false,
@@ -174,7 +182,15 @@ test("v4 simulated-city APIs preserve privacy and zero-denominator honesty", asy
       localReplication: { status: "verified" },
       externalReplication: { status: "pending" },
       offHostRecovery: { status: "pending" },
-      liveDeepSeekShadow: { status: "pending" },
+      liveDeepSeekShadow: {
+        status: "pending",
+        configured: false,
+        externalCallAttempts: 0,
+        successfulComparisons: 0,
+        providerFailures: 0,
+        totalTokens: 0,
+        costUsd: 0,
+      },
       elapsedProduction: { status: "pending" },
     },
   });
@@ -252,6 +268,7 @@ for (const viewport of [
     await expect(trust).toContainText("INDEPENDENT TRUST MATRIX");
     await expect(trust).toContainText("1/5");
     await expect(trust).toContainText("External CI + Sigstore");
+    await expect(trust).toContainText("0 comparisons");
     await expect(trust).toContainText("90-day production clock");
     const replication = page.getByTestId("scientific-replication");
     await expect(replication).toBeVisible();

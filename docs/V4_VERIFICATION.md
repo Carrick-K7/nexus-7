@@ -252,6 +252,8 @@ Unit/reference verification covers:
   expired otherwise-valid receipts become stale;
 - a provider name without persisted attempts/comparisons/Token usage cannot
   pass the live DeepSeek lane;
+- reference-shadow comparisons remain excluded from every live DeepSeek count,
+  Token, price, model and failure field;
 - 90 reference days pass the algorithm only when freshness, sequence,
   predecessor, revision and 99% on-time gates also pass; production shows only
   actual elapsed time.
@@ -260,6 +262,15 @@ The GitHub-hosted workflows issue replication and off-host recovery receipts
 only after Sigstore verification with self-hosted runners denied. Those
 reference paths do not claim a remote run occurred until an actual workflow
 artifact is deployed.
+
+v4.8.1 adds a production-regression fixture in which the diversity reference
+shadow has 260 comparisons while DeepSeek has never been configured or called.
+The live-provider lane remains pending with zero attempts, comparisons,
+failures, Tokens and cost. This prevents a correct status paired with a
+misleading human-facing count. The patch passes 258/258 non-PostgreSQL tests,
+the unchanged 16/16 real PostgreSQL/restore baseline, 27/27 production-build
+Playwright/axe scenarios, TypeScript/build, zero lint warnings and zero audit
+vulnerabilities.
 
 ## Provider and persistence gates
 

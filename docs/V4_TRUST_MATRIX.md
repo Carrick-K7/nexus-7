@@ -26,7 +26,9 @@ and preserves every missing, failed, stale, or verified lane.
 4. **Live DeepSeek shadow** requires DeepSeek to be the configured read-only
    shadow, at least one external attempt, successful comparable persisted
    output, and nonzero returned Token usage. Shadow output never settles the
-   city.
+   city. Its attempt, comparison, failure, Token, price and model fields are
+   projected from DeepSeek shadow records only; reference-shadow or primary
+   DeepSeek totals cannot satisfy or inflate this lane.
 5. **Elapsed production** requires 90 real wall-clock days, fresh reports,
    complete Turn lineage, 100% release-revision coverage and at least 99%
    on-time settlement. Accelerated or reference Turns cannot satisfy it.
@@ -119,3 +121,12 @@ The matrix is evidence about this software experiment. It is not evidence that
 real Shenzhen residents would behave similarly, that a real policy works, or
 that AI systems are conscious. Signed receipts establish artifact provenance,
 not truth beyond the measured contract.
+
+## v4.8.1 evidence-isolation correction
+
+The first v4.8.0 production projection kept the lane pending but displayed the
+ordinary reference shadow's comparison count in the DeepSeek card. v4.8.1
+removes that ambiguity: the lane now reads a dedicated DeepSeek-shadow slice
+for attempts, successful comparisons, provider failures, Token use, cost,
+models and pricing versions. A regression fixture with 260 reference
+comparisons and zero DeepSeek calls must still render zero DeepSeek evidence.

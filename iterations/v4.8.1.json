@@ -1,0 +1,28 @@
+{
+  "id": "iteration-v4.8.1",
+  "version": "4.8.1",
+  "date": "2026-07-31",
+  "trigger": "production-observability-regression",
+  "triggerReason": "The v4.8.0 DeepSeek lane stayed pending correctly but reused the aggregate diversity comparison count, so 260 reference-shadow comparisons could be read by a human as 260 live DeepSeek comparisons.",
+  "action": "Split persisted DeepSeek shadow evidence from combined provider usage and generic cognitive diversity, bind the trust lane only to that exact slice, add reference-shadow contamination tests at API and browser layers, and document the correction.",
+  "outcome": "A reference shadow can no longer contribute attempts, comparisons, failures, Tokens, price versions, models or cost to the live DeepSeek trust lane. The deterministic city and its PostgreSQL contracts are unchanged; missing live-provider evidence remains visibly pending.",
+  "metrics": [
+    { "label": "Reference comparisons displayed as DeepSeek", "before": 260, "after": 0 },
+    { "label": "DeepSeek evidence fields isolated", "before": 4, "after": 10 },
+    { "label": "Trust lanes", "before": 5, "after": 5 },
+    { "label": "World-settling paths changed", "before": 0, "after": 0 }
+  ],
+  "evidence": [
+    "258/258 non-PostgreSQL tests pass; the unchanged 16/16 PostgreSQL and restore baseline remains applicable",
+    "v4.8 trust contract 5/5 including a 260-reference-comparison contamination regression",
+    "TypeScript production build, lint with zero warnings and dependency audit with zero vulnerabilities",
+    "27/27 production-build Playwright/axe scenarios pass across API, desktop, mobile, Chinese and both themes"
+  ],
+  "artifacts": [
+    "src/symbiosis/observatory.ts",
+    "src/symbiosis/trust.ts",
+    "src/symbiosis/trust.test.ts",
+    "e2e/nexus.spec.ts",
+    "docs/V4_TRUST_MATRIX.md"
+  ]
+}

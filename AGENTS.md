@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-31 · v2.0.0 安全内核 + v4.8 独立证据矩阵
+> 更新：2026-07-31 · v2.0.0 安全内核 + v4.8.1 独立证据矩阵
 
 ## 定义与边界
 
@@ -45,8 +45,8 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 v2.0 reference 已闭环；无远端 attestation 时只能写 `external evidence pending`。
 
-v4.8 含 200 人、36 AI、24 机器人、可逆城市、无密钥复现及五路独立证据矩阵；
-无真人、身份映射或私人输入。
+v4.8.1 含 200 人、36 AI、24 机器人、可逆城市及五路证据矩阵；DeepSeek 轨道
+不混入参考比较。无真人、身份映射或私人输入。
 
 ## 模块边界
 
@@ -91,14 +91,12 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 |---|---:|
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
-| unit / 条件跳过 | 273/273 / 0 |
+| unit / 条件跳过 | 274/274 / 0 |
 | PostgreSQL / Playwright+axe | 16/16 / 27/27 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
-| v4 多季对照 | 3 regimes × 3 seeds × 90 Turns；mechanism separation pass |
-| v4.6 社会验证 | 500/500 safe closure；信用/交换守恒；active forced path 0 |
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
-| v4.8 证据契约 | 5 lanes；篡改/同机/过期 fail closed |
+| v4.8.1 证据契约 | 5 lanes；篡改/同机/过期/参考混入 fail closed |
 
 ## 外部边界
 

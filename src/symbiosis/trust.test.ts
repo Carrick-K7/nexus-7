@@ -71,6 +71,20 @@ function cognition(
       totalTokens: liveShadow ? 240 : 0,
       costUsd: liveShadow ? 0.0001 : 0,
       latestBilledTurn: liveShadow ? 304 : null,
+      shadow: {
+        externalCallAttempts: liveShadow ? 2 : 0,
+        successfulDecisions: liveShadow ? 2 : 0,
+        providerFailures: 0,
+        budgetSkipped: 0,
+        billedInvalid: 0,
+        inputTokens: liveShadow ? 200 : 0,
+        outputTokens: liveShadow ? 40 : 0,
+        totalTokens: liveShadow ? 240 : 0,
+        costUsd: liveShadow ? 0.0001 : 0,
+        latestBilledTurn: liveShadow ? 304 : null,
+        pricingVersions: liveShadow ? ["deepseek-2026-07"] : [],
+        models: liveShadow ? ["deepseek-v4"] : [],
+      },
       currentTurn: {
         externalCallAttempts: liveShadow ? 2 : 0,
         successfulDecisions: liveShadow ? 2 : 0,
@@ -234,8 +248,55 @@ describe("v4.8 independent trust matrix", () => {
     expect(matrix.lanes.localReplication.status).toBe("verified");
     expect(matrix.lanes.externalReplication.status).toBe("pending");
     expect(matrix.lanes.offHostRecovery.status).toBe("pending");
-    expect(matrix.lanes.liveDeepSeekShadow.status).toBe("pending");
+    expect(matrix.lanes.liveDeepSeekShadow).toMatchObject({
+      status: "pending",
+      configured: false,
+      externalCallAttempts: 0,
+      successfulComparisons: 0,
+      providerFailures: 0,
+      totalTokens: 0,
+      costUsd: 0,
+    });
     expect(matrix.lanes.elapsedProduction.status).toBe("pending");
+  });
+
+  it("does not count a reference shadow as live DeepSeek evidence", () => {
+    const referenceCognition = cognition();
+    referenceCognition.sourceDecisionCount = 260;
+    referenceCognition.diversity = {
+      ...referenceCognition.diversity,
+      shadowEnabled: true,
+      comparisons: 260,
+      disagreements: 130,
+      disagreementRate: 0.5,
+      homogeneityRate: 0.5,
+      externalCallAttempts: 0,
+    };
+    const matrix = buildSymbiosisTrustMatrix({
+      generatedAt: now,
+      releaseRevision,
+      repository,
+      signerWorkflows: [ciWorkflow, recoveryWorkflow],
+      publicKey,
+      replicationBundle: bundle,
+      replicationArtifactSha256: bundleArtifactSha256,
+      observatory: {
+        cognition: referenceCognition,
+        reliability: reliability(5),
+      },
+    });
+
+    expect(matrix.lanes.liveDeepSeekShadow).toMatchObject({
+      status: "pending",
+      reasonCodes: ["deepseek-shadow-not-configured"],
+      configured: false,
+      externalCallAttempts: 0,
+      successfulComparisons: 0,
+      providerFailures: 0,
+      totalTokens: 0,
+      costUsd: 0,
+      latestBilledTurn: null,
+    });
   });
 
   it("verifies all five independent lanes against exact signed subjects", () => {

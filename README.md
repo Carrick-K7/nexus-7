@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release is **v4.8.0 — Independent Trust Matrix**.
+The active release is **v4.8.1 — Independent Trust Matrix**.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
@@ -67,6 +67,10 @@ The default **Human Observatory / 人类观测台** exposes:
   portable bundle hash, reproduction command and external-proof status.
 - a five-lane trust matrix separating local replication, external CI,
   off-host recovery, live DeepSeek shadow and 90 elapsed production days.
+
+v4.8.1 keeps the live DeepSeek lane strictly separate from the ordinary
+reference shadow: only persisted DeepSeek-shadow attempts, outcomes, failures,
+Tokens, models and price versions can appear as evidence in that lane.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy
