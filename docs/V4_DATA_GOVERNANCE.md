@@ -45,6 +45,14 @@ bounded disposition, primary disagreement, status, latency, token counts and
 cost. It contains no prompt, raw response or reasoning. Shadow output is
 observational metadata and is prohibited from becoming a world input.
 
+The v4.7 replication bundle contains frozen synthetic seed names, bounded
+scenario parameters, aggregate outcomes, world/result hashes, source/input
+hashes and proof status. It excludes raw prompts, reasoning, credentials,
+database contents and resident-level Turn traces. The bundle is publicly
+downloadable because every input is repository-owned or frozen aggregate
+calibration and every run is synthetic. `externalCiVerified=false` and a null
+Sigstore receipt are meaningful evidence states and must not be hidden.
+
 Society records are synthetic structured state. Household membership contains
 only pseudonymous resident IDs; work records contain bounded role, workload
 and civic-credit reward; exchanges contain balanced debit/credit account IDs;

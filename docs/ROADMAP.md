@@ -153,17 +153,36 @@ Turns settled on time with revision binding and persisted society state. Actual
 - Stabilizes legacy-theme migration setup against simulation persistence races
   and gives the 730-Turn replay test a non-flaky execution budget.
 
-## Next objectives
-
 ### v4.7 — Scientific replication
 
-- Freeze preregistered hypotheses and analysis plans.
-- Publish portable scenario/data bundles with exact hashes.
-- Run independent seeds, engines and provider controls.
-- Add external CI/Sigstore receipts and reproducible result packaging.
+- Freezes seven prospective replication hypotheses for the earlier exploratory
+  v4.6 results without rewriting that exploration as preregistered work.
+- Publishes 12 held-out regime/seed runs with per-run fingerprints, full-result
+  SHA-256, exact double replay, denominators, refusals, coercion and safety.
+- Runs deterministic-primary/diversity-shadow and diversity-primary controls;
+  shadow leaves the world unchanged and substitution must preserve invariants.
+- Hashes the required source, lockfile and calibration inputs into one portable
+  `nexus.symbiosis-replication-bundle.v1` artifact.
+- Exposes the exact clean-checkout command, bundle digest, local result and
+  absent external receipt in Human Observatory.
+- Adds a CI upload/attestation path while keeping its actual result pending
+  until a remote trusted run exists.
 
-Exit: another environment can reproduce reference fingerprints and reports
-without access to production secrets.
+Local exit is complete when `npm ci && npm run verify:v47` reproduces the
+published bundle without production secrets. Independent environment and
+Sigstore receipts remain external evidence, not implementation claims.
+
+## Next objectives
+
+### v4.8 — Independent trust-domain replication
+
+- Execute the v4.7 bundle from a clean external runner and retain its receipt.
+- Restore an encrypted backup on a genuinely off-host PostgreSQL target.
+- Exercise DeepSeek as shadow under a fixed low budget before any promotion.
+- Accumulate the real 90-day production window without resetting history.
+
+Exit: local, external-CI, off-host recovery, live-provider and elapsed-time
+evidence are all independently visible and none substitutes for another.
 
 ## Explicit non-goals
 

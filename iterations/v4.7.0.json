@@ -1,0 +1,29 @@
+{
+  "id": "iteration-v4.7.0",
+  "version": "4.7.0",
+  "date": "2026-07-31",
+  "trigger": "roadmap-scientific-replication",
+  "triggerReason": "The v4.6 reference and production evidence were replayable inside NEXUS-7, but there was no credential-free held-out package binding hypotheses, inputs, per-run outcomes and proof status for reproduction in another environment.",
+  "action": "Froze seven prospective replication hypotheses for the exploratory v4.6 results; ran four held-out seeds across reciprocal, hierarchy and segregation controls twice each; added deterministic/diversity provider controls; hashed source, calibration, results and bundle envelopes; exposed the artifact and missing external proof in the bilingual Human Observatory; and added CI upload/Sigstore attestation steps.",
+  "outcome": "Local implementation produces 12/12 exact held-out replays with resource conservation and 7/7 hypothesis passes. Reciprocal pooled RALR is 559/697 with zero coercion or severe escape; hierarchy exposes 188 coercive episodes at RALR 0; segregation preserves a zero denominator and null RALR. The local bundle is reproducible without secrets; external runner and Sigstore receipts remain pending.",
+  "metrics": [
+    { "label": "Held-out exact replays", "before": 0, "after": 12 },
+    { "label": "Frozen replication hypotheses passed", "before": 0, "after": 7 },
+    { "label": "Secret inputs required", "before": null, "after": 0 },
+    { "label": "External Sigstore receipts", "before": 0, "after": 0 }
+  ],
+  "evidence": [
+    "Bundle SHA-256 0d8d4ccd347a4f303a455d57bb685f724e0bc986793e2333542d94c6dbb93550",
+    "Results SHA-256 b8b43a31fb560dee605745e564fa3d87dc6d03858bc913dd2b510a4091118d29",
+    "180 diversity-shadow comparisons with 73 disagreements and no world-fingerprint change",
+    "Input, result and envelope tampering fail closed",
+    "External CI and Sigstore remain false/null rather than inferred"
+  ],
+  "artifacts": [
+    "public/data/v4-7-replication-bundle.json",
+    "src/symbiosis/replication.ts",
+    "scripts/run-v47-replication.ts",
+    "docs/V4_REPLICATION.md",
+    "docs/adr/0030-portable-scientific-replication.md"
+  ]
+}

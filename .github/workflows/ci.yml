@@ -93,6 +93,9 @@ jobs:
       - name: Closed-loop v2 certification gate
         run: npm run verify:closure
 
+      - name: Portable v4.7 scientific replication gate
+        run: npm run verify:v47
+
       - name: Live model regression gate
         if: github.event_name == 'push'
         env:
@@ -136,6 +139,7 @@ jobs:
             .artifacts/participation-acceptance.json
             .artifacts/closed-loop-certification.json
             public/data/model-regression.json
+            public/data/v4-7-replication-bundle.json
             .artifacts/isolated-evaluation.json
 
       - name: Attest evidence provenance
@@ -143,3 +147,9 @@ jobs:
         uses: actions/attest@v4
         with:
           subject-path: public/data/ci-evidence.json
+
+      - name: Attest portable replication bundle
+        if: github.event_name == 'push'
+        uses: actions/attest@v4
+        with:
+          subject-path: public/data/v4-7-replication-bundle.json

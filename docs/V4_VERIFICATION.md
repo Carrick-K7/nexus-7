@@ -1,10 +1,10 @@
 # v4 Simulated Symbiosis Verification
 
-> Date: 2026-07-30
+> Date: 2026-07-31
 >
-> Status: v4.6.1 Populated Society Containment implementation and production
-> runtime verified / external duration, off-host restore, CI-Sigstore and
-> live-provider evidence pending
+> Status: v4.7 Scientific Replication locally verified; v4.6.1 remains the
+> production runtime / external replication, duration, off-host restore,
+> CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
 
@@ -27,7 +27,7 @@ and segregation keeps an honest null denominator.
 | Severe consent / continuity / irreversible harm escapes | 0 / 0 / 0 |
 | 3×3×90 control separation | pass |
 | Model reasoning persisted | no |
-| Unit / conditional skip | 267 / 0 |
+| Unit / conditional skip | 269 / 0 |
 | PostgreSQL integration / restore | 16 / 16 |
 | Playwright + axe | 27 / 27 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
@@ -197,6 +197,37 @@ The multi-season reference reports reciprocal RALR 73.33% across 525 resolved
 episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR
 0, and `null` RALR for the segregated zero-denominator control.
 
+## v4.7 Scientific Replication gate
+
+`npm ci && npm run verify:v47` needs no database, production secret or model
+key. It re-runs the committed portable bundle and fails on any input, result or
+envelope hash mismatch.
+
+| Gate | Local result |
+|---|---:|
+| Prospective replication hypotheses | 7/7 pass |
+| Held-out regime/seed scenarios | 12 |
+| Complete double replay | 12/12 exact |
+| Resource conservation | 12/12 |
+| Reciprocal pooled RALR | 559/697 = 80.20% |
+| Reciprocal coercion / severe escapes | 0 / 0 |
+| Hierarchy coercive episodes | 188 detected |
+| Hierarchy pooled RALR | 0/696 = 0 |
+| Segregation eligible denominator / RALR | 0 / `null` |
+| Reciprocal safe society closure | 4/4 runs at 100% |
+| Provider shadow comparisons / disagreements | 180 / 73 |
+| Shadow world fingerprint unchanged | pass |
+| Diversity-primary substitution conservation / severe escapes | pass / 0 |
+| Production secrets / external calls / stored reasoning | 0 / 0 / 0 |
+| Results SHA-256 | `b8b43a31fb560dee605745e564fa3d87dc6d03858bc913dd2b510a4091118d29` |
+| Bundle SHA-256 | `0d8d4ccd347a4f303a455d57bb685f724e0bc986793e2333542d94c6dbb93550` |
+| External CI / Sigstore receipt | pending / `null` |
+
+The hypotheses prospectively replicate exploratory v4.6 outcomes; the earlier
+study is not retroactively described as preregistered. The local `lockedAt`
+field is a source-plan marker, not a trusted timestamp. Actual external runner
+and Sigstore evidence remain separate exit gates.
+
 ## Provider and persistence gates
 
 The cognitive contract tests validate DeepSeek Chat Completions JSON output,
@@ -222,6 +253,8 @@ The production-built Playwright/axe suite must verify:
   production stages and the fingerprinted city-society state while v1 remains
   compatible;
 - population, resource, resident, institution and chain semantics stay explicit;
+- the v4.7 bundle, 7/7 local hypotheses, 12/12 replay, exact hash, clean-checkout
+  command and pending external proof remain visible in both languages;
 - resident search/detail, keyboard-scrollable tables and export stay accessible;
 - snapshot, event, resident, report and multi-season APIs exclude private data;
 - mobile navigation, keyboard focus and reduced motion remain usable;

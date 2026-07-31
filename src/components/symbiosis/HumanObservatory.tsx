@@ -18,6 +18,7 @@ import {
   CircleDollarSign,
   Download,
   Factory,
+  FlaskConical,
   HeartHandshake,
   House,
   Landmark,
@@ -47,6 +48,9 @@ import type {
 import type {
   NeedCode,
 } from "@/symbiosis/contracts";
+import type {
+  SymbiosisReplicationBundle,
+} from "@/symbiosis/replication";
 
 const copy = {
   en: {
@@ -108,6 +112,19 @@ const copy = {
     offHostBackup: "Off-host backup",
     secondDatabaseRestore: "Second-database restore",
     evidencePending: "Evidence pending",
+    replication: "SCIENTIFIC REPLICATION",
+    replicationDesc:
+      "Held-out seeds, frozen hypotheses, exact replay and provider controls packaged for reproduction without production secrets.",
+    hypotheses: "Hypotheses",
+    replicationRuns: "Held-out runs",
+    exactReplays: "Exact replays",
+    secretInputs: "Secret inputs",
+    noneRequired: "None required",
+    externalAttestation: "External attestation",
+    localEvidenceOnly: "Local evidence only",
+    reproduceCommand: "Reproduce from a clean checkout",
+    bundleFingerprint: "Bundle SHA-256",
+    downloadBundle: "Download replication bundle",
     cognitiveDiversity: "COGNITIVE DIVERSITY SHADOW",
     cognitiveDiversityDesc:
       "A shadow provider can disagree, fail or consume budget, but its output never settles the city.",
@@ -307,6 +324,19 @@ const copy = {
     offHostBackup: "异地备份",
     secondDatabaseRestore: "第二数据库恢复",
     evidencePending: "证据待补",
+    replication: "科学复现",
+    replicationDesc:
+      "用未使用种子、冻结假设、精确重放和 Provider 对照打包成无需生产密钥即可复现的实验。",
+    hypotheses: "复现假设",
+    replicationRuns: "未使用场景",
+    exactReplays: "精确重放",
+    secretInputs: "秘密输入",
+    noneRequired: "无需秘密",
+    externalAttestation: "外部证明",
+    localEvidenceOnly: "仅本地证据",
+    reproduceCommand: "从干净 checkout 复现",
+    bundleFingerprint: "实验包 SHA-256",
+    downloadBundle: "下载复现实验包",
     cognitiveDiversity: "认知多样性 Shadow",
     cognitiveDiversityDesc:
       "Shadow Provider 可以产生分歧、失败或消耗预算，但其输出永远不能参与城市结算。",
@@ -695,6 +725,8 @@ export default function HumanObservatory() {
   const { language } = useTranslation();
   const text = copy[language];
   const [data, setData] = useState<HumanObservatoryReport | null>(null);
+  const [replication, setReplication] =
+    useState<SymbiosisReplicationBundle | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -707,11 +739,20 @@ export default function HumanObservatory() {
 
   const refresh = useCallback(async () => {
     try {
-      const response = await fetch("/api/observatory/v2/overview", {
-        cache: "no-store",
-      });
+      const [response, replicationResponse] = await Promise.all([
+        fetch("/api/observatory/v2/overview", { cache: "no-store" }),
+        fetch("/data/v4-7-replication-bundle.json", {
+          cache: "no-store",
+        }),
+      ]);
       if (!response.ok) throw new Error(`observatory-${response.status}`);
+      if (!replicationResponse.ok) {
+        throw new Error(`replication-${replicationResponse.status}`);
+      }
       setData(await response.json() as HumanObservatoryReport);
+      setReplication(
+        await replicationResponse.json() as SymbiosisReplicationBundle,
+      );
       setError(null);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "unknown-error");
@@ -1269,6 +1310,107 @@ export default function HumanObservatory() {
             </p>
           </article>
         </section>
+
+        {replication && (
+          <section
+            className="rounded-2xl border border-cyber-purple/30 bg-cyber-darker/90 p-5"
+            aria-labelledby="scientific-replication-title"
+            data-testid="scientific-replication"
+          >
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+              <div className="max-w-5xl">
+                <div className="flex items-center gap-2">
+                  <FlaskConical className="h-5 w-5 text-cyber-purple" />
+                  <h2
+                    id="scientific-replication-title"
+                    className="font-orbitron text-sm text-cyber-purple"
+                  >
+                    {text.replication}
+                  </h2>
+                </div>
+                <p className="mt-2 text-sm leading-6 text-cyber-text-dim">
+                  {text.replicationDesc}
+                </p>
+              </div>
+              <span
+                className={`self-start rounded-full border px-3 py-1 text-xs ${
+                  replication.integrity.localVerificationPassed
+                    ? statusClasses("healthy")
+                    : statusClasses("critical")
+                }`}
+              >
+                {replication.analysis.passed}/{replication.analysis.total} {text.passed}
+              </span>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+              {[
+                {
+                  label: text.hypotheses,
+                  value: `${replication.analysis.passed} / ${replication.analysis.total}`,
+                  detail: replication.preregistration.kind,
+                },
+                {
+                  label: text.replicationRuns,
+                  value: replication.design.runCount.toLocaleString(),
+                  detail: `${replication.design.regimes.length} regimes × ${replication.design.seeds.length} seeds`,
+                },
+                {
+                  label: text.exactReplays,
+                  value: `${replication.runs.filter((run) => run.exactReplay).length} / ${replication.runs.length}`,
+                  detail: replication.integrity.resultsSha256.slice(0, 16),
+                },
+                {
+                  label: text.externalAttestation,
+                  value: replication.integrity.externalCiVerified
+                    ? text.passed
+                    : text.evidencePending,
+                  detail: replication.integrity.sigstoreReceipt
+                    ? String(replication.integrity.sigstoreReceipt)
+                    : text.localEvidenceOnly,
+                },
+              ].map((entry) => (
+                <article
+                  key={entry.label}
+                  className="min-w-0 rounded-xl border border-cyber-gray-light bg-cyber-black/45 p-4"
+                >
+                  <p className="text-xs text-cyber-text-dim">{entry.label}</p>
+                  <p className="mt-2 break-words font-mono text-lg text-cyber-text">
+                    {entry.value}
+                  </p>
+                  <p className="mt-2 break-all text-xs leading-5 text-cyber-text-dim">
+                    {entry.detail}
+                  </p>
+                </article>
+              ))}
+            </div>
+            <div className="mt-4 grid min-w-0 gap-3 lg:grid-cols-[1fr_auto] lg:items-end">
+              <div className="min-w-0 rounded-xl border border-cyber-gray-light bg-cyber-black/45 p-4">
+                <p className="text-xs text-cyber-text-dim">
+                  {text.reproduceCommand}
+                </p>
+                <code className="mt-2 block overflow-x-auto whitespace-nowrap font-mono text-sm text-cyber-green">
+                  {replication.design.command}
+                </code>
+                <p className="mt-3 break-all text-xs text-cyber-text-dim">
+                  {text.bundleFingerprint}: {replication.integrity.bundleSha256}
+                </p>
+              </div>
+              <a
+                href="/data/v4-7-replication-bundle.json"
+                download
+                className="inline-flex items-center justify-center gap-2 rounded-lg border border-cyber-purple/40 px-4 py-3 text-sm text-cyber-purple hover:bg-cyber-purple/10"
+              >
+                <Download className="h-4 w-4" />
+                {text.downloadBundle}
+              </a>
+            </div>
+            <p className="mt-4 text-xs leading-5 text-cyber-text-dim">
+              {language === "zh"
+                ? "这是对 v4.6 探索性结果的前瞻复现计划；本地源码锁定不等于外部时间戳、独立实验室复现或 Sigstore 证明。"
+                : "This prospectively replicates exploratory v4.6 results; a local source lock is not an external timestamp, independent-lab reproduction, or Sigstore proof."}
+            </p>
+          </section>
+        )}
 
         <section className="grid gap-4 xl:grid-cols-[0.8fr_1.2fr]">
           <div className="rounded-2xl border border-cyber-blue/25 bg-cyber-darker/90 p-5">

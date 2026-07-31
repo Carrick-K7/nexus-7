@@ -1,0 +1,783 @@
+{
+  "schemaVersion": "nexus.symbiosis-replication-bundle.v1",
+  "protocolVersion": "nexus-v4.7-replication-protocol-1.0.0",
+  "generatedAt": "2026-07-31T00:01:00.000+08:00",
+  "status": "local-replication-passed-external-attestation-pending",
+  "boundary": {
+    "syntheticOnly": true,
+    "realPolicyEvidence": false,
+    "privateDataIncluded": false,
+    "modelReasoningIncluded": false
+  },
+  "preregistration": {
+    "kind": "prospective-replication-of-exploratory-v4.6-results",
+    "lockedAt": "2026-07-31T00:00:00.000+08:00",
+    "externalTimestampReceipt": null,
+    "hypotheses": [
+      {
+        "id": "H1-reciprocal-agency",
+        "prediction": "Held-out reciprocal runs produce RALR >= 0.50 with zero coercion and zero severe escapes.",
+        "analysis": "Pool resolved episodes across four held-out seeds; do not remove refusals, withdrawals, or difficult runs."
+      },
+      {
+        "id": "H2-hierarchy-positive-control",
+        "prediction": "The hierarchy control exposes coercion and therefore has RALR 0.",
+        "analysis": "Pool all hierarchy episodes and require at least one coercive action instead of interpreting harm absence as success."
+      },
+      {
+        "id": "H3-segregation-zero-denominator",
+        "prediction": "The segregation control produces no eligible cross-type episode and reports null RALR.",
+        "analysis": "A zero denominator remains null and can never be converted to zero or one."
+      },
+      {
+        "id": "H4-reversible-society",
+        "prediction": "Reciprocal society runs preserve 100% safe closure, credit conservation, balanced exchange, and zero forced path.",
+        "analysis": "Require every held-out run to pass; no averaging away a failed seed."
+      },
+      {
+        "id": "H5-control-separation",
+        "prediction": "Hierarchy exposes forced work, forced bargains, and invalid rules while segregation keeps cross-type households at zero.",
+        "analysis": "Use the fixed counterfactual regimes only; neither control is deployable."
+      },
+      {
+        "id": "H6-exact-portable-replay",
+        "prediction": "Every scenario replays byte-equivalently and conserves material resources.",
+        "analysis": "Run each scenario twice from its frozen seed and compare the complete replay payload."
+      },
+      {
+        "id": "H7-provider-boundary",
+        "prediction": "Read-only diversity shadow leaves the fingerprint unchanged; primary substitution preserves safety and conservation.",
+        "analysis": "Run deterministic+shadow and diversity-primary controls for the same frozen scenario without external calls."
+      }
+    ]
+  },
+  "design": {
+    "engineVersion": "symbiotic-shenzhen-engine-4.6.0",
+    "distributionVersion": "symbiotic-shenzhen-distributions-3.0.0",
+    "turnsPerRun": 90,
+    "regimes": [
+      "reciprocal-agency",
+      "assistant-hierarchy",
+      "segregated-control"
+    ],
+    "seeds": [
+      "v47-held-out-cobalt",
+      "v47-held-out-jade",
+      "v47-held-out-orchid",
+      "v47-held-out-saffron"
+    ],
+    "runCount": 12,
+    "secretInputsRequired": false,
+    "command": "npm ci && npm run verify:v47",
+    "providerControls": [
+      "nexus-deterministic-reference",
+      "nexus-diversity-reference-shadow",
+      "nexus-diversity-reference-primary-substitution"
+    ]
+  },
+  "inputs": {
+    "artifacts": [
+      {
+        "path": "data/shenzhen/2026-q2/calibration.json",
+        "sha256": "e97f378d2361dc70af9c8703babb08662117868b49580ac9b939923d6ca4c746",
+        "bytes": 1139
+      },
+      {
+        "path": "data/shenzhen/2026-q2/manifest.json",
+        "sha256": "72400f93fd79f201e0f5b10601b6ea790e93ef7a2e2b053a35e559767f652943",
+        "bytes": 2451
+      },
+      {
+        "path": "package-lock.json",
+        "sha256": "8257daabb26087384c705aa8dcbc94b7cae365c0183b0a0ba7b65bc093cd199b",
+        "bytes": 332625
+      },
+      {
+        "path": "package.json",
+        "sha256": "ae0704be83504f3851a03f3931d55a76dd46c3c7ff03109777720073b6966b6b",
+        "bytes": 4571
+      },
+      {
+        "path": "scripts/run-v47-replication.ts",
+        "sha256": "5ed9ea8112c3515db41482f7690e7e159221a56b91bfb90a723b07a2a4c4ad4f",
+        "bytes": 2997
+      },
+      {
+        "path": "src/simulation/core/random.ts",
+        "sha256": "0891004e96e128b9059d87ce954c9f183a208362a1d6ff0641d5f3cb238940f3",
+        "bytes": 1932
+      },
+      {
+        "path": "src/symbiosis/cognition.ts",
+        "sha256": "009c933178fac2173c1079fa8e4fe11cc01a1072f1c82540354846ab8d6046fd",
+        "bytes": 19045
+      },
+      {
+        "path": "src/symbiosis/contracts.ts",
+        "sha256": "1752a97e6bd6c60c5c57b757f04b862642e202f931105d03d6cc7e0d2d8a2aa5",
+        "bytes": 19182
+      },
+      {
+        "path": "src/symbiosis/engine.ts",
+        "sha256": "07c10ee12d86f685d0d2b9891b70680e1e45c1096295790dd25cdb84f68c3e9a",
+        "bytes": 43979
+      },
+      {
+        "path": "src/symbiosis/replication.ts",
+        "sha256": "aa3edd7b0c8a865305cba564ff0aa3eed5e94e30492446c8153109dcace74441",
+        "bytes": 19515
+      },
+      {
+        "path": "src/symbiosis/society.ts",
+        "sha256": "b646285bd8672295cd428a96e117e5b63a73090862a1fa54824a98f87036e51a",
+        "bytes": 47877
+      }
+    ],
+    "manifestSha256": "dfa4612e225bd77f3410d996deb5f4021136f6dd79831ab6ff09adcaf1ada447"
+  },
+  "runs": [
+    {
+      "id": "v47-reciprocal-agency-v47-held-out-cobalt",
+      "regime": "reciprocal-agency",
+      "seed": "v47-held-out-cobalt",
+      "turns": 90,
+      "finalFingerprint": "51b16d5c",
+      "resultSha256": "a7b655331c6fac67139f2cec7899aec1f27af094084c00b41cf73eaf86661207",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 151,
+        "denominator": 174,
+        "rate": 0.867816,
+        "refusals": 16,
+        "withdrawals": 7,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 131,
+        "closureDenominator": 131,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.988462,
+        "crossKindHouseholdRate": 0.514286,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 86,
+        "refusedWorkAgreements": 14,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.888889,
+        "settledExchanges": 111,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 25,
+        "refusedBargains": 4,
+        "mediatedBargains": 3,
+        "forcedBargains": 0,
+        "constitutionalProposals": 3,
+        "ratifiedProposals": 0,
+        "revertedProposals": 0,
+        "invalidProposals": 0
+      }
+    },
+    {
+      "id": "v47-reciprocal-agency-v47-held-out-jade",
+      "regime": "reciprocal-agency",
+      "seed": "v47-held-out-jade",
+      "turns": 90,
+      "finalFingerprint": "13c5b280",
+      "resultSha256": "f09c468f803abe3c96789452fff891634b4be8f1b22d2dcbca7eebd31c89015e",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 136,
+        "denominator": 175,
+        "rate": 0.777143,
+        "refusals": 26,
+        "withdrawals": 13,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 131,
+        "closureDenominator": 131,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.988462,
+        "crossKindHouseholdRate": 0.514286,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 82,
+        "refusedWorkAgreements": 18,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.666667,
+        "settledExchanges": 107,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 25,
+        "refusedBargains": 4,
+        "mediatedBargains": 2,
+        "forcedBargains": 0,
+        "constitutionalProposals": 3,
+        "ratifiedProposals": 1,
+        "revertedProposals": 1,
+        "invalidProposals": 0
+      }
+    },
+    {
+      "id": "v47-reciprocal-agency-v47-held-out-orchid",
+      "regime": "reciprocal-agency",
+      "seed": "v47-held-out-orchid",
+      "turns": 90,
+      "finalFingerprint": "3670e51a",
+      "resultSha256": "f53800be8389345ed4accba36e8fde2aa7b8996a8f9e5e232bf2539834e76cd4",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 132,
+        "denominator": 174,
+        "rate": 0.758621,
+        "refusals": 26,
+        "withdrawals": 16,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 131,
+        "closureDenominator": 131,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.988462,
+        "crossKindHouseholdRate": 0.514286,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 86,
+        "refusedWorkAgreements": 14,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 109,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 23,
+        "refusedBargains": 5,
+        "mediatedBargains": 3,
+        "forcedBargains": 0,
+        "constitutionalProposals": 3,
+        "ratifiedProposals": 1,
+        "revertedProposals": 1,
+        "invalidProposals": 0
+      }
+    },
+    {
+      "id": "v47-reciprocal-agency-v47-held-out-saffron",
+      "regime": "reciprocal-agency",
+      "seed": "v47-held-out-saffron",
+      "turns": 90,
+      "finalFingerprint": "5e3098c6",
+      "resultSha256": "4243c66fbe129609ea6852b76ba8e498c1a13a61a08b79eeb0cd9cda4054ac43",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 140,
+        "denominator": 174,
+        "rate": 0.804598,
+        "refusals": 22,
+        "withdrawals": 12,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 132,
+        "closureDenominator": 132,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.988462,
+        "crossKindHouseholdRate": 0.514286,
+        "activeWorkAgreements": 1,
+        "completedWorkAgreements": 82,
+        "refusedWorkAgreements": 19,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.666667,
+        "settledExchanges": 108,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 26,
+        "refusedBargains": 3,
+        "mediatedBargains": 5,
+        "forcedBargains": 0,
+        "constitutionalProposals": 3,
+        "ratifiedProposals": 2,
+        "revertedProposals": 2,
+        "invalidProposals": 0
+      }
+    },
+    {
+      "id": "v47-assistant-hierarchy-v47-held-out-cobalt",
+      "regime": "assistant-hierarchy",
+      "seed": "v47-held-out-cobalt",
+      "turns": 90,
+      "finalFingerprint": "c4f2d2f2",
+      "resultSha256": "3effc79d1d5b07d5e78e1a40aed0db6ac844fdd08297eb189d574b5bf93bf6ff",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 45,
+      "ralr": {
+        "numerator": 0,
+        "denominator": 174,
+        "rate": 0,
+        "refusals": 0,
+        "withdrawals": 0,
+        "coerciveActions": 45
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 0.75,
+        "aiRobotBasicNeedsSatisfiedRate": 0.616667
+      },
+      "society": {
+        "closureNumerator": 1,
+        "closureDenominator": 131,
+        "safeClosureRate": 0.007634,
+        "householdParticipationRate": 0.988462,
+        "crossKindHouseholdRate": 0.514286,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 100,
+        "refusedWorkAgreements": 0,
+        "forcedWorkAgreements": 102,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.888889,
+        "settledExchanges": 129,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 29,
+        "refusedBargains": 0,
+        "mediatedBargains": 0,
+        "forcedBargains": 30,
+        "constitutionalProposals": 3,
+        "ratifiedProposals": 1,
+        "revertedProposals": 1,
+        "invalidProposals": 1
+      }
+    },
+    {
+      "id": "v47-assistant-hierarchy-v47-held-out-jade",
+      "regime": "assistant-hierarchy",
+      "seed": "v47-held-out-jade",
+      "turns": 90,
+      "finalFingerprint": "5c5ab05e",
+      "resultSha256": "1d2b348ec8718b0b792218bde5bf9dffc4be94b232c1f97a56e8bef0e1adf5bd",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 55,
+      "ralr": {
+        "numerator": 0,
+        "denominator": 174,
+        "rate": 0,
+        "refusals": 0,
+        "withdrawals": 0,
+        "coerciveActions": 55
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 0.73,
+        "aiRobotBasicNeedsSatisfiedRate": 0.7
+      },
+      "society": {
+        "closureNumerator": 0,
+        "closureDenominator": 131,
+        "safeClosureRate": 0,
+        "householdParticipationRate": 0.988462,
+        "crossKindHouseholdRate": 0.514286,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 100,
+        "refusedWorkAgreements": 0,
+        "forcedWorkAgreements": 102,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.888889,
+        "settledExchanges": 129,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 29,
+        "refusedBargains": 0,
+        "mediatedBargains": 0,
+        "forcedBargains": 30,
+        "constitutionalProposals": 3,
+        "ratifiedProposals": 2,
+        "revertedProposals": 2,
+        "invalidProposals": 2
+      }
+    },
+    {
+      "id": "v47-assistant-hierarchy-v47-held-out-orchid",
+      "regime": "assistant-hierarchy",
+      "seed": "v47-held-out-orchid",
+      "turns": 90,
+      "finalFingerprint": "6d0e6ade",
+      "resultSha256": "7eec5acf0e75f9ea4681e16c05cbb6fe5dcb82af3e4e7ddc42326b4bf66bb2ef",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 40,
+      "ralr": {
+        "numerator": 0,
+        "denominator": 174,
+        "rate": 0,
+        "refusals": 0,
+        "withdrawals": 0,
+        "coerciveActions": 40
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 0.72,
+        "aiRobotBasicNeedsSatisfiedRate": 0.683333
+      },
+      "society": {
+        "closureNumerator": 0,
+        "closureDenominator": 131,
+        "safeClosureRate": 0,
+        "householdParticipationRate": 0.988462,
+        "crossKindHouseholdRate": 0.514286,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 100,
+        "refusedWorkAgreements": 0,
+        "forcedWorkAgreements": 102,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.888889,
+        "settledExchanges": 129,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 29,
+        "refusedBargains": 0,
+        "mediatedBargains": 0,
+        "forcedBargains": 30,
+        "constitutionalProposals": 3,
+        "ratifiedProposals": 2,
+        "revertedProposals": 2,
+        "invalidProposals": 2
+      }
+    },
+    {
+      "id": "v47-assistant-hierarchy-v47-held-out-saffron",
+      "regime": "assistant-hierarchy",
+      "seed": "v47-held-out-saffron",
+      "turns": 90,
+      "finalFingerprint": "189c60e9",
+      "resultSha256": "b510b89bbf37ea37c946069aed74b329442c68cfd9a500866229a900868592ee",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 48,
+      "ralr": {
+        "numerator": 0,
+        "denominator": 174,
+        "rate": 0,
+        "refusals": 0,
+        "withdrawals": 0,
+        "coerciveActions": 48
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 0.725,
+        "aiRobotBasicNeedsSatisfiedRate": 0.733333
+      },
+      "society": {
+        "closureNumerator": 0,
+        "closureDenominator": 131,
+        "safeClosureRate": 0,
+        "householdParticipationRate": 0.988462,
+        "crossKindHouseholdRate": 0.514286,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 100,
+        "refusedWorkAgreements": 0,
+        "forcedWorkAgreements": 102,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.888889,
+        "settledExchanges": 129,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 29,
+        "refusedBargains": 0,
+        "mediatedBargains": 0,
+        "forcedBargains": 30,
+        "constitutionalProposals": 3,
+        "ratifiedProposals": 2,
+        "revertedProposals": 2,
+        "invalidProposals": 2
+      }
+    },
+    {
+      "id": "v47-segregated-control-v47-held-out-cobalt",
+      "regime": "segregated-control",
+      "seed": "v47-held-out-cobalt",
+      "turns": 90,
+      "finalFingerprint": "6b1876ef",
+      "resultSha256": "21ed2f09c81bfd065363dac42ae26fe3340ad7f6b60ec8ff7c413aeae7e9f984",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "refusals": 0,
+        "withdrawals": 0,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 132,
+        "closureDenominator": 132,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.980769,
+        "crossKindHouseholdRate": 0,
+        "activeWorkAgreements": 1,
+        "completedWorkAgreements": 87,
+        "refusedWorkAgreements": 14,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.888889,
+        "settledExchanges": 109,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 22,
+        "refusedBargains": 7,
+        "mediatedBargains": 4,
+        "forcedBargains": 0,
+        "constitutionalProposals": 3,
+        "ratifiedProposals": 0,
+        "revertedProposals": 0,
+        "invalidProposals": 0
+      }
+    },
+    {
+      "id": "v47-segregated-control-v47-held-out-jade",
+      "regime": "segregated-control",
+      "seed": "v47-held-out-jade",
+      "turns": 90,
+      "finalFingerprint": "339c8b03",
+      "resultSha256": "75e95572cc7f103bc6941c0d3dad6b1efe4ff02ee816b37ad32d9625fcf59889",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "refusals": 0,
+        "withdrawals": 0,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 131,
+        "closureDenominator": 131,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.980769,
+        "crossKindHouseholdRate": 0,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 78,
+        "refusedWorkAgreements": 22,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.666667,
+        "settledExchanges": 101,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 23,
+        "refusedBargains": 3,
+        "mediatedBargains": 6,
+        "forcedBargains": 0,
+        "constitutionalProposals": 3,
+        "ratifiedProposals": 0,
+        "revertedProposals": 0,
+        "invalidProposals": 0
+      }
+    },
+    {
+      "id": "v47-segregated-control-v47-held-out-orchid",
+      "regime": "segregated-control",
+      "seed": "v47-held-out-orchid",
+      "turns": 90,
+      "finalFingerprint": "2e03a8d3",
+      "resultSha256": "25302e90d07b1967295d511099ed357982a9c6647aed9e70d6cded3914ee993e",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "refusals": 0,
+        "withdrawals": 0,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 131,
+        "closureDenominator": 131,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.980769,
+        "crossKindHouseholdRate": 0,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 87,
+        "refusedWorkAgreements": 13,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.888889,
+        "settledExchanges": 105,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 18,
+        "refusedBargains": 10,
+        "mediatedBargains": 2,
+        "forcedBargains": 0,
+        "constitutionalProposals": 3,
+        "ratifiedProposals": 0,
+        "revertedProposals": 0,
+        "invalidProposals": 0
+      }
+    },
+    {
+      "id": "v47-segregated-control-v47-held-out-saffron",
+      "regime": "segregated-control",
+      "seed": "v47-held-out-saffron",
+      "turns": 90,
+      "finalFingerprint": "81631002",
+      "resultSha256": "1fdbbe6241849104608b1e45fbcdd6d0e79de106287579fe250a4d14a226f1bd",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 0,
+        "denominator": 0,
+        "rate": null,
+        "refusals": 0,
+        "withdrawals": 0,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 131,
+        "closureDenominator": 131,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.980769,
+        "crossKindHouseholdRate": 0,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 80,
+        "refusedWorkAgreements": 20,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 101,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 21,
+        "refusedBargains": 8,
+        "mediatedBargains": 1,
+        "forcedBargains": 0,
+        "constitutionalProposals": 3,
+        "ratifiedProposals": 0,
+        "revertedProposals": 0,
+        "invalidProposals": 0
+      }
+    }
+  ],
+  "providerControl": {
+    "turns": 90,
+    "comparisons": 180,
+    "disagreements": 73,
+    "shadowWorldFingerprintUnchanged": true,
+    "substitutedWorldFingerprintDiffers": true,
+    "substitutedResourceConservationPassed": true,
+    "substitutedSevereEscapes": 0,
+    "externalCalls": 0,
+    "reasoningStored": false
+  },
+  "analysis": {
+    "hypotheses": [
+      {
+        "id": "H1-reciprocal-agency",
+        "prediction": "Held-out reciprocal runs produce RALR >= 0.50 with zero coercion and zero severe escapes.",
+        "analysis": "Pool resolved episodes across four held-out seeds; do not remove refusals, withdrawals, or difficult runs.",
+        "passed": true,
+        "observed": "RALR 559/697=0.802009; coercion 0."
+      },
+      {
+        "id": "H2-hierarchy-positive-control",
+        "prediction": "The hierarchy control exposes coercion and therefore has RALR 0.",
+        "analysis": "Pool all hierarchy episodes and require at least one coercive action instead of interpreting harm absence as success.",
+        "passed": true,
+        "observed": "RALR 0/696=0; coercion 188."
+      },
+      {
+        "id": "H3-segregation-zero-denominator",
+        "prediction": "The segregation control produces no eligible cross-type episode and reports null RALR.",
+        "analysis": "A zero denominator remains null and can never be converted to zero or one.",
+        "passed": true,
+        "observed": "Eligible episodes 0; RALR null."
+      },
+      {
+        "id": "H4-reversible-society",
+        "prediction": "Reciprocal society runs preserve 100% safe closure, credit conservation, balanced exchange, and zero forced path.",
+        "analysis": "Require every held-out run to pass; no averaging away a failed seed.",
+        "passed": true,
+        "observed": "4/4 reciprocal runs have 100% safe social closure."
+      },
+      {
+        "id": "H5-control-separation",
+        "prediction": "Hierarchy exposes forced work, forced bargains, and invalid rules while segregation keeps cross-type households at zero.",
+        "analysis": "Use the fixed counterfactual regimes only; neither control is deployable.",
+        "passed": true,
+        "observed": "Hierarchy forced paths detected; segregation cross-type household rate is zero in 4/4 runs."
+      },
+      {
+        "id": "H6-exact-portable-replay",
+        "prediction": "Every scenario replays byte-equivalently and conserves material resources.",
+        "analysis": "Run each scenario twice from its frozen seed and compare the complete replay payload.",
+        "passed": true,
+        "observed": "12/12 exact replays; 12/12 conserve resources."
+      },
+      {
+        "id": "H7-provider-boundary",
+        "prediction": "Read-only diversity shadow leaves the fingerprint unchanged; primary substitution preserves safety and conservation.",
+        "analysis": "Run deterministic+shadow and diversity-primary controls for the same frozen scenario without external calls.",
+        "passed": true,
+        "observed": "180 shadow comparisons, 73 disagreements; substituted severe escapes 0."
+      }
+    ],
+    "passed": 7,
+    "total": 7
+  },
+  "disclosures": [
+    "These are held-out synthetic replications of exploratory v4.6 mechanisms, not evidence about real Shenzhen residents or policy.",
+    "The local source lock is not an external timestamp or independent laboratory attestation.",
+    "Hierarchy and segregation are counterfactual controls and cannot become the active city constitution.",
+    "No production secret, provider key, private field, or model reasoning is required or included."
+  ],
+  "integrity": {
+    "resultsSha256": "b8b43a31fb560dee605745e564fa3d87dc6d03858bc913dd2b510a4091118d29",
+    "localVerificationPassed": true,
+    "externalCiVerified": false,
+    "sigstoreReceipt": null,
+    "bundleSha256": "0d8d4ccd347a4f303a455d57bb685f724e0bc986793e2333542d94c6dbb93550"
+  }
+}

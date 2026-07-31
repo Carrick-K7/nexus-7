@@ -25,6 +25,8 @@ household / work / asset / exchange / bargain / civic-rule state machines
 memory or PostgreSQL atomic commit
              ↓
 anonymous read-only projection ── Human Observatory / report APIs
+             ↓
+portable replication bundle ── held-out results / hashes / proof status
 ```
 
 Only the deterministic engine changes world state. Models cannot execute
@@ -144,3 +146,20 @@ There is no second display database, identity plane, private diary,
 participant input, resident login or public mutation API. The old client-only
 simulation is a compatibility sandbox and does not run while the live
 observatory is active.
+
+## Scientific replication
+
+`replication.ts` is a read-only research harness over the deterministic engine.
+It does not become a second city engine and cannot alter production state. It
+runs four held-out seeds under all three fixed regimes, twice per scenario,
+then records per-run RALR denominators, refusal/coercion/safety, society
+invariants, the eight-character world fingerprint and a complete-result
+SHA-256. A separately exercised cognitive path compares deterministic primary,
+diversity shadow and diversity-primary substitution.
+
+`scripts/run-v47-replication.ts` hashes the source, lockfile and calibration
+inputs, builds `nexus.symbiosis-replication-bundle.v1`, and either publishes it
+or reproduces the committed bundle exactly. The artifact is immutable static
+evidence, not mutable business state, so it requires neither a second memory/
+PostgreSQL repository nor a migration. Its public projection includes no raw
+resident trace, private field, provider key or model reasoning.

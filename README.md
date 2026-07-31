@@ -63,6 +63,8 @@ The default **Human Observatory / 人类观测台** exposes:
 - primary/shadow disagreement, homogeneity, fallback bias and shadow cost.
 - household participation, work distribution, asset maintenance, exchange
   balance, bargaining outcomes and AI-proposed rule reversion.
+- scientific-replication hypotheses, held-out runs, exact-replay counts,
+  portable bundle hash, reproduction command and external-proof status.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy
@@ -77,6 +79,7 @@ GET /api/reports/symbiosis
 GET /api/reports/symbiosis/study?turns=90
 GET /api/observatory/v2/overview
 GET /api/observatory/v1/overview
+GET /data/v4-7-replication-bundle.json
 ```
 
 Observatory v2 uses only `human`, `ai` and `robot`. V1 remains a compatibility
@@ -144,6 +147,8 @@ npm run lint -- --max-warnings=0
 npm run test:run
 npm run verify:symbiosis
 npm run verify:v45
+npm run verify:v46
+npm run verify:v47
 npm run build
 npm run test:e2e
 ```
@@ -178,6 +183,7 @@ Start with [docs/INDEX.md](docs/INDEX.md). Current v4 authority:
 - [Human Observatory guide](docs/HUMAN_OBSERVATORY.md)
 - [data governance](docs/V4_DATA_GOVERNANCE.md)
 - [verification](docs/V4_VERIFICATION.md)
+- [scientific replication](docs/V4_REPLICATION.md)
 - [operations](docs/V4_OPERATIONS.md)
 - [production attestation](docs/V4_DEPLOYMENT_ATTESTATION.md)
 

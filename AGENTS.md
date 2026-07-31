@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-30 · v2.0.0 安全内核 + v4.6.1 移动端证据约束
+> 更新：2026-07-31 · v2.0.0 安全内核 + v4.7 科学复现
 
 ## 定义与边界
 
@@ -45,9 +45,8 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 v2.0 reference 已闭环；无远端 attestation 时只能写 `external evidence pending`。
 
-v4.6.1 含 200 人、36 AI、24 机器人、观测台、成本/Turn 证据、只读 shadow、
-restart-safe clock、可退出家庭/工作、公共资产、守恒交换/协商和有界城市规则。
-无真人、身份映射或私人输入。
+v4.7 含 200 人、36 AI、24 机器人、观测台、成本/Turn 证据、可逆城市社会及
+无密钥复现实验包；无真人、身份映射或私人输入。
 
 ## 模块边界
 
@@ -92,15 +91,18 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 |---|---:|
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
-| unit / 条件跳过 | 267/267 / 0 |
+| unit / 条件跳过 | 269/269 / 0 |
 | PostgreSQL / Playwright+axe | 16/16 / 27/27 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4 多季对照 | 3 regimes × 3 seeds × 90 Turns；mechanism separation pass |
 | v4.6 社会验证 | 500/500 safe closure；信用/交换守恒；active forced path 0 |
+| v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
 
 ## 外部边界
 
+- v4.7 本地 269/269、browser 27/27、build/audit 通过；外部 CI/Sigstore、
+  Tag/部署尚未完成，不得写成线上事实。
 - `6c90112` (v4.6.1) 已部署；实际 populated-rule 390 px overflow 0，公网
   200/写 405/console 0；Turn 282 按时（lag 332 ms）并精确绑定 revision。
 - v4.6.0 Turn 257–281 均按时；当前 429 society records/111 events，

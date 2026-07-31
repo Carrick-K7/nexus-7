@@ -35,9 +35,11 @@ reserved for the other research, safety and compatibility views.
 7. Inspect production stages, then search or filter any resident.
 8. Check the DeepSeek Token and cost ledger.
 9. Check Turn reliability/provenance and cognitive diversity.
-10. Inspect city society: households, work, assets, exchanges, bargains and
+10. Check scientific replication: hypotheses, held-out replay, bundle hash and
+    external-proof status.
+11. Inspect city society: households, work, assets, exchanges, bargains and
     reversible AI-proposed rules.
-11. Finish with the event river and exact snapshot evidence.
+12. Finish with the event river and exact snapshot evidence.
 
 The 18,248,500 background population is calibration only. The 260 foreground
 residents are the only individually modeled humans, AI and robots.
@@ -125,6 +127,20 @@ DeepSeek can instead run as a separately budgeted shadow before any governed
 promotion. No comparison is a vote: changing the primary provider requires a
 new run or release, and provider substitution is accepted only when resource,
 consent, continuity and harm invariants still pass.
+
+## Scientific replication
+
+The replication card reads the committed
+`nexus.symbiosis-replication-bundle.v1` artifact. It shows the number of fixed
+hypotheses, held-out regime/seed runs, exact replays, bundle SHA-256 and the
+credential-free command `npm ci && npm run verify:v47`. The complete JSON can
+be downloaded for independent inspection.
+
+“7/7 local” means the current source reproduced all fixed analyses and hashes.
+It does not mean an independent organization, remote CI or Sigstore has
+verified the result. External proof remains visibly pending until a receipt
+from another trust domain exists. The v4.6 study is labeled exploratory; the
+v4.7 plan prospectively replicates it rather than rewriting its history.
 
 ## Institutions and production
 

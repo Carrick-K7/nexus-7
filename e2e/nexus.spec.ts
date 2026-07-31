@@ -152,6 +152,27 @@ test("v4 simulated-city APIs preserve privacy and zero-denominator honesty", asy
     observationWindowDays: 0,
     requiredObservationDays: 90,
   });
+
+  const replicationResponse = await page.request.get(
+    "/data/v4-7-replication-bundle.json",
+  );
+  expect(replicationResponse.ok()).toBe(true);
+  const replication = await replicationResponse.json();
+  expect(replication).toMatchObject({
+    schemaVersion: "nexus.symbiosis-replication-bundle.v1",
+    status: "local-replication-passed-external-attestation-pending",
+    design: {
+      runCount: 12,
+      secretInputsRequired: false,
+      command: "npm ci && npm run verify:v47",
+    },
+    analysis: { passed: 7, total: 7 },
+    integrity: {
+      localVerificationPassed: true,
+      externalCiVerified: false,
+      sigstoreReceipt: null,
+    },
+  });
 });
 
 for (const viewport of [
@@ -193,6 +214,15 @@ for (const viewport of [
       "COGNITIVE DIVERSITY SHADOW",
     );
     await expect(diversity).toContainText("Disabled");
+    const replication = page.getByTestId("scientific-replication");
+    await expect(replication).toBeVisible();
+    await expect(replication).toContainText("SCIENTIFIC REPLICATION");
+    await expect(replication).toContainText("7 / 7");
+    await expect(replication).toContainText("12 / 12");
+    await expect(replication).toContainText(
+      "npm ci && npm run verify:v47",
+    );
+    await expect(replication).toContainText("Evidence pending");
     const society = page.getByTestId("city-society");
     await expect(society).toBeVisible();
     await expect(society).toContainText(
@@ -288,6 +318,8 @@ test("Human Observatory explains the city in Chinese", async ({ page }) => {
   await expect(page.getByText("DeepSeek API 用量与开销")).toBeVisible();
   await expect(page.getByText("Turn 可靠性与版本证据")).toBeVisible();
   await expect(page.getByText("认知多样性 Shadow")).toBeVisible();
+  await expect(page.getByText("科学复现")).toBeVisible();
+  await expect(page.getByText("外部证明")).toBeVisible();
   await expect(page.getByText("城市社会与可逆规则")).toBeVisible();
   await expect(page.getByText("AI 居民提出的城市规则")).toBeVisible();
   await expect(page.getByText("生产环节全链条 AI 化")).toBeVisible();
