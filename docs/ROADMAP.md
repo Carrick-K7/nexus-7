@@ -192,6 +192,12 @@ live-provider and elapsed-time lanes remain pending until their independent
 systems actually produce evidence. That pending state is the intended honest
 result, not a local verification failure.
 
+v4.8.2 hardens this boundary across build environments: committed Evolution
+Log evidence survives shallow and Git-less builds, current checkout entries
+take precedence, and unsigned PR artifacts remain outside the external-CI
+lane. GitHub-hosted quality is green; governed Sigstore receipt issuance is
+still pending.
+
 ## Next objectives
 
 No new city feature milestone is scheduled. Operate v4.8 until all five trust

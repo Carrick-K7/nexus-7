@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release is **v4.8.1 — Independent Trust Matrix**.
+The release candidate is **v4.8.2 — Reproducible Evolution Evidence**.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
@@ -71,6 +71,11 @@ The default **Human Observatory / 人类观测台** exposes:
 v4.8.1 keeps the live DeepSeek lane strictly separate from the ordinary
 reference shadow: only persisted DeepSeek-shadow attempts, outcomes, failures,
 Tokens, models and price versions can appear as evidence in that lane.
+
+v4.8.2 also preserves committed Evolution Log history in shallow CI and
+Git-less packaged builds. A GitHub-hosted pull-request run passed the complete
+quality pipeline, but its unsigned artifact is not promoted to the external-CI
+trust lane; that still requires the governed receipt and Sigstore path.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy

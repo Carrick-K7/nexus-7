@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-31 · v2.0.0 安全内核 + v4.8.1 独立证据矩阵
+> 更新：2026-07-31 · v2.0.0 安全内核 + v4.8.2 可复现演进证据
 
 ## 定义与边界
 
@@ -23,14 +23,14 @@ v4 运行可重放、可审计的模拟深圳，研究人、AI 和机器人的�
 - 治理/扩展：`docs/GOVERNANCE.md`、`docs/EXTENSIONS.md`
 - 版本事实/架构：`iterations/*.json`、`docs/adr/*.md`
 
-本文件只保留执行规则和最近基线，不复制详细历史、API 或设计。
+本文件仅保留执行规则和最近基线。
 
 ## 生产权限
 
 公网是 `nexus7.carrick7.com`；`main` 对齐前生产沿用 v4 分支。普通 push 不授权
 生产变更。不得重建/删除 `nexus7-postgres-data`；共享基础设施归
 `Carrick-K7/carrick-ops`。不得输出环境、数据库 URL、密码、模型密钥或签名材料。
-获授权发布后须核验 revision、Web/worker、数据库和公网主路径。
+获授权发布后核验 revision、Web/worker、数据库和公网主路径。
 
 ## 北极星
 
@@ -50,10 +50,10 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 ## 当前状态
 
-v2.0 reference 已闭环；无远端 attestation 时只能写 `external evidence pending`。
+v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
-v4.8.1 含 200 人、36 AI、24 机器人、可逆城市及五路证据矩阵；DeepSeek 轨道
-不混入参考比较。无真人、身份映射或私人输入。
+v4.8.2 含 200 人、36 AI、24 机器人及五路证据矩阵；DeepSeek 轨道
+不混入参考比较，浅克隆/Git-less 构建保留演进证据。无真人、身份映射或私人输入。
 
 ## 模块边界
 
@@ -63,7 +63,7 @@ v4.8.1 含 200 人、36 AI、24 机器人、可逆城市及五路证据矩阵；
 `lifecycle`/`experiments` 提供原子持久化；`governance`、`deployment`、
 `operations` 管身份、发布和恢复；UI 只做投影。
 
-运营 Incident 与合成城市 Incident 分属不同 bounded context。世界只能由确定性
+运营与合成城市 Incident 分属不同 bounded context。世界只能由确定性
 simulation/event 流改变；shadow 不得进入结算或 fallback；城市规则只能修改
 白名单参数，Agent/模型不得执行 shell、SQL 或隐式代码。
 
@@ -98,12 +98,12 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 |---|---:|
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
-| unit / 条件跳过 | 274/274 / 0 |
+| unit / 条件跳过 | 275/275 / 0 |
 | PostgreSQL / Playwright+axe | 16/16 / 27/27 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
-| v4.8.1 证据契约 | 5 lanes；篡改/同机/过期/参考混入 fail closed |
+| v4.8.2 证据契约 | 5 lanes；浅克隆/Git-less/参考混入 fail closed |
 
 ## 外部边界
 
@@ -113,4 +113,4 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
   实际调用/Token/费用仍为 0；真实观测 5.407 天。
 - 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
   恢复待验证。
-- evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。
+- GitHub PR CI `30641290821` 全绿且 Node 20 warning 0；未签名，不计 external lane。

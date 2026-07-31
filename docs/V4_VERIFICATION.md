@@ -273,6 +273,35 @@ the unchanged 16/16 real PostgreSQL/restore baseline, 27/27 production-build
 Playwright/axe scenarios, TypeScript/build, zero lint warnings and zero audit
 vulnerabilities.
 
+### v4.8.2 shallow and Git-less build gate
+
+The first GitHub-hosted pull-request run, `30639268795`, exposed an environment
+regression that the full local clone could not: build-time manifest generation
+replaced committed Git-derived Evolution Log entries with the shallow checkout,
+so the historical v0.3.0 card disappeared and one of 27 browser scenarios
+failed. This failure is retained as evidence rather than rewritten as a pass.
+
+The generator now treats a complete repository history as authoritative and,
+only for a shallow or Git-less build, merges committed Git-derived entries as
+fallbacks behind the current checkout. A focused test fixes precedence and
+deduplication. Run `30640312118` then passed the complete pipeline, including
+27/27 browser/axe scenarios and the isolated Git-less quality evaluation.
+
+Run `30641290821` repeated that result after all official checkout, setup-node
+and artifact actions were upgraded to their Node 24-native releases. It passed
+259 non-PostgreSQL tests, 16 real PostgreSQL/restore tests, v1/v2 gates, current
+and exact-Tag v4.7 reproduction, v4.8 contracts, 27/27 browser/axe scenarios,
+10,000 deterministic ticks and the isolated Git-less lint/test/build gate.
+The shallow browser build retained 13 fallback entries; the Git-less build
+retained all 14. Dependency vulnerabilities, lint warnings and deprecated
+Node 20 action warnings were zero.
+
+Artifact `8797892137` contains the generated verification evidence with
+internally matching SHA-256 entries. It has no Sigstore attestation: the run was
+for an unmerged Draft PR, so both attestation steps correctly stayed skipped
+and `gh attestation verify` found no attestation for the subject. It therefore
+supports the release review but does not satisfy the external-replication lane.
+
 ## Provider and persistence gates
 
 The cognitive contract tests validate DeepSeek Chat Completions JSON output,

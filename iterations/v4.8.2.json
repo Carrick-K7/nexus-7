@@ -4,22 +4,26 @@
   "date": "2026-07-31",
   "trigger": "external-ci-environment-regression",
   "triggerReason": "The first GitHub-hosted CI run used a shallow checkout, so the build-time Evolution Log generator discarded committed Git-derived history and the v0.3.0 evidence card disappeared even though local full-history browser tests passed.",
-  "action": "Made complete Git history authoritative while preserving committed Git-derived entries only for shallow or Git-less builds, deduplicated current entries ahead of fallbacks, and added a focused merge-order regression test.",
-  "outcome": "The same committed evidence history is now available in full clones, shallow CI clones and packaged builds without fabricating a successful external run. Remote CI rerun remains the acceptance authority.",
+  "action": "Made complete Git history authoritative while preserving committed Git-derived entries only for shallow or Git-less builds, deduplicated current entries ahead of fallbacks, added a focused merge-order regression test, and upgraded official GitHub Actions to their Node 24-native major versions.",
+  "outcome": "GitHub Actions run 30641290821 passed the complete quality pipeline from a shallow pull-request checkout and repeated the unit/build gate without Git metadata. It retained all 14 committed Git evidence entries, restored 27/27 browser scenarios, and emitted no Node 20 action warning. The unsigned PR artifact remains supporting evidence rather than a verified external-replication receipt.",
   "metrics": [
-    { "label": "GitHub browser scenarios", "before": 26, "after": 26 },
+    { "label": "GitHub browser scenarios", "before": 26, "after": 27 },
     { "label": "Missing historical version cards", "before": 1, "after": 0 },
-    { "label": "New generator regression tests", "before": 0, "after": 1 }
+    { "label": "New generator regression tests", "before": 0, "after": 1 },
+    { "label": "Deprecated Node 20 action warnings", "before": 7, "after": 0 }
   ],
   "evidence": [
     "GitHub Actions run 30639268795 failed only the missing v0.3.0 browser assertion after 26/27 scenarios",
-    "Focused shallow-history merge-order test passes",
-    "ESLint passes with zero warnings"
+    "GitHub Actions run 30640312118 first proved the generator fix with 27/27 browser scenarios and complete Git-less quality evaluation",
+    "GitHub Actions run 30641290821 passed 259 non-PostgreSQL and 16 real PostgreSQL/restore tests, 27/27 browser/axe scenarios, exact v4.7 Tag reproduction, 10,000-tick stability and isolated Git-less quality evaluation",
+    "Run 30641290821 uploaded artifact 8797892137 with internally matching SHA-256 entries; no Sigstore attestation exists for its CI evidence subject because PR workflows cannot self-attest",
+    "ESLint passes with zero warnings, dependency audit reports zero vulnerabilities, and Node 20 action warnings are zero"
   ],
   "artifacts": [
     "scripts/inject-git-log.js",
     "scripts/iteration-manifest-utils.cjs",
     "src/evidence/iteration-manifest-generator.test.ts",
+    ".github/workflows/ci.yml",
     "public/data/iteration-manifests.json"
   ]
 }
