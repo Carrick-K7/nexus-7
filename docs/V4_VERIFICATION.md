@@ -1,9 +1,9 @@
 # v4 Simulated Symbiosis Verification
 
-> Date: 2026-07-31
+> Date: 2026-08-01
 >
-> Status: v4.8.4 Independent Replication Path locally implemented;
-> v4.8.3 deployed; external replication, duration, off-host restore,
+> Status: v4.8.4 Independent Replication Path deployed;
+> external replication, duration, off-host restore,
 > CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
@@ -383,6 +383,13 @@ the 10,000-tick audit and the frozen-source isolated evaluation passed.
 Artifact `8803269675` is unsigned because this is still a Draft PR; both
 attestation steps skipped and the external-replication lane remains pending.
 
+Exact release run `30656174260` then repeated the complete pipeline for tagged
+commit `ace250c` in 12m26s and uploaded artifact `8803619226`. Its 262
+non-PostgreSQL tests, 16 real PostgreSQL/restore tests, 28/28 browser/axe
+scenarios, two exact bundle reproductions and isolated Node 24 evaluation all
+passed. Because the run is still attached to a Draft PR, attestation correctly
+remained disabled; this is release evidence, not the missing external receipt.
+
 ## Provider and persistence gates
 
 The cognitive contract tests validate DeepSeek Chat Completions JSON output,
@@ -420,8 +427,8 @@ The production-built Playwright/axe suite must verify:
 ## Production evidence and trust boundary
 
 The reference values above are generated from tagged v4 source and do not
-represent a claim about real humans. Annotated Tag `v4.8.3`, exact commit
-`467c91f` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and that
+represent a claim about real humans. Annotated Tag `v4.8.4`, exact commit
+`ace250c` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and that
 exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only access,
 200/36/24 taxonomy, 24 current ledgers, desktop/mobile Chromium, both themes,
 Chinese copy, zero WCAG A/AA violations, the DeepSeek zero ledger, read-only
@@ -468,6 +475,19 @@ the retained table, warning, 390px containment and axe gate passed. Turn 308
 settled naturally with 313 ms lag, exact `467c91f` revision, fingerprint
 `7279fa10`, conserved resources, RALR 449/612 and zero coercive actions or
 severe escapes. Missing, duplicate and predecessor-mismatch counts remain zero.
+The v4.8.4 cutover preserved Turn 309 and its original due time. PostgreSQL was
+not stopped or replaced. Production Chromium passed four desktop/mobile,
+dark/light axe scans with zero WCAG A/AA violations, zero console issues and
+390/390px mobile containment. Root, Overview and Trust return 200, mutation
+returns 405, and the public Trust projection binds `ace250c` while honestly
+remaining 1/5.
+Turn 310 then settled naturally with 307 ms lag, exact `ace250c` revision and
+fingerprint `1ce6eebe`. It recorded RALR 451/615, 84/84 safe society closure,
+conserved civic credit, zero coercive or forced active paths, zero invalid
+proposals and zero severe escapes. The live chain now contains 311 rows through
+Turn 310 with zero missing, duplicate or predecessor-mismatch counts; 134/135
+comparable settlements are on time, and the single historical early-restart
+sample remains visible.
 Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 

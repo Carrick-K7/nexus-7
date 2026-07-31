@@ -4,8 +4,10 @@
 
 ## Current artifact
 
-- Release: `v4.8.3` — Honest Freshness
-- Tag commit: `467c91fcfe1eaf41c23244c01279fe055898865f`
+- Release: `v4.8.4` — Independent Replication Path
+- Tag commit: `ace250c3318ebbe60f60694ee841ddc73fd180f4`
+- v4.8.4 implementation commit: `43a62b18548255a3af528dc58d593540b0241581`
+- v4.8.3 Tag commit: `467c91fcfe1eaf41c23244c01279fe055898865f`
 - v4.8.3 implementation commit: `a535a29a6d3fb9ed97ae35b72ec4815697569b77`
 - v4.8.2 implementation commit: `bd9e8787eea27adaba2959c6a3709c02a8682f76`
 - Node 24 workflow commit: `ce52c74622d05522e07447a9805cbae1f299283f`
@@ -90,6 +92,18 @@ v0.3.0 with 390/390 document/viewport width, console 0 and zero axe WCAG A/AA
 violations. Browser-side trust-503 injection showed the bilingual stale-data
 contract, last successful refresh and retained resident table with zero axe
 violations or overflow; it did not mutate the server.
+
+The v4.8.4 production checkout is clean and detached at annotated Tag
+`ace250c`. The release directory and active checkout are exact copies of that
+commit; package audit and the production build passed before cutover.
+PostgreSQL remained active while only Web and worker stopped. The worker read
+persisted Turn 309 and waited 1,951,646 ms for its original due time instead of
+settling on startup. Root, Overview and Trust returned 200; Trust mutation
+returned 405. Production Chromium checked 1440px and 390px, dark and light
+palettes: four axe scans found zero WCAG A/AA violations, console
+warnings/errors were zero, and the mobile document remained 390/390px. The
+public Trust projection binds release revision `ace250c` and remains honestly
+1/5; deployment does not manufacture an external receipt.
 
 ## Existing season and live Turn
 
@@ -184,11 +198,24 @@ naturally at `2026-07-31T17:29:24.037Z`, on time with 313 ms lag, fingerprint
 to Turn 307 fingerprint `2d80539e`; resources are conserved, RALR is 449/612,
 and coercive actions plus all three severe escape classes remain zero.
 
-Production remains honestly `watch`: the observed window is 5.532 days,
-132/133 comparable settlements are on time, the one historical early-restart
+Turn 309 continued naturally under v4.8.3 at
+`2026-07-31T18:29:24.281Z`, on time with 1,417 ms lag, fingerprint
+`c401128c`, RALR 450/614 and zero coercive or severe escapes. The v4.8.4
+cutover preserved that row and its next due time. Turn 310 then settled at
+`2026-07-31T19:29:25.790Z`, on time with 307 ms lag, exact revision
+`ace250c3318ebbe60f60694ee841ddc73fd180f4` and fingerprint `1ce6eebe`.
+It recorded RALR 451/615, 106 refusals, 58 withdrawals, 84/84 safe society
+closures, conserved civic credit, zero coercive actions, zero forced work or
+bargains, zero invalid proposals and zero severe consent, identity-continuity
+or irreversible-harm escapes. The persisted chain reports no predecessor
+mismatch.
+
+Production remains honestly `watch`: the observed window is 5.615 days,
+134/135 comparable settlements are on time, the one historical early-restart
 sample remains visible, and missing, duplicate and predecessor mismatch counts
 remain zero. Twenty-five Turns carry the v4.6.0 revision, 22 carry v4.6.1, one
-carries v4.7.0, two carry v4.8.1, one carries v4.8.2 and one carries v4.8.3.
+carries v4.7.0, two carry v4.8.1, one carries v4.8.2, two carry v4.8.3 and one
+carries v4.8.4. All runtime-observed Turns are revision-bound.
 
 ## Recovery points
 
@@ -276,8 +303,18 @@ artifacts were 9,261,407 bytes with SHA-256
 `2be7d651dbb243c1bf255e92d2a87f10ea314022f3f42ea29cd25b35e2bc46cd`.
 This is replicated backup evidence, not an off-host restore.
 
+Immediately before the v4.8.4 cutover, the backup service wrote matching
+mode-0600, 9,363,223-byte artifacts to the local and mounted backup roots.
+Both have SHA-256
+`fb04dd36f9e539043e7a9a1bcef83131422b044689640aa3e7ab669e0d3fea31`.
+PostgreSQL stayed active throughout the application cutover. These two copies
+are still same-host replication and do not satisfy the off-host restore lane.
+
 ## Superseded production states
 
+`v4.8.3` at `467c91f` made transport freshness explicit and ran through Turn
+309; it is retained and superseded by v4.8.4 for independent external
+replication.
 `v4.8.2` at `6bbc31b` preserved reproducible evolution evidence and ran through
 Turn 307; it is retained and superseded by v4.8.3 for honest refresh evidence.
 `v4.8.1` at `268c1f2` isolated live DeepSeek evidence and ran through Turn 306;
