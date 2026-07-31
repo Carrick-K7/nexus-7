@@ -1727,6 +1727,28 @@
     "source": "manifest"
   },
   {
+    "id": "7ade982b",
+    "version": "unreleased",
+    "date": "2026-07-31",
+    "trigger": "observation",
+    "triggerReason": "merge: reconcile production authority from main",
+    "action": "merge: reconcile production authority from main",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "b91e696c",
+    "version": "unreleased",
+    "date": "2026-07-23",
+    "trigger": "observation",
+    "triggerReason": "docs: define NEXUS production authority",
+    "action": "docs: define NEXUS production authority",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
     "id": "355bec9f",
     "version": "unreleased",
     "date": "2026-07-19",
