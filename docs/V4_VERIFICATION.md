@@ -237,6 +237,8 @@ and Sigstore evidence remain separate exit gates.
 
 `nexus.symbiosis-trust-matrix.v1` exposes five non-substitutable lanes through
 the read-only `/api/observatory/v2/trust` contract and bilingual Observatory.
+Implementation commit `7182378` contains the contract, fail-closed verifier,
+receipt workflows, Observatory projection and recovery-drill hardening.
 Unit/reference verification covers:
 
 - a valid committed bundle verifies locally while all four external lanes stay
