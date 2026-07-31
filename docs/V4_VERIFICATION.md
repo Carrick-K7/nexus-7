@@ -376,6 +376,13 @@ tests, the 12-case model regression and production build with no network,
 read-only root, dropped capabilities and no ignored host inputs. Remote
 workflow and production evidence are recorded only after commit and release.
 
+GitHub-hosted candidate run `30655282026` repeated the exact `43a62b1`
+pipeline in 12m15s: 262 non-PostgreSQL tests, 16 real PostgreSQL/restore tests,
+28/28 browser/axe scenarios, both v4.7 reproductions, all deterministic gates,
+the 10,000-tick audit and the frozen-source isolated evaluation passed.
+Artifact `8803269675` is unsigned because this is still a Draft PR; both
+attestation steps skipped and the external-replication lane remains pending.
+
 ## Provider and persistence gates
 
 The cognitive contract tests validate DeepSeek Chat Completions JSON output,

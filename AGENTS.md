@@ -113,4 +113,4 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
   实际调用/Token/费用仍为 0；真实观测 5.532 天。
 - 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
   恢复待验证。
-- PR CI `30649142382` 全绿（28/28 browser）；未签名，不计 external lane。
+- PR CI `30655282026` 全绿（278 tests；28/28 browser）；未签名，不计 external lane。
