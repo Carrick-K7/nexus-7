@@ -222,6 +222,11 @@ revision and translates every current trust reason while retaining stable
 machine codes. Missing evidence is still pending; bad evidence cannot be made
 less severe by removing another file.
 
+v4.8.6 closes the production accessibility defect found during the v4.8.5
+browser audit. The visible interface language and root document `lang` now
+change together and remain aligned after persisted-state reload. This is a
+presentation-metadata correction, not a new city mechanism or trust claim.
+
 ## Next objectives
 
 No new city feature milestone is scheduled. Operate v4.8 until all five trust

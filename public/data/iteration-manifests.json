@@ -1,5 +1,45 @@
 [
   {
+    "id": "iteration-v4.8.6",
+    "version": "4.8.6",
+    "date": "2026-08-01",
+    "trigger": "production-accessibility-audit",
+    "triggerReason": "The v4.8.5 production browser audit found that switching the visible interface to Chinese left the root document language declared as English, causing assistive technology to use the wrong pronunciation rules.",
+    "action": "Synchronize the root html lang attribute with the persisted interface language in the client shell and require zh-CN both immediately after switching and after a reload.",
+    "outcome": "Local acceptance passes 264 non-PostgreSQL tests, 16 real PostgreSQL/backup/restore tests, all deterministic v1/v2/v4 gates, 28/28 production-build Playwright/axe scenarios, 10,000 ticks, zero lint warnings, zero dependency vulnerabilities and the TypeScript production build. The pinned networkless Node 24.15.0 evaluator independently repeats lint, 264 tests, model regression and build from a frozen read-only source archive with dropped capabilities. Remote and production evidence are recorded only after their corresponding gates run.",
+    "metrics": [
+      {
+        "label": "Chinese UI with matching document language",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "label": "World-settlement paths changed",
+        "before": 0,
+        "after": 0
+      },
+      {
+        "label": "Trust lanes promoted",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Production v4.8.5 reproduced Chinese visible content with html lang still en",
+      "Browser regression requires html lang zh-CN after selection and persisted reload",
+      "Focused and full production-build browser regressions pass",
+      "264 non-PostgreSQL and 16 real PostgreSQL/backup/restore tests pass",
+      "All deterministic gates and the 10,000-tick audit pass",
+      "Pinned Node 24.15.0 isolated lint/test/model/build passes with network none, read-only root, frozen source and dropped capabilities"
+    ],
+    "artifacts": [
+      "src/app/page.tsx",
+      "e2e/nexus.spec.ts",
+      "docs/adr/0034-document-language-synchronization.md"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.8.5",
     "version": "4.8.5",
     "date": "2026-08-01",

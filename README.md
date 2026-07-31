@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release candidate is **v4.8.5 — Evidence Readiness**.
+The active release candidate is **v4.8.6 — Accessible Language State**.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
@@ -96,6 +96,11 @@ stable machine reason codes. A supplied malformed off-host receipt can no
 longer be downgraded to pending when its evidence file is absent, and the
 deployment template keeps every accepted signer workflow in its explicit
 override.
+
+v4.8.6 keeps the root document language synchronized with the persisted
+English/Chinese interface choice. Screen readers therefore receive `en` or
+`zh-CN` consistently after a switch and reload; city state and trust gates are
+unchanged.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy

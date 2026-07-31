@@ -700,10 +700,12 @@ test("terminal, ARIA, language, and persistence work", async ({ page }) => {
   await page.getByRole("button", { name: "Change language" }).click();
   await page.getByRole("button", { name: "中文" }).click();
   await expect(page.getByRole("button", { name: "仪表盘" })).toBeVisible();
+  await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
 
   await page.reload();
   await expect(page.getByRole("button", { name: "仪表盘" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Change language" })).toContainText("ZH");
+  await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
 });
 
 test("observer reconstructs traces and compares counterfactual runs", async ({ page }) => {
