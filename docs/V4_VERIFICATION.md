@@ -263,7 +263,8 @@ only after Sigstore verification with self-hosted runners denied. Those
 reference paths do not claim a remote run occurred until an actual workflow
 artifact is deployed.
 
-v4.8.1 adds a production-regression fixture in which the diversity reference
+Pushed correction commit `77ae73f` adds a production-regression fixture in
+which the diversity reference
 shadow has 260 comparisons while DeepSeek has never been configured or called.
 The live-provider lane remains pending with zero attempts, comparisons,
 failures, Tokens and cost. This prevents a correct status paired with a

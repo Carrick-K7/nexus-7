@@ -5,7 +5,7 @@
   "trigger": "production-observability-regression",
   "triggerReason": "The v4.8.0 DeepSeek lane stayed pending correctly but reused the aggregate diversity comparison count, so 260 reference-shadow comparisons could be read by a human as 260 live DeepSeek comparisons.",
   "action": "Split persisted DeepSeek shadow evidence from combined provider usage and generic cognitive diversity, bind the trust lane only to that exact slice, add reference-shadow contamination tests at API and browser layers, and document the correction.",
-  "outcome": "A reference shadow can no longer contribute attempts, comparisons, failures, Tokens, price versions, models or cost to the live DeepSeek trust lane. The deterministic city and its PostgreSQL contracts are unchanged; missing live-provider evidence remains visibly pending.",
+  "outcome": "Pushed implementation 77ae73f prevents a reference shadow from contributing attempts, comparisons, failures, Tokens, price versions, models or cost to the live DeepSeek trust lane. The deterministic city and its PostgreSQL contracts are unchanged; missing live-provider evidence remains visibly pending.",
   "metrics": [
     { "label": "Reference comparisons displayed as DeepSeek", "before": 260, "after": 0 },
     { "label": "DeepSeek evidence fields isolated", "before": 4, "after": 10 },
