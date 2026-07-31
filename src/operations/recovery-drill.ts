@@ -13,6 +13,9 @@ import {
   restorePostgresBackup,
   verifyPostgresBackup,
 } from "./postgres-backup";
+import {
+  initializeSymbiosisSchema,
+} from "@/symbiosis/postgres-schema";
 
 export interface RecoveryDrillReport {
   schemaVersion: 1;
@@ -78,6 +81,10 @@ export async function runPostgresRecoveryDrill(options: {
     id: () => `${drillId}-${++sequence}`,
   });
   await sourceService.initialize();
+  // The backup contract spans the v2 kernel and v4 city tables. Recovery
+  // drills must be self-contained rather than depending on a prior symbiosis
+  // test or worker having initialized the city schema.
+  await initializeSymbiosisSchema(options.sourcePool);
   const actor = {
     id: "recovery-drill",
     role: "admin" as const,

@@ -33,6 +33,11 @@ export interface SymbiosisRecoveryEvidence {
     latestFingerprintMatch: boolean;
     resumedWrite: boolean;
   };
+  locationProof?: {
+    sourceHostFingerprint: string;
+    restoreTargetHostFingerprint: string;
+    independentTarget: true;
+  };
   evidenceChecksum: string;
 }
 
@@ -110,11 +115,25 @@ export function verifyRecoveryEvidence(
   const offHostTarget =
     evidence.restoreDrill.target ===
     "off-host-second-database";
+  const locationProofValid =
+    !offHostTarget ||
+    (
+      evidence.locationProof?.independentTarget === true &&
+      /^[0-9a-f]{64}$/.test(
+        evidence.locationProof.sourceHostFingerprint,
+      ) &&
+      /^[0-9a-f]{64}$/.test(
+        evidence.locationProof.restoreTargetHostFingerprint,
+      ) &&
+      evidence.locationProof.sourceHostFingerprint !==
+        evidence.locationProof.restoreTargetHostFingerprint
+    );
   return (
     recoveryEvidenceChecksum(payload) === evidenceChecksum &&
     /^[0-9a-f]{64}$/.test(evidence.backup.checksum) &&
     /^[0-9a-f]{64}$/.test(evidence.backup.artifactSha256) &&
-    evidence.backup.offHost === offHostTarget
+    evidence.backup.offHost === offHostTarget &&
+    locationProofValid
   );
 }
 

@@ -20,6 +20,12 @@ npm ci
 npm run verify:v47
 ```
 
+On releases after v4.7, that command verifies that every frozen scientific
+source and complete result hash remains compatible while explicitly listing
+package/runner metadata drift. CI additionally checks out tag `v4.7.0` into an
+isolated directory and runs the original exact command there. Only that tagged
+checkout is described as exact v4.7 environment reproduction.
+
 The command hashes every required input, executes every scenario twice,
 recomputes the analysis and compares the complete bundle hash with
 `public/data/v4-7-replication-bundle.json`. It exits non-zero for a changed
@@ -59,6 +65,13 @@ Only the first two are currently present. Workflow code capable of uploading
 and attesting the bundle exists, but code is not a receipt. A GitHub or other
 independent run must complete and its provenance must be verified before the
 last two states can change.
+
+v4.8 keeps the immutable bundle unchanged and projects any later receipt
+through `/api/observatory/v2/trust`. The receipt must match the bundle file
+digest, internal bundle hash, hypothesis/run summary, deployed revision and a
+trusted GitHub workflow. The committed bundle's original `externalCiVerified`
+field remains false because external proof cannot rewrite the artifact it
+attests.
 
 This milestone does not close the live DeepSeek, 90 elapsed production days or
 off-host PostgreSQL restore gates.

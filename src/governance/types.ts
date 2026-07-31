@@ -214,7 +214,9 @@ export type GovernanceEvidenceKind =
   | "model-regression-live"
   | "recovery-drill"
   | "deployment-drill"
-  | "deployment-conformance";
+  | "deployment-conformance"
+  | "symbiosis-replication"
+  | "symbiosis-off-host-recovery";
 
 export interface GovernanceEvidenceRecord {
   id: string;

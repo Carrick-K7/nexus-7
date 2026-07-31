@@ -96,6 +96,19 @@ jobs:
       - name: Portable v4.7 scientific replication gate
         run: npm run verify:v47
 
+      - name: Checkout exact v4.7 replication release
+        uses: actions/checkout@v4
+        with:
+          ref: v4.7.0
+          path: .verified/v47-release
+
+      - name: Reproduce exact v4.7 release environment
+        working-directory: .verified/v47-release
+        run: npm ci && npm run verify:v47
+
+      - name: Independent v4.8 trust-domain contract gate
+        run: npm run verify:v48
+
       - name: Live model regression gate
         if: github.event_name == 'push'
         env:

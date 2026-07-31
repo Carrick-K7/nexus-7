@@ -2,8 +2,8 @@
 
 > Date: 2026-07-31
 >
-> Status: v4.7 Scientific Replication locally verified and deployed;
-> external replication, duration, off-host restore,
+> Status: v4.8 Independent Trust Matrix locally implemented;
+> v4.7 deployed; external replication, duration, off-host restore,
 > CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
@@ -201,9 +201,12 @@ episodes, zero reciprocal coercion, 139 detected hierarchy coercions with RALR
 
 Implementation commit `ebe3caf` contains the replication protocol, portable
 bundle, verifier, Human Observatory card, tests and CI attestation path.
-`npm ci && npm run verify:v47` needs no database, production secret or model
-key. It re-runs the committed portable bundle and fails on any input, result or
-envelope hash mismatch.
+At tag `v4.7.0`, `npm ci && npm run verify:v47` needs no database, production
+secret or model key and reproduces the complete envelope exactly. Later
+releases use the command as a compatibility gate: every scientific source and
+complete result hash must remain exact while package/runner metadata drift is
+listed explicitly. CI separately checks out `v4.7.0` and repeats the original
+exact release command.
 
 | Gate | Local result |
 |---|---:|
@@ -229,6 +232,32 @@ The hypotheses prospectively replicate exploratory v4.6 outcomes; the earlier
 study is not retroactively described as preregistered. The local `lockedAt`
 field is a source-plan marker, not a trusted timestamp. Actual external runner
 and Sigstore evidence remain separate exit gates.
+
+## v4.8 Independent Trust Matrix gate
+
+`nexus.symbiosis-trust-matrix.v1` exposes five non-substitutable lanes through
+the read-only `/api/observatory/v2/trust` contract and bilingual Observatory.
+Unit/reference verification covers:
+
+- a valid committed bundle verifies locally while all four external lanes stay
+  pending rather than inheriting the local pass;
+- exact Ed25519 remote receipts can verify all five reference contract lanes
+  only when kind, repository, trusted workflow, release revision, subject
+  SHA-256 and lane-specific summary all match;
+- a modified signed payload fails signature verification;
+- identical recovery host fingerprints invalidate an off-host claim;
+- absent public keys/receipts stay pending, malformed artifacts fail, and
+  expired otherwise-valid receipts become stale;
+- a provider name without persisted attempts/comparisons/Token usage cannot
+  pass the live DeepSeek lane;
+- 90 reference days pass the algorithm only when freshness, sequence,
+  predecessor, revision and 99% on-time gates also pass; production shows only
+  actual elapsed time.
+
+The GitHub-hosted workflows issue replication and off-host recovery receipts
+only after Sigstore verification with self-hosted runners denied. Those
+reference paths do not claim a remote run occurred until an actual workflow
+artifact is deployed.
 
 ## Provider and persistence gates
 
@@ -257,6 +286,8 @@ The production-built Playwright/axe suite must verify:
 - population, resource, resident, institution and chain semantics stay explicit;
 - the v4.7 bundle, 7/7 local hypotheses, 12/12 replay, exact hash, clean-checkout
   command and pending external proof remain visible in both languages;
+- the v4.8 matrix renders all five lanes on desktop/mobile, exposes missing
+  evidence without layout overflow, and rejects mutation with HTTP 405;
 - resident search/detail, keyboard-scrollable tables and export stay accessible;
 - snapshot, event, resident, report and multi-season APIs exclude private data;
 - mobile navigation, keyboard focus and reduced motion remain usable;
@@ -288,7 +319,9 @@ The v4.7 public bundle and Human Observatory then displayed 7/7 hypotheses,
 12/12 exact replay, exact SHA-256 and absent external proof. Production 390px
 Chromium had zero overflow or console warnings/errors; root and bundle returned
 200 and Observatory mutation returned 405. The restarted worker preserved the
-Turn 303 due time; the first naturally due v4.7 Turn remains pending.
+Turn 303 due time. Turn 304 then settled naturally on time with 602 ms lag,
+fingerprint `72e09ffd`, exact `2362ee8` revision, 75/75 safe society closure,
+conserved resources and zero severe or forced active path.
 Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 

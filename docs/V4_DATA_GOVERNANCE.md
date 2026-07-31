@@ -53,6 +53,14 @@ downloadable because every input is repository-owned or frozen aggregate
 calibration and every run is synthetic. `externalCiVerified=false` and a null
 Sigstore receipt are meaningful evidence states and must not be hidden.
 
+The v4.8 trust matrix adds only artifact SHA-256 values, release revisions,
+workflow/run identifiers, signed receipt timestamps, aggregate provider usage,
+runtime SLOs and pseudonymous SHA-256 host fingerprints. Host fingerprints are
+derived from stable non-secret infrastructure identities and must not contain
+hostnames, network addresses, credentials or resident data. Recovery and
+receipt files remain mode 0600 even though the public projection exposes only
+their bounded verification result.
+
 Society records are synthetic structured state. Household membership contains
 only pseudonymous resident IDs; work records contain bounded role, workload
 and civic-credit reward; exchanges contain balanced debit/credit account IDs;

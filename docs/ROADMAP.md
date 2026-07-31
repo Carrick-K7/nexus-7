@@ -172,17 +172,31 @@ Local exit is complete when `npm ci && npm run verify:v47` reproduces the
 published bundle without production secrets. Independent environment and
 Sigstore receipts remain external evidence, not implementation claims.
 
+### v4.8 — Independent trust domains
+
+- Publishes a five-lane trust matrix with verified, pending, failed and stale
+  states; no local score can satisfy an external lane.
+- Verifies the exact replication bundle at read time and binds remote receipts
+  to its bytes, deployed revision, hypotheses and run count.
+- Adds a GitHub-hosted off-host restore workflow with encrypted-artifact
+  authentication, distinct host fingerprints, resumed write and Sigstore.
+- Derives live DeepSeek shadow evidence only from persisted external attempts,
+  comparable output and returned Token usage.
+- Derives the 90-day lane only from real restart-safe runtime envelopes,
+  sequence integrity, revision coverage, freshness and on-time settlement.
+- Exposes the contract through `/api/observatory/v2/trust` and the bilingual
+  Human Observatory without making trust state a city input.
+
+The software path and local contract are complete. External-CI, off-host,
+live-provider and elapsed-time lanes remain pending until their independent
+systems actually produce evidence. That pending state is the intended honest
+result, not a local verification failure.
+
 ## Next objectives
 
-### v4.8 — Independent trust-domain replication
-
-- Execute the v4.7 bundle from a clean external runner and retain its receipt.
-- Restore an encrypted backup on a genuinely off-host PostgreSQL target.
-- Exercise DeepSeek as shadow under a fixed low budget before any promotion.
-- Accumulate the real 90-day production window without resetting history.
-
-Exit: local, external-CI, off-host recovery, live-provider and elapsed-time
-evidence are all independently visible and none substitutes for another.
+No new city feature milestone is scheduled. Operate v4.8 until all five trust
+lanes are independently verified; then reassess with the human constitutional
+governor before adding population, geography or mechanisms.
 
 ## Explicit non-goals
 

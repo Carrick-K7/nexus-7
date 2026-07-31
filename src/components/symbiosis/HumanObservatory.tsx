@@ -51,6 +51,10 @@ import type {
 import type {
   SymbiosisReplicationBundle,
 } from "@/symbiosis/replication";
+import type {
+  SymbiosisTrustMatrix,
+  TrustLaneStatus,
+} from "@/symbiosis/trust";
 
 const copy = {
   en: {
@@ -125,6 +129,23 @@ const copy = {
     reproduceCommand: "Reproduce from a clean checkout",
     bundleFingerprint: "Bundle SHA-256",
     downloadBundle: "Download replication bundle",
+    trustMatrix: "INDEPENDENT TRUST MATRIX",
+    trustMatrixDesc:
+      "Five gates that cannot substitute for one another. A local pass never implies an external run, off-host recovery, live provider exercise, or elapsed production time.",
+    trustVerifiedCount: "independent gates verified",
+    trustLocal: "Local replication",
+    trustExternal: "External CI + Sigstore",
+    trustRecovery: "Off-host PostgreSQL recovery",
+    trustDeepSeek: "Live DeepSeek shadow",
+    trustElapsed: "90-day production clock",
+    verified: "Verified",
+    pending: "Pending",
+    stale: "Stale",
+    receipt: "receipt",
+    comparisons: "comparisons",
+    days: "days",
+    trustBoundary:
+      "The matrix is a projection of exact artifacts, signed receipts, persisted provider usage, and wall-clock Turns. Missing evidence remains visible and does not stop the synthetic city.",
     cognitiveDiversity: "COGNITIVE DIVERSITY SHADOW",
     cognitiveDiversityDesc:
       "A shadow provider can disagree, fail or consume budget, but its output never settles the city.",
@@ -337,6 +358,23 @@ const copy = {
     reproduceCommand: "从干净 checkout 复现",
     bundleFingerprint: "实验包 SHA-256",
     downloadBundle: "下载复现实验包",
+    trustMatrix: "独立可信证据矩阵",
+    trustMatrixDesc:
+      "五条门禁互不替代。本地通过不代表外部运行、异机恢复、真实 Provider 演练或真实生产时长已经发生。",
+    trustVerifiedCount: "条独立门禁已验证",
+    trustLocal: "本地复现实验",
+    trustExternal: "外部 CI + Sigstore",
+    trustRecovery: "异机 PostgreSQL 恢复",
+    trustDeepSeek: "真实 DeepSeek Shadow",
+    trustElapsed: "90 天生产时钟",
+    verified: "已验证",
+    pending: "待补",
+    stale: "已过期",
+    receipt: "签名回执",
+    comparisons: "次对照",
+    days: "天",
+    trustBoundary:
+      "矩阵只投影精确工件、签名回执、持久化 Provider 用量和墙钟 Turn。缺失证据会持续可见，但不会让模拟城市停摆。",
     cognitiveDiversity: "认知多样性 Shadow",
     cognitiveDiversityDesc:
       "Shadow Provider 可以产生分歧、失败或消耗预算，但其输出永远不能参与城市结算。",
@@ -608,6 +646,16 @@ function statusClasses(status: ObservatoryHealth | UnitHealth): string {
   return "border-cyber-red/35 bg-cyber-red/10 text-cyber-red";
 }
 
+function trustStatusClasses(status: TrustLaneStatus): string {
+  if (status === "verified") {
+    return "border-cyber-green/35 bg-cyber-green/10 text-cyber-green";
+  }
+  if (status === "pending") {
+    return "border-cyber-yellow/35 bg-cyber-yellow/10 text-cyber-yellow";
+  }
+  return "border-cyber-red/35 bg-cyber-red/10 text-cyber-red";
+}
+
 function Progress({
   value,
   label,
@@ -727,6 +775,7 @@ export default function HumanObservatory() {
   const [data, setData] = useState<HumanObservatoryReport | null>(null);
   const [replication, setReplication] =
     useState<SymbiosisReplicationBundle | null>(null);
+  const [trust, setTrust] = useState<SymbiosisTrustMatrix | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [query, setQuery] = useState("");
@@ -739,20 +788,25 @@ export default function HumanObservatory() {
 
   const refresh = useCallback(async () => {
     try {
-      const [response, replicationResponse] = await Promise.all([
+      const [response, replicationResponse, trustResponse] = await Promise.all([
         fetch("/api/observatory/v2/overview", { cache: "no-store" }),
         fetch("/data/v4-7-replication-bundle.json", {
           cache: "no-store",
         }),
+        fetch("/api/observatory/v2/trust", { cache: "no-store" }),
       ]);
       if (!response.ok) throw new Error(`observatory-${response.status}`);
       if (!replicationResponse.ok) {
         throw new Error(`replication-${replicationResponse.status}`);
       }
+      if (!trustResponse.ok) {
+        throw new Error(`trust-${trustResponse.status}`);
+      }
       setData(await response.json() as HumanObservatoryReport);
       setReplication(
         await replicationResponse.json() as SymbiosisReplicationBundle,
       );
+      setTrust(await trustResponse.json() as SymbiosisTrustMatrix);
       setError(null);
     } catch (caught) {
       setError(caught instanceof Error ? caught.message : "unknown-error");
@@ -1311,6 +1365,122 @@ export default function HumanObservatory() {
           </article>
         </section>
 
+        {trust && (
+          <section
+            className="rounded-2xl border border-cyber-blue/30 bg-cyber-darker/90 p-5"
+            aria-labelledby="independent-trust-matrix-title"
+            data-testid="independent-trust-matrix"
+          >
+            <div className="flex flex-col gap-3 lg:flex-row lg:items-start lg:justify-between">
+              <div className="max-w-5xl">
+                <div className="flex items-center gap-2">
+                  <ShieldCheck className="h-5 w-5 text-cyber-blue" />
+                  <h2
+                    id="independent-trust-matrix-title"
+                    className="font-orbitron text-sm text-cyber-blue"
+                  >
+                    {text.trustMatrix}
+                  </h2>
+                </div>
+                <p className="mt-2 text-sm leading-6 text-cyber-text-dim">
+                  {text.trustMatrixDesc}
+                </p>
+              </div>
+              <span
+                className={`self-start rounded-full border px-3 py-1 text-xs ${
+                  trust.summary.allVerified
+                    ? trustStatusClasses("verified")
+                    : trustStatusClasses("pending")
+                }`}
+              >
+                {trust.summary.verified}/{trust.summary.required}{" "}
+                {text.trustVerifiedCount}
+              </span>
+            </div>
+            <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+              {[
+                {
+                  id: "local-replication",
+                  label: text.trustLocal,
+                  lane: trust.lanes.localReplication,
+                  value: `${trust.lanes.localReplication.hypothesesPassed ?? 0} / ${trust.lanes.localReplication.hypothesesTotal ?? 0}`,
+                  detail: `${trust.lanes.localReplication.exactRuns ?? 0} / ${trust.lanes.localReplication.runCount ?? 0} ${text.exactReplays}`,
+                },
+                {
+                  id: "external-replication",
+                  label: text.trustExternal,
+                  lane: trust.lanes.externalReplication,
+                  value: trust.lanes.externalReplication.receiptVerified
+                    ? text.verified
+                    : text[trust.lanes.externalReplication.status],
+                  detail: `${text.receipt}: ${
+                    trust.lanes.externalReplication.receiptPresent
+                      ? trust.lanes.externalReplication.runId ?? "—"
+                      : text.evidencePending
+                  }`,
+                },
+                {
+                  id: "off-host-recovery",
+                  label: text.trustRecovery,
+                  lane: trust.lanes.offHostRecovery,
+                  value: text[trust.lanes.offHostRecovery.status],
+                  detail: `${text.offHostBackup}: ${evidenceState(
+                    trust.lanes.offHostRecovery.offHost,
+                    language,
+                  )} · ${text.receipt}: ${evidenceState(
+                    trust.lanes.offHostRecovery.receiptVerified,
+                    language,
+                  )}`,
+                },
+                {
+                  id: "live-deepseek-shadow",
+                  label: text.trustDeepSeek,
+                  lane: trust.lanes.liveDeepSeekShadow,
+                  value: `${trust.lanes.liveDeepSeekShadow.successfulComparisons} ${text.comparisons}`,
+                  detail: `${trust.lanes.liveDeepSeekShadow.totalTokens.toLocaleString()} Token · ${usd(trust.lanes.liveDeepSeekShadow.costUsd)}`,
+                },
+                {
+                  id: "elapsed-production",
+                  label: text.trustElapsed,
+                  lane: trust.lanes.elapsedProduction,
+                  value: `${trust.lanes.elapsedProduction.observedDays.toFixed(1)} / ${trust.lanes.elapsedProduction.requiredDays} ${text.days}`,
+                  detail: `${trust.lanes.elapsedProduction.storedTurns.toLocaleString()} Turns · ${percent(trust.lanes.elapsedProduction.onTimeRate)}`,
+                },
+              ].map(({ id, label, lane, value, detail }) => (
+                <article
+                  key={id}
+                  className="min-w-0 rounded-xl border border-cyber-gray-light bg-cyber-black/45 p-4"
+                >
+                  <div className="flex flex-wrap items-start justify-between gap-2">
+                    <h3 className="text-xs font-semibold text-cyber-text">
+                      {label}
+                    </h3>
+                    <span
+                      className={`rounded-full border px-2 py-0.5 text-[10px] ${trustStatusClasses(lane.status)}`}
+                    >
+                      {text[lane.status]}
+                    </span>
+                  </div>
+                  <p className="mt-3 break-words font-mono text-lg text-cyber-text">
+                    {value}
+                  </p>
+                  <p className="mt-2 break-words text-xs leading-5 text-cyber-text-dim">
+                    {detail}
+                  </p>
+                  {lane.reasonCodes.length > 0 && (
+                    <p className="mt-2 break-all font-mono text-[10px] leading-4 text-cyber-text-dim">
+                      {lane.reasonCodes.join(" · ")}
+                    </p>
+                  )}
+                </article>
+              ))}
+            </div>
+            <p className="mt-4 text-xs leading-5 text-cyber-text-dim">
+              {text.trustBoundary}
+            </p>
+          </section>
+        )}
+
         {replication && (
           <section
             className="rounded-2xl border border-cyber-purple/30 bg-cyber-darker/90 p-5"
@@ -1361,11 +1531,14 @@ export default function HumanObservatory() {
                 },
                 {
                   label: text.externalAttestation,
-                  value: replication.integrity.externalCiVerified
-                    ? text.passed
-                    : text.evidencePending,
-                  detail: replication.integrity.sigstoreReceipt
-                    ? String(replication.integrity.sigstoreReceipt)
+                  value:
+                    trust?.lanes.externalReplication.status === "verified"
+                      ? text.verified
+                      : trust
+                        ? text[trust.lanes.externalReplication.status]
+                        : text.evidencePending,
+                  detail: trust?.lanes.externalReplication.receiptVerified
+                    ? `${text.receipt}: ${trust.lanes.externalReplication.runId ?? "—"}`
                     : text.localEvidenceOnly,
                 },
               ].map((entry) => (

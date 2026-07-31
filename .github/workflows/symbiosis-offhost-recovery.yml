@@ -1,0 +1,103 @@
+name: Symbiosis off-host recovery
+
+on:
+  workflow_dispatch:
+
+jobs:
+  restore:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_USER: nexus
+          POSTGRES_PASSWORD: nexus
+          POSTGRES_DB: nexus_restore
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U nexus -d nexus_restore"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout exact recovery code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Download production backup artifacts
+        env:
+          BACKUP_MANIFEST_URL: ${{ secrets.SYMBIOSIS_BACKUP_MANIFEST_URL }}
+          ENCRYPTED_BACKUP_URL: ${{ secrets.SYMBIOSIS_ENCRYPTED_BACKUP_URL }}
+        run: |
+          test -n "$BACKUP_MANIFEST_URL"
+          test -n "$ENCRYPTED_BACKUP_URL"
+          mkdir -p .private .artifacts
+          curl --fail --silent --show-error --location \
+            "$BACKUP_MANIFEST_URL" --output .private/nexus-backup.json
+          curl --fail --silent --show-error --location \
+            "$ENCRYPTED_BACKUP_URL" --output .private/nexus-backup.json.nexus7
+
+      - name: Prepare independent host identity and decryption key
+        env:
+          BACKUP_KEY_HEX: ${{ secrets.NEXUS7_BACKUP_ENCRYPTION_KEY_HEX }}
+          SOURCE_HOST_FINGERPRINT: ${{ secrets.SYMBIOSIS_BACKUP_SOURCE_HOST_FINGERPRINT }}
+        run: |
+          test "${#BACKUP_KEY_HEX}" -eq 64
+          test "${#SOURCE_HOST_FINGERPRINT}" -eq 64
+          printf '%s' "$BACKUP_KEY_HEX" > .private/backup.key
+          chmod 600 .private/backup.key
+          printf 'SYMBIOSIS_BACKUP_SOURCE_HOST_FINGERPRINT=%s\n' \
+            "$SOURCE_HOST_FINGERPRINT" >> "$GITHUB_ENV"
+          printf '%s' \
+            "${{ github.repository }}:${{ github.run_id }}:${{ runner.name }}" \
+            | sha256sum | cut -d ' ' -f 1 \
+            | sed 's/^/SYMBIOSIS_RESTORE_TARGET_HOST_FINGERPRINT=/' \
+            >> "$GITHUB_ENV"
+
+      - name: Restore into independent PostgreSQL
+        env:
+          DATABASE_URL: postgresql://nexus:nexus@127.0.0.1:5432/nexus_restore
+        run: npm run db:restore -- .private/nexus-backup.json --force
+
+      - name: Verify encrypted artifact and resume one Turn
+        env:
+          RESTORE_DATABASE_URL: postgresql://nexus:nexus@127.0.0.1:5432/nexus_restore
+          NEXUS7_BACKUP_ENCRYPTION_KEY_FILE: .private/backup.key
+        run: >-
+          npm run recovery:evidence --
+          .private/nexus-backup.json
+          .private/nexus-backup.json.nexus7
+          .artifacts/symbiosis-offhost-recovery.json
+          --off-host
+
+      - name: Upload off-host recovery evidence
+        uses: actions/upload-artifact@v4
+        with:
+          name: nexus-symbiosis-offhost-recovery
+          path: .artifacts/symbiosis-offhost-recovery.json
+          include-hidden-files: true
+          retention-days: 30
+
+      - name: Attest off-host recovery evidence
+        uses: actions/attest@v4
+        with:
+          subject-path: .artifacts/symbiosis-offhost-recovery.json
+
+      - name: Remove temporary backup material
+        if: always()
+        run: rm -rf .private

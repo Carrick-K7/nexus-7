@@ -59,7 +59,8 @@ untrusted until validated at their boundary.
 | Notification suppression | durable delivery attempts, receipts, dead letter, escalation, governance red team | use alternate channel and incident review |
 | SSRF / secret disclosure | configured HTTPS endpoints, server-side tokens, no secrets in events/UI, network-isolated evaluator | rotate credential and inspect audit |
 | Backup theft or tampering | mode-0600 AES-256-GCM key, authenticated encrypted artifact, checksum before restore, empty-target default, deterministic report comparison | reject restore, rotate key and use a retained clean artifact |
-| Misstated recovery locality | checksum-backed receipt records restore database identity and explicit same/off-host scope | never promote same-host evidence to off-host without an operator-attested drill |
+| Misstated recovery locality | checksum-backed envelope, distinct source/target host fingerprints, GitHub-hosted drill, Sigstore subject and fresh signed receipt | never promote same-host or unsigned evidence to off-host |
+| Local evidence presented as external proof | five independent trust lanes; exact subject/revision/summary checks; no weighted aggregate | mark missing as pending, tampering as failed and expiry as stale |
 | Uncertified extension | declared capabilities/data/network/failures; seven conformance suites; sandbox-only default | certify or remove extension |
 | Real-data contamination | allowlisted frozen aggregates; `containsPersonalData=false`; no identity/input tables; restore rejects deprecated participant rows | stop Turns, quarantine bundle/backup and rebuild from a clean seed |
 | Synthetic context exfiltration | structured allowlisted provider payload; no free-form private text; reasoning discarded; server-side keys | stop provider, rotate key and audit decision envelopes |

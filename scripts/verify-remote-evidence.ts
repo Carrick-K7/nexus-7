@@ -14,6 +14,14 @@ import {
 import type {
   GovernanceEvidenceKind,
 } from "../src/governance/types";
+import {
+  verifySymbiosisReplicationBundle,
+  type SymbiosisReplicationBundle,
+} from "../src/symbiosis/replication";
+import {
+  verifyRecoveryEvidence,
+  type SymbiosisRecoveryEvidence,
+} from "../src/symbiosis/reliability";
 
 interface GithubAttestationVerification {
   verificationResult?: {
@@ -31,6 +39,8 @@ const KINDS: GovernanceEvidenceKind[] = [
   "recovery-drill",
   "deployment-drill",
   "deployment-conformance",
+  "symbiosis-replication",
+  "symbiosis-off-host-recovery",
 ];
 
 function required(value: string | undefined, name: string): string {
@@ -55,6 +65,50 @@ function passed(kind: GovernanceEvidenceKind, artifact: Record<string, unknown>)
   }
   if (kind === "model-regression-live") {
     return isRecord(artifact.gate) && artifact.gate.passed === true;
+  }
+  if (kind === "symbiosis-replication") {
+    const structurallyPassing =
+      artifact.schemaVersion ===
+        "nexus.symbiosis-replication-bundle.v1" &&
+      artifact.status ===
+        "local-replication-passed-external-attestation-pending" &&
+      isRecord(artifact.analysis) &&
+      artifact.analysis.passed === artifact.analysis.total &&
+      isRecord(artifact.integrity) &&
+      artifact.integrity.localVerificationPassed === true;
+    if (!structurallyPassing) return false;
+    try {
+      return verifySymbiosisReplicationBundle(
+        artifact as unknown as SymbiosisReplicationBundle,
+      ).passed;
+    } catch {
+      return false;
+    }
+  }
+  if (kind === "symbiosis-off-host-recovery") {
+    const structurallyPassing =
+      artifact.schemaVersion ===
+        "nexus.symbiosis-recovery-evidence.v1" &&
+      isRecord(artifact.backup) &&
+      artifact.backup.encrypted === true &&
+      artifact.backup.offHost === true &&
+      isRecord(artifact.restoreDrill) &&
+      artifact.restoreDrill.target ===
+        "off-host-second-database" &&
+      artifact.restoreDrill.checksumValid === true &&
+      artifact.restoreDrill.rowCountsMatch === true &&
+      artifact.restoreDrill.latestFingerprintMatch === true &&
+      artifact.restoreDrill.resumedWrite === true &&
+      isRecord(artifact.locationProof) &&
+      artifact.locationProof.independentTarget === true;
+    if (!structurallyPassing) return false;
+    try {
+      return verifyRecoveryEvidence(
+        artifact as unknown as SymbiosisRecoveryEvidence,
+      );
+    } catch {
+      return false;
+    }
   }
   return artifact.passed === true;
 }
@@ -101,6 +155,30 @@ function summary(
       adapterId: artifact.adapterId,
       fingerprint: artifact.fingerprint,
       checks: artifact.checks,
+    };
+  }
+  if (kind === "symbiosis-replication") {
+    const analysis = artifact.analysis as Record<string, unknown>;
+    const design = artifact.design as Record<string, unknown>;
+    const integrity = artifact.integrity as Record<string, unknown>;
+    return {
+      bundleSha256: integrity.bundleSha256,
+      resultsSha256: integrity.resultsSha256,
+      hypothesesPassed: analysis.passed,
+      hypothesesTotal: analysis.total,
+      runCount: design.runCount,
+    };
+  }
+  if (kind === "symbiosis-off-host-recovery") {
+    const backup = artifact.backup as Record<string, unknown>;
+    const location = artifact.locationProof as Record<string, unknown>;
+    return {
+      evidenceChecksum: artifact.evidenceChecksum,
+      backupArtifactSha256: backup.artifactSha256,
+      sourceHostFingerprint: location.sourceHostFingerprint,
+      restoreTargetHostFingerprint:
+        location.restoreTargetHostFingerprint,
+      independentTarget: location.independentTarget,
     };
   }
   return {

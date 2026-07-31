@@ -42,6 +42,8 @@ export const EVIDENCE_MAXIMUM_AGE_HOURS: Record<
   "recovery-drill": 8 * 24,
   "deployment-drill": 8 * 24,
   "deployment-conformance": 30 * 24,
+  "symbiosis-replication": 8 * 24,
+  "symbiosis-off-host-recovery": 8 * 24,
 };
 
 interface EvidenceRegistryOptions {

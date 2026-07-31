@@ -17,6 +17,7 @@
 /blob-report
 /backups
 /.artifacts
+/.verified
 
 # next.js
 /.next/

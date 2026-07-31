@@ -126,6 +126,13 @@ Same-host evidence is explicitly distinct from off-host evidence. Empty backups 
 prototype remain readable, but any deprecated participant table containing
 rows is rejected instead of silently importing or discarding personal data.
 
+v4.8 adds no display database. `nexus.symbiosis-trust-matrix.v1` projects the
+committed replication bundle, optional signed external receipts, recovery
+envelope, persisted provider decisions and runtime Turn chain. Its five lanes
+are independent observations and never enter world settlement. An off-host
+claim additionally requires distinct source/target host fingerprints and a
+fresh receipt whose Sigstore subject digest matches the recovery envelope.
+
 ## Observation
 
 The Human Observatory is a pure projection over the same memory/PostgreSQL
@@ -135,6 +142,9 @@ lanes, community institutions, production continuity, trends, event lineage,
 RALR, DeepSeek usage/cost, cognitive diversity, wall-clock reliability and
 evidence. It also projects household participation, work distribution, asset
 maintenance, exchange balance, bargaining outcomes and reversible city rules.
+The companion `/api/observatory/v2/trust` projection exposes the independent
+local/external/recovery/provider/elapsed gates without mutating either bounded
+context.
 Formula version `human-observatory-formulas-2.1.0` binds every derived score.
 V1 remains a read-only label compatibility projection.
 

@@ -68,6 +68,11 @@ function recoveryEvidence(
       latestFingerprintMatch: true,
       resumedWrite: true,
     },
+    locationProof: {
+      sourceHostFingerprint: "c".repeat(64),
+      restoreTargetHostFingerprint: "d".repeat(64),
+      independentTarget: true,
+    },
   });
 }
 

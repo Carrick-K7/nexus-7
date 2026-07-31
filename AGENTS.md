@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-31 · v2.0.0 安全内核 + v4.7 科学复现
+> 更新：2026-07-31 · v2.0.0 安全内核 + v4.8 独立证据矩阵
 
 ## 定义与边界
 
@@ -16,7 +16,7 @@ v4 运行可重放、可审计的模拟深圳，研究人、AI 和机器人的�
 
 - v4 宪法/路线：`docs/SYMBIOSIS_CONSTITUTION.md`、`docs/SYMBIOTIC_SHENZHEN_PLAN.md`
 - v4 架构/数据/验证：`docs/V4_ARCHITECTURE.md`、`docs/V4_DATA_GOVERNANCE.md`、
-  `docs/V4_VERIFICATION.md`
+  `docs/V4_VERIFICATION.md`、`docs/V4_TRUST_MATRIX.md`
 - 能力/闭环/认证：`README.md`、`docs/CLOSED_LOOP_PLAN.md`、
   `docs/VERIFICATION.md`、`docs/V2_VERIFICATION.md`
 - 生产/安全：`docs/PRODUCTION.md`、`docs/THREAT_MODEL.md`
@@ -45,8 +45,8 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 v2.0 reference 已闭环；无远端 attestation 时只能写 `external evidence pending`。
 
-v4.7 含 200 人、36 AI、24 机器人、观测台、成本/Turn 证据、可逆城市社会及
-无密钥复现实验包；无真人、身份映射或私人输入。
+v4.8 含 200 人、36 AI、24 机器人、可逆城市、无密钥复现及五路独立证据矩阵；
+无真人、身份映射或私人输入。
 
 ## 模块边界
 
@@ -91,20 +91,21 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 |---|---:|
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
-| unit / 条件跳过 | 269/269 / 0 |
+| unit / 条件跳过 | 273/273 / 0 |
 | PostgreSQL / Playwright+axe | 16/16 / 27/27 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4 多季对照 | 3 regimes × 3 seeds × 90 Turns；mechanism separation pass |
 | v4.6 社会验证 | 500/500 safe closure；信用/交换守恒；active forced path 0 |
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
+| v4.8 证据契约 | 5 lanes；篡改/同机/过期 fail closed |
 
 ## 外部边界
 
-- `2362ee8` (v4.7.0) 已部署；390 px 复现卡 overflow 0、console 0，bundle/
-  公网 200、写 405；worker 等待 Turn 304 自然到期，尚无 v4.7 Turn 证明。
-- v4.6.1 已运行至 Turn 303；当前 482 society records/196 events、74/74
-  safe closure，强制/无效规则 0；DeepSeek 实际 Token/费用仍为 0。
+- `2362ee8` (v4.7.0) 已部署；Turn 304 按时、lag 602 ms、精确绑定 revision；
+  390 px overflow/console 0，bundle/API 200、写 405。
+- 当前 483 society records、75/75 safe closure，强制/无效规则 0；DeepSeek
+  实际 Token/费用仍为 0；真实观测 5.365 天。
 - 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
   恢复待验证。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。

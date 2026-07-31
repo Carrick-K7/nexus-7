@@ -10,3 +10,5 @@ export * from "./study";
 export * from "./observatory";
 export * from "./society";
 export * from "./society-study";
+export * from "./replication";
+export * from "./trust";

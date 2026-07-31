@@ -35,11 +35,12 @@ reserved for the other research, safety and compatibility views.
 7. Inspect production stages, then search or filter any resident.
 8. Check the DeepSeek Token and cost ledger.
 9. Check Turn reliability/provenance and cognitive diversity.
-10. Check scientific replication: hypotheses, held-out replay, bundle hash and
+10. Read the five-lane independent trust matrix; pending is not a pass.
+11. Check scientific replication: hypotheses, held-out replay, bundle hash and
     external-proof status.
-11. Inspect city society: households, work, assets, exchanges, bargains and
+12. Inspect city society: households, work, assets, exchanges, bargains and
     reversible AI-proposed rules.
-12. Finish with the event river and exact snapshot evidence.
+13. Finish with the event river and exact snapshot evidence.
 
 The 18,248,500 background population is calibration only. The 260 foreground
 residents are the only individually modeled humans, AI and robots.
@@ -141,6 +142,20 @@ It does not mean an independent organization, remote CI or Sigstore has
 verified the result. External proof remains visibly pending until a receipt
 from another trust domain exists. The v4.6 study is labeled exploratory; the
 v4.7 plan prospectively replicates it rather than rewriting its history.
+
+## Independent trust matrix
+
+The v4.8 matrix keeps five claims separate: local replication, external
+CI/Sigstore replication, off-host PostgreSQL recovery, live DeepSeek shadow and
+90 elapsed production days. Each lane is `verified`, `pending`, `failed` or
+`stale`; there is no weighted score and the whole matrix passes only at 5/5.
+
+The matrix reads immutable bundle/recovery artifacts, fresh signed receipts,
+persisted DeepSeek usage and restart-safe Turn runtime evidence. It never
+settles the city. Missing credentials, provider outage, expired receipts or an
+unfinished duration stay visible while the deterministic city continues.
+See [V4_TRUST_MATRIX.md](V4_TRUST_MATRIX.md) for exact issuance and deployment
+configuration.
 
 ## Institutions and production
 

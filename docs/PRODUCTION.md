@@ -310,3 +310,6 @@ vault, private text, participant input or resident authentication.
 12. Perform a deployment canary and rollback drill.
 13. Verify the most recent database recovery drill is inside RPO/RTO.
 14. Start redundant clock workers and verify lease ownership.
+15. Inspect `/api/observatory/v2/trust`; do not collapse local replication,
+    remote CI, off-host recovery, live provider or elapsed-time status into one
+    inferred deployment claim.

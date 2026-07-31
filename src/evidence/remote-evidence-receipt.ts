@@ -49,6 +49,8 @@ export function isRemoteEvidenceReceipt(
     "recovery-drill",
     "deployment-drill",
     "deployment-conformance",
+    "symbiosis-replication",
+    "symbiosis-off-host-recovery",
   ];
   return (
     typeof value.signature === "string" &&

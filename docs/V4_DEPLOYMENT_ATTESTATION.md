@@ -124,8 +124,12 @@ fingerprint `340fd94c`; the database contains 482 current society records and
 civic-credit conservation, and zero forced or invalid paths.
 
 At the v4.7 cutover the worker read Turn 303's persisted 12:29:19 UTC runtime
-record and announced a 1,968,502 ms wait rather than settling early. The first
-naturally due v4.7 revision-bound Turn remains pending.
+record and announced a 1,968,502 ms wait rather than settling early. Turn 304
+settled naturally at `2026-07-31T13:29:22.606Z`, on time with 602 ms lag,
+fingerprint `72e09ffd` and exact revision
+`2362ee8a206b11c48c993e5d6bb9dbbaa6904f2b`. It conserved resources, recorded
+zero severe escapes and zero forced active paths, and raised safe society
+closure to 75/75.
 
 Production remains honestly `watch`: the observed window is 5.324 days,
 127/128 comparable settlements are on time, the one historical early-restart

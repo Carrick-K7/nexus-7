@@ -117,9 +117,12 @@ The key file must contain 32 random bytes encoded as 64 hexadecimal characters
 and be mode 0600. The receipt command authenticates and decrypts the encrypted
 artifact, binds its SHA-256 and embedded backup checksum, verifies every
 restored row count and latest fingerprint, then advances the disposable
-restore database by one Turn. Add `--off-host` only when the encrypted artifact
-and restore database are genuinely on another host; the flag is an operator
-claim, not automatic location discovery.
+restore database by one Turn. `--off-host` additionally requires distinct
+`SYMBIOSIS_BACKUP_SOURCE_HOST_FINGERPRINT` and
+`SYMBIOSIS_RESTORE_TARGET_HOST_FINGERPRINT` SHA-256 values. The public v4.8
+gate still requires the resulting envelope to be independently attested and
+bound by a fresh signed receipt; a flag or host claim alone cannot pass.
+See [V4_TRUST_MATRIX.md](V4_TRUST_MATRIX.md) for the GitHub-hosted drill.
 
 A release must build and
 test from a clean commit, migrate a staging/restore database, stop the worker,

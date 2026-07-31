@@ -1,0 +1,29 @@
+{
+  "id": "iteration-v4.8.0",
+  "version": "4.8.0",
+  "date": "2026-07-31",
+  "trigger": "roadmap-independent-trust-domains",
+  "triggerReason": "Local replication, remote provenance, off-host recovery, live-provider exercise and elapsed production time were described separately but lacked one fail-closed public contract, making it too easy for a local pass or operator flag to be read as external proof.",
+  "action": "Added a five-lane trust matrix, exact bundle and signed-receipt verification, distinct off-host identity evidence, GitHub-hosted replication/recovery receipt workflows, persisted DeepSeek-shadow and wall-clock gates, a read-only API, bilingual Human Observatory panel, unit/browser failure coverage and deployment runbooks.",
+  "outcome": "The implementation verifies the local v4.7 bundle while honestly retaining external CI, off-host recovery, live DeepSeek and 90 elapsed days as independent pending lanes. Reference contract tests can reach 5/5 only with exact signed subjects and reject tampering, expiry or same-host identity. The full gate passes 257 non-PostgreSQL plus 16 real PostgreSQL/restore tests, 27 production-build Playwright/axe scenarios, zero lint warnings, zero audit vulnerabilities and TypeScript/build. Production deployment will be recorded after release.",
+  "metrics": [
+    { "label": "Independently visible trust lanes", "before": 0, "after": 5 },
+    { "label": "Local lanes currently verified", "before": 1, "after": 1 },
+    { "label": "External lanes falsely inferred", "before": 0, "after": 0 },
+    { "label": "Off-host bare-flag acceptance", "before": 1, "after": 0 }
+  ],
+  "evidence": [
+    "nexus.symbiosis-trust-matrix.v1 with verified/pending/failed/stale states",
+    "Signed receipt binds repository, workflow, release revision, subject digest and lane summary",
+    "Off-host evidence requires distinct SHA-256 source and restore target fingerprints",
+    "Live DeepSeek requires persisted attempts, comparable output and nonzero Token usage",
+    "90-day lane requires actual runtime envelopes plus lineage, freshness, revision and timing gates"
+  ],
+  "artifacts": [
+    "src/symbiosis/trust.ts",
+    "src/app/api/observatory/v2/trust/route.ts",
+    ".github/workflows/symbiosis-offhost-recovery.yml",
+    "docs/V4_TRUST_MATRIX.md",
+    "docs/adr/0031-independent-trust-matrix.md"
+  ]
+}

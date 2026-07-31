@@ -153,6 +153,39 @@ test("v4 simulated-city APIs preserve privacy and zero-denominator honesty", asy
     requiredObservationDays: 90,
   });
 
+  const trustResponse = await page.request.get(
+    "/api/observatory/v2/trust",
+    { headers },
+  );
+  expect(trustResponse.ok()).toBe(true);
+  const trust = await trustResponse.json();
+  expect(trust).toMatchObject({
+    schemaVersion: "nexus.symbiosis-trust-matrix.v1",
+    overall: "incomplete",
+    summary: {
+      verified: 1,
+      pending: 4,
+      failed: 0,
+      stale: 0,
+      required: 5,
+      allVerified: false,
+    },
+    lanes: {
+      localReplication: { status: "verified" },
+      externalReplication: { status: "pending" },
+      offHostRecovery: { status: "pending" },
+      liveDeepSeekShadow: { status: "pending" },
+      elapsedProduction: { status: "pending" },
+    },
+  });
+  expect(
+    (
+      await page.request.post("/api/observatory/v2/trust", {
+        headers,
+      })
+    ).status(),
+  ).toBe(405);
+
   const replicationResponse = await page.request.get(
     "/data/v4-7-replication-bundle.json",
   );
@@ -214,6 +247,12 @@ for (const viewport of [
       "COGNITIVE DIVERSITY SHADOW",
     );
     await expect(diversity).toContainText("Disabled");
+    const trust = page.getByTestId("independent-trust-matrix");
+    await expect(trust).toBeVisible();
+    await expect(trust).toContainText("INDEPENDENT TRUST MATRIX");
+    await expect(trust).toContainText("1/5");
+    await expect(trust).toContainText("External CI + Sigstore");
+    await expect(trust).toContainText("90-day production clock");
     const replication = page.getByTestId("scientific-replication");
     await expect(replication).toBeVisible();
     await expect(replication).toContainText("SCIENTIFIC REPLICATION");
@@ -222,7 +261,7 @@ for (const viewport of [
     await expect(replication).toContainText(
       "npm ci && npm run verify:v47",
     );
-    await expect(replication).toContainText("Evidence pending");
+    await expect(replication).toContainText("Pending");
     const society = page.getByTestId("city-society");
     await expect(society).toBeVisible();
     await expect(society).toContainText(
@@ -318,6 +357,8 @@ test("Human Observatory explains the city in Chinese", async ({ page }) => {
   await expect(page.getByText("DeepSeek API 用量与开销")).toBeVisible();
   await expect(page.getByText("Turn 可靠性与版本证据")).toBeVisible();
   await expect(page.getByText("认知多样性 Shadow")).toBeVisible();
+  await expect(page.getByText("独立可信证据矩阵")).toBeVisible();
+  await expect(page.getByText("异机 PostgreSQL 恢复")).toBeVisible();
   await expect(page.getByText("科学复现")).toBeVisible();
   await expect(page.getByText("外部证明")).toBeVisible();
   await expect(page.getByText("城市社会与可逆规则")).toBeVisible();

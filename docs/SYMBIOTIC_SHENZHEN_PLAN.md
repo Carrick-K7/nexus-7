@@ -2,7 +2,7 @@
 
 > 更新：2026-07-30
 >
-> 状态：v4.6.1 已发布；v4.7 Scientific Replication 本地实现；
+> 状态：v4.8 Independent Trust Matrix 已实现；本地复现已验证；
 > 真实 90 天 / off-host restore / live provider / external Sigstore pending
 
 ## 目标与研究边界
@@ -84,6 +84,10 @@ v4.7 同屏展示科学复现实验包：7 条冻结假设、12 个 held-out 场
 重放与 SHA-256、Provider 控制、无需生产密钥的复现命令，以及独立显示的本地/
 外部证据状态。它把 v4.6 明确称为探索性结果，不伪装成事前预注册研究。
 
+v4.8 同屏展示五条互不替代的可信证据：本地复现、外部 CI/Sigstore、异机恢复、
+真实 DeepSeek shadow 和 90 天墙钟运行。每条只能是 verified、pending、failed 或
+stale；没有加权总分。本地结果、参考 Provider 和加速 Turn 均不能填补外部门禁。
+
 人的情绪、AI 参与状态、机器人耐久度和机构流畅度都是有版本公式的模拟状态，
 不构成 AI 意识或现实机构声明。表格支持搜索、筛选、分页、键盘与移动端；JSON
 导出绑定 Turn、fingerprint、事件 cursor 和公式版本。
@@ -103,6 +107,8 @@ v4.7 同屏展示科学复现实验包：7 条冻结假设、12 个 held-out 场
 - 层级对照必须暴露强制工作/协商和无效表决，隔离对照跨类型家庭率为 0。
 - v4.7 的 12 个 held-out 场景必须全部精确双重放、资源守恒，7 条假设逐条
   通过；包/结果/输入 SHA-256 任一篡改必须失败。
+- v4.8 五条证据必须分别可见；签名/subject/revision/摘要不匹配失败，回执过期
+  显示 stale，同机恢复和 reference shadow 只能保持外部门禁 pending。
 
 本地门禁、生产部署、CI/Sigstore、外部 PostgreSQL 恢复和 live provider 是彼此
 独立的证据，必须分别标注，不能互相推断。

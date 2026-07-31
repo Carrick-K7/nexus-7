@@ -1,6 +1,6 @@
 {
   "name": "nexus",
-  "version": "4.7.0",
+  "version": "4.8.0",
   "private": true,
   "scripts": {
     "postinstall": "node scripts/patch-minimatch-brace-expansion.mjs",
@@ -27,6 +27,7 @@
     "verify:v46": "tsx scripts/run-v46-verification.ts",
     "bundle:v47": "tsx scripts/run-v47-replication.ts --write",
     "verify:v47": "tsx scripts/run-v47-replication.ts",
+    "verify:v48": "vitest run src/symbiosis/trust.test.ts",
     "worker:clock": "tsx scripts/run-experiment-clock.ts",
     "worker:operations": "tsx scripts/run-operational-intelligence.ts",
     "worker:symbiosis": "tsx scripts/run-symbiosis-clock.ts",
@@ -46,7 +47,7 @@
     "test:ui": "vitest --ui",
     "pretest:e2e": "npm run build",
     "test:e2e": "playwright test",
-    "check": "npm audit --audit-level=moderate && npm run lint -- --max-warnings=0 && npm run test:run && npm run verify:model && npm run verify:operations && npm run verify:deployment-contract && npm run verify:city && npm run verify:diagnosis && npm run verify:planning && npm run verify:outcomes && npm run verify:participation && npm run verify:closure && npm run verify:symbiosis && npm run verify:v45 && npm run verify:v46 && npm run verify:v47 && npm run test:e2e && npm run verify:stress",
+    "check": "npm audit --audit-level=moderate && npm run lint -- --max-warnings=0 && npm run test:run && npm run verify:model && npm run verify:operations && npm run verify:deployment-contract && npm run verify:city && npm run verify:diagnosis && npm run verify:planning && npm run verify:outcomes && npm run verify:participation && npm run verify:closure && npm run verify:symbiosis && npm run verify:v45 && npm run verify:v46 && npm run verify:v47 && npm run verify:v48 && npm run test:e2e && npm run verify:stress",
     "check:release": "npm run check && npm run evaluate:isolated -- quality && npm run evidence:generate && npm run verify:closure"
   },
   "dependencies": {

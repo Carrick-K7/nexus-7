@@ -29,6 +29,17 @@ const INPUT_PATHS = [
   "src/symbiosis/society.ts",
 ] as const;
 
+// A later release may change package metadata and this verifier itself without
+// changing the frozen v4.7 scientific inputs. Exact v4.7 environment
+// reproduction still runs from tag v4.7.0 in CI; this current-release command
+// reports compatibility only when every calibration/world source and complete
+// result hash remains exact.
+const COMPATIBILITY_METADATA_PATHS = new Set<string>([
+  "package.json",
+  "package-lock.json",
+  "scripts/run-v47-replication.ts",
+]);
+
 async function artifact(filePath: string): Promise<ReplicationInputArtifact> {
   const content = await readFile(path.resolve(filePath));
   return {
@@ -53,6 +64,8 @@ async function main(): Promise<void> {
       `Generated v4.7 bundle failed: ${verification.errors.join(", ")}`,
     );
   }
+  let publishedBundleSha256 = bundle.integrity.bundleSha256;
+  let exactBundleMatch = true;
   if (process.argv.includes("--write")) {
     await mkdir(path.dirname(outputPath), { recursive: true });
     await writeFile(
@@ -66,26 +79,81 @@ async function main(): Promise<void> {
     ) as SymbiosisReplicationBundle;
     const publishedVerification =
       verifySymbiosisReplicationBundle(published);
+    publishedBundleSha256 = published.integrity.bundleSha256;
     if (!publishedVerification.passed) {
       throw new Error(
         `Published v4.7 bundle failed: ${publishedVerification.errors.join(", ")}`,
       );
     }
+    exactBundleMatch =
+      published.integrity.bundleSha256 ===
+      bundle.integrity.bundleSha256;
+    const publishedInputs = new Map(
+      published.inputs.artifacts.map((input) => [input.path, input]),
+    );
+    const currentInputs = new Map(
+      bundle.inputs.artifacts.map((input) => [input.path, input]),
+    );
+    const scientificInputMismatches = [
+      ...new Set(
+        [...publishedInputs.keys(), ...currentInputs.keys()].filter(
+          (inputPath) => {
+            if (COMPATIBILITY_METADATA_PATHS.has(inputPath)) {
+              return false;
+            }
+            const publishedInput = publishedInputs.get(inputPath);
+            const currentInput = currentInputs.get(inputPath);
+            return (
+              !publishedInput ||
+              !currentInput ||
+              publishedInput.sha256 !== currentInput.sha256 ||
+              publishedInput.bytes !== currentInput.bytes
+            );
+          },
+        ),
+      ),
+    ].sort();
+    const metadataDrift = bundle.inputs.artifacts
+      .filter(
+        (input) =>
+          COMPATIBILITY_METADATA_PATHS.has(input.path) &&
+          (
+            publishedInputs.get(input.path)?.sha256 !== input.sha256 ||
+            publishedInputs.get(input.path)?.bytes !== input.bytes
+          ),
+      )
+      .map((input) => input.path);
     if (
-      published.integrity.bundleSha256 !==
-      bundle.integrity.bundleSha256
+      !exactBundleMatch &&
+      (
+        scientificInputMismatches.length > 0 ||
+        published.integrity.resultsSha256 !==
+          bundle.integrity.resultsSha256
+      )
     ) {
       throw new Error(
-        `v4.7 reproduction mismatch: expected ${published.integrity.bundleSha256}, reproduced ${bundle.integrity.bundleSha256}`,
+        `v4.7 scientific compatibility mismatch: inputs=${scientificInputMismatches.join(",") || "none"}, expected-results=${published.integrity.resultsSha256}, reproduced-results=${bundle.integrity.resultsSha256}`,
       );
     }
+    console.log(
+      JSON.stringify({
+        event: "v47.replication.compatibility",
+        exactBundleMatch,
+        scientificInputMismatches,
+        metadataDrift,
+        exactReleaseCommand:
+          "git checkout v4.7.0 && npm ci && npm run verify:v47",
+      }),
+    );
   }
   console.log(
     JSON.stringify({
       event: "v47.replication.completed",
       mode: process.argv.includes("--write") ? "write" : "verify",
       outputPath,
-      bundleSha256: bundle.integrity.bundleSha256,
+      bundleSha256: publishedBundleSha256,
+      reproducedEnvelopeSha256: bundle.integrity.bundleSha256,
+      exactBundleMatch,
       resultsSha256: bundle.integrity.resultsSha256,
       hypotheses: `${bundle.analysis.passed}/${bundle.analysis.total}`,
       runs: bundle.runs.length,

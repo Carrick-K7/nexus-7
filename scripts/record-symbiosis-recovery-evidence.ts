@@ -43,6 +43,14 @@ function safeTableName(value: string): string {
   return value;
 }
 
+function hostFingerprint(name: string): string {
+  const value = process.env[name]?.trim() ?? "";
+  if (!/^[0-9a-f]{64}$/.test(value)) {
+    throw new Error(`${name} must be a lowercase SHA-256 fingerprint`);
+  }
+  return value;
+}
+
 async function main(): Promise<void> {
   const [backupArgument, encryptedArgument, outputArgument] =
     process.argv.slice(2).filter((value) => value !== "--off-host");
@@ -184,6 +192,26 @@ async function main(): Promise<void> {
     const encryptedMetadata = await stat(encryptedPath);
     const completedAt = new Date().toISOString();
     const offHost = process.argv.includes("--off-host");
+    const locationProof = offHost
+      ? {
+          sourceHostFingerprint: hostFingerprint(
+            "SYMBIOSIS_BACKUP_SOURCE_HOST_FINGERPRINT",
+          ),
+          restoreTargetHostFingerprint: hostFingerprint(
+            "SYMBIOSIS_RESTORE_TARGET_HOST_FINGERPRINT",
+          ),
+          independentTarget: true as const,
+        }
+      : undefined;
+    if (
+      locationProof &&
+      locationProof.sourceHostFingerprint ===
+        locationProof.restoreTargetHostFingerprint
+    ) {
+      throw new Error(
+        "Off-host recovery requires distinct source and restore host fingerprints",
+      );
+    }
     const evidence = withRecoveryEvidenceChecksum({
       schemaVersion: RECOVERY_EVIDENCE_SCHEMA_VERSION,
       generatedAt: completedAt,
@@ -206,6 +234,7 @@ async function main(): Promise<void> {
         latestFingerprintMatch,
         resumedWrite,
       },
+      ...(locationProof ? { locationProof } : {}),
     });
     const temporaryPath = `${outputPath}.tmp`;
     await writeFile(

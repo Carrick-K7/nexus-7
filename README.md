@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release is **v4.7.0 — Portable Scientific Replication**.
+The active release is **v4.8.0 — Independent Trust Matrix**.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
@@ -65,6 +65,8 @@ The default **Human Observatory / 人类观测台** exposes:
   balance, bargaining outcomes and AI-proposed rule reversion.
 - scientific-replication hypotheses, held-out runs, exact-replay counts,
   portable bundle hash, reproduction command and external-proof status.
+- a five-lane trust matrix separating local replication, external CI,
+  off-host recovery, live DeepSeek shadow and 90 elapsed production days.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy
@@ -78,6 +80,7 @@ GET /api/world/v3/events?afterCursor=0
 GET /api/reports/symbiosis
 GET /api/reports/symbiosis/study?turns=90
 GET /api/observatory/v2/overview
+GET /api/observatory/v2/trust
 GET /api/observatory/v1/overview
 GET /data/v4-7-replication-bundle.json
 ```
@@ -149,6 +152,7 @@ npm run verify:symbiosis
 npm run verify:v45
 npm run verify:v46
 npm run verify:v47
+npm run verify:v48
 npm run build
 npm run test:e2e
 ```
