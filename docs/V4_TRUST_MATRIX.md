@@ -40,12 +40,20 @@ violation is failed. None of these states stops the deterministic city clock.
 
 ## External replication receipt
 
-The normal `CI` workflow checks out tag `v4.7.0` in an isolated directory,
-executes its exact reproduction command, then uploads and attests the unchanged
-`public/data/v4-7-replication-bundle.json`. After a successful push to `main`,
-`Remote evidence receipts` downloads that exact artifact, verifies its GitHub
-attestation with self-hosted runners denied, recomputes the internal hashes and
-issues `symbiosis-replication-receipt.json`.
+The `Symbiosis replication` workflow runs independently of live-model release
+promotion. It verifies the bundle from the attested revision, checks out tag
+`v4.7.0` in an isolated directory, repeats its exact reproduction command and
+requires the two bundle files to be byte-identical. After a successful push to
+`main` or governed manual run, it uploads and attests that unchanged artifact.
+`Remote evidence receipts` ignores pull-request runs, downloads the artifact,
+executes only the default branch's trusted verifier, verifies the artifact's
+GitHub attestation with self-hosted runners denied, recomputes the internal
+hashes and issues `symbiosis-replication-receipt.json`. The attested revision
+is bound as data but its code never receives the receipt-signing key.
+
+This separation does not relax the legacy live-model promotion gate. It only
+prevents an absent OpenAI promotion credential from blocking the independent
+scientific-replication lane.
 
 The repository must provide:
 

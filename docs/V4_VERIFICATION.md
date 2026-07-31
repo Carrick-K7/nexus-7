@@ -2,8 +2,8 @@
 
 > Date: 2026-07-31
 >
-> Status: v4.8 Independent Trust Matrix locally implemented;
-> v4.7 deployed; external replication, duration, off-host restore,
+> Status: v4.8.4 Independent Replication Path locally implemented;
+> v4.8.3 deployed; external replication, duration, off-host restore,
 > CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
@@ -27,9 +27,9 @@ and segregation keeps an honest null denominator.
 | Severe consent / continuity / irreversible harm escapes | 0 / 0 / 0 |
 | 3×3×90 control separation | pass |
 | Model reasoning persisted | no |
-| Unit / conditional skip | 269 / 0 |
+| Non-PostgreSQL / conditional PostgreSQL | 262 / 16 |
 | PostgreSQL integration / restore | 16 / 16 |
-| Playwright + axe | 27 / 27 |
+| Playwright + axe | 28 / 28 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 
 ## v4.1 AI-only hardening gate
@@ -342,6 +342,39 @@ Production v4.8.2 then settled natural Turn 307 on its preserved hourly clock:
 revision `6bbc31b`, lag 421 ms, fingerprint `2d80539e`, RALR 447/609, zero
 coercive actions and zero severe escapes. This is continuity evidence for the
 currently deployed release, not a v4.8.3 deployment claim.
+
+### v4.8.4 independent-replication and atomic-theme gate
+
+Release review found that the external-replication receipt depended on the
+general main-branch CI workflow. That workflow also requires an unrelated live
+OpenAI regression for high-risk promotion. With no OpenAI secret configured,
+an independently reproducible v4.7 bundle could never reach its own Sigstore
+lane. This coupled two trust domains that the v4.8 matrix promises to keep
+independent.
+
+The dedicated `Symbiosis replication` workflow now uses no model key. It
+verifies the committed bundle, repeats the exact `v4.7.0` checkout command,
+requires byte-identical published artifacts, uploads the bundle and requests a
+GitHub-hosted attestation. The receipt bridge excludes pull-request events and
+executes only the default branch's trusted verifier with the Ed25519 signing
+key; the attested head is bound as data but never executed by that key-bearing
+job. Both symbiosis signer workflows are accepted by the public matrix and
+optional governance ingestion. Legacy live-model promotion remains unchanged.
+
+The first full browser run retained one failure: during a light-to-dark switch,
+a transitioning light button background briefly combined with dark-theme text
+and axe measured 1.17 contrast. Root `<html>` is now the sole palette authority
+and theme updates suppress transitions for the forced atomic style change. The
+exact scenario then passed five consecutive repetitions, followed by 28/28 of
+the full production-build browser/axe suite.
+
+Local acceptance passes 262 non-PostgreSQL tests, 16/16 real PostgreSQL and
+restore tests, every v1/v2/v4 deterministic gate, 10,000 ticks, zero lint
+warnings, zero dependency vulnerabilities and the TypeScript production
+build. The frozen-source Node 24 evaluator independently repeated lint, 262
+tests, the 12-case model regression and production build with no network,
+read-only root, dropped capabilities and no ignored host inputs. Remote
+workflow and production evidence are recorded only after commit and release.
 
 ## Provider and persistence gates
 

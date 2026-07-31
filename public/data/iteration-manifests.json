@@ -1,5 +1,68 @@
 [
   {
+    "id": "iteration-v4.8.4",
+    "version": "4.8.4",
+    "date": "2026-08-01",
+    "trigger": "external-replication-live-model-coupling",
+    "triggerReason": "The five-lane trust matrix defines external replication and live-provider operation as independent claims, but the original receipt path depended on a general main-branch CI run whose legacy promotion evidence requires an unrelated OpenAI credential. The repository has no such secret, so a reproducible symbiosis bundle could not reach GitHub attestation or receipt issuance. Release browser acceptance also caught a theme-switch frame that combined a light button background with dark-theme text and temporarily failed contrast.",
+    "action": "Create a dedicated GitHub-hosted symbiosis-replication workflow with no model key. Reproduce the bundle at the attested revision and from exact tag v4.7.0, require byte identity, upload and attest it, reject pull-request receipt triggers, run the key-bearing verifier only from the default branch, and add the dedicated replication and off-host workflows to the default trust allowlists without weakening the legacy promotion gate. Make the root the sole palette authority and suppress transitions during the atomic root-theme update.",
+    "outcome": "Local implementation acceptance passes 262 non-PostgreSQL tests, 16 real PostgreSQL/restore tests, every deterministic v1/v2/v4 gate, 28/28 browser/axe scenarios, a five-repeat theme-switch regression, 10,000 ticks, zero lint warnings, zero dependency vulnerabilities, TypeScript/build and the pinned networkless Node 24 evaluator. Remote workflow and production evidence are recorded only after commit and release. Human-governed signing material, exact-revision receipt ingestion and the other external trust lanes remain independent prerequisites.",
+    "metrics": [
+      {
+        "label": "External replication dependence on live-model credentials",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Exact bundle reproductions per remote run",
+        "before": 1,
+        "after": 2
+      },
+      {
+        "label": "PR runs eligible for signed receipt issuance",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Candidate-code paths exposed to the receipt-signing key",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Theme-switch frames with WCAG contrast violations",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "High-risk promotion gates removed",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Dedicated workflow contract verifies two v4.7 reproductions, byte identity and GitHub attestation",
+      "Receipt workflow explicitly excludes pull_request events",
+      "Receipt workflow executes the verifier from the default branch rather than the attested head",
+      "Light/dark theme changes use one root palette and an atomic transition-free update",
+      "Trust projection and governance registry accept the dedicated signed workflow",
+      "262 non-PostgreSQL and 16 real PostgreSQL/restore tests pass",
+      "Full production-build Playwright/axe passes 28/28 after a five-repeat theme-switch regression",
+      "Pinned Node 24 isolated lint/test/model/build passes with network none and read-only root",
+      "Complete remote and production evidence is added only after those systems run"
+    ],
+    "artifacts": [
+      ".github/workflows/symbiosis-replication.yml",
+      ".github/workflows/evidence-receipts.yml",
+      "src/evidence/symbiosis-replication-workflow.test.ts",
+      "src/symbiosis/trust-server.ts",
+      "src/governance/evidence-service.ts",
+      "src/app/page.tsx",
+      "src/app/globals.css",
+      "docs/adr/0032-independent-replication-workflow.md"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.8.3",
     "version": "4.8.3",
     "date": "2026-08-01",

@@ -1,0 +1,59 @@
+name: Symbiosis replication
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  replicate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      id-token: write
+      attestations: write
+
+    steps:
+      - name: Checkout attested revision
+        uses: actions/checkout@v7
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install current revision dependencies
+        run: npm ci
+
+      - name: Reproduce committed bundle
+        run: npm run verify:v47
+
+      - name: Checkout exact v4.7 replication release
+        uses: actions/checkout@v7
+        with:
+          ref: v4.7.0
+          path: .verified/v47-release
+
+      - name: Reproduce exact v4.7 release environment
+        working-directory: .verified/v47-release
+        run: npm ci && npm run verify:v47
+
+      - name: Require byte-identical portable bundle
+        run: >-
+          cmp --silent
+          public/data/v4-7-replication-bundle.json
+          .verified/v47-release/public/data/v4-7-replication-bundle.json
+
+      - name: Upload portable replication evidence
+        uses: actions/upload-artifact@v7
+        with:
+          name: nexus-symbiosis-replication
+          path: public/data/v4-7-replication-bundle.json
+          retention-days: 30
+
+      - name: Attest portable replication provenance
+        uses: actions/attest@v4
+        with:
+          subject-path: public/data/v4-7-replication-bundle.json

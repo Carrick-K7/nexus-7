@@ -207,6 +207,13 @@ Git-trackable source archive so ignored host files stay outside evaluated code.
 GitHub-hosted run `30648143519` passed the complete pipeline; its Draft-PR
 artifact remains unsigned and therefore does not satisfy the external lane.
 
+v4.8.4 removes an operational coupling between two independent trust domains.
+Portable symbiosis replication now has a dedicated GitHub-hosted workflow that
+uses no live-model credential, repeats both the current and exact v4.7
+reproduction, requires byte-identical bundles and attests the result. The
+receipt bridge rejects pull-request runs and trusts the new signer. Legacy
+live-model promotion requirements remain unchanged.
+
 ## Next objectives
 
 No new city feature milestone is scheduled. Operate v4.8 until all five trust

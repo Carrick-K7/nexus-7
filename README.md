@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release is **v4.8.3 — Honest Freshness**.
+The active release is **v4.8.4 — Independent Replication Path**.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
@@ -83,6 +83,12 @@ continuity while visibly marking it stale with the last successful refresh
 time and bounded failure reason. Its isolated evaluator also consumes only a
 temporary frozen archive of Git-trackable source and installed dependencies;
 ignored host files never enter the evaluation container.
+
+v4.8.4 separates portable symbiosis replication from the legacy live-model
+promotion gate. A dedicated GitHub-hosted workflow reproduces the committed
+bundle and exact v4.7 release, requires byte identity, then attests the bundle.
+Receipt issuance ignores pull-request runs and accepts the dedicated workflow;
+the existing high-risk release gate is unchanged.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy

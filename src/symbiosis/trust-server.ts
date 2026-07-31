@@ -60,6 +60,7 @@ function trustedWorkflows(repository: string): string[] {
     ? configured
     : [
         `${repository}/.github/workflows/ci.yml`,
+        `${repository}/.github/workflows/symbiosis-replication.yml`,
         `${repository}/.github/workflows/operations-drills.yml`,
         `${repository}/.github/workflows/symbiosis-offhost-recovery.yml`,
       ];
