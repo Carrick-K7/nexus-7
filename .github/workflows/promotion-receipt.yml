@@ -20,12 +20,12 @@ jobs:
 
     steps:
       - name: Checkout attested revision
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
         with:
           ref: ${{ github.event.workflow_run.head_sha }}
 
       - name: Set up Node.js
-        uses: actions/setup-node@v4
+        uses: actions/setup-node@v7
         with:
           node-version: 22
           cache: npm
@@ -55,7 +55,7 @@ jobs:
           .artifacts/attestation-receipt.json
 
       - name: Upload short-lived promotion receipt
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: nexus-promotion-receipt-${{ github.event.workflow_run.head_sha }}
           path: .artifacts/attestation-receipt.json
