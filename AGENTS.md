@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.4 独立复现路径
+> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.5 证据就绪
 
 ## 定义与边界
 
@@ -52,8 +52,8 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
-v4.8.4 含 200 人、36 AI、24 机器人及五路证据矩阵；外部复现与 live-model
-门禁解耦，签名器只执行默认分支代码。无真人、身份映射或私人输入。
+v4.8.5 含 200 人、36 AI、24 机器人及五路证据矩阵；坏回执 fail closed，
+部署 revision/失败原因可读。无真人、身份映射或私人输入。
 
 ## 模块边界
 
@@ -98,12 +98,12 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 |---|---:|
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
-| unit+PG / 条件跳过 | 278/278 / 0 |
+| unit+PG / 条件跳过 | 280/280 / 0 |
 | PostgreSQL / Playwright+axe | 16/16 / 28/28 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
-| v4.8.4 信任契约 | 5 lanes；独立复现；签名器/主题 fail closed |
+| v4.8.5 信任契约 | 5 lanes；signer 配置/坏回执 fail closed |
 
 ## 外部边界
 

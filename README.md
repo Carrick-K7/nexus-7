@@ -11,7 +11,7 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active release is **v4.8.4 — Independent Replication Path**.
+The active development release is **v4.8.5 — Evidence Readiness**.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
@@ -89,6 +89,13 @@ promotion gate. A dedicated GitHub-hosted workflow reproduces the committed
 bundle and exact v4.7 release, requires byte identity, then attests the bundle.
 Receipt issuance ignores pull-request runs and accepts the dedicated workflow;
 the existing high-risk release gate is unchanged.
+
+v4.8.5 makes the evidence handoff observable and fail closed. The Human
+Observatory shows the exact deployed revision and bilingual explanations beside
+stable machine reason codes. A supplied malformed off-host receipt can no
+longer be downgraded to pending when its evidence file is absent, and the
+deployment template keeps every accepted signer workflow in its explicit
+override.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy

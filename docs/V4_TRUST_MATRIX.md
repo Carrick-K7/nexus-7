@@ -62,6 +62,12 @@ NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64  # GitHub Actions secret
 NEXUS_ATTESTATION_RECEIPT_PUBLIC_KEY_BASE64   # web-process environment
 ```
 
+`SYMBIOSIS_TRUSTED_SIGNER_WORKFLOWS` is optional. When present it replaces,
+rather than extends, the built-in allowlist. An explicit deployment value must
+therefore contain `ci.yml`, `symbiosis-replication.yml`,
+`operations-drills.yml` and `symbiosis-offhost-recovery.yml`; the checked
+`.env.example` value is the conformance reference.
+
 Download the receipt artifact to a mode-0600 server file and configure:
 
 ```text
@@ -138,3 +144,13 @@ removes that ambiguity: the lane now reads a dedicated DeepSeek-shadow slice
 for attempts, successful comparisons, provider failures, Token use, cost,
 models and pricing versions. A regression fixture with 260 reference
 comparisons and zero DeepSeek calls must still render zero DeepSeek evidence.
+
+## v4.8.5 evidence-readiness correction
+
+The public Observatory now pairs each stable reason code with a bilingual
+human explanation and displays the exact release revision against which signed
+receipts are checked. The API keeps the unchanged machine codes. A malformed
+off-host receipt is failed even when the recovery evidence file is absent;
+removing a companion artifact cannot downgrade already supplied bad evidence
+to pending. A repository test also prevents the explicit environment template
+from silently excluding a supported signer workflow.

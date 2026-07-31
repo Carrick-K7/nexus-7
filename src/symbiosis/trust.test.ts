@@ -398,6 +398,34 @@ describe("v4.8 independent trust matrix", () => {
     expect(matrix.overall).toBe("failed");
   });
 
+  it("does not downgrade a supplied malformed recovery receipt to pending", () => {
+    const matrix = buildSymbiosisTrustMatrix({
+      generatedAt: now,
+      releaseRevision,
+      repository,
+      signerWorkflows: [replicationWorkflow, recoveryWorkflow],
+      publicKey,
+      replicationBundle: bundle,
+      replicationArtifactSha256: bundleArtifactSha256,
+      recoveryReceipt: { malformed: true },
+      observatory: {
+        cognition: cognition(),
+        reliability: reliability(5),
+      },
+    });
+
+    expect(matrix.lanes.offHostRecovery).toMatchObject({
+      status: "failed",
+      evidencePresent: false,
+      receiptPresent: false,
+      reasonCodes: expect.arrayContaining([
+        "receipt-envelope-invalid",
+        "recovery-evidence-missing",
+      ]),
+    });
+    expect(matrix.overall).toBe("failed");
+  });
+
   it("shows expired proof as stale and an unverifiable receipt as pending", () => {
     const summary = {
       bundleSha256: bundle.integrity.bundleSha256,

@@ -50,4 +50,26 @@ describe("independent symbiosis replication workflow", () => {
       "/.github/workflows/symbiosis-replication.yml",
     );
   });
+
+  it("keeps the explicit deployment signer override aligned with every producer", () => {
+    const source = readFileSync(
+      path.join(process.cwd(), ".env.example"),
+      "utf8",
+    );
+    const configured = source
+      .split("\n")
+      .find((line) =>
+        line.startsWith("SYMBIOSIS_TRUSTED_SIGNER_WORKFLOWS="),
+      );
+
+    expect(configured).toBeDefined();
+    for (const signer of [
+      "/.github/workflows/ci.yml",
+      "/.github/workflows/symbiosis-replication.yml",
+      "/.github/workflows/operations-drills.yml",
+      "/.github/workflows/symbiosis-offhost-recovery.yml",
+    ]) {
+      expect(configured).toContain(signer);
+    }
+  });
 });

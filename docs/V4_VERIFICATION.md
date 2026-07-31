@@ -2,7 +2,7 @@
 
 > Date: 2026-08-01
 >
-> Status: v4.8.4 Independent Replication Path deployed;
+> Status: v4.8.5 Evidence Readiness locally implemented; v4.8.4 deployed;
 > external replication, duration, off-host restore,
 > CI-Sigstore and live-provider evidence pending
 
@@ -389,6 +389,37 @@ non-PostgreSQL tests, 16 real PostgreSQL/restore tests, 28/28 browser/axe
 scenarios, two exact bundle reproductions and isolated Node 24 evaluation all
 passed. Because the run is still attached to a Draft PR, attestation correctly
 remained disabled; this is release evidence, not the missing external receipt.
+
+### v4.8.5 evidence-readiness gate
+
+Completion review found two operator-boundary defects. The checked environment
+template defined `SYMBIOSIS_TRUSTED_SIGNER_WORKFLOWS`, which replaces the
+built-in allowlist, but omitted the dedicated replication workflow and the
+operations drill. A deployment copied from that template would reject valid
+receipts even though code defaults were correct. The template and a repository
+contract test now require all four symbiosis evidence producers.
+
+The recovery lane also overwrote a failed malformed receipt with `pending` when
+the separate recovery evidence file was absent. Failure and stale receipt
+states now take precedence over the missing companion file. A regression test
+supplies a malformed recovery receipt without evidence and requires the lane
+and overall matrix to remain failed.
+
+Human Observatory displays the complete deployed revision and pairs stable
+machine reason codes with bilingual explanations. Desktop/mobile browser
+fixtures bind the rendered revision to the Trust API and require English and
+Chinese explanations for the currently missing signed receipt and DeepSeek
+shadow. The API reason-code contract remains unchanged.
+
+Local acceptance passes 264 non-PostgreSQL tests, 16/16 real PostgreSQL and
+restore tests, all deterministic v1/v2/v4 gates, 28/28 production-build
+Playwright/axe scenarios, 10,000 ticks, zero lint warnings, zero dependency
+vulnerabilities and the TypeScript production build. No persistence schema or
+world-settlement path changes in this release.
+The pinned Node 24.15.0 evaluator independently repeated lint, 264 tests, the
+12-case deterministic model regression and production build with network
+disabled, a read-only root and frozen source archive, and all capabilities
+dropped; it exited 0.
 
 ## Provider and persistence gates
 

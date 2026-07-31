@@ -214,6 +214,14 @@ reproduction, requires byte-identical bundles and attests the result. The
 receipt bridge rejects pull-request runs and trusts the new signer. Legacy
 live-model promotion requirements remain unchanged.
 
+v4.8.5 closes the operator handoff around those workflows. The explicit
+deployment signer override must contain every accepted symbiosis evidence
+producer, and a supplied malformed recovery receipt remains failed even when
+its companion evidence is absent. Human Observatory shows the exact deployed
+revision and translates every current trust reason while retaining stable
+machine codes. Missing evidence is still pending; bad evidence cannot be made
+less severe by removing another file.
+
 ## Next objectives
 
 No new city feature milestone is scheduled. Operate v4.8 until all five trust

@@ -232,6 +232,9 @@ for (const viewport of [
     page,
   }) => {
     test.slow();
+    const trustContract = await page.request
+      .get("/api/observatory/v2/trust")
+      .then((response) => response.json());
     await page.setViewportSize(viewport);
     await page.goto("/");
     await expect(
@@ -270,6 +273,15 @@ for (const viewport of [
     await expect(trust).toContainText("External CI + Sigstore");
     await expect(trust).toContainText("0 comparisons");
     await expect(trust).toContainText("90-day production clock");
+    await expect(page.getByTestId("trust-release-revision")).toContainText(
+      trustContract.releaseRevision,
+    );
+    await expect(trust).toContainText(
+      "A signed evidence receipt has not been supplied.",
+    );
+    await expect(trust).toContainText(
+      "Live DeepSeek is not configured as the read-only shadow.",
+    );
     const replication = page.getByTestId("scientific-replication");
     await expect(replication).toBeVisible();
     await expect(replication).toContainText("SCIENTIFIC REPLICATION");
@@ -376,6 +388,10 @@ test("Human Observatory explains the city in Chinese", async ({ page }) => {
   await expect(page.getByText("认知多样性 Shadow")).toBeVisible();
   await expect(page.getByText("独立可信证据矩阵")).toBeVisible();
   await expect(page.getByText("异机 PostgreSQL 恢复")).toBeVisible();
+  await expect(page.getByText("尚未提供签名证据回执。").first()).toBeVisible();
+  await expect(
+    page.getByText("尚未把真实 DeepSeek 配置为只读 Shadow。"),
+  ).toBeVisible();
   await expect(page.getByText("科学复现")).toBeVisible();
   await expect(page.getByText("外部证明")).toBeVisible();
   await expect(page.getByText("城市社会与可逆规则")).toBeVisible();
