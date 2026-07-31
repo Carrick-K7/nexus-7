@@ -302,6 +302,40 @@ for an unmerged Draft PR, so both attestation steps correctly stayed skipped
 and `gh attestation verify` found no attestation for the subject. It therefore
 supports the release review but does not satisfy the external-replication lane.
 
+### v4.8.3 transport-freshness gate
+
+The Observatory previously showed an explicit error when its first load
+failed, but a later polling failure left already-loaded data visible without a
+transport warning. The persisted Turn age remained accurate, yet a human could
+not distinguish a healthy read path from a retained client snapshot.
+
+The v4.8.3 candidate retains the last successful snapshot rather than blanking
+the Observatory, while an assertive bilingual banner exposes the failure, the
+last successful browser refresh time and a bounded endpoint/status reason. A
+390px Playwright fault injection forces the trust endpoint to return 503 and
+proves that the resident table remains available, English and Chinese warnings
+render, horizontal overflow is zero and axe reports zero WCAG A/AA violations.
+
+Local release acceptance passes 259 non-PostgreSQL tests plus 16 real
+PostgreSQL/restore tests, all deterministic v1/v2/v4 gates, 28/28
+production-build browser/axe scenarios, TypeScript/build, 10,000 deterministic
+ticks, zero lint warnings and zero dependency vulnerabilities. Remote CI, Tag
+and deployment remain separate release gates.
+
+The first local isolated-quality attempt also retained its failure: the Docker
+daemon's user namespace could stat the mode-0600 host files but not read them
+through a direct directory bind. The evaluator now snapshots Git-trackable
+source plus installed dependencies into a temporary mode-0444 archive, never
+includes ignored host files, mounts only that archive, extracts to tmpfs and
+deletes it after the run. The final pinned Node 24 quality run passed lint, 259
+tests, the 12-case model regression and the production build with no network,
+a read-only root and all capabilities dropped.
+
+Production v4.8.2 then settled natural Turn 307 on its preserved hourly clock:
+revision `6bbc31b`, lag 421 ms, fingerprint `2d80539e`, RALR 447/609, zero
+coercive actions and zero severe escapes. This is continuity evidence for the
+currently deployed release, not a v4.8.3 deployment claim.
+
 ## Provider and persistence gates
 
 The cognitive contract tests validate DeepSeek Chat Completions JSON output,

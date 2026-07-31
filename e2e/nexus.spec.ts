@@ -388,6 +388,52 @@ test("Human Observatory explains the city in Chinese", async ({ page }) => {
   await expect(page.getByText("合成人类")).toHaveCount(0);
 });
 
+test("Human Observatory marks retained data stale when live refresh fails", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 390, height: 844 });
+  await page.goto("/");
+  await expect(
+    page.getByRole("heading", {
+      name: "SHENZHEN SYMBIOSIS CITY · HUMAN OBSERVATORY",
+    }),
+  ).toBeVisible();
+  await expect(page.getByTestId("unit-status-table")).toBeVisible();
+
+  await page.route("**/api/observatory/v2/trust", async (route) => {
+    await route.fulfill({
+      status: 503,
+      contentType: "application/json",
+      body: JSON.stringify({ error: "injected-refresh-outage" }),
+    });
+  });
+  await page.getByRole("button", { name: "Refresh", exact: true }).click();
+
+  const alert = page.getByTestId("observatory-refresh-alert");
+  await expect(alert).toContainText(
+    "Live refresh failed. The values below are the last successfully loaded snapshot.",
+  );
+  await expect(alert).toContainText("Last successful refresh");
+  await expect(alert).toContainText("trust-503");
+  await expect(page.getByTestId("unit-status-table")).toBeVisible();
+
+  const accessibility = await new AxeBuilder({ page })
+    .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa"])
+    .analyze();
+  expect(accessibility.violations).toEqual([]);
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - window.innerWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(1);
+
+  await page.getByRole("button", { name: "Change language" }).click();
+  await page.getByRole("button", { name: "中文" }).click();
+  await expect(alert).toContainText(
+    "实时刷新失败。以下数值为最后一次成功加载的快照。",
+  );
+  await expect(alert).toContainText("最后成功刷新");
+});
+
 test("redundant status labels stay hidden and both color themes remain accessible", async ({
   page,
 }) => {

@@ -198,6 +198,11 @@ take precedence, and unsigned PR artifacts remain outside the external-CI
 lane. GitHub-hosted quality is green; governed Sigstore receipt issuance is
 still pending.
 
+v4.8.3 closes a human-observation ambiguity: a failed periodic or manual live
+refresh may retain the last successful snapshot for continuity only when the
+UI marks it stale, exposes the last successful refresh time and a bounded
+failure reason, and remains bilingual, mobile-contained and WCAG A/AA clean.
+
 ## Next objectives
 
 No new city feature milestone is scheduled. Operate v4.8 until all five trust

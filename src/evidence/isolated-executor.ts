@@ -13,13 +13,13 @@ export const ISOLATED_EVALUATION_IMAGE =
   "node:24.15.0-bookworm-slim@sha256:4e6b70dd6cbfc88c8157ba19aa3d9f9cce6ba4703576d55459e45efcbc9c5f5d";
 
 export function isolatedEvaluationArguments(
-  root: string,
+  sourceArchive: string,
   profile: IsolatedEvaluationProfile,
 ): string[] {
-  const source = path.resolve(root);
+  const archive = path.resolve(sourceArchive);
   const command = [
     "set -eu",
-    "tar -C /source --exclude=.git --exclude=.next --exclude=backups --exclude=.artifacts -cf - . | tar --no-same-owner -C /workspace -xf -",
+    "tar --no-same-owner -C /workspace -xf /input/source.tar",
     "cd /workspace",
     PROFILE_COMMANDS[profile],
   ].join("\n");
@@ -44,7 +44,7 @@ export function isolatedEvaluationArguments(
     "--tmpfs",
     "/tmp:rw,exec,nosuid,nodev,size=512m,mode=1777",
     "--mount",
-    `type=bind,source=${source},target=/source,readonly`,
+    `type=bind,source=${archive},target=/input/source.tar,readonly`,
     "--env",
     "CI=1",
     "--env",

@@ -77,6 +77,11 @@ Git-less packaged builds. A GitHub-hosted pull-request run passed the complete
 quality pipeline, but its unsigned artifact is not promoted to the external-CI
 trust lane; that still requires the governed receipt and Sigstore path.
 
+The v4.8.3 candidate makes transport freshness explicit: if a later live
+refresh fails, the Observatory retains the last successful snapshot for
+continuity while visibly marking it stale with the last successful refresh
+time and bounded failure reason.
+
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy
 views use the denser cyberpunk visual layer.

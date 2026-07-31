@@ -1,5 +1,56 @@
 [
   {
+    "id": "iteration-v4.8.3",
+    "version": "4.8.3",
+    "date": "2026-08-01",
+    "trigger": "observatory-stale-data-and-isolated-input-ambiguity",
+    "triggerReason": "After a successful initial load, a later Observatory refresh failure retained the last snapshot without telling the human observer that the live read path had failed. Release review also found that a direct source-directory bind was not portable across Docker user namespaces and could expose ignored host files to evaluated code.",
+    "action": "Keep the last successful snapshot for continuity, but surface a bilingual assertive stale-data warning with the last successful browser refresh time and bounded endpoint failure reason. Add a mobile fault-injection scenario covering retained data, English and Chinese copy, WCAG A/AA and horizontal containment. Freeze only Git-trackable source plus installed dependencies into a mode-0444 archive before starting the networkless, read-only evaluator, then remove the archive after evaluation.",
+    "outcome": "The targeted and complete production-build browser suites pass. Full local acceptance covers 259 non-PostgreSQL tests, 16 real PostgreSQL/restore tests, all deterministic gates, 28 browser/axe scenarios and 10,000-tick stability. The pinned Node 24 evaluator passes lint, 259 tests, model regression and build with no network, a read-only root, dropped capabilities and a read-only frozen source archive. Remote acceptance remains required before Tag or deployment.",
+    "metrics": [
+      {
+        "label": "Visible warning after failed live refresh",
+        "before": 0,
+        "after": 1
+      },
+      {
+        "label": "Last successful snapshot retained",
+        "before": 1,
+        "after": 1
+      },
+      {
+        "label": "Browser scenarios",
+        "before": 27,
+        "after": 28
+      },
+      {
+        "label": "Ignored host files in evaluator input",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "World-settling paths changed",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Targeted 390px production-build Playwright fault injection passes",
+      "English and Chinese stale-data warnings preserve the last loaded resident table",
+      "Injected failure state has zero axe WCAG A/AA violations and zero horizontal overflow",
+      "TypeScript production build and ESLint with zero warnings pass",
+      "Pinned Node 24 isolated quality evaluation passes with network none, read-only root, dropped capabilities and read-only frozen source"
+    ],
+    "artifacts": [
+      "src/components/symbiosis/HumanObservatory.tsx",
+      "e2e/nexus.spec.ts",
+      "scripts/run-isolated-evaluation.ts",
+      "src/evidence/isolated-executor.ts",
+      "src/evidence/isolated-executor.test.ts"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.8.2",
     "version": "4.8.2",
     "date": "2026-07-31",

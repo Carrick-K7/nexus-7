@@ -4,6 +4,7 @@ import {
   useCallback,
   useEffect,
   useMemo,
+  useRef,
   useState,
 } from "react";
 import {
@@ -276,6 +277,9 @@ const copy = {
     noConsciousness: "No consciousness claim",
     loading: "Loading the simulated city…",
     unavailable: "The Human Observatory is temporarily unavailable.",
+    refreshFailed:
+      "Live refresh failed. The values below are the last successfully loaded snapshot.",
+    lastSuccessfulRefresh: "Last successful refresh",
     healthy: "Healthy",
     watch: "Watch",
     strained: "Strained",
@@ -505,6 +509,8 @@ const copy = {
     noConsciousness: "不主张 AI 意识",
     loading: "正在加载模拟城市……",
     unavailable: "人类观测台暂时不可用。",
+    refreshFailed: "实时刷新失败。以下数值为最后一次成功加载的快照。",
+    lastSuccessfulRefresh: "最后成功刷新",
     healthy: "健康",
     watch: "关注",
     strained: "承压",
@@ -778,6 +784,9 @@ export default function HumanObservatory() {
   const [trust, setTrust] = useState<SymbiosisTrustMatrix | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [lastSuccessfulRefreshAt, setLastSuccessfulRefreshAt] =
+    useState<string | null>(null);
+  const refreshSequence = useRef(0);
   const [query, setQuery] = useState("");
   const [kind, setKind] = useState<ObserverResidentKind | "all">("all");
   const [unitStatus, setUnitStatus] = useState<UnitHealth | "all">("all");
@@ -787,6 +796,7 @@ export default function HumanObservatory() {
   const [selectedUnitId, setSelectedUnitId] = useState<string | null>(null);
 
   const refresh = useCallback(async () => {
+    const sequence = ++refreshSequence.current;
     try {
       const [response, replicationResponse, trustResponse] = await Promise.all([
         fetch("/api/observatory/v2/overview", { cache: "no-store" }),
@@ -802,16 +812,23 @@ export default function HumanObservatory() {
       if (!trustResponse.ok) {
         throw new Error(`trust-${trustResponse.status}`);
       }
-      setData(await response.json() as HumanObservatoryReport);
-      setReplication(
-        await replicationResponse.json() as SymbiosisReplicationBundle,
-      );
-      setTrust(await trustResponse.json() as SymbiosisTrustMatrix);
+      const [report, replicationBundle, trustMatrix] = await Promise.all([
+        response.json() as Promise<HumanObservatoryReport>,
+        replicationResponse.json() as Promise<SymbiosisReplicationBundle>,
+        trustResponse.json() as Promise<SymbiosisTrustMatrix>,
+      ]);
+      if (sequence !== refreshSequence.current) return;
+      setData(report);
+      setReplication(replicationBundle);
+      setTrust(trustMatrix);
+      setLastSuccessfulRefreshAt(new Date().toISOString());
       setError(null);
     } catch (caught) {
-      setError(caught instanceof Error ? caught.message : "unknown-error");
+      if (sequence !== refreshSequence.current) return;
+      const reason = caught instanceof Error ? caught.message : "unknown-error";
+      setError(reason.replace(/\s+/g, " ").slice(0, 120));
     } finally {
-      setLoading(false);
+      if (sequence === refreshSequence.current) setLoading(false);
     }
   }, []);
 
@@ -819,6 +836,7 @@ export default function HumanObservatory() {
     const initial = window.setTimeout(() => void refresh(), 0);
     const timer = window.setInterval(() => void refresh(), 15_000);
     return () => {
+      refreshSequence.current += 1;
       window.clearTimeout(initial);
       window.clearInterval(timer);
     };
@@ -996,6 +1014,23 @@ export default function HumanObservatory() {
             </div>
           </div>
         </header>
+
+        {error ? (
+          <div
+            role="alert"
+            data-testid="observatory-refresh-alert"
+            className="rounded-2xl border border-cyber-red/45 bg-cyber-red/10 px-4 py-3 text-sm text-cyber-text"
+          >
+            <p className="font-semibold text-cyber-red">
+              {text.refreshFailed}
+            </p>
+            <p className="mt-1 break-words text-xs text-cyber-text-dim">
+              {text.lastSuccessfulRefresh}: {lastSuccessfulRefreshAt ?? "—"}
+              {" · "}
+              <span className="font-mono">{error}</span>
+            </p>
+          </div>
+        ) : null}
 
         <section className="rounded-2xl border border-cyber-purple/25 bg-cyber-darker/90 p-5">
           <div className="flex items-center gap-2">

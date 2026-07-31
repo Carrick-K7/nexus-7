@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-07-31 · v2.0.0 安全内核 + v4.8.2 可复现演进证据
+> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.3 刷新诚实性
 
 ## 定义与边界
 
@@ -52,8 +52,8 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
-v4.8.2 含 200 人、36 AI、24 机器人及五路证据矩阵；DeepSeek 轨道
-不混入参考比较，浅克隆/Git-less 构建保留演进证据。无真人、身份映射或私人输入。
+v4.8.3 候选含 200 人、36 AI、24 机器人及五路证据矩阵；DeepSeek 不混入参考
+比较，浅克隆/Git-less 保留证据，刷新失败显式标陈旧。无真人、身份映射或私人输入。
 
 ## 模块边界
 
@@ -99,18 +99,18 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
 | unit / 条件跳过 | 275/275 / 0 |
-| PostgreSQL / Playwright+axe | 16/16 / 27/27 |
+| PostgreSQL / Playwright+axe | 16/16 / 28/28 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
-| v4.8.2 证据契约 | 5 lanes；浅克隆/Git-less/参考混入 fail closed |
+| v4.8.3 观测契约 | 5 lanes；浅克隆/Git-less/刷新故障 fail closed |
 
 ## 外部边界
 
-- `6bbc31b` (v4.8.2) 已部署；Turn 306 在切换前按时，worker 保留后继截止时间；
+- `6bbc31b` (v4.8.2) 已部署；Turn 307 按时（lag 421 ms），worker 保留截止时间；
   390 px overflow/console/axe 0，API 200、写 405。
-- 当前 safe closure 100%，强制/无效规则 0；参考 shadow 262 次，DeepSeek
-  实际调用/Token/费用仍为 0；真实观测 5.449 天。
+- 当前 safe closure 100%，强制/无效规则 0；参考 shadow 266 次，DeepSeek
+  实际调用/Token/费用仍为 0；真实观测 5.49 天。
 - 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
   恢复待验证。
-- GitHub PR CI `30641290821` 全绿且 Node 20 warning 0；未签名，不计 external lane。
+- PR CI `30641290821` 全绿且 Node 20 warning 0；未签名，不计 external lane。
