@@ -2,8 +2,8 @@
 
 > Date: 2026-07-31
 >
-> Status: v4.7 Scientific Replication locally verified; v4.6.1 remains the
-> production runtime / external replication, duration, off-host restore,
+> Status: v4.7 Scientific Replication locally verified and deployed;
+> external replication, duration, off-host restore,
 > CI-Sigstore and live-provider evidence pending
 
 ## Reference gate
@@ -264,9 +264,9 @@ The production-built Playwright/axe suite must verify:
 
 ## Production evidence and trust boundary
 
-The reference values above are generated from tagged v4.6 source and do not
-represent a claim about real humans. Annotated Tag `v4.6.1`, exact commit
-`6c90112` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and that
+The reference values above are generated from tagged v4 source and do not
+represent a claim about real humans. Annotated Tag `v4.7.0`, exact commit
+`2362ee8` and branch `codex/ai-only-symbiotic-shenzhen-v4` are remote, and that
 exact Tag is active at `nexus7.carrick7.com`. Anonymous read-only access,
 200/36/24 taxonomy, 24 current ledgers, desktop/mobile Chromium, both themes,
 Chinese copy, zero WCAG A/AA violations, the DeepSeek zero ledger, read-only
@@ -284,6 +284,11 @@ due Turn settled on time with 332 ms lag, fingerprint `eaa7a03b`, exact
 `6c90112` revision, resource and civic-credit conservation, and no severe
 escape or forced path. At Turn 282, production holds 429 society records and
 111 society events supporting 44/44 safe closures.
+The v4.7 public bundle and Human Observatory then displayed 7/7 hypotheses,
+12/12 exact replay, exact SHA-256 and absent external proof. Production 390px
+Chromium had zero overflow or console warnings/errors; root and bundle returned
+200 and Observatory mutation returned 405. The restarted worker preserved the
+Turn 303 due time; the first naturally due v4.7 Turn remains pending.
 Deployment history and checksums are recorded in
 `docs/V4_DEPLOYMENT_ATTESTATION.md`.
 

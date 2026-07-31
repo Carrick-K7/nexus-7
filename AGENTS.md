@@ -101,12 +101,10 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 
 ## 外部边界
 
-- v4.7 本地 269/269、browser 27/27、build/audit 通过；外部 CI/Sigstore、
-  Tag/部署尚未完成，不得写成线上事实。
-- `6c90112` (v4.6.1) 已部署；实际 populated-rule 390 px overflow 0，公网
-  200/写 405/console 0；Turn 282 按时（lag 332 ms）并精确绑定 revision。
-- v4.6.0 Turn 257–281 均按时；当前 429 society records/111 events，
-  44/44 safe closure，强制/无效规则 0。
+- `2362ee8` (v4.7.0) 已部署；390 px 复现卡 overflow 0、console 0，bundle/
+  公网 200、写 405；worker 等待 Turn 304 自然到期，尚无 v4.7 Turn 证明。
+- v4.6.1 已运行至 Turn 303；当前 482 society records/196 events、74/74
+  safe closure，强制/无效规则 0；DeepSeek 实际 Token/费用仍为 0。
 - 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
   恢复待验证。
 - evidence 回灌需要 GitHub OIDC workload、变量和治理 endpoint。

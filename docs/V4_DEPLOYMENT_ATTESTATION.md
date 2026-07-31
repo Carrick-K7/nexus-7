@@ -1,12 +1,13 @@
 # v4 Production Deployment Attestation
 
-> Observed: 2026-07-26 through 2026-07-30 · Asia/Shanghai
+> Observed: 2026-07-26 through 2026-07-31 · Asia/Shanghai
 
 ## Current artifact
 
-- Release: `v4.6.1` — Populated Society Containment
-- Tag commit: `6c90112ceb9514344962ecdae4e5c283b754b338`
-- Implementation commit: `71f550c079d4d5c9c62bfcc6f1b0a337bf5d1e43`
+- Release: `v4.7.0` — Portable Scientific Replication
+- Tag commit: `2362ee8a206b11c48c993e5d6bb9dbbaa6904f2b`
+- Implementation commit: `ebe3cafbff62fc8d27b3f9c13d4b1493f2b67da3`
+- v4.6.1 implementation commit: `71f550c079d4d5c9c62bfcc6f1b0a337bf5d1e43`
 - v4.6 implementation commit: `a8ba2bd3022cdfd45cfdad31ead6cde3167d2c38`
 - Hotfix commit: `60f7612954e64408badb193cfe3f9df89c7fdfe7`
 - v4.5 implementation commit: `9da503f56e4c341f3d3aa909e205f31907242b35`
@@ -34,7 +35,7 @@ returned HTTP 405.
 
 `/api/observatory/v2/overview` returned
 `nexus.human-observatory.v2`, formula version 2.1.0, 200 humans, 36 AI, 24
-robots, 24 current resource ledgers and Turn 282. The three resident kinds are
+robots, 24 current resource ledgers and Turn 303. The three resident kinds are
 software state; these are synthetic results, not live Shenzhen data.
 
 The primary provider is `nexus-deterministic-reference`. The configured
@@ -49,6 +50,14 @@ agreements, conserved credits, bounded policy values and an honest 0/0 safe
 closure denominator. Mobile horizontal overflow and console errors were zero.
 The full tagged build separately passed all 27 desktop/mobile, dark/light,
 Chinese and WCAG A/AA scenarios.
+
+The v4.7 public bundle returned HTTP 200 with 7/7 local hypotheses, 12/12
+exact held-out replays, bundle SHA-256
+`0d8d4ccd347a4f303a455d57bb685f724e0bc986793e2333542d94c6dbb93550`
+and explicit `externalCiVerified=false` / null Sigstore receipt. Production
+Chromium at 390px rendered the same values and clean-checkout command with
+zero document overflow, console errors or warnings. Observatory mutation
+remained HTTP 405.
 
 ## Existing season and live Turn
 
@@ -109,10 +118,19 @@ current society records and 111 society events. The live Observatory reports
 balanced exchanges, seven resolved bargains, one ratified bounded rule,
 conserved civic credits and zero forced or invalid paths.
 
-Production remains honestly `watch`: the observed window is 4.448 days,
-106/107 comparable settlements are on time, the one historical early-restart
+Turns 283 through 303 continued naturally under v4.6.1. Turn 303 has
+fingerprint `340fd94c`; the database contains 482 current society records and
+196 society events. Observatory reports 74/74 safe closures, resource and
+civic-credit conservation, and zero forced or invalid paths.
+
+At the v4.7 cutover the worker read Turn 303's persisted 12:29:19 UTC runtime
+record and announced a 1,968,502 ms wait rather than settling early. The first
+naturally due v4.7 revision-bound Turn remains pending.
+
+Production remains honestly `watch`: the observed window is 5.324 days,
+127/128 comparable settlements are on time, the one historical early-restart
 sample remains visible, and missing, duplicate and predecessor mismatch counts
-remain zero. Twenty-five Turns carry the v4.6.0 revision and one carries the
+remain zero. Twenty-five Turns carry the v4.6.0 revision and 22 carry the
 v4.6.1 revision.
 
 ## Recovery points
@@ -180,9 +198,16 @@ Turn. Receipt checksum is
 `ce919c3e74def7f07f00a1febc1a6345f2c40ec07ea1cfafc6428075e656a892`;
 it explicitly records `offHost=false`.
 
+Before the v4.7 cutover, a mode-0600 custom-format PostgreSQL backup captured
+Turn 303 at `/deploy/nexus-7/backups/nexus-v4.7.0-pre-upgrade.dump`. Its size
+is 9,056,629 bytes and SHA-256 is
+`742fa3593beabd7c9ef0b00b6cd86c1b640e3a2c95a94fa6e3223ff2baaf61e1`.
+
 ## Superseded production states
 
-`v4.6.0` at `75eda1b` introduced reversible city society and persisted the
+`v4.6.1` at `6c90112` contained populated mobile society evidence and ran
+through Turn 303; it is retained and superseded by v4.7.0. `v4.6.0` at
+`75eda1b` introduced reversible city society and persisted the
 first 25 society Turns; it is retained and superseded by v4.6.1 for mobile
 containment. `v4.5.1` at `1226826` fixed restart cadence and proved the first on-time
 post-restart settlement; it is retained and superseded by v4.6.0.
@@ -203,7 +228,7 @@ recovery points remain immutable.
 - recovery is same-host; no off-host restore is claimed;
 - cognition is deterministic/reference-shadow; no live DeepSeek call is
   claimed;
-- no remote CI/Sigstore receipt exists for v4.6.1;
+- no remote CI/Sigstore receipt exists for v4.7.0;
 - the public surface is anonymous read-only observation, not multi-user OIDC;
 - all residents and outcomes are synthetic and provide no evidence of real
   policy effects.
