@@ -145,8 +145,11 @@ maintenance, exchange balance, bargaining outcomes and reversible city rules.
 The companion `/api/observatory/v2/trust` projection exposes the independent
 local/external/recovery/provider/elapsed gates without mutating either bounded
 context.
-Formula version `human-observatory-formulas-2.1.0` binds every derived score.
-V1 remains a read-only label compatibility projection.
+Formula version `human-observatory-formulas-2.2.0` binds every derived score.
+It normalizes the city's 0–100 relationship-trust score at the observation
+boundary and preserves recovery freshness as a separate evidence dimension.
+V1 remains a read-only label compatibility projection and retains its
+historical 0–100 relationship-trust value.
 
 Each Turn first settles local production and consumption, then balances
 resource reserve pressure between communities. Transfer lanes are included in

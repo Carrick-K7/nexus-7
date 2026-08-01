@@ -25,7 +25,7 @@ export const HUMAN_OBSERVATORY_V1_SCHEMA_VERSION =
 export const HUMAN_OBSERVATORY_SCHEMA_VERSION =
   "nexus.human-observatory.v2" as const;
 export const HUMAN_OBSERVATORY_FORMULA_VERSION =
-  "human-observatory-formulas-2.1.0" as const;
+  "human-observatory-formulas-2.2.0" as const;
 
 export interface LocalizedText {
   zh: string;
@@ -1579,7 +1579,9 @@ export function buildHumanObservatory(
       ...input.report.ralr,
       activeRelationships: input.report.relationships.active,
       completedCommitments: input.report.relationships.completedCommitments,
-      averageTrust: input.report.relationships.averageTrust,
+      averageTrust: rounded(
+        input.report.relationships.averageTrust / 100,
+      ),
     },
     trends: [...input.history]
       .sort((left, right) => left.turn - right.turn)
@@ -1644,6 +1646,12 @@ export function toHumanObservatoryV1(
     ...report,
     schemaVersion: HUMAN_OBSERVATORY_V1_SCHEMA_VERSION,
     formulaVersion: "human-observatory-formulas-1.0.0",
+    reciprocalAgency: {
+      ...report.reciprocalAgency,
+      averageTrust: Number(
+        (report.reciprocalAgency.averageTrust * 100).toFixed(6),
+      ),
+    },
     population: {
       ...report.population,
       byKind: report.population.byKind.map((entry) => ({

@@ -1,7 +1,7 @@
 # Human Observatory Guide
 
 > Contract: `nexus.human-observatory.v2` · formulas:
-> `human-observatory-formulas-2.1.0`
+> `human-observatory-formulas-2.2.0`
 
 ## Purpose
 
@@ -46,6 +46,12 @@ English/Chinese selection also updates the root document language to `en` or
 
 The 18,248,500 background population is calibration only. The 260 foreground
 residents are the only individually modeled humans, AI and robots.
+
+Relationship trust is stored by the city as a 0–100 score and projected here
+as a normalized 0–1 rate before percentage formatting. The reliability card
+does not collapse recovery evidence: backup freshness and age, restore,
+encryption and off-host status are displayed separately. The v1 compatibility
+endpoint retains its historical trust-score scale.
 
 ## Resident semantics
 

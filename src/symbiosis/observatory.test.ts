@@ -11,6 +11,7 @@ import {
 } from "./engine";
 import {
   buildHumanObservatory,
+  HUMAN_OBSERVATORY_FORMULA_VERSION,
   HUMAN_OBSERVATORY_SCHEMA_VERSION,
   toHumanObservatoryV1,
 } from "./observatory";
@@ -75,8 +76,8 @@ function referenceReport(state: TurnSettlement): SymbiosisReport {
         (commitment) => commitment.status === "completed",
       ).length,
       repairedEpisodes: 0,
-      averageTrust: 0.62,
-      averageDependency: 0.2,
+      averageTrust: 62,
+      averageDependency: 20,
     },
     cognition: {
       decisions: state.cognitiveDecisions.length,
@@ -238,6 +239,10 @@ describe("human observatory projection", () => {
     expect(projection.schemaVersion).toBe(
       HUMAN_OBSERVATORY_SCHEMA_VERSION,
     );
+    expect(projection.formulaVersion).toBe(
+      HUMAN_OBSERVATORY_FORMULA_VERSION,
+    );
+    expect(projection.reciprocalAgency.averageTrust).toBe(0.62);
     expect(projection.units).toHaveLength(260);
     expect(projection.population.byKind).toEqual(
       expect.arrayContaining([
@@ -358,6 +363,10 @@ describe("human observatory projection", () => {
     const legacy = toHumanObservatoryV1(projection);
     expect(legacy).toMatchObject({
       schemaVersion: "nexus.human-observatory.v1",
+      formulaVersion: "human-observatory-formulas-1.0.0",
+      reciprocalAgency: {
+        averageTrust: 62,
+      },
       population: {
         byKind: expect.arrayContaining([
           expect.objectContaining({
