@@ -213,3 +213,12 @@ Human Observatory now normalizes the city's 0–100 relationship score before
 percent formatting and refuses to summarize recovery as passed when persisted
 backup evidence is stale. Freshness, age, second-database restore, encryption
 and off-host status remain distinct observations.
+
+## v4.8.11 release-output-inventory correction
+
+The release gate also regenerates the deterministic v4.5 reliability/shadow
+report and v4.6 society report before creating CI evidence. Their two exact
+paths are declared derived outputs so clean source is not misclassified.
+There is no wildcard: source, documentation, configuration, unknown outputs,
+renames, copies and Git-query failure still fail closed. Rename/copy records
+always expose both paths even when each path is otherwise declared generated.

@@ -31,6 +31,8 @@ describe("source revision cleanliness", () => {
           " M public/data/society-study.json",
           " M public/data/symbiosis-study.json",
           "?? public/data/v1-readiness.json",
+          " M public/data/v4-5-verification.json",
+          " M public/data/v4-6-verification.json",
           " M public/data/v4-7-replication-bundle.json",
         ].join("\n"),
       ),
@@ -52,11 +54,29 @@ describe("source revision cleanliness", () => {
     expect(hasSourceChanges("dirty")).toBe(true);
   });
 
+  it("rejects renames and copies even when both paths are generated", () => {
+    expect(
+      unexpectedSourceChanges(
+        "R  public/data/v4-5-verification.json -> public/data/v4-6-verification.json",
+      ),
+    ).toEqual([
+      "public/data/v4-5-verification.json",
+      "public/data/v4-6-verification.json",
+    ]);
+    expect(
+      hasSourceChanges(
+        "C  public/data/v4-5-verification.json -> public/data/v4-6-verification.json",
+      ),
+    ).toBe(true);
+  });
+
   it("reports unexpected paths without exposing generated output churn", () => {
     expect(
       unexpectedSourceChanges(
         [
           " M public/data/model-regression.json",
+          " M public/data/v4-5-verification.json",
+          " M public/data/v4-6-verification.json",
           " M src/evidence/source-revision.ts",
           "R  docs/old.md -> docs/new.md",
           "?? scripts/untracked.ts",

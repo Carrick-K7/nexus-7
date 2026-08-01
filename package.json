@@ -1,6 +1,6 @@
 {
   "name": "nexus",
-  "version": "4.8.10",
+  "version": "4.8.11",
   "private": true,
   "scripts": {
     "postinstall": "node scripts/patch-minimatch-brace-expansion.mjs",

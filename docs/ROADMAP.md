@@ -249,6 +249,11 @@ browser audit. Relationship trust is normalized before percent formatting,
 and stale backup evidence can no longer hide behind a successful same-host
 restore. Both corrections are formula/UI changes, not city mutations.
 
+v4.8.11 completes the release-output inventory after a clean local release
+audit found that the deterministic v4.5 and v4.6 verification commands rewrote
+two named reports before signing. Those exact paths are now classified as
+derived output; the policy still rejects every unknown path or source edit.
+
 ## Next objectives
 
 No new city feature milestone is scheduled. Operate v4.8 until all five trust

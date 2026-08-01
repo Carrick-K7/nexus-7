@@ -6,6 +6,8 @@ const GENERATED_RELEASE_OUTPUTS = new Set([
   "public/data/symbiosis-study.json",
   "public/data/v1-1-stress.json",
   "public/data/v1-readiness.json",
+  "public/data/v4-5-verification.json",
+  "public/data/v4-6-verification.json",
   "public/data/v4-7-replication-bundle.json",
 ]);
 
@@ -40,15 +42,19 @@ export function unexpectedSourceChanges(
       porcelainStatus
         .split("\n")
         .filter(Boolean)
-        .flatMap((line) =>
-          line
+        .flatMap((line) => {
+          const paths = line
             .slice(3)
             .split(" -> ")
-            .map(normalizePorcelainPath),
-        )
-        .filter(
-          (path) => !GENERATED_RELEASE_OUTPUTS.has(path),
-        ),
+            .map(normalizePorcelainPath);
+          const status = line.slice(0, 2);
+          if (status.includes("R") || status.includes("C")) {
+            return paths;
+          }
+          return paths.filter(
+            (path) => !GENERATED_RELEASE_OUTPUTS.has(path),
+          );
+        }),
     ),
   ];
 }

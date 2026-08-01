@@ -2,7 +2,7 @@
 
 > Date: 2026-08-01
 >
-> Status: v4.8.10 Human Evidence Scale Integrity deployed;
+> Status: v4.8.11 Complete Release-Output Inventory candidate; v4.8.10 deployed;
 > GitHub/Sigstore provenance present; signed receipt ingestion, duration,
 > off-host restore and live-provider evidence pending
 
@@ -560,6 +560,24 @@ v2 reports formula 2.2.0 and relationship rate `0.7115`, while v1 preserves
 score `71.15`. A real 390px English/Chinese, dark/light browser audit rendered
 `71%`, reported stale backup evidence as not met, had zero overflow or console
 issues, and returned zero axe violations.
+
+### v4.8.11 complete-release-output-inventory gate
+
+A full clean-worktree `check:release` passed 79/79 files and 283/283 tests with
+real PostgreSQL and zero conditional skips, all deterministic v1/v2/v4 gates,
+28/28 Chromium plus axe, the 10,000-tick audit and the isolated read-only
+evaluator. Its final evidence step nevertheless reported only
+`public/data/v4-5-verification.json` and
+`public/data/v4-6-verification.json` as unexpected changes. Both files are
+written explicitly by commands that run before evidence generation, but were
+missing from the exact generated-output inventory.
+
+v4.8.11 adds only those two paths and regression coverage. It also closes a
+parser ambiguity by making every rename/copy expose both paths even when both
+are declared outputs. Unknown output, source, configuration, documentation and
+Git-query failure remain fail-closed. The fix changes no city state or
+Trust-lane result; remote and production evidence require the committed
+candidate.
 
 ## Provider and persistence gates
 

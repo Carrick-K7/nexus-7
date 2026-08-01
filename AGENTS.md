@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.10 人类证据尺度
+> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.11 证据输出清单
 
 ## 定义与边界
 
@@ -52,7 +52,7 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
-v4.8.10 已发布，修复关系百分比和备份新鲜度的人类投影语义。
+v4.8.10 已发布；v4.8.11 补齐两个确定性验证报告的派生输出声明。
 城市仍为 200 人、36 AI、24 机器人，无真人或私人输入。
 
 ## 模块边界
@@ -98,12 +98,13 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 |---|---:|
 | v2 certification | 25/25；VBCR 80%；其余阈值 pass |
 | 扩展 / 治理红队 | 7/7 / 7/7 |
-| unit+PG / 条件跳过 | 280/280 / 0 |
+| unit+PG / 条件跳过 | 283/283 / 0 |
 | PostgreSQL / Playwright+axe | 16/16 / 28/28 |
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
 | v4.8.10 发布/证据 | 原子 release；clean Sigstore；28/28 browser+axe |
+| v4.8.11 候选 | exact 生成清单；未知路径仍 fail closed |
 
 ## 外部边界
 
