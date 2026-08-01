@@ -6,7 +6,7 @@
     "trigger": "signed-receipt-source-identity",
     "triggerReason": "The first successful automatic main delivery signed its evidence and portable bundle, but the follower receipt job classified declared generated reports as dirty before reaching the separately missing human-controlled signing key. The first candidate run then proved that a generic trim also removed the leading porcelain status column.",
     "action": "Keep source cleanliness fail closed for every unexpected path, explicitly classify only quality-workflow generated evidence outputs, preserve the first porcelain status column, expose unexpected paths in the manifest log, and preserve receipt signing and ingestion as external configuration.",
-    "outcome": "Targeted source-revision tests and zero-warning lint pass locally. Exact remote, deployment and receipt-follower evidence must be recorded only after the corresponding committed main run.",
+    "outcome": "Exact PR run 30683661198 and main run 30684112947 passed 280 tests, 28/28 browser scenarios, all deterministic/long-horizon/isolated gates and emitted dirty=false with no unexpected path. Main produced two Sigstore attestations, an immutable archive and atomically deployed 033272f1 without replacing PostgreSQL. Production browser checks passed; receipt followers now fail only because the human-controlled Ed25519 private key is not configured.",
     "metrics": [
       {
         "label": "Unexpected source paths tolerated",
@@ -33,7 +33,10 @@
       "v4.8.7 main CI 30668893061 and both GitHub/Sigstore attestations passed",
       "v4.8.7 production revision fbd5b272 settled natural Turn 313 on time",
       "Promotion and remote-receipt followers expose missing receipt configuration",
-      "Generated-output churn, porcelain status preservation and unexpected source paths have separate tests and diagnostics"
+      "Generated-output churn, porcelain status preservation and unexpected source paths have separate tests and diagnostics",
+      "Main evidence artifact 8813426047 binds dirty=false to exact 033272f1",
+      "Production artifact 8813439775 deployed exact v4.8.8 with matching local/mounted backup hashes",
+      "Receipt runs 30684599147 and 30684599145 reach the explicit missing-private-key boundary"
     ],
     "artifacts": [
       "src/evidence/source-revision.ts",
