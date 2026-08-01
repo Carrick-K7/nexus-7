@@ -6,7 +6,7 @@
     "trigger": "full-release-completion-audit",
     "triggerReason": "A clean release-level audit passed every implementation gate but the evidence generator misclassified the deterministic v4.5 and v4.6 verification reports as unexpected source changes.",
     "action": "Complete the exact release-output inventory, make every rename/copy dirty, and add an explicit requires-external-verification state so unsigned CI artifacts cannot imply completed Sigstore verification.",
-    "outcome": "The first exact candidate passed the complete hosted gate and produced clean source evidence; its unsigned PR manifest exposed the pre-attestation claim ambiguity now corrected. Final remote and production evidence remain pending until the amended candidate executes.",
+    "outcome": "Final PR and main gates passed 283/283 tests with real PostgreSQL, 28/28 browser/axe, exact replication, isolated evaluation and clean source evidence. GitHub/Sigstore bound the exact main revision; the immutable production release settled natural Turn 323 on time with replay, conservation and safety intact. Annotated v4.8.11 is the completed software baseline; governed receipt ingestion and the other external trust lanes remain honestly pending.",
     "metrics": [
       {
         "label": "Declared release outputs incorrectly reported as source changes",
