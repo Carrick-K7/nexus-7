@@ -5,10 +5,22 @@ import {
 } from "vitest";
 import {
   hasSourceChanges,
+  normalizeGitPorcelainOutput,
   unexpectedSourceChanges,
 } from "./source-revision";
 
 describe("source revision cleanliness", () => {
+  it("preserves the leading porcelain status column", () => {
+    expect(
+      normalizeGitPorcelainOutput(
+        " M public/data/iteration-manifests.json\n",
+      ),
+    ).toBe(" M public/data/iteration-manifests.json");
+    expect(normalizeGitPorcelainOutput("?? new-file.ts\r\n")).toBe(
+      "?? new-file.ts",
+    );
+  });
+
   it("ignores only declared generated release outputs", () => {
     expect(hasSourceChanges("")).toBe(false);
     expect(

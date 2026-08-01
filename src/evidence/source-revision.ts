@@ -17,6 +17,12 @@ function normalizePorcelainPath(value: string): string {
   return path;
 }
 
+export function normalizeGitPorcelainOutput(
+  output: string,
+): string {
+  return output.replace(/(?:\r?\n)+$/, "");
+}
+
 export function hasSourceChanges(
   porcelainStatus: string,
 ): boolean {

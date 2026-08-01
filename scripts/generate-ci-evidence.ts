@@ -7,6 +7,7 @@ import {
 } from "../src/evidence/ci-evidence";
 import {
   hasSourceChanges,
+  normalizeGitPorcelainOutput,
   unexpectedSourceChanges,
 } from "../src/evidence/source-revision";
 
@@ -18,6 +19,23 @@ function git(argumentsList: string[], fallback: string): string {
     }).trim();
   } catch {
     return fallback;
+  }
+}
+
+function gitPorcelain(): string {
+  try {
+    return normalizeGitPorcelainOutput(
+      execFileSync(
+        "git",
+        ["status", "--porcelain=v1", "--untracked-files=all"],
+        {
+          encoding: "utf8",
+          stdio: ["ignore", "pipe", "ignore"],
+        },
+      ),
+    );
+  } catch {
+    return "dirty";
   }
 }
 
@@ -91,10 +109,7 @@ async function main(): Promise<void> {
     // The closed-loop report binds this manifest. Hashing that report here
     // would make the two signed artifacts recursively invalidate each other.
   ];
-  const porcelainStatus = git(
-    ["status", "--porcelain=v1", "--untracked-files=all"],
-    "dirty",
-  );
+  const porcelainStatus = gitPorcelain();
   const unexpectedChanges = unexpectedSourceChanges(porcelainStatus);
   console.log(
     JSON.stringify({

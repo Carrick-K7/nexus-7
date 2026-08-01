@@ -25,6 +25,8 @@ list before signing, and a failed Git query remains an explicit
 
 Receipt signing, OIDC ingestion and trust-lane promotion remain separate. This
 change cannot create a receipt, supply a secret, or turn a pending lane green.
+Git porcelain normalization removes trailing line endings only; it must retain
+the leading status column on the first row.
 
 ## Consequences
 
