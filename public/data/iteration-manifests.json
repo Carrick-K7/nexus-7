@@ -1,5 +1,46 @@
 [
   {
+    "id": "iteration-v4.8.10",
+    "version": "4.8.10",
+    "date": "2026-08-01",
+    "trigger": "production-observatory-scale-audit",
+    "triggerReason": "The v4.8.9 production browser audit exposed a 0–100 relationship score rendered by a 0–1 percent formatter and a backup card whose headline omitted stale backup evidence.",
+    "action": "Normalize relationship trust at the v2 observatory boundary, advance the formula version, and make backup freshness, age, restore, encryption and off-host status explicit in both languages.",
+    "outcome": "The targeted observatory projection test, zero-warning lint, production build and 28/28 Chromium plus axe scenarios pass locally. Exact remote and production evidence remain pending until the committed candidate executes.",
+    "metrics": [
+      {
+        "label": "Current relationship signal rendered above 100%",
+        "before": 1,
+        "after": 0
+      },
+      {
+        "label": "Backup evidence dimensions visible in the headline card",
+        "before": 3,
+        "after": 5
+      },
+      {
+        "label": "City settlement fields changed",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "Relationship score 62 projects as rate 0.62",
+      "Formula version advances to human-observatory-formulas-2.2.0",
+      "V1 compatibility retains the historical 0–100 score",
+      "Stale backup evidence makes the composite card Not met",
+      "English and Chinese labels expose backup freshness"
+    ],
+    "artifacts": [
+      "src/symbiosis/observatory.ts",
+      "src/symbiosis/observatory.test.ts",
+      "src/components/symbiosis/HumanObservatory.tsx",
+      "e2e/nexus.spec.ts",
+      "docs/adr/0038-normalize-observatory-evidence-scales.md"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.8.9",
     "version": "4.8.9",
     "date": "2026-08-01",
@@ -2132,6 +2173,17 @@
       "docs/adr/0001-deterministic-simulation-core.md"
     ],
     "source": "manifest"
+  },
+  {
+    "id": "384650a1",
+    "version": "unreleased",
+    "date": "2026-08-01",
+    "trigger": "bug",
+    "triggerReason": "fix: normalize human observatory evidence scales",
+    "action": "fix: normalize human observatory evidence scales",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
   },
   {
     "id": "c7d1b3f6",
