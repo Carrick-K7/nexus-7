@@ -6,7 +6,7 @@
     "trigger": "production-observatory-scale-audit",
     "triggerReason": "The v4.8.9 production browser audit exposed a 0–100 relationship score rendered by a 0–1 percent formatter and a backup card whose headline omitted stale backup evidence.",
     "action": "Normalize relationship trust at the v2 observatory boundary, advance the formula version, and make backup freshness, age, restore, encryption and off-host status explicit in both languages.",
-    "outcome": "The targeted observatory projection test, zero-warning lint, production build and 28/28 Chromium plus axe scenarios pass locally. Exact remote and production evidence remain pending until the committed candidate executes.",
+    "outcome": "The targeted projection test, zero-warning lint, production build and 28/28 Chromium plus axe scenarios pass locally. GitHub quality, independent replication, clean-source Sigstore attestation, automatic production deployment and real 390px bilingual browser verification pass at exact revision 6184d4f0e2b996dd539553f74acbccfd2ede69fb.",
     "metrics": [
       {
         "label": "Current relationship signal rendered above 100%",
