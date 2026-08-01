@@ -2,7 +2,7 @@
 
 > Date: 2026-08-01
 >
-> Status: v4.8.11 Release Evidence Identity Closure candidate; v4.8.10 deployed;
+> Status: v4.8.11 Release Evidence Identity Closure deployed and tagged;
 > GitHub/Sigstore provenance present; signed receipt ingestion, duration,
 > off-host restore and live-provider evidence pending
 
@@ -588,6 +588,15 @@ attestation steps were skipped while the provider field alone read
 `attestationState=requires-external-verification`; local evidence uses
 `not-applicable`, and the external verifier remains the only path to a signed
 receipt.
+
+Final PR run `30690123823` and main run `30690561015` passed the amended exact
+revision; main produced clean evidence artifact `8815647779`, immutable release
+artifact `8815663506`, and Sigstore attestations `38310421` / `38310423`.
+Independent replication run `30690561002` added attestation `38309973` for the
+same bundle. Production serves `6bb51b54bd58aae8afc58a83ecf0c1e28ace9a96`.
+Turn 323 settled naturally with 349 ms lag, exact replay and conservation,
+zero coercive actions and zero severe escapes. Annotated Tag `v4.8.11` points
+to that merge revision; the external application receipt remains pending.
 
 ## Provider and persistence gates
 

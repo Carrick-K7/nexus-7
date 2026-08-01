@@ -255,11 +255,17 @@ not state that Sigstore verification was still external. The exact paths are
 classified as derived output, all rename/copy records fail closed, and CI
 manifests explicitly require external verification before any receipt.
 
+Annotated `v4.8.11` is the completed software baseline. Main CI, independent
+replication, Sigstore verification, immutable production delivery and the
+first natural revision-bound Turn all passed; no city settlement changed.
+
 ## Next objectives
 
-No new city feature milestone is scheduled. Operate v4.8 until all five trust
-lanes are independently verified; then reassess with the human constitutional
-governor before adding population, geography or mechanisms.
+No new city feature milestone is scheduled. The handoff order is governed
+receipt ingestion, distinct-host recovery, read-only live DeepSeek shadow, and
+90 elapsed production days. These are evidence operations, not reasons to add
+features. Reassess with the human constitutional governor only after all five
+lanes are independently verified.
 
 ## Explicit non-goals
 

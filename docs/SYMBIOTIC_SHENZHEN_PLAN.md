@@ -2,8 +2,8 @@
 
 > 更新：2026-07-30
 >
-> 状态：v4.8.11 Release Evidence Identity Closure 候选；v4.8.10 已部署；
-> 本地/托管复现与 GitHub/Sigstore provenance 已验证；
+> 状态：v4.8.11 Release Evidence Identity Closure 已部署并标记；
+> 本地/托管复现、GitHub/Sigstore provenance 与生产 Turn 已验证；
 > 签名回执回灌 / 真实 90 天 / off-host restore / live provider pending
 
 ## 目标与研究边界
@@ -115,8 +115,13 @@ stale；没有加权总分。本地结果、参考 Provider 和加速 Turn 均�
 本地门禁、生产部署、CI/Sigstore、外部 PostgreSQL 恢复和 live provider 是彼此
 独立的证据，必须分别标注，不能互相推断。
 
-## 后续停止条件
+## 后续停止条件与交接
 
 v4.6 完成后默认不继续增加居民规模、社会机制或地理范围。后续优先级是可移植
 实验包、预注册假设、独立引擎/种子复现、外部签名和异地恢复。任何新机制仍只
 面向软件居民。
+
+v4.8.11 后的软件功能路线视为闭合。后续开发依次服务于：人类密钥签发并回灌
+精确 revision 回执、不同主机 PostgreSQL 恢复、只读 live DeepSeek shadow、
+90 个自然生产日；不得用新面板或本地证明替代这些外部事实。完成五条证据后，
+再由人类宪法参与者决定是否开启下一城市机制版本。
