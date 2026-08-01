@@ -1,9 +1,9 @@
 {
   "schemaVersion": 1,
-  "generatedAt": "2026-08-01T07:19:17.778Z",
+  "generatedAt": "2026-08-01T07:37:39.233Z",
   "source": {
     "repository": "https://github.com/Carrick-K7/nexus-7.git",
-    "commitSha": "c97f2c1cd5a8ac34ec260bc0d04c0a68250ad482",
+    "commitSha": "6d22a8d43c9c2054f8af9ae20788559ba6e2f06e",
     "ref": "codex/ai-only-symbiotic-shenzhen-v4",
     "workflow": "local",
     "runId": "local",
@@ -163,7 +163,8 @@
   "provenance": {
     "trustLevel": "local",
     "provider": "local",
-    "attestationSubject": "public/data/ci-evidence.json"
+    "attestationSubject": "public/data/ci-evidence.json",
+    "attestationState": "not-applicable"
   },
-  "fingerprint": "e26d88275e54b93635d40f8b85712b1bf9541bc4d205af5fc14e5d5e6a44dfa3"
+  "fingerprint": "2940b4213816b8b1d3b96c0bbb222b891896c165dcd3cf37e19c060d88c36a2e"
 }
