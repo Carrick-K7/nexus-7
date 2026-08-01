@@ -14,6 +14,7 @@
     "recovery:evidence": "tsx scripts/record-symbiosis-recovery-evidence.ts",
     "ops:recovery-drill": "tsx scripts/run-recovery-drill.ts",
     "ops:deployment-drill": "tsx scripts/run-deployment-drill.ts",
+    "ops:receipt-drill": "tsx scripts/run-receipt-drill.ts",
     "verify:deployment-contract": "tsx scripts/run-deployment-conformance.ts",
     "verify:operations": "tsx scripts/run-operational-acceptance.ts",
     "verify:city": "tsx scripts/run-city-verification.ts",

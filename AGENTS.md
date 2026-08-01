@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.11 证据身份闭合
+> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.12 回执生命周期闭环
 
 ## 定义与边界
 
@@ -27,6 +27,9 @@ v4 运行可重放、可审计的模拟深圳，研究人、AI 和机器人的�
 
 - `main` 经 `.github/workflows/ci.yml` 验证、构建并自动发布到
   `nexus7.carrick7.com`；专用 SSH key 只能提交 `deploy <40-char SHA>` 及归档。
+- 开发直接落在 `main`，不留长期特性分支；push 前本地 `npm run check` 必须
+  全绿。CI quality 是部署唯一闸门：失败的 push 不部署，线上保持上一绿
+  commit，下一绿 commit 恢复。
 - 主机校验/备份/迁移后原子切换 release，重启 Web/worker 并检查健康。
 - 必须保留 `nexus7-postgres-data`；共享设施归 `Carrick-K7/carrick-ops`。
 - 不得输出环境、数据库 URL、密码、模型密钥或签名材料；发布后核验 exact
@@ -53,6 +56,8 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
 v4.8.11 已发布：补齐派生输出和预签名证据身份语义。
+v4.8.12 已发布：本地回执演练 + ingestion 客户端 reference-fake 契约测试；
+开发已切换为主线直开。
 城市仍为 200 人、36 AI、24 机器人，无真人或私人输入。
 
 ## 模块边界
@@ -104,11 +109,14 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
 | v4.8.11 发布/证据 | 原子 release；clean Sigstore；28/28 browser+axe |
+| v4.8.12 回执演练 | 8/8 drill；4/4 客户端契约；主线直开部署 |
 
 ## 外部边界
 
-- `6bb51b5` (v4.8.11) 已部署；Turn 323 按时且绑定 exact revision；390 px
-  overflow/console/axe 0，API 200、写 405，PG 原卷未替换。
+- `3eb4afd` (v4.8.11 + handoff 文档) 已部署；Turn 324 按时且绑定 exact
+  revision；390 px overflow/console/axe 0，API 200、写 405，PG 原卷未替换。
 - Trust 1/5；DeepSeek 调用/Token/费用 0；回执 follower 缺密钥时成功报告
   pending、签发 skip、产物 0，配置后仍 fail closed。
 - 签名回执/回灌待人类密钥与 OIDC；live DeepSeek、90 天和 off-host 恢复待验证。
+- `npm run ops:receipt-drill` 本地 8/8：签发→验证→幂等回灌→故障拒绝；
+  `src/governance/ingest-client.test.ts` 4/4：真实 HTTP reference fake。

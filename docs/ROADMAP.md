@@ -259,6 +259,13 @@ Annotated `v4.8.11` is the completed software baseline. Main CI, independent
 replication, Sigstore verification, immutable production delivery and the
 first natural revision-bound Turn all passed; no city settlement changed.
 
+v4.8.12 moves development to `main` directly and closes the local receipt
+gap: `npm run ops:receipt-drill` exercises issue, verify, idempotent ingest
+and five fail-closed rejections with an ephemeral key, and the ingestion
+client is covered by a real-HTTP reference-fake contract suite. Receipt
+signing and OIDC ingestion still require the human key and a distinct
+authenticated control-plane route; no city settlement changed.
+
 ## Next objectives
 
 No new city feature milestone is scheduled. The handoff order is governed

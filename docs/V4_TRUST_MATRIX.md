@@ -225,3 +225,43 @@ always expose both paths even when each path is otherwise declared generated.
 CI manifests now also say `requires-external-verification`: naming Sigstore as
 the provider does not claim that a PR artifact was attested. Only independent
 verification and the signed receipt can advance a Trust lane.
+
+## v4.8.12 receipt-lifecycle closure
+
+The governed receipt path is now exercised as a local machine drill before
+any human key configuration:
+
+```bash
+npm run ops:receipt-drill
+```
+
+The drill signs the committed CI-evidence artifact with an ephemeral Ed25519
+key (memory only), verifies signature, repository, signer allowlist and
+lifetime, ingests the receipt twice through the real
+`EvidenceRegistryService` against an in-memory repository to prove
+idempotency, and asserts five fail-closed rejections (tampered signature,
+untrusted workflow, expired receipt, wrong repository, viewer caller) plus
+envelope-schema rejection. Its machine report is written mode-0600 to
+`.artifacts/receipt-drill.json` and is a mechanical drill artifact, never a
+governed receipt.
+
+The ingestion client contract is covered by a real HTTP reference fake:
+`src/governance/ingest-client.test.ts` runs the actual
+`scripts/ingest-remote-evidence.ts` subprocess against an ephemeral
+governance server and asserts the OIDC bearer path, registry rejection,
+OIDC failure and malformed-receipt failure.
+
+Operator receipt sequence (human-hosted key and registry):
+
+1. On a human-controlled machine, generate the Ed25519 pair and set the
+   GitHub Actions secret exactly as documented above.
+2. Install the public Base64 value and the signed receipt file on the
+   production host (mode 0600) and set `SYMBIOSIS_REPLICATION_RECEIPT_FILE`.
+3. Configure the separate authenticated governance route
+   (`NEXUS_GOVERNANCE_BASE_URL`, `NEXUS_OIDC_AUDIENCE` and the GitHub OIDC
+   provider entry from `.env.example`) only on a distinct control plane;
+   the public observatory rejects POST.
+4. Restart web and verify `/api/observatory/v2/trust`: the lane binds the
+   receipt subject digest, signer workflow, revision and non-expired time.
+5. Re-run `npm run ops:receipt-drill` after configuration; it must stay
+   green because it never reads production keys or storage.

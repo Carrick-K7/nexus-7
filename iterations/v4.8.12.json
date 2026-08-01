@@ -1,0 +1,47 @@
+{
+  "id": "iteration-v4.8.12",
+  "version": "4.8.12",
+  "date": "2026-08-01",
+  "trigger": "governed-receipt-lifecycle-drill",
+  "triggerReason": "The governed receipt ingestion path existed end to end but had no local machine drill, and the ingestion client had no automated contract test against a reference fake.",
+  "action": "Develop directly on main, add a local receipt-lifecycle drill and a real-HTTP reference-fake contract suite for the ingestion client, and publish the operator runbook for human key signing and OIDC receipt ingestion.",
+  "outcome": "The repository moved to direct-main development with deploy-on-green CI as the only release gate; the merged handoff head was deployed and verified. The receipt drill signs the committed CI evidence with an ephemeral key, verifies it, ingests it idempotently through the real registry service and rejects tampering, untrusted workflows, expiry, wrong repositories and viewer callers. The client contract suite runs the real ingestion script against an ephemeral governance server and asserts OIDC success, registry rejection, OIDC failure and malformed receipt failure. Human-configured receipt signing and OIDC ingestion remain external evidence operations, pending the operator's key and control-plane route.",
+  "metrics": [
+    {
+      "label": "Local receipt lifecycle drill steps",
+      "before": 0,
+      "after": 8
+    },
+    {
+      "label": "Ingestion client contract tests against a reference fake",
+      "before": 0,
+      "after": 4
+    },
+    {
+      "label": "City settlement fields changed",
+      "before": 0,
+      "after": 0
+    },
+    {
+      "label": "Trust lanes verified",
+      "before": 1,
+      "after": 1
+    }
+  ],
+  "evidence": [
+    "scripts/run-receipt-drill.ts passes 8/8 with .artifacts/receipt-drill.json mode 0600",
+    "src/governance/ingest-client.test.ts passes 4/4 against a real HTTP reference fake",
+    "Receipt envelope, signer allowlist, lifetime and repository checks fail closed",
+    "Memory and PostgreSQL ingestion remain idempotent on the same runId and subject digest",
+    "No city mechanism, UI panel, denominator or trust claim changed"
+  ],
+  "artifacts": [
+    "scripts/run-receipt-drill.ts",
+    "src/governance/ingest-client.test.ts",
+    "docs/V4_TRUST_MATRIX.md",
+    "docs/V4_OPERATIONS.md",
+    "AGENTS.md",
+    "README.md",
+    "docs/ROADMAP.md"
+  ]
+}

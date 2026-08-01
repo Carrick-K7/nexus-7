@@ -127,6 +127,15 @@ as exact derived outputs. Unknown paths and every source, configuration,
 documentation, rename or copy change remain fail-closed. CI manifests also
 state that Sigstore still requires independent external verification.
 
+v4.8.12 adds the local governed-receipt lifecycle drill
+(`npm run ops:receipt-drill`): it signs the committed CI evidence with an
+ephemeral Ed25519 key, verifies it, ingests it idempotently through the real
+governance registry and asserts five fail-closed rejections plus envelope
+validation. The ingestion client now also has a real-HTTP reference-fake
+contract suite. The operator runbook for human receipt signing and OIDC
+ingestion is published; those lanes stay pending until the human configures
+the key and control-plane route.
+
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy
 views use the denser cyberpunk visual layer.

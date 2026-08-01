@@ -124,6 +124,11 @@ gate still requires the resulting envelope to be independently attested and
 bound by a fresh signed receipt; a flag or host claim alone cannot pass.
 See [V4_TRUST_MATRIX.md](V4_TRUST_MATRIX.md) for the GitHub-hosted drill.
 
+The governed receipt lifecycle can be exercised locally at any time with
+`npm run ops:receipt-drill`; it signs the committed CI evidence with an
+ephemeral key, proves idempotent ingestion and fail-closed rejections, and
+never reads production keys, storage or the network.
+
 A release must build and
 test from a clean commit, migrate a staging/restore database, stop the worker,
 deploy the exact artifact, start web then worker, and compare the first
