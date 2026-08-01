@@ -2,7 +2,7 @@
 
 > Date: 2026-08-01
 >
-> Status: v4.8.11 Complete Release-Output Inventory candidate; v4.8.10 deployed;
+> Status: v4.8.11 Release Evidence Identity Closure candidate; v4.8.10 deployed;
 > GitHub/Sigstore provenance present; signed receipt ingestion, duration,
 > off-host restore and live-provider evidence pending
 
@@ -578,6 +578,16 @@ are declared outputs. Unknown output, source, configuration, documentation and
 Git-query failure remain fail-closed. The fix changes no city state or
 Trust-lane result; remote and production evidence require the committed
 candidate.
+
+PR run `30689556012` then passed the complete 12m18s hosted gate for exact
+candidate `4873ec2`, including real PostgreSQL, 28/28 Chromium/axe, both v4.7
+reproductions and the isolated evaluator. Its downloaded manifest correctly
+reported `dirty=false`, but also exposed a separate ambiguity: the PR
+attestation steps were skipped while the provider field alone read
+`github-actions-sigstore`. The manifest contract now adds
+`attestationState=requires-external-verification`; local evidence uses
+`not-applicable`, and the external verifier remains the only path to a signed
+receipt.
 
 ## Provider and persistence gates
 

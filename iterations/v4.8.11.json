@@ -4,8 +4,8 @@
   "date": "2026-08-01",
   "trigger": "full-release-completion-audit",
   "triggerReason": "A clean release-level audit passed every implementation gate but the evidence generator misclassified the deterministic v4.5 and v4.6 verification reports as unexpected source changes.",
-  "action": "Add only the two explicitly regenerated verification report paths to the exact release-output inventory, and make every rename or copy dirty even when both ends are declared outputs.",
-  "outcome": "The five-case targeted cleanliness contract, zero-warning lint and TypeScript pass locally. Complete remote and production evidence remain pending until the committed candidate executes.",
+  "action": "Complete the exact release-output inventory, make every rename/copy dirty, and add an explicit requires-external-verification state so unsigned CI artifacts cannot imply completed Sigstore verification.",
+  "outcome": "The first exact candidate passed the complete hosted gate and produced clean source evidence; its unsigned PR manifest exposed the pre-attestation claim ambiguity now corrected. Final remote and production evidence remain pending until the amended candidate executes.",
   "metrics": [
     {
       "label": "Declared release outputs incorrectly reported as source changes",
@@ -21,17 +21,26 @@
       "label": "City settlement fields changed",
       "before": 0,
       "after": 0
+    },
+    {
+      "label": "Unsigned CI manifests with explicit verification-required state",
+      "before": 0,
+      "after": 1
     }
   ],
   "evidence": [
     "v4.5 and v4.6 reports are exact named derived outputs",
     "No public/data wildcard is trusted",
     "Source, documentation, configuration, renames and copies remain dirty",
-    "Git status failure remains explicit and fail closed"
+    "Git status failure remains explicit and fail closed",
+    "Sigstore provider identity does not self-assert completed attestation"
   ],
   "artifacts": [
     "src/evidence/source-revision.ts",
     "src/evidence/source-revision.test.ts",
+    "src/evidence/ci-evidence.ts",
+    "src/evidence/ci-evidence.test.ts",
+    "scripts/verify-github-attestation.ts",
     "docs/adr/0039-complete-release-output-inventory.md"
   ]
 }

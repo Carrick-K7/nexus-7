@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.11 证据输出清单
+> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.11 证据身份闭合
 
 ## 定义与边界
 
@@ -52,7 +52,7 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
-v4.8.10 已发布；v4.8.11 补齐两个确定性验证报告的派生输出声明。
+v4.8.10 已发布；v4.8.11 补齐派生输出和预签名证据身份语义。
 城市仍为 200 人、36 AI、24 机器人，无真人或私人输入。
 
 ## 模块边界
@@ -104,7 +104,7 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
 | v4.8.10 发布/证据 | 原子 release；clean Sigstore；28/28 browser+axe |
-| v4.8.11 候选 | exact 生成清单；未知路径仍 fail closed |
+| v4.8.11 候选 | exact 输出；预签名明确；未知路径 fail closed |
 
 ## 外部边界
 

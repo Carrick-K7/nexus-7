@@ -222,3 +222,6 @@ paths are declared derived outputs so clean source is not misclassified.
 There is no wildcard: source, documentation, configuration, unknown outputs,
 renames, copies and Git-query failure still fail closed. Rename/copy records
 always expose both paths even when each path is otherwise declared generated.
+CI manifests now also say `requires-external-verification`: naming Sigstore as
+the provider does not claim that a PR artifact was attested. Only independent
+verification and the signed receipt can advance a Trust lane.

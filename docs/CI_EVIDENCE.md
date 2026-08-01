@@ -26,6 +26,13 @@ configuration, renames and every unknown untracked path still set
 Rename and copy statuses always expose both paths, including moves entirely
 within the declared output inventory.
 
+A GitHub-hosted manifest records
+`attestationState: requires-external-verification`. The provider field names
+the expected verification mechanism; it is not a self-asserted attestation.
+Pull-request artifacts therefore remain explicitly unverified. Only a
+successful external `gh attestation verify` followed by a valid signed receipt
+can promote release trust. Local manifests use `not-applicable`.
+
 The closed-loop report is not hashed into this manifest because that report
 binds the manifest fingerprint. Release automation runs certification once as
 a gate, generates the manifest, then runs certification again to create the

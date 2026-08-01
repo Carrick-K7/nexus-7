@@ -42,6 +42,9 @@ export interface CiEvidenceManifest {
     trustLevel: "local" | "external-ci";
     provider: "local" | "github-actions-sigstore";
     attestationSubject: string;
+    attestationState?:
+      | "not-applicable"
+      | "requires-external-verification";
     verificationCommand?: string;
   };
   fingerprint: string;
@@ -106,6 +109,18 @@ export function fingerprintCiEvidence(
   return sha256(Buffer.from(stableStringify(manifest), "utf8"));
 }
 
+export function requiresExternalAttestationVerification(
+  manifest: CiEvidenceManifest,
+): boolean {
+  return (
+    manifest.provenance.trustLevel === "external-ci" &&
+    manifest.provenance.provider === "github-actions-sigstore" &&
+    (manifest.provenance.attestationState === undefined ||
+      manifest.provenance.attestationState ===
+        "requires-external-verification")
+  );
+}
+
 export function createCiEvidenceManifest(options: {
   root: string;
   generatedAt?: Date;
@@ -133,6 +148,8 @@ export function createCiEvidenceManifest(options: {
           trustLevel: "external-ci" as const,
           provider: "github-actions-sigstore" as const,
           attestationSubject: "public/data/ci-evidence.json",
+          attestationState:
+            "requires-external-verification" as const,
           verificationCommand:
             "gh attestation verify public/data/ci-evidence.json --repo OWNER/REPO",
         }
@@ -140,6 +157,7 @@ export function createCiEvidenceManifest(options: {
           trustLevel: "local" as const,
           provider: "local" as const,
           attestationSubject: "public/data/ci-evidence.json",
+          attestationState: "not-applicable" as const,
         },
   };
   return {
