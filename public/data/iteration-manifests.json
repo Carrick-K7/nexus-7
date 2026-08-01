@@ -1,12 +1,59 @@
 [
   {
+    "id": "iteration-v4.8.11",
+    "version": "4.8.11",
+    "date": "2026-08-01",
+    "trigger": "full-release-completion-audit",
+    "triggerReason": "A clean release-level audit passed every implementation gate but the evidence generator misclassified the deterministic v4.5 and v4.6 verification reports as unexpected source changes.",
+    "action": "Complete the exact release-output inventory, make every rename/copy dirty, and add an explicit requires-external-verification state so unsigned CI artifacts cannot imply completed Sigstore verification.",
+    "outcome": "The first exact candidate passed the complete hosted gate and produced clean source evidence; its unsigned PR manifest exposed the pre-attestation claim ambiguity now corrected. Final remote and production evidence remain pending until the amended candidate executes.",
+    "metrics": [
+      {
+        "label": "Declared release outputs incorrectly reported as source changes",
+        "before": 2,
+        "after": 0
+      },
+      {
+        "label": "Unknown output paths rejected",
+        "before": 1,
+        "after": 1
+      },
+      {
+        "label": "City settlement fields changed",
+        "before": 0,
+        "after": 0
+      },
+      {
+        "label": "Unsigned CI manifests with explicit verification-required state",
+        "before": 0,
+        "after": 1
+      }
+    ],
+    "evidence": [
+      "v4.5 and v4.6 reports are exact named derived outputs",
+      "No public/data wildcard is trusted",
+      "Source, documentation, configuration, renames and copies remain dirty",
+      "Git status failure remains explicit and fail closed",
+      "Sigstore provider identity does not self-assert completed attestation"
+    ],
+    "artifacts": [
+      "src/evidence/source-revision.ts",
+      "src/evidence/source-revision.test.ts",
+      "src/evidence/ci-evidence.ts",
+      "src/evidence/ci-evidence.test.ts",
+      "scripts/verify-github-attestation.ts",
+      "docs/adr/0039-complete-release-output-inventory.md"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.8.10",
     "version": "4.8.10",
     "date": "2026-08-01",
     "trigger": "production-observatory-scale-audit",
     "triggerReason": "The v4.8.9 production browser audit exposed a 0–100 relationship score rendered by a 0–1 percent formatter and a backup card whose headline omitted stale backup evidence.",
     "action": "Normalize relationship trust at the v2 observatory boundary, advance the formula version, and make backup freshness, age, restore, encryption and off-host status explicit in both languages.",
-    "outcome": "The targeted observatory projection test, zero-warning lint, production build and 28/28 Chromium plus axe scenarios pass locally. Exact remote and production evidence remain pending until the committed candidate executes.",
+    "outcome": "The targeted projection test, zero-warning lint, production build and 28/28 Chromium plus axe scenarios pass locally. GitHub quality, independent replication, clean-source Sigstore attestation, automatic production deployment and real 390px bilingual browser verification pass at exact revision 6184d4f0e2b996dd539553f74acbccfd2ede69fb.",
     "metrics": [
       {
         "label": "Current relationship signal rendered above 100%",
@@ -2173,6 +2220,28 @@
       "docs/adr/0001-deterministic-simulation-core.md"
     ],
     "source": "manifest"
+  },
+  {
+    "id": "6d22a8d4",
+    "version": "unreleased",
+    "date": "2026-08-01",
+    "trigger": "bug",
+    "triggerReason": "fix: make pre-attestation evidence state explicit",
+    "action": "fix: make pre-attestation evidence state explicit",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "c97f2c1c",
+    "version": "unreleased",
+    "date": "2026-08-01",
+    "trigger": "bug",
+    "triggerReason": "fix: complete release output source identity",
+    "action": "fix: complete release output source identity",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
   },
   {
     "id": "384650a1",

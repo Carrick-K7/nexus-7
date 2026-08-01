@@ -11,10 +11,14 @@ import {
   createExternalAttestationReceipt,
   sha256FileContent,
 } from "../src/evidence/attestation-receipt";
-import type {
-  CiEvidenceManifest,
+import {
+  requiresExternalAttestationVerification,
+  type CiEvidenceManifest,
 } from "../src/evidence/ci-evidence";
-
+/*
+ * The manifest names the expected verifier but never self-asserts that the
+ * attestation exists. This process supplies that independent verification.
+ */
 interface GithubAttestationVerification {
   verificationResult?: {
     statement?: {
@@ -47,8 +51,7 @@ async function main(): Promise<void> {
     evidenceContent.toString("utf8"),
   ) as CiEvidenceManifest;
   if (
-    manifest.provenance.trustLevel !== "external-ci" ||
-    manifest.provenance.provider !== "github-actions-sigstore" ||
+    !requiresExternalAttestationVerification(manifest) ||
     manifest.source.dirty
   ) {
     throw new Error(

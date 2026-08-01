@@ -7,6 +7,7 @@ import { afterEach, describe, expect, it } from "vitest";
 import {
   createCiEvidenceManifest,
   fingerprintCiEvidence,
+  requiresExternalAttestationVerification,
 } from "./ci-evidence";
 
 const temporaryDirectories: string[] = [];
@@ -50,7 +51,43 @@ describe("CI evidence manifest", () => {
       ]),
     );
     expect(manifest.provenance.provider).toBe("github-actions-sigstore");
+    expect(manifest.provenance.attestationState).toBe(
+      "requires-external-verification",
+    );
     expect(manifest.artifacts[0].bytes).toBe(16);
+    expect(requiresExternalAttestationVerification(manifest)).toBe(true);
     expect(fingerprint).toBe(fingerprintCiEvidence(unsigned));
+
+    const legacy = structuredClone(manifest);
+    delete legacy.provenance.attestationState;
+    expect(requiresExternalAttestationVerification(legacy)).toBe(true);
+  });
+
+  it("does not imply that a local manifest can be attested", () => {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "nexus-evidence-"));
+    temporaryDirectories.push(root);
+    fs.writeFileSync(path.join(root, "report.json"), '{"passed":true}\n');
+    const manifest = createCiEvidenceManifest({
+      root,
+      generatedAt: new Date("2026-07-16T12:00:00.000Z"),
+      source: {
+        repository: "local/nexus-7",
+        commitSha: "abc123",
+        ref: "local",
+        workflow: "local",
+        runId: "local",
+        runAttempt: "1",
+        actor: "developer",
+        dirty: false,
+      },
+      artifactPaths: ["report.json"],
+    });
+
+    expect(manifest.provenance).toMatchObject({
+      trustLevel: "local",
+      provider: "local",
+      attestationState: "not-applicable",
+    });
+    expect(requiresExternalAttestationVerification(manifest)).toBe(false);
   });
 });

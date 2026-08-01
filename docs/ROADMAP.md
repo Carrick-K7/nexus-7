@@ -249,6 +249,12 @@ browser audit. Relationship trust is normalized before percent formatting,
 and stale backup evidence can no longer hide behind a successful same-host
 restore. Both corrections are formula/UI changes, not city mutations.
 
+v4.8.11 closes release-evidence identity after a clean local audit found two
+missing deterministic report paths and a PR artifact whose provider field did
+not state that Sigstore verification was still external. The exact paths are
+classified as derived output, all rename/copy records fail closed, and CI
+manifests explicitly require external verification before any receipt.
+
 ## Next objectives
 
 No new city feature milestone is scheduled. Operate v4.8 until all five trust

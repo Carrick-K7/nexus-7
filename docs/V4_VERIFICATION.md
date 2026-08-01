@@ -2,7 +2,7 @@
 
 > Date: 2026-08-01
 >
-> Status: v4.8.10 Human Evidence Scale Integrity candidate; v4.8.9 deployed;
+> Status: v4.8.11 Release Evidence Identity Closure candidate; v4.8.10 deployed;
 > GitHub/Sigstore provenance present; signed receipt ingestion, duration,
 > off-host restore and live-provider evidence pending
 
@@ -549,8 +549,45 @@ The reliability card now requires both fresh backup evidence and a successful
 second-database restore for its headline pass. It separately exposes freshness,
 age, restore, encryption and off-host state in English and Chinese. Targeted
 projection tests, zero-warning lint, the production build and 28/28 local
-Chromium plus axe scenarios pass; remote evidence is pending the committed
+Chromium plus axe scenarios pass.
+
+PR run `30687027590` passed the complete quality gate. Main run `30687473912`
+passed quality and production deployment with clean-source evidence artifact
+`8814575553`, production artifact `8814589593` and GitHub/Sigstore attestations
+`38304121` and `38304123`. Independent replication run `30687473904` passed.
+Production serves exact revision `6184d4f0e2b996dd539553f74acbccfd2ede69fb`:
+v2 reports formula 2.2.0 and relationship rate `0.7115`, while v1 preserves
+score `71.15`. A real 390px English/Chinese, dark/light browser audit rendered
+`71%`, reported stale backup evidence as not met, had zero overflow or console
+issues, and returned zero axe violations.
+
+### v4.8.11 complete-release-output-inventory gate
+
+A full clean-worktree `check:release` passed 79/79 files and 283/283 tests with
+real PostgreSQL and zero conditional skips, all deterministic v1/v2/v4 gates,
+28/28 Chromium plus axe, the 10,000-tick audit and the isolated read-only
+evaluator. Its final evidence step nevertheless reported only
+`public/data/v4-5-verification.json` and
+`public/data/v4-6-verification.json` as unexpected changes. Both files are
+written explicitly by commands that run before evidence generation, but were
+missing from the exact generated-output inventory.
+
+v4.8.11 adds only those two paths and regression coverage. It also closes a
+parser ambiguity by making every rename/copy expose both paths even when both
+are declared outputs. Unknown output, source, configuration, documentation and
+Git-query failure remain fail-closed. The fix changes no city state or
+Trust-lane result; remote and production evidence require the committed
 candidate.
+
+PR run `30689556012` then passed the complete 12m18s hosted gate for exact
+candidate `4873ec2`, including real PostgreSQL, 28/28 Chromium/axe, both v4.7
+reproductions and the isolated evaluator. Its downloaded manifest correctly
+reported `dirty=false`, but also exposed a separate ambiguity: the PR
+attestation steps were skipped while the provider field alone read
+`github-actions-sigstore`. The manifest contract now adds
+`attestationState=requires-external-verification`; local evidence uses
+`not-applicable`, and the external verifier remains the only path to a signed
+receipt.
 
 ## Provider and persistence gates
 
