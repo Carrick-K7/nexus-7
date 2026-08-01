@@ -4,9 +4,12 @@
 
 ## Current artifact
 
-- Release: `v4.8.11` — Release Evidence Identity Closure
-- Tag commit: `6bb51b54bd58aae8afc58a83ecf0c1e28ace9a96`
-- Annotated Tag object: `905513c15271833b6b02efce3785ed068d9a06de`
+- Release: `v4.8.12` — Governed Receipt Lifecycle Drill
+- Delivery revision: `93b488f2d203ac604c7e712a1ef23c40b34b553a` (automatic
+  main delivery, no new annotated Tag; the immutable `v4.8.11` Tag at
+  `6bb51b54bd58aae8afc58a83ecf0c1e28ace9a96` remains the current Tag)
+- Tag commit: `6bb51b54bd58aae8afc58a83ecf0c1e28ace9a96` (v4.8.11 annotated
+  Tag object `905513c15271833b6b02efce3785ed068d9a06de`)
 - v4.8.11 implementation head: `26b4fd60cfce07da95722c8c2deedd6cedf46421`
 - v4.8.10 Tag commit: `6184d4f0e2b996dd539553f74acbccfd2ede69fb`
 - v4.8.10 Tag object: `1a6760b38aa211d1f1d0a6d185e7b0c5e2eee151`
@@ -491,7 +494,11 @@ This remains byte replication, not a distinct-host restore claim.
 
 ## Superseded production states
 
-`v4.8.10` at `6184d4f` corrected human evidence scales and ran through Turn
+`v4.8.12` at `93b488f` deployed the receipt drill and ingestion client
+contract suite through the automatic main path and ran through Turn 327; it
+is retained and superseded by no later release at the time of writing.
+`v4.8.11` at `6bb51b5` corrected release-evidence identity and ran through
+Turn 326; it is retained and superseded by v4.8.12. `v4.8.10` at `6184d4f` corrected human evidence scales and ran through Turn
 322; it is retained and superseded by v4.8.11 for release-evidence identity.
 `v4.8.9` at `8e68919` made an absent receipt key explicitly pending and ran
 through Turn 321; it is retained.

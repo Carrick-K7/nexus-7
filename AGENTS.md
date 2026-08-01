@@ -113,8 +113,10 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 
 ## 外部边界
 
+- `93b488f` (v4.8.12) 已部署；Turn 327 绑定 exact revision；回执演练
+  8/8、客户端契约 4/4，trust 1/5 无回归，API 200、写 405，PG 原卷未替换。
 - `3eb4afd` (v4.8.11 + handoff 文档) 已部署；Turn 324 按时且绑定 exact
-  revision；390 px overflow/console/axe 0，API 200、写 405，PG 原卷未替换。
+  revision；390 px overflow/console/axe 0，已由 v4.8.12 接替。
 - Trust 1/5；DeepSeek 调用/Token/费用 0；回执 follower 缺密钥时成功报告
   pending、签发 skip、产物 0，配置后仍 fail closed。
 - 签名回执/回灌待人类密钥与 OIDC；live DeepSeek、90 天和 off-host 恢复待验证。
