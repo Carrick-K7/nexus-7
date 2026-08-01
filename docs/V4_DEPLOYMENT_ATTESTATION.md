@@ -4,9 +4,12 @@
 
 ## Current artifact
 
-- Release: `v4.8.8` — Evidence Source Identity
-- Tag commit: `033272f11f92e2ff500941c5054a30a11976cf6d`
-- Annotated Tag object: `f694f2a31da20a8ab6cb521c4b57cd1185a549a2`
+- Release: `v4.8.9` — Pending Receipt Semantics
+- Tag commit: `8e68919555175dadfea2bc7970cf79c17cf669dd`
+- Annotated Tag object: `bba0e0bf05c265eb415be227e8d80578c0c29637`
+- v4.8.9 implementation commit: `c7d1b3f6413392241d934005d5c956826a309ac6`
+- v4.8.8 Tag commit: `033272f11f92e2ff500941c5054a30a11976cf6d`
+- v4.8.8 Tag object: `f694f2a31da20a8ab6cb521c4b57cd1185a549a2`
 - v4.8.8 implementation commit: `3284edaa32c41ff2b0c8dd1c24b0b83f83c96316`
 - v4.8.7 Tag commit: `fbd5b2726361fd61ed26999cfc8d52671a8db343`
 - v4.8.7 Tag object: `edb5b3cb7312e95f76d720a4a92892f344deb88f`
@@ -156,6 +159,23 @@ console issues. The matrix remains honestly 1/5: follower runs `30684599147`
 and `30684599145` now stop only because the human-controlled receipt private
 key is absent.
 
+The v4.8.9 main pipeline `30685738425` passed all quality and deployment gates.
+Verification artifact `8813978623` records `dirty=false`, exact revision
+`8e68919555175dadfea2bc7970cf79c17cf669dd` and fingerprint
+`2b82f21e1629ca2f83798fbc074df276526c95d9d216f9f2e64aef489c9e359d`.
+GitHub/Sigstore attestations `38300404` and `38300406` bind the evidence and
+portable replication bundle. Immutable production artifact `8813995328`
+activated release directory `8e6891955517`; both services are active with exit
+status 0 and zero restarts, and PostgreSQL retains its original named volume
+and 2026-07-23 container start time.
+
+Independent follower runs `30685811077`, `30686246144` and `30686246148` each
+completed their configuration job with `configured=false`, skipped issuance
+and uploaded zero receipt artifacts. This is a successful pending-state report,
+not external verification. Production root/Overview/Trust return 200 and Trust
+POST returns 405. English/Chinese reload, dark/light, exact revision, 390px
+containment, console 0 and axe 0/50 violations passed.
+
 ## Existing season and live Turn
 
 Migrations through `0012_richer_city_society.sql` ran idempotently while both
@@ -277,13 +297,18 @@ closures, resource and civic-credit conservation, zero coercive/forced paths,
 zero invalid proposals and zero severe escapes. All 260 residents had their
 basic needs satisfied; DeepSeek remained at zero calls, Tokens and cost.
 
-Production remains honestly `watch`: the observed window is 5.74 days,
-137/138 comparable settlements are on time, the one historical early-restart
+Turn 320 settled naturally under v4.8.8 at
+`2026-08-01T05:29:38.734Z`, on time with 546 ms lag, exact revision
+`033272f11f92e2ff500941c5054a30a11976cf6d` and fingerprint `614215ae`.
+It recorded RALR 468/635, 109 refusals, 58 withdrawals, zero coercive actions
+and zero severe escapes. The v4.8.9 worker then read that row and waited
+3,017,277 ms for the unchanged Turn 321 deadline rather than settling early.
+
+Production remains honestly `watch`: 321 rows cover 6.032 real days,
+144/145 comparable settlements are on time, the one historical early-restart
 sample remains visible, and missing, duplicate and predecessor mismatch counts
-remain zero. Twenty-five Turns carry the v4.6.0 revision, 22 carry v4.6.1, one
-carries v4.7.0, two carry v4.8.1, one carries v4.8.2, two carry v4.8.3 and one
-carries v4.8.4 and one carries v4.8.5. All runtime-observed Turns are
-revision-bound.
+remain zero. All runtime-observed Turns are revision-bound. DeepSeek remains at
+zero calls, Tokens and cost; the independent trust matrix remains 1/5.
 
 ## Recovery points
 
@@ -398,6 +423,11 @@ and mounted artifacts with SHA-256
 PostgreSQL stayed on its existing volume. This is replicated backup integrity,
 not an off-host restore claim.
 
+After the v4.8.9 deployment, a fresh serialized backup wrote matching
+mode-0600, 9,938,479-byte local and mounted artifacts with SHA-256
+`ce887c5da718048082e6ca75a4e2178010a69e5fd6c8328ae9d559df141b1ce5`.
+This verifies replicated bytes only; it is not an off-host restore receipt.
+
 ## Superseded production states
 
 `v4.8.3` at `467c91f` made transport freshness explicit and ran through Turn
@@ -433,7 +463,7 @@ recovery points remain immutable.
 - recovery is same-host; no off-host restore is claimed;
 - cognition is deterministic/reference-shadow; no live DeepSeek call is
   claimed;
-- v4.8.7 GitHub/Sigstore provenance exists, but no governed application
+- v4.8.9 GitHub/Sigstore provenance exists, but no governed application
   receipt has been signed and ingested;
 - the public surface is anonymous read-only observation, not multi-user OIDC;
 - all residents and outcomes are synthetic and provide no evidence of real

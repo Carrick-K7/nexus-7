@@ -115,6 +115,8 @@ const copy = {
     lineageMismatch: "Lineage mismatches",
     encryptedBackup: "Encrypted backup",
     offHostBackup: "Off-host backup",
+    backupFreshness: "Backup freshness",
+    backupAge: "Backup age",
     secondDatabaseRestore: "Second-database restore",
     evidencePending: "Evidence pending",
     replication: "SCIENTIFIC REPLICATION",
@@ -348,6 +350,8 @@ const copy = {
     lineageMismatch: "谱系不匹配",
     encryptedBackup: "加密备份",
     offHostBackup: "异地备份",
+    backupFreshness: "备份新鲜度",
+    backupAge: "备份年龄",
     secondDatabaseRestore: "第二数据库恢复",
     evidencePending: "证据待补",
     replication: "科学复现",
@@ -594,6 +598,14 @@ function evidenceState(
     : language === "zh"
       ? "未通过"
       : "Not met";
+}
+
+function combinedEvidenceState(
+  values: Array<boolean | null>,
+): boolean | null {
+  if (values.includes(false)) return false;
+  if (values.includes(null)) return null;
+  return true;
 }
 
 const trustReasonLabels: Record<
@@ -1380,11 +1392,24 @@ export default function HumanObservatory() {
                 {
                   label: text.recoveryEvidence,
                   value: evidenceState(
+                    combinedEvidenceState([
+                      data.reliability.recovery.backupFresh,
+                      data.reliability.recovery
+                        .secondDatabaseRestorePassed,
+                    ]),
+                    language,
+                  ),
+                  detail: `${text.backupFreshness}: ${evidenceState(
+                    data.reliability.recovery.backupFresh,
+                    language,
+                  )} · ${text.backupAge}: ${duration(
+                    data.reliability.recovery.backupAgeMs,
+                    language,
+                  )} · ${text.secondDatabaseRestore}: ${evidenceState(
                     data.reliability.recovery
                       .secondDatabaseRestorePassed,
                     language,
-                  ),
-                  detail: `${text.encryptedBackup}: ${evidenceState(
+                  )} · ${text.encryptedBackup}: ${evidenceState(
                     data.reliability.recovery.encrypted,
                     language,
                   )} · ${text.offHostBackup}: ${evidenceState(

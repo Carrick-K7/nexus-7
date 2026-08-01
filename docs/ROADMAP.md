@@ -244,6 +244,11 @@ human signing key produces a pending configuration summary and skips issuance;
 after configuration, any verification, signing or ingestion failure remains a
 red workflow and cannot promote a lane.
 
+v4.8.10 corrects two human-observation semantics found in the production
+browser audit. Relationship trust is normalized before percent formatting,
+and stale backup evidence can no longer hide behind a successful same-host
+restore. Both corrections are formula/UI changes, not city mutations.
+
 ## Next objectives
 
 No new city feature milestone is scheduled. Operate v4.8 until all five trust

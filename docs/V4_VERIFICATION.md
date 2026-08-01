@@ -2,7 +2,7 @@
 
 > Date: 2026-08-01
 >
-> Status: v4.8.9 Pending Receipt Semantics release candidate; v4.8.8 deployed;
+> Status: v4.8.10 Human Evidence Scale Integrity candidate; v4.8.9 deployed;
 > GitHub/Sigstore provenance present; signed receipt ingestion, duration,
 > off-host restore and live-provider evidence pending
 
@@ -532,8 +532,25 @@ writes a pending summary and skips issuance when unconfigured. The issuer job
 still performs unchanged verification/signing/ingestion when configured, and
 no error is tolerated with `continue-on-error`.
 
-Targeted workflow contracts pass 4/4 and lint has zero warnings locally.
-Complete remote evidence remains pending until the committed candidate runs.
+PR run `30685341998` passed the complete quality gate. Main run `30685738425`
+passed quality and production deployment. Follower runs `30685811077`,
+`30686246144` and `30686246148` each completed configuration, reported
+`configured=false`, skipped issuance and uploaded zero receipt artifacts. The
+Trust API therefore remains honestly 1/5 with external evidence pending.
+
+### v4.8.10 human-evidence-scale gate
+
+The v4.8.9 production browser audit exposed relationship trust `71.05` as
+`7105%` because the city report's 0–100 score crossed into a 0–1 percent
+formatter. The corrected v2 projection emits `0.7105` under formula version
+2.2.0. Its unit fixture proves score `62` becomes rate `0.62`.
+
+The reliability card now requires both fresh backup evidence and a successful
+second-database restore for its headline pass. It separately exposes freshness,
+age, restore, encryption and off-host state in English and Chinese. Targeted
+projection tests, zero-warning lint, the production build and 28/28 local
+Chromium plus axe scenarios pass; remote evidence is pending the committed
+candidate.
 
 ## Provider and persistence gates
 

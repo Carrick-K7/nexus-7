@@ -11,9 +11,9 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active production release is **v4.8.8 — Evidence Source Identity**.
-The **v4.8.9 — Pending Receipt Semantics** candidate aligns follower workflow
-health with the public trust-state contract.
+The active production release is **v4.8.9 — Pending Receipt Semantics**.
+The **v4.8.10 — Human Evidence Scale Integrity** candidate corrects relationship
+and recovery semantics found by production browser verification.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
@@ -117,6 +117,10 @@ operator supplies their key and workload identity.
 v4.8.9 treats an absent human receipt key as explicit pending configuration:
 the lightweight preflight succeeds and issuance is skipped. Once configured,
 all attestation, signing and ingestion errors remain fail-closed.
+
+v4.8.10 binds normalized relationship trust to formula version 2.2.0 and makes
+backup freshness, age, restore, encryption and off-host status separately
+visible. It changes observation only, never the settled city.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy

@@ -205,3 +205,11 @@ The production v4.8.5 browser audit found that translated Chinese content
 could retain `lang="en"` at the document root. v4.8.6 synchronizes the root
 language with the persisted display language and verifies it after selection
 and reload. Trust calculations and all five lane states are unchanged.
+
+## v4.8.10 human-projection correction
+
+The Trust API and all five lane calculations remain unchanged. The adjacent
+Human Observatory now normalizes the city's 0–100 relationship score before
+percent formatting and refuses to summarize recovery as passed when persisted
+backup evidence is stale. Freshness, age, second-database restore, encryption
+and off-host status remain distinct observations.

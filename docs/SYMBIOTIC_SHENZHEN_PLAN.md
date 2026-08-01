@@ -2,7 +2,7 @@
 
 > 更新：2026-07-30
 >
-> 状态：v4.8.9 Pending Receipt Semantics 候选；v4.8.8 已部署；
+> 状态：v4.8.10 Human Evidence Scale Integrity 候选；v4.8.9 已部署；
 > 本地/托管复现与 GitHub/Sigstore provenance 已验证；
 > 签名回执回灌 / 真实 90 天 / off-host restore / live provider pending
 

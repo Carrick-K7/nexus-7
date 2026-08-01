@@ -260,6 +260,8 @@ for (const viewport of [
       "TURN RELIABILITY & PROVENANCE",
     );
     await expect(reliability).toContainText("0.0 / 90 days");
+    await expect(reliability).toContainText("Backup freshness");
+    await expect(reliability).toContainText("Second-database restore");
     const diversity = page.getByTestId("cognitive-diversity");
     await expect(diversity).toBeVisible();
     await expect(diversity).toContainText(
@@ -385,6 +387,7 @@ test("Human Observatory explains the city in Chinese", async ({ page }) => {
   await expect(page.getByText("城市实时资源流")).toBeVisible();
   await expect(page.getByText("DeepSeek API 用量与开销")).toBeVisible();
   await expect(page.getByText("Turn 可靠性与版本证据")).toBeVisible();
+  await expect(page.getByText("备份新鲜度")).toBeVisible();
   await expect(page.getByText("认知多样性 Shadow")).toBeVisible();
   await expect(page.getByText("独立可信证据矩阵")).toBeVisible();
   await expect(page.getByText("异机 PostgreSQL 恢复")).toBeVisible();
