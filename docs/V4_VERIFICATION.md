@@ -2,7 +2,7 @@
 
 > Date: 2026-08-01
 >
-> Status: v4.8.8 Evidence Source Identity deployed;
+> Status: v4.8.9 Pending Receipt Semantics release candidate; v4.8.8 deployed;
 > GitHub/Sigstore provenance present; signed receipt ingestion, duration,
 > off-host restore and live-provider evidence pending
 
@@ -522,6 +522,18 @@ Follower runs `30684599147` and `30684599145` now pass source/attestation
 verification and stop only at the absent
 `NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64`. No receipt or trust lane is
 claimed until the human-controlled key and delivery path are configured.
+
+### v4.8.9 pending-receipt-semantics gate
+
+The v4.8.8 Trust API correctly treats an absent receipt as pending, but its
+followers still concluded failure when the human key was absent. v4.8.9 adds a
+two-minute configuration job to both workflows. It exports only a boolean,
+writes a pending summary and skips issuance when unconfigured. The issuer job
+still performs unchanged verification/signing/ingestion when configured, and
+no error is tolerated with `continue-on-error`.
+
+Targeted workflow contracts pass 4/4 and lint has zero warnings locally.
+Complete remote evidence remains pending until the committed candidate runs.
 
 ## Provider and persistence gates
 

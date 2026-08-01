@@ -239,6 +239,11 @@ all unexpected paths remain fail-closed and are printed before attestation.
 This does not mint a receipt or replace the human-controlled signing key and
 OIDC ingestion configuration.
 
+v4.8.9 aligns workflow health with the same missing/bad distinction. An absent
+human signing key produces a pending configuration summary and skips issuance;
+after configuration, any verification, signing or ingestion failure remains a
+red workflow and cannot promote a lane.
+
 ## Next objectives
 
 No new city feature milestone is scheduled. Operate v4.8 until all five trust

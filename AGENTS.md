@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.8 证据源身份
+> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.9 回执待配语义
 
 ## 定义与边界
 
@@ -52,7 +52,7 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
-v4.8.8 已原子发布；生成证据与源码变更分离且异常路径可见。
+v4.8.8 已发布；v4.8.9 将缺失回执密钥表示为 pending/skip，配置后仍 fail closed。
 城市仍为 200 人、36 AI、24 机器人，无真人或私人输入。
 
 ## 模块边界

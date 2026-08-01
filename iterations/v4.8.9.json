@@ -1,0 +1,27 @@
+{
+  "id": "iteration-v4.8.9",
+  "version": "4.8.9",
+  "date": "2026-08-01",
+  "trigger": "pending-receipt-configuration-semantics",
+  "triggerReason": "v4.8.8 produced clean signed provenance, but missing human-controlled receipt configuration appeared as repeated red workflow failures even though the public trust contract correctly classified missing evidence as pending.",
+  "action": "Add a secret-presence preflight to both receipt followers, skip issuance with an explicit pending summary when absent, and preserve fail-closed verification and ingestion whenever configuration is present.",
+  "outcome": "Targeted workflow contracts and zero-warning lint pass locally. Exact remote and production evidence remain to be recorded only after the committed workflows execute.",
+  "metrics": [
+    { "label": "Missing-key follower failures per eligible source run", "before": 2, "after": 0 },
+    { "label": "Verification errors tolerated after configuration", "before": 0, "after": 0 },
+    { "label": "Trust lanes promoted without receipt", "before": 0, "after": 0 },
+    { "label": "Secrets disclosed by preflight", "before": 0, "after": 0 }
+  ],
+  "evidence": [
+    "Both workflows expose one boolean configured output",
+    "Issuer jobs require configured == true",
+    "Missing configuration writes an explicit pending summary",
+    "No receipt workflow uses continue-on-error"
+  ],
+  "artifacts": [
+    ".github/workflows/evidence-receipts.yml",
+    ".github/workflows/promotion-receipt.yml",
+    "src/evidence/symbiosis-replication-workflow.test.ts",
+    "docs/adr/0037-absent-receipt-key-is-pending.md"
+  ]
+}

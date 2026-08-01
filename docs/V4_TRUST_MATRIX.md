@@ -113,6 +113,14 @@ SYMBIOSIS_REPLICATION_RECEIPT_FILE=/run/nexus7/symbiosis-replication-receipt.jso
 Receipts expire after seven days. Refreshing a receipt verifies current
 availability and provenance; it does not alter historical experiment results.
 
+In v4.8.9, each receipt follower first runs a two-minute configuration
+preflight. If the private-key secret is absent, the workflow writes an explicit
+pending summary and skips the issuer job; it does not create a receipt or
+promote a trust lane. If the secret is present, the existing download,
+attestation, verification, signing and optional ingestion path runs unchanged,
+and every error remains fail-closed. A green preflight means only that the
+absence was reported correctly, not that external evidence was verified.
+
 ## Off-host PostgreSQL drill
 
 The manual `Symbiosis off-host recovery` workflow runs on a GitHub-hosted

@@ -12,6 +12,8 @@ current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
 The active production release is **v4.8.8 — Evidence Source Identity**.
+The **v4.8.9 — Pending Receipt Semantics** candidate aligns follower workflow
+health with the public trust-state contract.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
@@ -111,6 +113,10 @@ v4.8.8 separates declared generated evidence churn from unexpected source
 changes. The signed production manifest is clean and logs no unexpected path;
 receipt signing and governance ingestion remain pending until the human
 operator supplies their key and workload identity.
+
+v4.8.9 treats an absent human receipt key as explicit pending configuration:
+the lightweight preflight succeeds and issuance is skipped. Once configured,
+all attestation, signing and ingestion errors remain fail-closed.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy
