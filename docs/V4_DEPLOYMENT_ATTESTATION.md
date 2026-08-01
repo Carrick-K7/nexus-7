@@ -4,9 +4,12 @@
 
 ## Current artifact
 
-- Release: `v4.8.7` — Atomic Delivery Closure
-- Tag commit: `fbd5b2726361fd61ed26999cfc8d52671a8db343`
-- Annotated Tag object: `edb5b3cb7312e95f76d720a4a92892f344deb88f`
+- Release: `v4.8.8` — Evidence Source Identity
+- Tag commit: `033272f11f92e2ff500941c5054a30a11976cf6d`
+- Annotated Tag object: `f694f2a31da20a8ab6cb521c4b57cd1185a549a2`
+- v4.8.8 implementation commit: `3284edaa32c41ff2b0c8dd1c24b0b83f83c96316`
+- v4.8.7 Tag commit: `fbd5b2726361fd61ed26999cfc8d52671a8db343`
+- v4.8.7 Tag object: `edb5b3cb7312e95f76d720a4a92892f344deb88f`
 - v4.8.7 implementation commit: `24725d5e9edd93103c2c2f3b961bc230b4417638`
 - v4.8.6 Tag commit: `6b463c28436d4cc02f0f54eda03a3cb6d119b353`
 - v4.8.5 Tag commit: `2e7fa1608bc536dbe1d84aa4d45592ed17467263`
@@ -136,6 +139,22 @@ Production Chromium checked English dark desktop plus Chinese dark/light
 switching to Chinese set `lang="zh-CN"` and survived reload. Three axe WCAG
 A/AA scans found zero violations, the mobile document remained 390/390px and
 the audit window recorded zero console warnings or errors.
+
+The v4.8.8 main pipeline `30684112947` records `dirty=false` and no unexpected
+source path in verification artifact `8813426047`. GitHub/Sigstore
+attestations `38296591` and `38296592` bind that manifest and the portable
+replication bundle. Immutable production artifact `8813439775` activated exact
+revision `033272f11f92e2ff500941c5054a30a11976cf6d`; both services are active,
+have exit status 0 and zero restarts, while the PostgreSQL container retains
+its 2026-07-23 start time and named data volume. Root/Overview/Trust return 200
+and Trust mutation returns 405.
+
+The worker read Turn 319 and announced 2,560,341 ms remaining rather than
+settling early. Production Chromium repeated exact-revision, bilingual reason,
+`zh-CN` persistence, dark/light, 390px and axe checks with zero audit-window
+console issues. The matrix remains honestly 1/5: follower runs `30684599147`
+and `30684599145` now stop only because the human-controlled receipt private
+key is absent.
 
 ## Existing season and live Turn
 
@@ -372,6 +391,12 @@ artifacts locally and to the mounted object-store path. Both have SHA-256
 `d0a52eea1815b1d32bbb377bd690658be141de236a88a046652108d697ddd5b1`.
 This proves serialized replicated backup integrity, not an independent-host
 restore.
+
+The v4.8.8 automatic deployment wrote matching mode-0600, 9,886,589-byte local
+and mounted artifacts with SHA-256
+`3291738222423b17a9eb2a0992cd2b6213ab1c669517d16920ecbb473b404383`.
+PostgreSQL stayed on its existing volume. This is replicated backup integrity,
+not an off-host restore claim.
 
 ## Superseded production states
 
