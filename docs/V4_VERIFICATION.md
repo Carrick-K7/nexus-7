@@ -2,7 +2,7 @@
 
 > Date: 2026-08-01
 >
-> Status: v4.8.8 Evidence Source Identity release candidate; v4.8.7 deployed;
+> Status: v4.8.9 Pending Receipt Semantics release candidate; v4.8.8 deployed;
 > GitHub/Sigstore provenance present; signed receipt ingestion, duration,
 > off-host restore and live-provider evidence pending
 
@@ -501,8 +501,39 @@ unexpected path. Code, configuration, documentation, unknown outputs, renames
 and Git-query failure still make the manifest dirty. This patch cannot issue,
 install or ingest a receipt by itself.
 
-Targeted source-cleanliness tests and zero-warning lint pass locally. Complete
-remote evidence remains pending until the committed candidate runs.
+The first complete PR run `30683144550` passed but its machine artifact exposed
+`unexpectedChanges=["ublic/data/iteration-manifests.json"]`: the generic Git
+helper had trimmed the leading porcelain status column. The follow-up preserves
+leading bytes and strips trailing line endings only. Exact PR run
+`30683661198` then passed all 280 tests, 28/28 browser/axe, deterministic and
+long-horizon gates plus the isolated evaluator; artifact `8813290002` records
+`dirty=false` and an empty unexpected-path list.
+
+Exact `main` run `30684112947` repeated the gate and deployment for revision
+`033272f11f92e2ff500941c5054a30a11976cf6d`. Verification artifact
+`8813426047` records the same clean source state. Sigstore attestations
+`38296591` and `38296592` bind the CI manifest and portable bundle; production
+artifact `8813439775` was atomically deployed after equal pre-deploy backups.
+Production Chromium verified the exact revision, bilingual receipt reason,
+persisted `zh-CN`, dark/light themes, 390/390px containment, zero axe violations
+and zero audit-window console issues.
+
+Follower runs `30684599147` and `30684599145` now pass source/attestation
+verification and stop only at the absent
+`NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64`. No receipt or trust lane is
+claimed until the human-controlled key and delivery path are configured.
+
+### v4.8.9 pending-receipt-semantics gate
+
+The v4.8.8 Trust API correctly treats an absent receipt as pending, but its
+followers still concluded failure when the human key was absent. v4.8.9 adds a
+two-minute configuration job to both workflows. It exports only a boolean,
+writes a pending summary and skips issuance when unconfigured. The issuer job
+still performs unchanged verification/signing/ingestion when configured, and
+no error is tolerated with `continue-on-error`.
+
+Targeted workflow contracts pass 4/4 and lint has zero warnings locally.
+Complete remote evidence remains pending until the committed candidate runs.
 
 ## Provider and persistence gates
 

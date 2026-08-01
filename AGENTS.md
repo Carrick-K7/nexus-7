@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.8 证据源身份
+> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.9 回执待配语义
 
 ## 定义与边界
 
@@ -52,7 +52,7 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
-v4.8.7 已原子发布；v4.8.8 区分生成证据与源码变更并暴露异常路径。
+v4.8.8 已发布；v4.8.9 将缺失回执密钥表示为 pending/skip，配置后仍 fail closed。
 城市仍为 200 人、36 AI、24 机器人，无真人或私人输入。
 
 ## 模块边界
@@ -103,13 +103,13 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
-| v4.8.7 发布/语言 | 原子 release；lang 同步；Turn 313 按时 |
+| v4.8.8 发布/证据 | 原子 release；clean Sigstore；lang 同步 |
 
 ## 外部边界
 
-- `fbd5b27` (v4.8.7) 已部署；Turn 313 lag 298 ms、指纹 `243f5e72`；390 px
+- `033272f` (v4.8.8) 已部署；worker 从 Turn 319 等待原 deadline；390 px
   overflow/console/axe 0，API 200、写 405，PG 原卷未替换。
-- 当前 safe closure 88/88，强制/无效规则 0；DeepSeek 调用/Token/费用为 0；
-  真实观测 5.74 天。
-- 加密备份/同机第二库恢复续写已通过；v4.8.7 Sigstore 已有，但签名回执/回灌
-  仍待人类密钥与 OIDC；live DeepSeek、90 天和 off-host 恢复待验证。
+- 当前 safe closure 95/95，强制/无效规则 0；DeepSeek 调用/Token/费用为 0；
+  真实观测 5.991 天。
+- clean Sigstore 已有；签名回执/回灌仍待人类密钥与 OIDC；live DeepSeek、
+  90 天和 off-host 恢复待验证。

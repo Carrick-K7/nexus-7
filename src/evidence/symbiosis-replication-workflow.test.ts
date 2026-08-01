@@ -49,6 +49,32 @@ describe("independent symbiosis replication workflow", () => {
     expect(source).toContain(
       "/.github/workflows/symbiosis-replication.yml",
     );
+    expect(source).toContain("name: Receipt configuration");
+    expect(source).toContain(
+      "needs: configuration\n    if: needs.configuration.outputs.configured == 'true'",
+    );
+    expect(source).toContain(
+      "Receipt signing is pending human key configuration; no receipt was issued.",
+    );
+  });
+
+  it("keeps an absent human receipt key pending in both follower workflows", () => {
+    for (const name of [
+      "evidence-receipts.yml",
+      "promotion-receipt.yml",
+    ]) {
+      const source = workflow(name);
+      expect(source).toContain(
+        "configured: ${{ steps.receipt-key.outputs.configured }}",
+      );
+      expect(source).toContain(
+        "RECEIPT_KEY: ${{ secrets.NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64 }}",
+      );
+      expect(source).toContain(
+        "if: needs.configuration.outputs.configured == 'true'",
+      );
+      expect(source).not.toContain("continue-on-error");
+    }
   });
 
   it("keeps the explicit deployment signer override aligned with every producer", () => {

@@ -70,6 +70,34 @@ manifest is necessary but not sufficient: without the private key no receipt
 is issued, and without the matching public key plus receipt file the web
 process cannot verify or display that lane as complete.
 
+Generate the Ed25519 pair on a human-controlled administrative machine, never
+inside the repository or application release directory:
+
+```bash
+umask 077
+openssl genpkey -algorithm ED25519 -out nexus7-receipt-private.pem
+openssl pkey -in nexus7-receipt-private.pem -pubout -out nexus7-receipt-public.pem
+base64 -w0 nexus7-receipt-private.pem > nexus7-receipt-private.pem.b64
+base64 -w0 nexus7-receipt-public.pem > nexus7-receipt-public.pem.b64
+gh secret set NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64 \
+  --repo Carrick-K7/nexus-7 < nexus7-receipt-private.pem.b64
+```
+
+Install only the public Base64 value in the shared Web environment as
+`NEXUS_ATTESTATION_RECEIPT_PUBLIC_KEY_BASE64`. After a successful receipt
+workflow, install `symbiosis-replication-receipt.json` as an application-user
+readable, mode-0600 file outside the release directory and set
+`SYMBIOSIS_REPLICATION_RECEIPT_FILE` to that absolute path. Restart Web and
+confirm the Trust API binds the receipt subject, signer and non-expired time.
+The private PEM and intermediate Base64 file remain under human custody and
+must not be copied to the application host.
+
+Automatic governance-registry ingestion additionally requires repository
+variables `NEXUS_GOVERNANCE_BASE_URL` and `NEXUS_OIDC_AUDIENCE`, plus a Web
+OIDC provider that trusts only the named GitHub workflow identity. The public
+observatory intentionally rejects POST, so its URL must not be used as the
+governance base until a distinct authenticated control-plane route exists.
+
 `SYMBIOSIS_TRUSTED_SIGNER_WORKFLOWS` is optional. When present it replaces,
 rather than extends, the built-in allowlist. An explicit deployment value must
 therefore contain `ci.yml`, `symbiosis-replication.yml`,
@@ -84,6 +112,14 @@ SYMBIOSIS_REPLICATION_RECEIPT_FILE=/run/nexus7/symbiosis-replication-receipt.jso
 
 Receipts expire after seven days. Refreshing a receipt verifies current
 availability and provenance; it does not alter historical experiment results.
+
+In v4.8.9, each receipt follower first runs a two-minute configuration
+preflight. If the private-key secret is absent, the workflow writes an explicit
+pending summary and skips the issuer job; it does not create a receipt or
+promote a trust lane. If the secret is present, the existing download,
+attestation, verification, signing and optional ingestion path runs unchanged,
+and every error remains fail-closed. A green preflight means only that the
+absence was reported correctly, not that external evidence was verified.
 
 ## Off-host PostgreSQL drill
 
