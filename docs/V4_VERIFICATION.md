@@ -2,7 +2,7 @@
 
 > Date: 2026-08-01
 >
-> Status: v4.8.10 Human Evidence Scale Integrity candidate; v4.8.9 deployed;
+> Status: v4.8.10 Human Evidence Scale Integrity deployed;
 > GitHub/Sigstore provenance present; signed receipt ingestion, duration,
 > off-host restore and live-provider evidence pending
 
@@ -549,8 +549,17 @@ The reliability card now requires both fresh backup evidence and a successful
 second-database restore for its headline pass. It separately exposes freshness,
 age, restore, encryption and off-host state in English and Chinese. Targeted
 projection tests, zero-warning lint, the production build and 28/28 local
-Chromium plus axe scenarios pass; remote evidence is pending the committed
-candidate.
+Chromium plus axe scenarios pass.
+
+PR run `30687027590` passed the complete quality gate. Main run `30687473912`
+passed quality and production deployment with clean-source evidence artifact
+`8814575553`, production artifact `8814589593` and GitHub/Sigstore attestations
+`38304121` and `38304123`. Independent replication run `30687473904` passed.
+Production serves exact revision `6184d4f0e2b996dd539553f74acbccfd2ede69fb`:
+v2 reports formula 2.2.0 and relationship rate `0.7115`, while v1 preserves
+score `71.15`. A real 390px English/Chinese, dark/light browser audit rendered
+`71%`, reported stale backup evidence as not met, had zero overflow or console
+issues, and returned zero axe violations.
 
 ## Provider and persistence gates
 

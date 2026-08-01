@@ -4,9 +4,12 @@
 
 ## Current artifact
 
-- Release: `v4.8.9` — Pending Receipt Semantics
-- Tag commit: `8e68919555175dadfea2bc7970cf79c17cf669dd`
-- Annotated Tag object: `bba0e0bf05c265eb415be227e8d80578c0c29637`
+- Release: `v4.8.10` — Human Evidence Scale Integrity
+- Tag commit: `6184d4f0e2b996dd539553f74acbccfd2ede69fb`
+- Annotated Tag object: `1a6760b38aa211d1f1d0a6d185e7b0c5e2eee151`
+- v4.8.10 implementation commit: `384650a185f3cbed9001c25cf25ffb75a0d203af`
+- v4.8.9 Tag commit: `8e68919555175dadfea2bc7970cf79c17cf669dd`
+- v4.8.9 Tag object: `bba0e0bf05c265eb415be227e8d80578c0c29637`
 - v4.8.9 implementation commit: `c7d1b3f6413392241d934005d5c956826a309ac6`
 - v4.8.8 Tag commit: `033272f11f92e2ff500941c5054a30a11976cf6d`
 - v4.8.8 Tag object: `f694f2a31da20a8ab6cb521c4b57cd1185a549a2`
@@ -53,9 +56,11 @@ permissions only. Public and direct-loopback POST requests to Observatory
 returned HTTP 405.
 
 `/api/observatory/v2/overview` returned
-`nexus.human-observatory.v2`, formula version 2.1.0, 200 humans, 36 AI, 24
-robots, 24 current resource ledgers and Turn 308. The three resident kinds are
-software state; these are synthetic results, not live Shenzhen data.
+`nexus.human-observatory.v2`, formula version 2.2.0, 200 humans, 36 AI, 24
+robots, 24 current resource ledgers and Turn 321. Relationship trust is the
+normalized rate `0.7115`; the v1 compatibility projection remains score
+`71.15`. The three resident kinds are software state; these are synthetic
+results, not live Shenzhen data.
 
 The primary provider is `nexus-deterministic-reference`. The configured
 read-only shadow is `nexus-diversity-reference`: it recorded 268 comparisons
@@ -175,6 +180,24 @@ and uploaded zero receipt artifacts. This is a successful pending-state report,
 not external verification. Production root/Overview/Trust return 200 and Trust
 POST returns 405. English/Chinese reload, dark/light, exact revision, 390px
 containment, console 0 and axe 0/50 violations passed.
+
+The v4.8.10 main pipeline `30687473912` passed quality and deployment. Clean
+verification artifact `8814575553` has fingerprint
+`05f448d6d9845c77ff94f93f4c508257b773011965e5a23e1b44958994f7befd`;
+production artifact `8814589593` is 123,408,283 bytes. GitHub/Sigstore
+attestations `38304121` and `38304123` bind the evidence and replication
+bundle. Independent replication run `30687473904` passed. Immutable release
+directory `6184d4f0e2b9` is active; Web and worker have exit status 0, zero
+restarts and use the unchanged PostgreSQL volume.
+
+Production root, Overview v2/v1 and Trust return 200; Trust POST returns 405.
+The Trust matrix is 1/5, with zero DeepSeek calls, Tokens and cost. Real
+English/Chinese, dark/light Chromium verification at 390px showed relationship
+trust as `71%`, not `7105%`; stale 40-hour backup evidence is visibly not met
+while second-database restore remains met. Document overflow and console
+issues were zero, and axe returned zero violations with 50 passes. Follower
+runs `30687551605`, `30687916008` and `30687916022` completed preflight,
+skipped unconfigured issuance and uploaded zero receipt artifacts.
 
 ## Existing season and live Turn
 
@@ -304,6 +327,13 @@ It recorded RALR 468/635, 109 refusals, 58 withdrawals, zero coercive actions
 and zero severe escapes. The v4.8.9 worker then read that row and waited
 3,017,277 ms for the unchanged Turn 321 deadline rather than settling early.
 
+Turn 321 settled naturally under v4.8.9 at
+`2026-08-01T06:29:37.985Z`, on time with 342 ms lag, exact revision
+`8e68919555175dadfea2bc7970cf79c17cf669dd` and fingerprint `8f492e44`.
+It recorded RALR 470/637, 109 refusals, 58 withdrawals, resource conservation,
+zero coercive actions and zero severe escapes. The v4.8.10 worker read that
+row and waited 3,470,329 ms for the unchanged Turn 322 deadline.
+
 Production remains honestly `watch`: 321 rows cover 6.032 real days,
 144/145 comparable settlements are on time, the one historical early-restart
 sample remains visible, and missing, duplicate and predecessor mismatch counts
@@ -428,8 +458,17 @@ mode-0600, 9,938,479-byte local and mounted artifacts with SHA-256
 `ce887c5da718048082e6ca75a4e2178010a69e5fd6c8328ae9d559df141b1ce5`.
 This verifies replicated bytes only; it is not an off-host restore receipt.
 
+After the v4.8.10 deployment, matching mode-0600 local and mounted backup
+artifacts are 9,993,139 bytes with SHA-256
+`2e40bc7966111856cccaf6f4154932a47cb9eda455bc07fdd5848cb94e9b3ea1`.
+They prove serialized byte replication, not an independently restored off-host
+copy.
+
 ## Superseded production states
 
+`v4.8.9` at `8e68919` made an absent receipt key explicitly pending and ran
+through Turn 321; it is retained and superseded by v4.8.10 for correct human
+evidence scales.
 `v4.8.3` at `467c91f` made transport freshness explicit and ran through Turn
 309; it is retained and superseded by v4.8.4 for independent external
 replication.
@@ -463,7 +502,7 @@ recovery points remain immutable.
 - recovery is same-host; no off-host restore is claimed;
 - cognition is deterministic/reference-shadow; no live DeepSeek call is
   claimed;
-- v4.8.9 GitHub/Sigstore provenance exists, but no governed application
+- v4.8.10 GitHub/Sigstore provenance exists, but no governed application
   receipt has been signed and ingested;
 - the public surface is anonymous read-only observation, not multi-user OIDC;
 - all residents and outcomes are synthetic and provide no evidence of real

@@ -11,9 +11,9 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active production release is **v4.8.9 — Pending Receipt Semantics**.
-The **v4.8.10 — Human Evidence Scale Integrity** candidate corrects relationship
-and recovery semantics found by production browser verification.
+The active production release is **v4.8.10 — Human Evidence Scale Integrity**.
+It corrects relationship and recovery semantics found by production browser
+verification without changing city settlement.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
