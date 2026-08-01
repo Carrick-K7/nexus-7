@@ -1,12 +1,56 @@
 [
   {
+    "id": "iteration-v4.8.8",
+    "version": "4.8.8",
+    "date": "2026-08-01",
+    "trigger": "signed-receipt-source-identity",
+    "triggerReason": "The first successful automatic main delivery signed its evidence and portable bundle, but the follower receipt job classified declared generated reports as dirty before reaching the separately missing human-controlled signing key.",
+    "action": "Keep source cleanliness fail closed for every unexpected path, explicitly classify only quality-workflow generated evidence outputs, expose unexpected paths in the manifest log, and preserve receipt signing and ingestion as external configuration.",
+    "outcome": "Targeted source-revision tests and zero-warning lint pass locally. Exact remote, deployment and receipt-follower evidence must be recorded only after the corresponding committed main run.",
+    "metrics": [
+      {
+        "label": "Unexpected source paths tolerated",
+        "before": 0,
+        "after": 0
+      },
+      {
+        "label": "Declared generated output classes",
+        "before": 5,
+        "after": 8
+      },
+      {
+        "label": "Trust lanes promoted without a receipt",
+        "before": 0,
+        "after": 0
+      },
+      {
+        "label": "Human-controlled receipt keys created by application code",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "v4.8.7 main CI 30668893061 and both GitHub/Sigstore attestations passed",
+      "v4.8.7 production revision fbd5b272 settled natural Turn 313 on time",
+      "Promotion and remote-receipt followers expose missing receipt configuration",
+      "Generated-output churn and unexpected source paths have separate tests and diagnostics"
+    ],
+    "artifacts": [
+      "src/evidence/source-revision.ts",
+      "src/evidence/source-revision.test.ts",
+      "scripts/generate-ci-evidence.ts",
+      "docs/adr/0036-generated-evidence-cleanliness.md"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.8.7",
     "version": "4.8.7",
     "date": "2026-08-01",
     "trigger": "atomic-delivery-integration",
     "triggerReason": "The v4.8.6 accessibility artifact passed twice, but main advanced with automatic delivery, serialized backup and branch-concurrency corrections before that Tag could fast-forward into production. Moving the immutable v4.8.6 Tag would make its evidence dishonest.",
     "action": "Preserve v4.8.6 unchanged, integrate the reviewed main-delivery changes, document the restricted immutable artifact path and require the corrected serialized backup before atomic activation. Publish the combined tree as v4.8.7.",
-    "outcome": "The combined tree passes zero-warning lint, the TypeScript production build and the persisted-language Playwright regression locally. The v4.8.6 application behavior already passed 280 local tests, 28/28 browser scenarios and two complete GitHub pipelines; v4.8.7 exact release and production evidence remain to be recorded after their corresponding gates run.",
+    "outcome": "Exact main run 30668893061 passed all 280 tests, 28/28 browser scenarios, deterministic, long-horizon and isolated gates, created two GitHub/Sigstore provenance attestations, built one immutable artifact and atomically deployed fbd5b272 without replacing PostgreSQL. Production browser checks passed and natural Turn 313 settled on time at the exact revision.",
     "metrics": [
       {
         "label": "Immutable tags moved",
@@ -34,7 +78,10 @@
       "Main workflow builds and transfers one revision-bound immutable archive",
       "Restricted host command serializes verified backups before migration and atomic activation",
       "Branch concurrency cannot block main delivery and Draft PRs cannot deploy",
-      "Combined v4.8.7 lint, production build and focused persisted-language browser regression pass"
+      "GitHub main run 30668893061 and deploy job passed",
+      "Production artifacts 8808258101 and 8808282965 bind exact fbd5b272 revision",
+      "Production English/Chinese dark/light browser audit has zero axe violations, overflow or audit-window console issues",
+      "Natural Turn 313 settled with 298 ms lag, fingerprint 243f5e72 and exact release revision"
     ],
     "artifacts": [
       ".github/workflows/ci.yml",
