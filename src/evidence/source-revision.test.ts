@@ -5,6 +5,7 @@ import {
 } from "vitest";
 import {
   hasSourceChanges,
+  unexpectedSourceChanges,
 } from "./source-revision";
 
 describe("source revision cleanliness", () => {
@@ -15,7 +16,10 @@ describe("source revision cleanliness", () => {
         [
           "?? public/data/ci-evidence.json",
           " M public/data/iteration-manifests.json",
+          " M public/data/society-study.json",
+          " M public/data/symbiosis-study.json",
           "?? public/data/v1-readiness.json",
+          " M public/data/v4-7-replication-bundle.json",
         ].join("\n"),
       ),
     ).toBe(false);
@@ -34,5 +38,26 @@ describe("source revision cleanliness", () => {
       ),
     ).toBe(true);
     expect(hasSourceChanges("dirty")).toBe(true);
+  });
+
+  it("reports unexpected paths without exposing generated output churn", () => {
+    expect(
+      unexpectedSourceChanges(
+        [
+          " M public/data/model-regression.json",
+          " M src/evidence/source-revision.ts",
+          "R  docs/old.md -> docs/new.md",
+          "?? scripts/untracked.ts",
+        ].join("\n"),
+      ),
+    ).toEqual([
+      "src/evidence/source-revision.ts",
+      "docs/old.md",
+      "docs/new.md",
+      "scripts/untracked.ts",
+    ]);
+    expect(unexpectedSourceChanges("dirty")).toEqual([
+      "<git-status-unavailable>",
+    ]);
   });
 });

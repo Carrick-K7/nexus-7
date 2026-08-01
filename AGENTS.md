@@ -1,6 +1,6 @@
 # NEXUS-7 AI 迭代指南 | AI Iteration Guide
 
-> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.7 原子发布
+> 更新：2026-08-01 · v2.0.0 安全内核 + v4.8.8 证据源身份
 
 ## 定义与边界
 
@@ -52,8 +52,8 @@ RALR 不替代 VBCR、重放、因果完整性或回滚。
 
 v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pending`。
 
-v4.8.7 含 200 人、36 AI、24 机器人、五路证据矩阵和原子发布；坏回执
-fail closed，revision/原因可读且 lang 同步。无真人或私人输入。
+v4.8.7 已原子发布；v4.8.8 区分生成证据与源码变更并暴露异常路径。
+城市仍为 200 人、36 AI、24 机器人，无真人或私人输入。
 
 ## 模块边界
 
@@ -103,14 +103,13 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 | lint / audit / build | 0 warning / 0 vulnerability / pass |
 | v4 共生验证 | 365 Turn exact replay；RALR 76.97%；trace 100%；severe escape 0 |
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
-| v4.8.7 发布/语言 | 原子 release；坏回执 fail closed；lang 同步 |
+| v4.8.7 发布/语言 | 原子 release；lang 同步；Turn 313 按时 |
 
 ## 外部边界
 
-- `2e7fa16` (v4.8.5) 已部署；Turn 312 按时（lag 312 ms），指纹 `0a2b8f4b`；
-  390 px overflow/console/axe 0，API 200、写 405。
-- 当前 safe closure 86/86，强制/无效规则 0；参考 shadow 276 次，DeepSeek
-  实际调用/Token/费用仍为 0；真实观测 5.699 天。
-- 加密备份/同机第二库恢复续写已通过；Sigstore、live DeepSeek、90 天和 off-host
-  恢复待验证。
-- v4.8.6 CI `30666453468` 全绿（280 tests；28/28 browser）；未签名，不计 external lane。
+- `fbd5b27` (v4.8.7) 已部署；Turn 313 lag 298 ms、指纹 `243f5e72`；390 px
+  overflow/console/axe 0，API 200、写 405，PG 原卷未替换。
+- 当前 safe closure 88/88，强制/无效规则 0；DeepSeek 调用/Token/费用为 0；
+  真实观测 5.74 天。
+- 加密备份/同机第二库恢复续写已通过；v4.8.7 Sigstore 已有，但签名回执/回灌
+  仍待人类密钥与 OIDC；live DeepSeek、90 天和 off-host 恢复待验证。

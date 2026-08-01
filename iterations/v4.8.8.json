@@ -1,0 +1,27 @@
+{
+  "id": "iteration-v4.8.8",
+  "version": "4.8.8",
+  "date": "2026-08-01",
+  "trigger": "signed-receipt-source-identity",
+  "triggerReason": "The first successful automatic main delivery signed its evidence and portable bundle, but the follower receipt job classified declared generated reports as dirty before reaching the separately missing human-controlled signing key.",
+  "action": "Keep source cleanliness fail closed for every unexpected path, explicitly classify only quality-workflow generated evidence outputs, expose unexpected paths in the manifest log, and preserve receipt signing and ingestion as external configuration.",
+  "outcome": "Targeted source-revision tests and zero-warning lint pass locally. Exact remote, deployment and receipt-follower evidence must be recorded only after the corresponding committed main run.",
+  "metrics": [
+    { "label": "Unexpected source paths tolerated", "before": 0, "after": 0 },
+    { "label": "Declared generated output classes", "before": 5, "after": 8 },
+    { "label": "Trust lanes promoted without a receipt", "before": 0, "after": 0 },
+    { "label": "Human-controlled receipt keys created by application code", "before": 0, "after": 0 }
+  ],
+  "evidence": [
+    "v4.8.7 main CI 30668893061 and both GitHub/Sigstore attestations passed",
+    "v4.8.7 production revision fbd5b272 settled natural Turn 313 on time",
+    "Promotion and remote-receipt followers expose missing receipt configuration",
+    "Generated-output churn and unexpected source paths have separate tests and diagnostics"
+  ],
+  "artifacts": [
+    "src/evidence/source-revision.ts",
+    "src/evidence/source-revision.test.ts",
+    "scripts/generate-ci-evidence.ts",
+    "docs/adr/0036-generated-evidence-cleanliness.md"
+  ]
+}

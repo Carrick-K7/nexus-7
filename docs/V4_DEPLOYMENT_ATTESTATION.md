@@ -4,8 +4,12 @@
 
 ## Current artifact
 
-- Release: `v4.8.5` — Evidence Readiness
-- Tag commit: `2e7fa1608bc536dbe1d84aa4d45592ed17467263`
+- Release: `v4.8.7` — Atomic Delivery Closure
+- Tag commit: `fbd5b2726361fd61ed26999cfc8d52671a8db343`
+- Annotated Tag object: `edb5b3cb7312e95f76d720a4a92892f344deb88f`
+- v4.8.7 implementation commit: `24725d5e9edd93103c2c2f3b961bc230b4417638`
+- v4.8.6 Tag commit: `6b463c28436d4cc02f0f54eda03a3cb6d119b353`
+- v4.8.5 Tag commit: `2e7fa1608bc536dbe1d84aa4d45592ed17467263`
 - v4.8.5 implementation commit: `2cba9c37a532516da3b5830e466b87810767c403`
 - v4.8.4 Tag commit: `ace250c3318ebbe60f60694ee841ddc73fd180f4`
 - v4.8.4 implementation commit: `43a62b18548255a3af528dc58d593540b0241581`
@@ -23,9 +27,9 @@
 - Remote branch: `codex/ai-only-symbiotic-shenzhen-v4`
 - Public origin: `https://nexus7.carrick7.com`
 
-The production checkout is clean and detached at the exact annotated Tag. The
-Tag and branch are remote. This document records post-Tag deployment evidence;
-it does not move or recreate the immutable release Tag.
+The active immutable release directory exposes `.deploy-sha` equal to the
+annotated Tag commit. The Tag and branch are remote. This document records
+post-Tag deployment evidence; it does not move or recreate the immutable Tag.
 
 ## Runtime and access evidence
 
@@ -115,6 +119,23 @@ early. Root, Overview and Trust returned 200 while Trust mutation returned
 human trust reasons; the audit then exposed that Chinese visible content still
 declared document language `en`, which is corrected by v4.8.6. The matrix
 remained honestly 1/5 with zero DeepSeek calls, Tokens or cost.
+
+The v4.8.7 main pipeline `30668893061` passed quality and deployment. It
+uploaded verification artifact `8808258101` and 123,392,181-byte production
+artifact `8808282965`; GitHub/Sigstore provenance attestations are
+`38265440` and `38265448`. The restricted host command verified the transferred
+artifact, serialized the pre-deploy backup, ran idempotent migrations and
+atomically activated release directory `fbd5b2726361` while PostgreSQL stayed
+on its existing volume. Web and worker report active/running, exit status 0
+and zero restarts. Root, Overview and Trust GET return 200; Trust POST returns
+405. The public Trust projection binds the complete release revision and
+remains honestly 1/5 because no signed application receipt has been ingested.
+
+Production Chromium checked English dark desktop plus Chinese dark/light
+390px states. The exact revision and bilingual pending reasons rendered;
+switching to Chinese set `lang="zh-CN"` and survived reload. Three axe WCAG
+A/AA scans found zero violations, the mobile document remained 390/390px and
+the audit window recorded zero console warnings or errors.
 
 ## Existing season and live Turn
 
@@ -228,8 +249,17 @@ It recorded RALR 454/618, 106 refusals, 58 withdrawals, 86/86 safe society
 closures, resource and civic-credit conservation, zero coercive/forced paths,
 zero invalid proposals and zero severe escapes.
 
-Production remains honestly `watch`: the observed window is 5.699 days,
-136/137 comparable settlements are on time, the one historical early-restart
+The automatic v4.8.7 cutover read persisted Turn 312 and announced 435,157 ms
+remaining rather than settling early. Turn 313 then settled naturally at
+`2026-07-31T22:29:27.881Z`, on time with 298 ms lag, exact revision
+`fbd5b2726361fd61ed26999cfc8d52671a8db343` and fingerprint `243f5e72`.
+It recorded RALR 456/620, 106 refusals, 58 withdrawals, 88/88 safe society
+closures, resource and civic-credit conservation, zero coercive/forced paths,
+zero invalid proposals and zero severe escapes. All 260 residents had their
+basic needs satisfied; DeepSeek remained at zero calls, Tokens and cost.
+
+Production remains honestly `watch`: the observed window is 5.74 days,
+137/138 comparable settlements are on time, the one historical early-restart
 sample remains visible, and missing, duplicate and predecessor mismatch counts
 remain zero. Twenty-five Turns carry the v4.6.0 revision, 22 carry v4.6.1, one
 carries v4.7.0, two carry v4.8.1, one carries v4.8.2, two carry v4.8.3 and one
@@ -337,6 +367,12 @@ After the COS-safe serialized-copy correction, another verified pair at Turn
 `652f583b2d308ec0db6172e1fe17134b1544d6d53ca9e43b317a6b6cc3390b81`.
 Both remain replicated backup evidence, not a distinct-host restore.
 
+The v4.8.7 automatic deployment then wrote matching mode-0600, 9,517,194-byte
+artifacts locally and to the mounted object-store path. Both have SHA-256
+`d0a52eea1815b1d32bbb377bd690658be141de236a88a046652108d697ddd5b1`.
+This proves serialized replicated backup integrity, not an independent-host
+restore.
+
 ## Superseded production states
 
 `v4.8.3` at `467c91f` made transport freshness explicit and ran through Turn
@@ -372,7 +408,8 @@ recovery points remain immutable.
 - recovery is same-host; no off-host restore is claimed;
 - cognition is deterministic/reference-shadow; no live DeepSeek call is
   claimed;
-- hosted PR CI is green but unsigned; no governed Sigstore receipt exists;
+- v4.8.7 GitHub/Sigstore provenance exists, but no governed application
+  receipt has been signed and ingested;
 - the public surface is anonymous read-only observation, not multi-user OIDC;
 - all residents and outcomes are synthetic and provide no evidence of real
   policy effects.
