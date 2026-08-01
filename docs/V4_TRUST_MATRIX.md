@@ -173,6 +173,36 @@ returned Token counts, pinned price version and USD cost. A missing key or
 provider outage leaves the gate pending/failed and the city continues through
 the deterministic primary.
 
+## Operator execution order (v4.8.12 handoff)
+
+The four remaining lanes are external evidence operations; each is executed
+by the human operator with the exact steps above, then verified by API:
+
+1. **Governed receipt signing and ingestion** — generate the Ed25519 pair on
+   a human machine, set `NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64`, install
+   the public key and receipt file on the host, configure the distinct
+   authenticated governance route with OIDC, restart web.
+   Verify: `curl -fsS https://nexus7.carrick7.com/api/observatory/v2/trust`
+   shows `externalReplication` receipt-bound with the exact source commit.
+2. **Distinct-host recovery** — prepare short-lived URLs and the five secrets
+   above, run the `Symbiosis off-host recovery` workflow, install the envelope
+   and receipt files, restart web.
+   Verify: `offHostRecovery` shows distinct host fingerprints, restored
+   second-database rows and a verified receipt.
+3. **Read-only live DeepSeek shadow** — install the mode-0600 key file and the
+   environment above, restart worker, wait one natural Turn.
+   Verify: `liveDeepSeekShadow` shows real persisted attempt/token/cost
+   evidence and `settlesWorld: false`.
+4. **90 elapsed production days** — no action; the runtime envelopes accrue
+   automatically. Verify: `elapsedProduction.observedDays` reaches 90 with
+   on-time rate, revision coverage, zero missing/duplicate/predecessor
+   mismatches.
+
+After each lane turns verified, refresh this document, the iteration
+manifests and the AGENTS.md baseline before the next lane; only the human
+constitutional governor reopens city mechanisms after all five lanes are
+independently verified.
+
 ## Boundary
 
 The matrix is evidence about this software experiment. It is not evidence that

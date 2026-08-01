@@ -1,9 +1,9 @@
 # 共生深圳 v4 | AI-Only Symbiotic Shenzhen
 
-> 更新：2026-07-30
+> 更新：2026-08-01
 >
-> 状态：v4.8.11 Release Evidence Identity Closure 已部署并标记；
-> 本地/托管复现、GitHub/Sigstore provenance 与生产 Turn 已验证；
+> 状态：v4.8.12 Governed Receipt Lifecycle Drill 已部署；
+> 本地回执演练与 ingestion 契约测试已验证；
 > 签名回执回灌 / 真实 90 天 / off-host restore / live provider pending
 
 ## 目标与研究边界
