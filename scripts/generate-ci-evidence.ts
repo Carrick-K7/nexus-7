@@ -7,6 +7,8 @@ import {
 } from "../src/evidence/ci-evidence";
 import {
   hasSourceChanges,
+  normalizeGitPorcelainOutput,
+  unexpectedSourceChanges,
 } from "../src/evidence/source-revision";
 
 function git(argumentsList: string[], fallback: string): string {
@@ -17,6 +19,23 @@ function git(argumentsList: string[], fallback: string): string {
     }).trim();
   } catch {
     return fallback;
+  }
+}
+
+function gitPorcelain(): string {
+  try {
+    return normalizeGitPorcelainOutput(
+      execFileSync(
+        "git",
+        ["status", "--porcelain=v1", "--untracked-files=all"],
+        {
+          encoding: "utf8",
+          stdio: ["ignore", "pipe", "ignore"],
+        },
+      ),
+    );
+  } catch {
+    return "dirty";
   }
 }
 
@@ -90,6 +109,15 @@ async function main(): Promise<void> {
     // The closed-loop report binds this manifest. Hashing that report here
     // would make the two signed artifacts recursively invalidate each other.
   ];
+  const porcelainStatus = gitPorcelain();
+  const unexpectedChanges = unexpectedSourceChanges(porcelainStatus);
+  console.log(
+    JSON.stringify({
+      event: "ci.evidence.source-status",
+      dirty: unexpectedChanges.length > 0,
+      unexpectedChanges,
+    }),
+  );
   const manifest = createCiEvidenceManifest({
     root,
     source: {
@@ -101,16 +129,7 @@ async function main(): Promise<void> {
       runId: process.env.GITHUB_RUN_ID ?? "local",
       runAttempt: process.env.GITHUB_RUN_ATTEMPT ?? "1",
       actor: process.env.GITHUB_ACTOR ?? process.env.USER ?? "local",
-      dirty: hasSourceChanges(
-        git(
-          [
-            "status",
-            "--porcelain=v1",
-            "--untracked-files=all",
-          ],
-          "dirty",
-        ),
-      ),
+      dirty: hasSourceChanges(porcelainStatus),
     },
     artifactPaths,
     externalCi,

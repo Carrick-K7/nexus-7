@@ -2,9 +2,9 @@
 
 > 更新：2026-07-30
 >
-> 状态：v4.8.7 Atomic Delivery Closure 候选；v4.8.5 已部署；
-> 本地/托管复现已验证；
-> 真实 90 天 / off-host restore / live provider / external Sigstore pending
+> 状态：v4.8.8 Evidence Source Identity 候选；v4.8.7 已部署；
+> 本地/托管复现与 GitHub/Sigstore provenance 已验证；
+> 签名回执回灌 / 真实 90 天 / off-host restore / live provider pending
 
 ## 目标与研究边界
 

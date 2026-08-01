@@ -233,6 +233,12 @@ restricted command, backed up with serialization and verification, migrated,
 atomically activated and health-checked. PR verification remains non-deploying
 and independent trust lanes remain unchanged.
 
+v4.8.8 closes the source-identity defect exposed by the first automatic
+delivery. Expected deterministic reports are classified as generated outputs;
+all unexpected paths remain fail-closed and are printed before attestation.
+This does not mint a receipt or replace the human-controlled signing key and
+OIDC ingestion configuration.
+
 ## Next objectives
 
 No new city feature milestone is scheduled. Operate v4.8 until all five trust
