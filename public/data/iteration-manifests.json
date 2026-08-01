@@ -1,5 +1,43 @@
 [
   {
+    "id": "iteration-v4.8.11",
+    "version": "4.8.11",
+    "date": "2026-08-01",
+    "trigger": "full-release-completion-audit",
+    "triggerReason": "A clean release-level audit passed every implementation gate but the evidence generator misclassified the deterministic v4.5 and v4.6 verification reports as unexpected source changes.",
+    "action": "Add only the two explicitly regenerated verification report paths to the exact release-output inventory, and make every rename or copy dirty even when both ends are declared outputs.",
+    "outcome": "The five-case targeted cleanliness contract, zero-warning lint and TypeScript pass locally. Complete remote and production evidence remain pending until the committed candidate executes.",
+    "metrics": [
+      {
+        "label": "Declared release outputs incorrectly reported as source changes",
+        "before": 2,
+        "after": 0
+      },
+      {
+        "label": "Unknown output paths rejected",
+        "before": 1,
+        "after": 1
+      },
+      {
+        "label": "City settlement fields changed",
+        "before": 0,
+        "after": 0
+      }
+    ],
+    "evidence": [
+      "v4.5 and v4.6 reports are exact named derived outputs",
+      "No public/data wildcard is trusted",
+      "Source, documentation, configuration, renames and copies remain dirty",
+      "Git status failure remains explicit and fail closed"
+    ],
+    "artifacts": [
+      "src/evidence/source-revision.ts",
+      "src/evidence/source-revision.test.ts",
+      "docs/adr/0039-complete-release-output-inventory.md"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.8.10",
     "version": "4.8.10",
     "date": "2026-08-01",
@@ -2173,6 +2211,17 @@
       "docs/adr/0001-deterministic-simulation-core.md"
     ],
     "source": "manifest"
+  },
+  {
+    "id": "c97f2c1c",
+    "version": "unreleased",
+    "date": "2026-08-01",
+    "trigger": "bug",
+    "triggerReason": "fix: complete release output source identity",
+    "action": "fix: complete release output source identity",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
   },
   {
     "id": "384650a1",
