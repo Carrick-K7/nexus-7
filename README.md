@@ -67,8 +67,8 @@ The default **Human Observatory / 人类观测台** exposes:
   balance, bargaining outcomes and AI-proposed rule reversion.
 - scientific-replication hypotheses, held-out runs, exact-replay counts,
   portable bundle hash, reproduction command and external-proof status.
-- a five-lane trust matrix separating local replication, external CI,
-  off-host recovery, live DeepSeek shadow and 90 elapsed production days.
+- a two-lane autonomous evidence matrix: byte-exact local replication and
+  90 elapsed production days; external attestation is not required.
 
 v4.8.1 keeps the live DeepSeek lane strictly separate from the ordinary
 reference shadow: only persisted DeepSeek-shadow attempts, outcomes, failures,
@@ -135,6 +135,14 @@ validation. The ingestion client now also has a real-HTTP reference-fake
 contract suite. The operator runbook for human receipt signing and OIDC
 ingestion is published; those lanes stay pending until the human configures
 the key and control-plane route.
+
+v4.9.0 removes the external-attestation requirement by constitutional
+decision. `/api/observatory/v2/trust` becomes the autonomous two-lane
+evidence matrix (`nexus.symbiosis-trust-matrix.v2`): local byte-exact
+replication and the 90-day production clock. Signed receipts, off-host
+recovery and a live provider are no longer required; their machinery stays
+archived and dormant. The Human Observatory now shows two gates and the
+roadmap moves to the autonomous science program.
 
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy

@@ -266,13 +266,37 @@ client is covered by a real-HTTP reference-fake contract suite. Receipt
 signing and OIDC ingestion still require the human key and a distinct
 authenticated control-plane route; no city settlement changed.
 
+v4.9.0 removes the external-attestation requirement by constitutional
+decision. The trust matrix is now the autonomous two-lane evidence matrix:
+local byte-exact replication and 90 elapsed production days. Signed receipts,
+off-host recovery and a live provider are no longer required; their archived
+machinery stays dormant and tested. The human governor observes results and
+decides direction; the laboratory no longer waits on operator credentials.
+
 ## Next objectives
 
-No new city feature milestone is scheduled. The handoff order is governed
-receipt ingestion, distinct-host recovery, read-only live DeepSeek shadow, and
-90 elapsed production days. These are evidence operations, not reasons to add
-features. Reassess with the human constitutional governor only after all five
-lanes are independently verified.
+No new city feature milestone is scheduled. The science program continues
+entirely inside the constitution boundary, on software residents only:
+
+1. **Hypothesis campaign framework** — generalize the v4.7 preregistration
+   into a campaign runner: hypotheses × seeds × regimes × horizons, held-out
+   design, exact replay, comparative report and portable bundle. A campaign
+   changes no production settlement and keeps every denominator visible.
+2. **First campaign: institutional design** — measure how white-listed
+   society parameters (mediation depth, asset maintenance, civic-credit
+   limits) move RALR and the refusal/withdrawal/coercion distribution across
+   held-out seeds.
+3. **Long-horizon study** — 1,825-Turn (five simulated years) runs across
+   seeds to study institutional drift, long-pending commitment dynamics and
+   community inequality trajectories.
+4. **Season boundary protocol** — define season archival and evidence-chain
+   continuity before the project commits to year-scale operation; the season
+   identifier is currently a constant with no rollover semantics.
+5. **Test stability** — remove the two known performance flakes so the local
+   full gate is reliably green on developer machines, not only on CI.
+6. **Continuous evidence** — the 90-day lane completes itself; keep Turn SLO,
+   sequence integrity, replay and backup/restore drills green and refresh
+   manifests on every commit.
 
 ## Explicit non-goals
 
@@ -286,7 +310,7 @@ lanes are independently verified.
 ## Stop rule
 
 New panels, resident scale and geographic scope are lower priority than
-continuity, evidence quality and external reproduction. A milestone is not
+continuity, evidence quality and reproducible science. A milestone is not
 complete because a UI exists; it must include contracts, failure paths,
 persistence, migrations, API/worker behavior, bilingual observation,
 accessibility, recovery tests, machine evidence and updated authority docs.

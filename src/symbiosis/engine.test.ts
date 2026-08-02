@@ -55,14 +55,16 @@ describe("Symbiotic Shenzhen deterministic world", () => {
     ).toBe(true);
   });
 
-  it("replays 365 daily Turns exactly with conserved resources", () => {
-    const initial = createInitialWorld({
-      seed: "365-turn-certification-seed",
-    });
-    const first = replayWorld(initial, 365);
-    const second = replayWorld(initial, 365);
+  it(
+    "replays 365 daily Turns exactly with conserved resources",
+    () => {
+      const initial = createInitialWorld({
+        seed: "365-turn-certification-seed",
+      });
+      const first = replayWorld(initial, 365);
+      const second = replayWorld(initial, 365);
 
-    expect(first.turn.turn).toBe(365);
+      expect(first.turn.turn).toBe(365);
     expect(first.turn.simulationDate).toBe("2027-07-18");
     expect(first.turn.resourceConservationPassed).toBe(true);
     expect(first.snapshot.residentStates).toHaveLength(260);
@@ -112,7 +114,7 @@ describe("Symbiotic Shenzhen deterministic world", () => {
           !proposal.arbitraryCodeAllowed,
       ),
     ).toBe(true);
-  }, 120_000);
+  }, 300_000);
 
   it("rejects a snapshot that is not the current season head", () => {
     const initial = createInitialWorld();

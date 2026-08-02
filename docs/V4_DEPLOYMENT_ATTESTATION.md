@@ -532,11 +532,9 @@ recovery points remain immutable.
 ## Remaining evidence boundaries
 
 - production has not elapsed 90 observed days under the runtime envelope;
-- recovery is same-host; no off-host restore is claimed;
-- cognition is deterministic/reference-shadow; no live DeepSeek call is
-  claimed;
-- v4.8.11 GitHub/Sigstore provenance exists, but no governed application
-  receipt has been signed and ingested;
+- v4.9 removed the external-attestation requirement (ADR 0040): receipt
+  signing, off-host restore and live-provider evidence are no longer gates;
+  their machinery remains dormant and tested;
 - the public surface is anonymous read-only observation, not multi-user OIDC;
 - all residents and outcomes are synthetic and provide no evidence of real
   policy effects.

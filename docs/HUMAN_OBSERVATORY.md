@@ -37,7 +37,7 @@ English/Chinese selection also updates the root document language to `en` or
 7. Inspect production stages, then search or filter any resident.
 8. Check the DeepSeek Token and cost ledger.
 9. Check Turn reliability/provenance and cognitive diversity.
-10. Read the five-lane independent trust matrix; pending is not a pass.
+10. Read the two-lane autonomous evidence matrix; pending is not a pass.
 11. Check scientific replication: hypotheses, held-out replay, bundle hash and
     external-proof status.
 12. Inspect city society: households, work, assets, exchanges, bargains and
@@ -151,26 +151,23 @@ verified the result. External proof remains visibly pending until a receipt
 from another trust domain exists. The v4.6 study is labeled exploratory; the
 v4.7 plan prospectively replicates it rather than rewriting its history.
 
-## Independent trust matrix
+## Autonomous evidence matrix
 
-The v4.8 matrix keeps five claims separate: local replication, external
-CI/Sigstore replication, off-host PostgreSQL recovery, live DeepSeek shadow and
+The v4.9 matrix keeps two autonomous claims separate: local replication and
 90 elapsed production days. Each lane is `verified`, `pending`, `failed` or
-`stale`; there is no weighted score and the whole matrix passes only at 5/5.
+`stale`; there is no weighted score and the whole matrix passes only at 2/2.
 
-The matrix reads immutable bundle/recovery artifacts, fresh signed receipts,
-persisted DeepSeek usage and restart-safe Turn runtime evidence. It never
-settles the city. Missing credentials, provider outage, expired receipts or an
-unfinished duration stay visible while the deterministic city continues.
-The header shows the exact deployed revision used for receipt matching. Every
-lane keeps its stable machine reason code and adds an English/Chinese human
-explanation; invalid supplied evidence is shown as failed rather than being
-downgraded because a companion file is missing.
-The DeepSeek lane uses only persisted DeepSeek shadow records; the ordinary
-reference-shadow comparison counter remains visible elsewhere and cannot be
-misread as live-provider evidence.
-See [V4_TRUST_MATRIX.md](V4_TRUST_MATRIX.md) for exact issuance and deployment
-configuration.
+v4.9 removed the external-attestation requirement by constitutional decision:
+signed receipts, off-host recovery and a live provider are no longer gates.
+The matrix reads the immutable replication bundle and restart-safe Turn
+runtime evidence. It never settles the city. Missing evidence or an unfinished
+duration stay visible while the deterministic city continues. The header shows
+the exact deployed revision. Every lane keeps its stable machine reason code
+and adds an English/Chinese human explanation.
+The DeepSeek usage card remains a pure observation of persisted shadow
+records; it is not a gate.
+See [V4_TRUST_MATRIX.md](V4_TRUST_MATRIX.md) for the contract and the archived
+external program.
 
 ## Institutions and production
 

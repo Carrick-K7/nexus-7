@@ -12,7 +12,8 @@ historical decisions and generated evidence.
 - `V4_DATA_GOVERNANCE.md` — allowed data and prohibited ingress;
 - `V4_VERIFICATION.md` — reference verification;
 - `V4_REPLICATION.md` — portable scientific-replication protocol;
-- `V4_TRUST_MATRIX.md` — independent local/external/recovery/provider/time gates;
+- `V4_TRUST_MATRIX.md` — autonomous local-replication/elapsed-time gates;
+  archived external program;
 - `V4_OPERATIONS.md` — deployment and observation;
 - `V4_DEPLOYMENT_ATTESTATION.md` — bound production evidence.
 

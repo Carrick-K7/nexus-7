@@ -168,29 +168,18 @@ test("v4 simulated-city APIs preserve privacy and zero-denominator honesty", asy
   expect(trustResponse.ok()).toBe(true);
   const trust = await trustResponse.json();
   expect(trust).toMatchObject({
-    schemaVersion: "nexus.symbiosis-trust-matrix.v1",
+    schemaVersion: "nexus.symbiosis-trust-matrix.v2",
     overall: "incomplete",
     summary: {
       verified: 1,
-      pending: 4,
+      pending: 1,
       failed: 0,
       stale: 0,
-      required: 5,
+      required: 2,
       allVerified: false,
     },
     lanes: {
       localReplication: { status: "verified" },
-      externalReplication: { status: "pending" },
-      offHostRecovery: { status: "pending" },
-      liveDeepSeekShadow: {
-        status: "pending",
-        configured: false,
-        externalCallAttempts: 0,
-        successfulComparisons: 0,
-        providerFailures: 0,
-        totalTokens: 0,
-        costUsd: 0,
-      },
       elapsedProduction: { status: "pending" },
     },
   });
@@ -270,19 +259,15 @@ for (const viewport of [
     await expect(diversity).toContainText("Disabled");
     const trust = page.getByTestId("independent-trust-matrix");
     await expect(trust).toBeVisible();
-    await expect(trust).toContainText("INDEPENDENT TRUST MATRIX");
-    await expect(trust).toContainText("1/5");
-    await expect(trust).toContainText("External CI + Sigstore");
-    await expect(trust).toContainText("0 comparisons");
+    await expect(trust).toContainText("AUTONOMOUS TRUST MATRIX");
+    await expect(trust).toContainText("1/2");
+    await expect(trust).toContainText("Local replication");
     await expect(trust).toContainText("90-day production clock");
     await expect(page.getByTestId("trust-release-revision")).toContainText(
       trustContract.releaseRevision,
     );
     await expect(trust).toContainText(
-      "A signed evidence receipt has not been supplied.",
-    );
-    await expect(trust).toContainText(
-      "Live DeepSeek is not configured as the read-only shadow.",
+      "No persisted wall-clock runtime evidence is available.",
     );
     const replication = page.getByTestId("scientific-replication");
     await expect(replication).toBeVisible();
@@ -292,7 +277,6 @@ for (const viewport of [
     await expect(replication).toContainText(
       "npm ci && npm run verify:v47",
     );
-    await expect(replication).toContainText("Pending");
     const society = page.getByTestId("city-society");
     await expect(society).toBeVisible();
     await expect(society).toContainText(
@@ -389,14 +373,10 @@ test("Human Observatory explains the city in Chinese", async ({ page }) => {
   await expect(page.getByText("Turn 可靠性与版本证据")).toBeVisible();
   await expect(page.getByText("备份新鲜度")).toBeVisible();
   await expect(page.getByText("认知多样性 Shadow")).toBeVisible();
-  await expect(page.getByText("独立可信证据矩阵")).toBeVisible();
-  await expect(page.getByText("异机 PostgreSQL 恢复")).toBeVisible();
-  await expect(page.getByText("尚未提供签名证据回执。").first()).toBeVisible();
-  await expect(
-    page.getByText("尚未把真实 DeepSeek 配置为只读 Shadow。"),
-  ).toBeVisible();
+  await expect(page.getByText("自主可信证据矩阵")).toBeVisible();
+  await expect(page.getByText("90 天生产时钟")).toBeVisible();
+  await expect(page.getByText("尚无持久化墙钟运行证据。").first()).toBeVisible();
   await expect(page.getByText("科学复现")).toBeVisible();
-  await expect(page.getByText("外部证明")).toBeVisible();
   await expect(page.getByText("城市社会与可逆规则")).toBeVisible();
   await expect(page.getByText("AI 居民提出的城市规则")).toBeVisible();
   await expect(page.getByText("生产环节全链条 AI 化")).toBeVisible();

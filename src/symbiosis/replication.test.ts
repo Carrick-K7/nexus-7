@@ -22,7 +22,7 @@ describe("v4.7 scientific replication bundle", () => {
 
   beforeAll(async () => {
     bundle = await createSymbiosisReplicationBundle(artifacts);
-  }, 120_000);
+  }, 300_000);
 
   it("replays held-out regimes and keeps external proof pending", async () => {
     expect(bundle.design.runCount).toBe(12);

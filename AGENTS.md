@@ -58,6 +58,8 @@ v2.0 reference 已闭环；无远端 attestation 只能写 `external evidence pe
 v4.8.11 已发布：补齐派生输出和预签名证据身份语义。
 v4.8.12 已发布：本地回执演练 + ingestion 客户端 reference-fake 契约测试；
 开发已切换为主线直开。
+v4.9.0 已发布：按宪法决定移除外部 attestation 要求，证据矩阵改为
+自主双车道（本地精确复现 + 90 天生产时钟）。
 城市仍为 200 人、36 AI、24 机器人，无真人或私人输入。
 
 ## 模块边界
@@ -110,6 +112,7 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 | v4.7 科学复现 | 7/7 假设；12/12 exact；secret input 0 |
 | v4.8.11 发布/证据 | 原子 release；clean Sigstore；28/28 browser+axe |
 | v4.8.12 回执演练 | 8/8 drill；4/4 客户端契约；主线直开部署 |
+| v4.9.0 自主证据矩阵 | 双车道 v2 契约；7/7 矩阵测试；外部 attestation 移除 |
 
 ## 外部边界
 
@@ -117,8 +120,9 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
   8/8、客户端契约 4/4，trust 1/5 无回归，API 200、写 405，PG 原卷未替换。
 - `3eb4afd` (v4.8.11 + handoff 文档) 已部署；Turn 324 按时且绑定 exact
   revision；390 px overflow/console/axe 0，已由 v4.8.12 接替。
-- Trust 1/5；DeepSeek 调用/Token/费用 0；回执 follower 缺密钥时成功报告
-  pending、签发 skip、产物 0，配置后仍 fail closed。
-- 签名回执/回灌待人类密钥与 OIDC；live DeepSeek、90 天和 off-host 恢复待验证。
+- Trust 2 车道（本地复现 verified + 90 天 pending）；DeepSeek 调用/Token/
+  费用 0（影子观测保留，非门禁）；外部 attestation 已按宪法移除，回执机制
+  保留但休眠、不再呈现。
+- 90 天车道自愈推进；签名回执、off-host、live provider 不再作为要求。
 - `npm run ops:receipt-drill` 本地 8/8：签发→验证→幂等回灌→故障拒绝；
   `src/governance/ingest-client.test.ts` 4/4：真实 HTTP reference fake。

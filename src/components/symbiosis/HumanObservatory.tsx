@@ -128,28 +128,23 @@ const copy = {
     secretInputs: "Secret inputs",
     noneRequired: "None required",
     externalAttestation: "External attestation",
-    localEvidenceOnly: "Local evidence only",
     reproduceCommand: "Reproduce from a clean checkout",
     bundleFingerprint: "Bundle SHA-256",
     downloadBundle: "Download replication bundle",
-    trustMatrix: "INDEPENDENT TRUST MATRIX",
+    trustMatrix: "AUTONOMOUS TRUST MATRIX",
     trustMatrixDesc:
-      "Five gates that cannot substitute for one another. A local pass never implies an external run, off-host recovery, live provider exercise, or elapsed production time.",
-    trustVerifiedCount: "independent gates verified",
+      "Two autonomous gates the laboratory can verify by itself. Exact bundle reproduction and elapsed wall-clock production time cannot substitute for each other; external attestation is not required.",
+    trustVerifiedCount: "autonomous gates verified",
     releaseRevision: "Deployed release revision",
     trustLocal: "Local replication",
-    trustExternal: "External CI + Sigstore",
-    trustRecovery: "Off-host PostgreSQL recovery",
-    trustDeepSeek: "Live DeepSeek shadow",
     trustElapsed: "90-day production clock",
     verified: "Verified",
     pending: "Pending",
     stale: "Stale",
-    receipt: "receipt",
     comparisons: "comparisons",
     days: "days",
     trustBoundary:
-      "The matrix is a projection of exact artifacts, signed receipts, persisted provider usage, and wall-clock Turns. Missing evidence remains visible and does not stop the synthetic city.",
+      "The matrix is a projection of exact artifacts and wall-clock Turns. Missing evidence remains visible and does not stop the synthetic city.",
     cognitiveDiversity: "COGNITIVE DIVERSITY SHADOW",
     cognitiveDiversityDesc:
       "A shadow provider can disagree, fail or consume budget, but its output never settles the city.",
@@ -363,28 +358,23 @@ const copy = {
     secretInputs: "秘密输入",
     noneRequired: "无需秘密",
     externalAttestation: "外部证明",
-    localEvidenceOnly: "仅本地证据",
     reproduceCommand: "从干净 checkout 复现",
     bundleFingerprint: "实验包 SHA-256",
     downloadBundle: "下载复现实验包",
-    trustMatrix: "独立可信证据矩阵",
+    trustMatrix: "自主可信证据矩阵",
     trustMatrixDesc:
-      "五条门禁互不替代。本地通过不代表外部运行、异机恢复、真实 Provider 演练或真实生产时长已经发生。",
-    trustVerifiedCount: "条独立门禁已验证",
+      "两条实验室可自主验证的门禁：精确实验包复现与真实墙钟生产时长，二者互不替代；外部证明不再被要求。",
+    trustVerifiedCount: "条自主门禁已验证",
     releaseRevision: "当前部署 revision",
     trustLocal: "本地复现实验",
-    trustExternal: "外部 CI + Sigstore",
-    trustRecovery: "异机 PostgreSQL 恢复",
-    trustDeepSeek: "真实 DeepSeek Shadow",
     trustElapsed: "90 天生产时钟",
     verified: "已验证",
     pending: "待补",
     stale: "已过期",
-    receipt: "签名回执",
     comparisons: "次对照",
     days: "天",
     trustBoundary:
-      "矩阵只投影精确工件、签名回执、持久化 Provider 用量和墙钟 Turn。缺失证据会持续可见，但不会让模拟城市停摆。",
+      "矩阵只投影精确工件与墙钟 Turn。缺失证据会持续可见，但不会让模拟城市停摆。",
     cognitiveDiversity: "认知多样性 Shadow",
     cognitiveDiversityDesc:
       "Shadow Provider 可以产生分歧、失败或消耗预算，但其输出永远不能参与城市结算。",
@@ -620,66 +610,6 @@ const trustReasonLabels: Record<
     en: "The local replication bundle failed validation.",
     zh: "本地复现实验包未通过校验。",
   },
-  "receipt-missing": {
-    en: "A signed evidence receipt has not been supplied.",
-    zh: "尚未提供签名证据回执。",
-  },
-  "receipt-envelope-invalid": {
-    en: "The supplied receipt envelope is malformed.",
-    zh: "已提供的回执封装格式无效。",
-  },
-  "receipt-public-key-missing": {
-    en: "The receipt public key has not been configured.",
-    zh: "尚未配置回执验证公钥。",
-  },
-  "receipt-expired": {
-    en: "The signed receipt has expired and must be refreshed.",
-    zh: "签名回执已过期，需要刷新。",
-  },
-  "receipt-kind-mismatch": {
-    en: "The receipt describes the wrong evidence kind.",
-    zh: "回执绑定的证据类型不匹配。",
-  },
-  "receipt-release-revision-mismatch": {
-    en: "The receipt does not bind the deployed revision.",
-    zh: "回执未绑定当前部署 revision。",
-  },
-  "expected-subject-digest-missing": {
-    en: "The expected evidence digest is unavailable.",
-    zh: "缺少待验证证据的预期摘要。",
-  },
-  "receipt-subject-digest-mismatch": {
-    en: "The receipt subject digest does not match the artifact.",
-    zh: "回执 subject 摘要与工件不匹配。",
-  },
-  "local-replication-not-verified": {
-    en: "External proof cannot replace a failed local replication.",
-    zh: "外部证明不能替代未通过的本地复现。",
-  },
-  "recovery-evidence-missing": {
-    en: "Off-host recovery evidence has not been supplied.",
-    zh: "尚未提供异机恢复证据。",
-  },
-  "recovery-evidence-invalid": {
-    en: "The recovery evidence failed checksum or replay validation.",
-    zh: "恢复证据未通过校验和或续写验证。",
-  },
-  "off-host-recovery-not-demonstrated": {
-    en: "A restore on a distinct host has not been demonstrated.",
-    zh: "尚未证明在不同主机完成恢复。",
-  },
-  "deepseek-shadow-not-configured": {
-    en: "Live DeepSeek is not configured as the read-only shadow.",
-    zh: "尚未把真实 DeepSeek 配置为只读 Shadow。",
-  },
-  "deepseek-shadow-not-exercised": {
-    en: "The DeepSeek shadow has not made an external call.",
-    zh: "DeepSeek Shadow 尚未发起外部调用。",
-  },
-  "deepseek-shadow-no-successful-comparison": {
-    en: "DeepSeek was attempted but produced no billable comparison.",
-    zh: "DeepSeek 已尝试调用，但没有可计费的成功对照。",
-  },
   "production-runtime-evidence-missing": {
     en: "No persisted wall-clock runtime evidence is available.",
     zh: "尚无持久化墙钟运行证据。",
@@ -698,16 +628,6 @@ function trustReasonLabel(
   reason: string,
   language: Language,
 ): string {
-  if (reason.startsWith("receipt-invalid:")) {
-    return language === "zh"
-      ? "签名回执验证失败。"
-      : "The signed receipt failed verification.";
-  }
-  if (reason.startsWith("receipt-summary-mismatch:")) {
-    return language === "zh"
-      ? "回执摘要与证据内容不匹配。"
-      : "The receipt summary does not match the evidence.";
-  }
   return trustReasonLabels[reason]?.[language] ??
     (language === "zh"
       ? "证据未通过校验。"
@@ -1574,7 +1494,7 @@ export default function HumanObservatory() {
                 {text.trustVerifiedCount}
               </span>
             </div>
-            <div className="mt-4 grid gap-3 sm:grid-cols-2 xl:grid-cols-5">
+            <div className="mt-4 grid gap-3 sm:grid-cols-2">
               {[
                 {
                   id: "local-replication",
@@ -1582,39 +1502,6 @@ export default function HumanObservatory() {
                   lane: trust.lanes.localReplication,
                   value: `${trust.lanes.localReplication.hypothesesPassed ?? 0} / ${trust.lanes.localReplication.hypothesesTotal ?? 0}`,
                   detail: `${trust.lanes.localReplication.exactRuns ?? 0} / ${trust.lanes.localReplication.runCount ?? 0} ${text.exactReplays}`,
-                },
-                {
-                  id: "external-replication",
-                  label: text.trustExternal,
-                  lane: trust.lanes.externalReplication,
-                  value: trust.lanes.externalReplication.receiptVerified
-                    ? text.verified
-                    : text[trust.lanes.externalReplication.status],
-                  detail: `${text.receipt}: ${
-                    trust.lanes.externalReplication.receiptPresent
-                      ? trust.lanes.externalReplication.runId ?? "—"
-                      : text.evidencePending
-                  }`,
-                },
-                {
-                  id: "off-host-recovery",
-                  label: text.trustRecovery,
-                  lane: trust.lanes.offHostRecovery,
-                  value: text[trust.lanes.offHostRecovery.status],
-                  detail: `${text.offHostBackup}: ${evidenceState(
-                    trust.lanes.offHostRecovery.offHost,
-                    language,
-                  )} · ${text.receipt}: ${evidenceState(
-                    trust.lanes.offHostRecovery.receiptVerified,
-                    language,
-                  )}`,
-                },
-                {
-                  id: "live-deepseek-shadow",
-                  label: text.trustDeepSeek,
-                  lane: trust.lanes.liveDeepSeekShadow,
-                  value: `${trust.lanes.liveDeepSeekShadow.successfulComparisons} ${text.comparisons}`,
-                  detail: `${trust.lanes.liveDeepSeekShadow.totalTokens.toLocaleString()} Token · ${usd(trust.lanes.liveDeepSeekShadow.costUsd)}`,
                 },
                 {
                   id: "elapsed-production",
@@ -1712,18 +1599,6 @@ export default function HumanObservatory() {
                   label: text.exactReplays,
                   value: `${replication.runs.filter((run) => run.exactReplay).length} / ${replication.runs.length}`,
                   detail: replication.integrity.resultsSha256.slice(0, 16),
-                },
-                {
-                  label: text.externalAttestation,
-                  value:
-                    trust?.lanes.externalReplication.status === "verified"
-                      ? text.verified
-                      : trust
-                        ? text[trust.lanes.externalReplication.status]
-                        : text.evidencePending,
-                  detail: trust?.lanes.externalReplication.receiptVerified
-                    ? `${text.receipt}: ${trust.lanes.externalReplication.runId ?? "—"}`
-                    : text.localEvidenceOnly,
                 },
               ].map((entry) => (
                 <article

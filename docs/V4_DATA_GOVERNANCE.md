@@ -53,7 +53,7 @@ downloadable because every input is repository-owned or frozen aggregate
 calibration and every run is synthetic. `externalCiVerified=false` and a null
 Sigstore receipt are meaningful evidence states and must not be hidden.
 
-The v4.8 trust matrix adds only artifact SHA-256 values, release revisions,
+The v4.9 evidence matrix adds only artifact SHA-256 values, release revisions,
 workflow/run identifiers, signed receipt timestamps, aggregate provider usage,
 runtime SLOs and pseudonymous SHA-256 host fingerprints. Host fingerprints are
 derived from stable non-secret infrastructure identities and must not contain

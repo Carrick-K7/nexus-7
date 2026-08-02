@@ -1,297 +1,89 @@
-# v4.8 Independent Trust Matrix
+# v4 Autonomous Evidence Matrix
 
-## Purpose
+> Updated 2026-08-01 · v4.9.0 · external-attestation requirement removed
 
-v4.8 makes the remaining scientific and operational uncertainty visible in one
-human-facing contract. It does not turn missing external evidence into a local
-score. The public read-only endpoint is:
+## Definition
 
-```text
-GET /api/observatory/v2/trust
+The evidence matrix is a projection of the two gates the laboratory can
+verify by itself:
+
+1. **Local replication** — the committed v4.7 replication bundle verifies
+   byte-exactly at read time: 7/7 hypotheses, 12/12 held-out runs, exact
+   double replay, matching bundle and results SHA-256.
+2. **Elapsed production** — the persisted wall-clock runtime envelope shows
+   90 elapsed production days with on-time settlement, exact revision
+   coverage, and zero missing, duplicate or predecessor-mismatched Turns.
+
+The two lanes are independent: a passing bundle can never satisfy the
+elapsed-time lane, and simulated Turns can never count as production days.
+Missing evidence stays visible with stable machine reason codes; it does not
+stop the synthetic city.
+
+## Contract
+
+`GET /api/observatory/v2/trust` returns
+`nexus.symbiosis-trust-matrix.v2` with policy
+`nexus-v4.9-autonomous-trust-policy-1.0.0`:
+
+```json
+{
+  "schemaVersion": "nexus.symbiosis-trust-matrix.v2",
+  "policyVersion": "nexus-v4.9-autonomous-trust-policy-1.0.0",
+  "summary": { "required": 2 },
+  "lanes": { "localReplication": {}, "elapsedProduction": {} },
+  "boundary": {
+    "lanesAreIndependent": true,
+    "simulatedTurnsCannotSatisfyElapsedTimeLane": true,
+    "externalAttestationNotRequired": true
+  }
+}
 ```
 
-`POST` is rejected with 405. The Human Observatory renders the same contract
-and preserves every missing, failed, stale, or verified lane.
+Lane statuses are `verified | pending | failed | stale`. The matrix is
+`verified` only when both lanes are; any failed or stale lane fails the whole
+matrix. Reason codes are stable machine identifiers; the Human Observatory
+pairs them with bilingual explanations.
 
-## Five independent lanes
+## Reading the matrix
 
-1. **Local replication** verifies the committed v4.7 bundle, all input/result/
-   envelope hashes, 7/7 hypotheses and 12/12 exact runs.
-2. **External replication** requires a GitHub-hosted clean CI run, Sigstore
-   provenance for the exact bundle bytes, and a fresh Ed25519 receipt bound to
-   the deployed commit, digest, hypotheses and run count.
-3. **Off-host recovery** requires a checksum-valid encrypted backup, distinct
-   source and target host fingerprints, restored row/fingerprint equality, a
-   resumed Turn, GitHub-hosted provenance and a fresh signed receipt.
-4. **Live DeepSeek shadow** requires DeepSeek to be the configured read-only
-   shadow, at least one external attempt, successful comparable persisted
-   output, and nonzero returned Token usage. Shadow output never settles the
-   city. Its attempt, comparison, failure, Token, price and model fields are
-   projected from DeepSeek shadow records only; reference-shadow or primary
-   DeepSeek totals cannot satisfy or inflate this lane.
-5. **Elapsed production** requires 90 real wall-clock days, fresh reports,
-   complete Turn lineage, 100% release-revision coverage and at least 99%
-   on-time settlement. Accelerated or reference Turns cannot satisfy it.
+- `localReplication.status = verified` requires the committed bundle to pass
+  `verifySymbiosisReplicationBundle` (structural checks, integrity hashes,
+  exact replay counts, hypothesis counts). A missing or corrupted bundle is
+  `failed`, never hidden.
+- `elapsedProduction` requires a fresh reliability report with no missing,
+  duplicate or predecessor-mismatched Turns, 100% revision coverage of the
+  observed runtime, on-time rate ≥ 0.99, and
+  `observationWindowDays ≥ requiredObservationDays (90)`. Until 90 real days
+  elapse it is honestly `pending` with
+  `ninety-days-not-yet-observed`.
 
-The overall state is verified only when all five are verified. A malformed or
-tampered artifact fails its lane. An absent artifact is pending. An expired
-otherwise-valid receipt is stale. Provider failure or a reliability invariant
-violation is failed. None of these states stops the deterministic city clock.
+## v4.9.0 constitution decision: external attestation removed
 
-## External replication receipt
+The human governor decided the laboratory does not require independent
+external attestation to be considered complete. Consequences:
 
-The `Symbiosis replication` workflow runs independently of live-model release
-promotion. It verifies the bundle from the attested revision, checks out tag
-`v4.7.0` in an isolated directory, repeats its exact reproduction command and
-requires the two bundle files to be byte-identical. After a successful push to
-`main` or governed manual run, it uploads and attests that unchanged artifact.
-`Remote evidence receipts` ignores pull-request runs, downloads the artifact,
-executes only the default branch's trusted verifier, verifies the artifact's
-GitHub attestation with self-hosted runners denied, recomputes the internal
-hashes and issues `symbiosis-replication-receipt.json`. The attested revision
-is bound as data but its code never receives the receipt-signing key.
+- signed receipt ingestion (governed Ed25519 key + OIDC governance route),
+  distinct-host recovery proof and a live DeepSeek shadow are **no longer
+  requirements** and no longer appear as matrix lanes;
+- the receipt issuance and ingestion machinery remains in the repository,
+  dormant and tested (`npm run ops:receipt-drill`, the governance evidence
+  registry and its reference-fake contract suite) so it can be re-enabled
+  later without archaeology;
+- the DeepSeek shadow observation remains in the cognitive-diversity panel:
+  any future provider usage still records attempts, Tokens, models, pricing
+  versions and USD cost without ever settling the world;
+- backup/restore and recovery drills remain operational controls: they keep
+  proving that the production PostgreSQL volume can be backed up, encrypted,
+  restored and replayed, but they are not gates on the evidence matrix.
 
-This separation does not relax the legacy live-model promotion gate. It only
-prevents an absent OpenAI promotion credential from blocking the independent
-scientific-replication lane.
+Nothing in this decision weakens the scientific boundary: results remain
+synthetic, RALR still shows its denominator, refusals, withdrawals, coercion
+and long-pending episodes, and no real person or private input participates.
 
-The repository must provide:
+## Boundaries
 
-```text
-NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64  # GitHub Actions secret
-NEXUS_ATTESTATION_RECEIPT_PUBLIC_KEY_BASE64   # web-process environment
-```
-
-v4.8.8 keeps the source-cleanliness guard independent from those keys. Its CI
-manifest ignores only declared reports regenerated by the quality workflow and
-prints every unexpected path; code, configuration, documentation, unknown
-outputs and Git-status failure still block receipt promotion. A clean signed
-manifest is necessary but not sufficient: without the private key no receipt
-is issued, and without the matching public key plus receipt file the web
-process cannot verify or display that lane as complete.
-
-Generate the Ed25519 pair on a human-controlled administrative machine, never
-inside the repository or application release directory:
-
-```bash
-umask 077
-openssl genpkey -algorithm ED25519 -out nexus7-receipt-private.pem
-openssl pkey -in nexus7-receipt-private.pem -pubout -out nexus7-receipt-public.pem
-base64 -w0 nexus7-receipt-private.pem > nexus7-receipt-private.pem.b64
-base64 -w0 nexus7-receipt-public.pem > nexus7-receipt-public.pem.b64
-gh secret set NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64 \
-  --repo Carrick-K7/nexus-7 < nexus7-receipt-private.pem.b64
-```
-
-Install only the public Base64 value in the shared Web environment as
-`NEXUS_ATTESTATION_RECEIPT_PUBLIC_KEY_BASE64`. After a successful receipt
-workflow, install `symbiosis-replication-receipt.json` as an application-user
-readable, mode-0600 file outside the release directory and set
-`SYMBIOSIS_REPLICATION_RECEIPT_FILE` to that absolute path. Restart Web and
-confirm the Trust API binds the receipt subject, signer and non-expired time.
-The private PEM and intermediate Base64 file remain under human custody and
-must not be copied to the application host.
-
-Automatic governance-registry ingestion additionally requires repository
-variables `NEXUS_GOVERNANCE_BASE_URL` and `NEXUS_OIDC_AUDIENCE`, plus a Web
-OIDC provider that trusts only the named GitHub workflow identity. The public
-observatory intentionally rejects POST, so its URL must not be used as the
-governance base until a distinct authenticated control-plane route exists.
-
-`SYMBIOSIS_TRUSTED_SIGNER_WORKFLOWS` is optional. When present it replaces,
-rather than extends, the built-in allowlist. An explicit deployment value must
-therefore contain `ci.yml`, `symbiosis-replication.yml`,
-`operations-drills.yml` and `symbiosis-offhost-recovery.yml`; the checked
-`.env.example` value is the conformance reference.
-
-Download the receipt artifact to a mode-0600 server file and configure:
-
-```text
-SYMBIOSIS_REPLICATION_RECEIPT_FILE=/run/nexus7/symbiosis-replication-receipt.json
-```
-
-Receipts expire after seven days. Refreshing a receipt verifies current
-availability and provenance; it does not alter historical experiment results.
-
-In v4.8.9, each receipt follower first runs a two-minute configuration
-preflight. If the private-key secret is absent, the workflow writes an explicit
-pending summary and skips the issuer job; it does not create a receipt or
-promote a trust lane. If the secret is present, the existing download,
-attestation, verification, signing and optional ingestion path runs unchanged,
-and every error remains fail-closed. A green preflight means only that the
-absence was reported correctly, not that external evidence was verified.
-
-## Off-host PostgreSQL drill
-
-The manual `Symbiosis off-host recovery` workflow runs on a GitHub-hosted
-runner, restores a production backup into PostgreSQL 17 and advances the
-restored season by one Turn. Configure these repository secrets before running
-it:
-
-```text
-SYMBIOSIS_BACKUP_MANIFEST_URL
-SYMBIOSIS_ENCRYPTED_BACKUP_URL
-NEXUS7_BACKUP_ENCRYPTION_KEY_HEX
-SYMBIOSIS_BACKUP_SOURCE_HOST_FINGERPRINT
-NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64
-```
-
-The two URLs must be short-lived HTTPS download URLs for the matching plaintext
-backup manifest and encrypted artifact. The source fingerprint is SHA-256 of a
-stable, non-secret production-host identity. The workflow derives a different
-target fingerprint from its repository/run/runner identity, deletes temporary
-backup material, uploads only the evidence envelope and attests it.
-
-The receipt workflow then verifies that attestation and issues
-`symbiosis-off-host-recovery-receipt.json`. Deploy both the recovery envelope
-and receipt as mode-0600 files:
-
-```text
-SYMBIOSIS_RECOVERY_EVIDENCE_FILE=/run/nexus7/symbiosis-offhost-recovery.json
-SYMBIOSIS_OFFHOST_RECOVERY_RECEIPT_FILE=/run/nexus7/symbiosis-off-host-recovery-receipt.json
-```
-
-The dashboard rejects identical host fingerprints, a changed evidence
-checksum, a subject-digest mismatch, an untrusted workflow, the wrong release
-commit, an invalid signature or an expired receipt.
-
-## DeepSeek shadow drill
-
-Keep the deterministic provider as the world-settling primary and start with a
-small independent shadow cap:
-
-```text
-SYMBIOSIS_COGNITIVE_PROVIDER=deterministic
-SYMBIOSIS_SHADOW_PROVIDER=deepseek
-SYMBIOSIS_SHADOW_MONTHLY_BUDGET_USD=1
-DEEPSEEK_API_KEY_FILE=/run/secrets/deepseek-api-key
-```
-
-Restart web and worker normally; do not use `--once`. On the next naturally due
-Turn, the gateway records attempts, provider failures or successful usage,
-returned Token counts, pinned price version and USD cost. A missing key or
-provider outage leaves the gate pending/failed and the city continues through
-the deterministic primary.
-
-## Operator execution order (v4.8.12 handoff)
-
-The four remaining lanes are external evidence operations; each is executed
-by the human operator with the exact steps above, then verified by API:
-
-1. **Governed receipt signing and ingestion** — generate the Ed25519 pair on
-   a human machine, set `NEXUS_ATTESTATION_RECEIPT_PRIVATE_KEY_BASE64`, install
-   the public key and receipt file on the host, configure the distinct
-   authenticated governance route with OIDC, restart web.
-   Verify: `curl -fsS https://nexus7.carrick7.com/api/observatory/v2/trust`
-   shows `externalReplication` receipt-bound with the exact source commit.
-2. **Distinct-host recovery** — prepare short-lived URLs and the five secrets
-   above, run the `Symbiosis off-host recovery` workflow, install the envelope
-   and receipt files, restart web.
-   Verify: `offHostRecovery` shows distinct host fingerprints, restored
-   second-database rows and a verified receipt.
-3. **Read-only live DeepSeek shadow** — install the mode-0600 key file and the
-   environment above, restart worker, wait one natural Turn.
-   Verify: `liveDeepSeekShadow` shows real persisted attempt/token/cost
-   evidence and `settlesWorld: false`.
-4. **90 elapsed production days** — no action; the runtime envelopes accrue
-   automatically. Verify: `elapsedProduction.observedDays` reaches 90 with
-   on-time rate, revision coverage, zero missing/duplicate/predecessor
-   mismatches.
-
-After each lane turns verified, refresh this document, the iteration
-manifests and the AGENTS.md baseline before the next lane; only the human
-constitutional governor reopens city mechanisms after all five lanes are
-independently verified.
-
-## Boundary
-
-The matrix is evidence about this software experiment. It is not evidence that
-real Shenzhen residents would behave similarly, that a real policy works, or
-that AI systems are conscious. Signed receipts establish artifact provenance,
-not truth beyond the measured contract.
-
-## v4.8.1 evidence-isolation correction
-
-The first v4.8.0 production projection kept the lane pending but displayed the
-ordinary reference shadow's comparison count in the DeepSeek card. v4.8.1
-removes that ambiguity: the lane now reads a dedicated DeepSeek-shadow slice
-for attempts, successful comparisons, provider failures, Token use, cost,
-models and pricing versions. A regression fixture with 260 reference
-comparisons and zero DeepSeek calls must still render zero DeepSeek evidence.
-
-## v4.8.5 evidence-readiness correction
-
-The public Observatory now pairs each stable reason code with a bilingual
-human explanation and displays the exact release revision against which signed
-receipts are checked. The API keeps the unchanged machine codes. A malformed
-off-host receipt is failed even when the recovery evidence file is absent;
-removing a companion artifact cannot downgrade already supplied bad evidence
-to pending. A repository test also prevents the explicit environment template
-from silently excluding a supported signer workflow.
-
-## v4.8.6 accessibility correction
-
-The production v4.8.5 browser audit found that translated Chinese content
-could retain `lang="en"` at the document root. v4.8.6 synchronizes the root
-language with the persisted display language and verifies it after selection
-and reload. Trust calculations and all five lane states are unchanged.
-
-## v4.8.10 human-projection correction
-
-The Trust API and all five lane calculations remain unchanged. The adjacent
-Human Observatory now normalizes the city's 0–100 relationship score before
-percent formatting and refuses to summarize recovery as passed when persisted
-backup evidence is stale. Freshness, age, second-database restore, encryption
-and off-host status remain distinct observations.
-
-## v4.8.11 release-output-inventory correction
-
-The release gate also regenerates the deterministic v4.5 reliability/shadow
-report and v4.6 society report before creating CI evidence. Their two exact
-paths are declared derived outputs so clean source is not misclassified.
-There is no wildcard: source, documentation, configuration, unknown outputs,
-renames, copies and Git-query failure still fail closed. Rename/copy records
-always expose both paths even when each path is otherwise declared generated.
-CI manifests now also say `requires-external-verification`: naming Sigstore as
-the provider does not claim that a PR artifact was attested. Only independent
-verification and the signed receipt can advance a Trust lane.
-
-## v4.8.12 receipt-lifecycle closure
-
-The governed receipt path is now exercised as a local machine drill before
-any human key configuration:
-
-```bash
-npm run ops:receipt-drill
-```
-
-The drill signs the committed CI-evidence artifact with an ephemeral Ed25519
-key (memory only), verifies signature, repository, signer allowlist and
-lifetime, ingests the receipt twice through the real
-`EvidenceRegistryService` against an in-memory repository to prove
-idempotency, and asserts five fail-closed rejections (tampered signature,
-untrusted workflow, expired receipt, wrong repository, viewer caller) plus
-envelope-schema rejection. Its machine report is written mode-0600 to
-`.artifacts/receipt-drill.json` and is a mechanical drill artifact, never a
-governed receipt.
-
-The ingestion client contract is covered by a real HTTP reference fake:
-`src/governance/ingest-client.test.ts` runs the actual
-`scripts/ingest-remote-evidence.ts` subprocess against an ephemeral
-governance server and asserts the OIDC bearer path, registry rejection,
-OIDC failure and malformed-receipt failure.
-
-Operator receipt sequence (human-hosted key and registry):
-
-1. On a human-controlled machine, generate the Ed25519 pair and set the
-   GitHub Actions secret exactly as documented above.
-2. Install the public Base64 value and the signed receipt file on the
-   production host (mode 0600) and set `SYMBIOSIS_REPLICATION_RECEIPT_FILE`.
-3. Configure the separate authenticated governance route
-   (`NEXUS_GOVERNANCE_BASE_URL`, `NEXUS_OIDC_AUDIENCE` and the GitHub OIDC
-   provider entry from `.env.example`) only on a distinct control plane;
-   the public observatory rejects POST.
-4. Restart web and verify `/api/observatory/v2/trust`: the lane binds the
-   receipt subject digest, signer workflow, revision and non-expired time.
-5. Re-run `npm run ops:receipt-drill` after configuration; it must stay
-   green because it never reads production keys or storage.
+- The matrix is evidence about this software experiment.
+- Synthetic results cannot establish real human behavior, policy effects, AI
+  consciousness or legal personhood.
+- Archived receipt code is not a live attestation; re-enabling it requires a
+  fresh constitutional decision and operator configuration.

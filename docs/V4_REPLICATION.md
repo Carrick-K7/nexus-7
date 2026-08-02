@@ -54,24 +54,18 @@ behind a mean.
 
 ## Trust levels
 
-The Observatory deliberately shows four different facts:
+The Observatory shows two autonomous facts:
 
 1. local reproduction passed;
-2. the portable bundle's exact SHA-256;
-3. external CI verification status;
-4. Sigstore receipt presence.
+2. the portable bundle's exact SHA-256.
 
-Only the first two are currently present. Workflow code capable of uploading
-and attesting the bundle exists, but code is not a receipt. A GitHub or other
-independent run must complete and its provenance must be verified before the
-last two states can change.
+v4.9.0 removed the external-attestation requirement by constitutional
+decision: external CI verification status and Sigstore receipt presence are
+no longer required and no longer appear in the evidence matrix
+(`nexus.symbiosis-trust-matrix.v2`). The committed bundle keeps its original
+historical fields (`externalCiVerified: false`, `sigstoreReceipt: null`)
+because an external proof cannot rewrite the artifact it attests; those
+fields are archive data, not gates.
 
-v4.8 keeps the immutable bundle unchanged and projects any later receipt
-through `/api/observatory/v2/trust`. The receipt must match the bundle file
-digest, internal bundle hash, hypothesis/run summary, deployed revision and a
-trusted GitHub workflow. The committed bundle's original `externalCiVerified`
-field remains false because external proof cannot rewrite the artifact it
-attests.
-
-This milestone does not close the live DeepSeek, 90 elapsed production days or
-off-host PostgreSQL restore gates.
+The receipt machinery remains dormant and tested; re-enabling it requires a
+fresh constitutional decision.

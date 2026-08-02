@@ -235,6 +235,9 @@ and Sigstore evidence remain separate exit gates.
 
 ## v4.8 Independent Trust Matrix gate
 
+> Superseded by the v4.9 autonomous evidence matrix (ADR 0040): the external
+> lanes below are archived history, no longer required or projected.
+
 `nexus.symbiosis-trust-matrix.v1` exposes five non-substitutable lanes through
 the read-only `/api/observatory/v2/trust` contract and bilingual Observatory.
 Implementation commit `7182378` contains the contract, fail-closed verifier,
@@ -257,6 +260,25 @@ Unit/reference verification covers:
 - 90 reference days pass the algorithm only when freshness, sequence,
   predecessor, revision and 99% on-time gates also pass; production shows only
   actual elapsed time.
+
+### v4.9 autonomous evidence matrix gate
+
+`nexus.symbiosis-trust-matrix.v2` exposes two autonomous lanes through the
+same read-only `/api/observatory/v2/trust` contract: local byte-exact
+replication and 90 elapsed production days. ADR 0040 removed the
+external-attestation requirement; the receipt machinery stays dormant and
+tested. Unit/reference verification covers:
+
+- a valid committed bundle verifies locally while the elapsed lane stays
+  pending rather than inheriting the local pass;
+- the elapsed lane passes only with 90 observed days, 100% revision coverage,
+  zero missing/duplicate/predecessor mismatches, fresh report and on-time
+  rate ≥ 0.99;
+- simulated Turns can never satisfy the elapsed-time lane;
+- missing runtime evidence stays pending, sequence/freshness loss fails the
+  lane, and a corrupted bundle fails local replication;
+- the contract pins `nexus.symbiosis-trust-matrix.v2`,
+  `nexus-v4.9-autonomous-trust-policy-1.0.0` and `required: 2`.
 
 The GitHub-hosted workflows issue replication and off-host recovery receipts
 only after Sigstore verification with self-hosted runners denied. Those
