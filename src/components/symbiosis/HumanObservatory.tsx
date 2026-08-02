@@ -53,6 +53,12 @@ import type {
   SymbiosisReplicationBundle,
 } from "@/symbiosis/replication";
 import type {
+  HypothesisCampaignReport,
+} from "@/symbiosis/campaign";
+import type {
+  LongHorizonStudyReport,
+} from "@/symbiosis/long-horizon";
+import type {
   SymbiosisTrustMatrix,
   TrustLaneStatus,
 } from "@/symbiosis/trust";
@@ -131,6 +137,24 @@ const copy = {
     reproduceCommand: "Reproduce from a clean checkout",
     bundleFingerprint: "Bundle SHA-256",
     downloadBundle: "Download replication bundle",
+    researchCampaigns: "RESEARCH CAMPAIGNS",
+    researchCampaignsDesc:
+      "Preregistered hypothesis campaigns on white-listed civic-policy regimes. Every denominator, refusal and withdrawal stays visible; rejected hypotheses remain published.",
+    campaignId: "Campaign",
+    campaignHypotheses: "Hypotheses",
+    campaignRuns: "Runs",
+    campaignTurnsPerRun: "Turns / run",
+    campaignPolicy: "Policy",
+    campaignSeed: "seed",
+    longHorizon: "LONG-HORIZON STUDY",
+    longHorizonDesc:
+      "Five simulated years (1,825 Turns) across held-out seeds under the constitutional baseline, with quartile sampling and institutional-drift analysis.",
+    longHorizonTurns: "Simulated years",
+    longHorizonSeeds: "Seeds",
+    longPending: "Long-pending",
+    driftDirection: "Ratification drift",
+    downloadCampaign: "Download campaign evidence",
+    downloadLongHorizon: "Download long-horizon evidence",
     trustMatrix: "AUTONOMOUS TRUST MATRIX",
     trustMatrixDesc:
       "Two autonomous gates the laboratory can verify by itself. Exact bundle reproduction and elapsed wall-clock production time cannot substitute for each other; external attestation is not required.",
@@ -361,6 +385,24 @@ const copy = {
     reproduceCommand: "从干净 checkout 复现",
     bundleFingerprint: "实验包 SHA-256",
     downloadBundle: "下载复现实验包",
+    researchCampaigns: "研究战役",
+    researchCampaignsDesc:
+      "在白名单制度参数上的预注册假设战役。分母、拒绝与撤回全部可见；被拒绝的假设保持发布。",
+    campaignId: "战役",
+    campaignHypotheses: "假设",
+    campaignRuns: "运行数",
+    campaignTurnsPerRun: "每次运行 Turn",
+    campaignPolicy: "制度参数",
+    campaignSeed: "种子",
+    longHorizon: "长期演进研究",
+    longHorizonDesc:
+      "宪法基线下的五个模拟年（1,825 Turn），held-out 种子、四分位采样与制度漂移分析。",
+    longHorizonTurns: "模拟年",
+    longHorizonSeeds: "种子数",
+    longPending: "长期未决",
+    driftDirection: "批准制度漂移",
+    downloadCampaign: "下载战役证据",
+    downloadLongHorizon: "下载长期研究证据",
     trustMatrix: "自主可信证据矩阵",
     trustMatrixDesc:
       "两条实验室可自主验证的门禁：精确实验包复现与真实墙钟生产时长，二者互不替代；外部证明不再被要求。",
@@ -822,6 +864,11 @@ export default function HumanObservatory() {
   const [replication, setReplication] =
     useState<SymbiosisReplicationBundle | null>(null);
   const [trust, setTrust] = useState<SymbiosisTrustMatrix | null>(null);
+  const [campaigns, setCampaigns] = useState<
+    HypothesisCampaignReport[]
+  >([]);
+  const [longHorizon, setLongHorizon] =
+    useState<LongHorizonStudyReport | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastSuccessfulRefreshAt, setLastSuccessfulRefreshAt] =
@@ -838,13 +885,24 @@ export default function HumanObservatory() {
   const refresh = useCallback(async () => {
     const sequence = ++refreshSequence.current;
     try {
-      const [response, replicationResponse, trustResponse] = await Promise.all([
-        fetch("/api/observatory/v2/overview", { cache: "no-store" }),
-        fetch("/data/v4-7-replication-bundle.json", {
-          cache: "no-store",
-        }),
-        fetch("/api/observatory/v2/trust", { cache: "no-store" }),
-      ]);
+      const [response, replicationResponse, trustResponse] =
+        await Promise.all([
+          fetch("/api/observatory/v2/overview", { cache: "no-store" }),
+          fetch("/data/v4-7-replication-bundle.json", {
+            cache: "no-store",
+          }),
+          fetch("/api/observatory/v2/trust", { cache: "no-store" }),
+        ]);
+      const campaignResponses = await Promise.all(
+        [
+          "/data/campaigns/institutional-design-v1.json",
+          "/data/campaigns/institutional-design-v2.json",
+        ].map((url) => fetch(url, { cache: "no-store" })),
+      );
+      const longHorizonResponse = await fetch(
+        "/data/long-horizon-study.json",
+        { cache: "no-store" },
+      );
       if (!response.ok) throw new Error(`observatory-${response.status}`);
       if (!replicationResponse.ok) {
         throw new Error(`replication-${replicationResponse.status}`);
@@ -852,15 +910,33 @@ export default function HumanObservatory() {
       if (!trustResponse.ok) {
         throw new Error(`trust-${trustResponse.status}`);
       }
-      const [report, replicationBundle, trustMatrix] = await Promise.all([
-        response.json() as Promise<HumanObservatoryReport>,
-        replicationResponse.json() as Promise<SymbiosisReplicationBundle>,
-        trustResponse.json() as Promise<SymbiosisTrustMatrix>,
-      ]);
+      if (campaignResponses.some((item) => !item.ok)) {
+        throw new Error("campaigns-unavailable");
+      }
+      if (!longHorizonResponse.ok) {
+        throw new Error(`long-horizon-${longHorizonResponse.status}`);
+      }
+      const [report, replicationBundle, trustMatrix] =
+        await Promise.all([
+          response.json() as Promise<HumanObservatoryReport>,
+          replicationResponse.json() as Promise<SymbiosisReplicationBundle>,
+          trustResponse.json() as Promise<SymbiosisTrustMatrix>,
+        ]);
+      const campaignReports = (await Promise.all(
+        campaignResponses.map(
+          (item) => item.json() as Promise<HypothesisCampaignReport>,
+        ),
+      )).sort((left, right) =>
+        left.campaignId.localeCompare(right.campaignId),
+      );
+      const longHorizonReport =
+        (await longHorizonResponse.json()) as LongHorizonStudyReport;
       if (sequence !== refreshSequence.current) return;
       setData(report);
       setReplication(replicationBundle);
       setTrust(trustMatrix);
+      setCampaigns(campaignReports);
+      setLongHorizon(longHorizonReport);
       setLastSuccessfulRefreshAt(new Date().toISOString());
       setError(null);
     } catch (caught) {
@@ -1641,6 +1717,168 @@ export default function HumanObservatory() {
                 ? "这是对 v4.6 探索性结果的前瞻复现计划；本地源码锁定不等于外部时间戳、独立实验室复现或 Sigstore 证明。"
                 : "This prospectively replicates exploratory v4.6 results; a local source lock is not an external timestamp, independent-lab reproduction, or Sigstore proof."}
             </p>
+          </section>
+        )}
+
+        {campaigns.length > 0 && (
+          <section
+            className="rounded-2xl border border-cyber-orange/30 bg-cyber-darker/90 p-5"
+            aria-labelledby="research-campaigns-title"
+            data-testid="research-campaigns"
+          >
+            <div className="flex items-center gap-2">
+              <FlaskConical className="h-5 w-5 text-cyber-orange" />
+              <h2
+                id="research-campaigns-title"
+                className="font-orbitron text-sm text-cyber-orange"
+              >
+                {text.researchCampaigns}
+              </h2>
+            </div>
+            <p className="mt-2 text-xs leading-5 text-cyber-text-dim">
+              {text.researchCampaignsDesc}
+            </p>
+            <div className="mt-4 grid gap-3 lg:grid-cols-2">
+              {campaigns.map((campaign) => (
+                <article
+                  key={campaign.campaignId}
+                  className="min-w-0 rounded-xl border border-cyber-gray-light bg-cyber-black/45 p-4"
+                >
+                  <div className="flex flex-wrap items-center justify-between gap-2">
+                    <h3 className="break-all font-mono text-xs font-semibold text-cyber-text">
+                      {campaign.campaignId} · {campaign.campaignVersion}
+                    </h3>
+                    <span
+                      className={`rounded-full border px-2 py-0.5 text-[10px] ${
+                        campaign.status === "campaign-passed"
+                          ? "border-cyber-green/60 text-cyber-green"
+                          : "border-cyber-orange/60 text-cyber-orange"
+                      }`}
+                    >
+                      {campaign.status === "campaign-passed"
+                        ? text.verified
+                        : "REJECTED"}
+                    </span>
+                  </div>
+                  <p className="mt-3 font-mono text-lg text-cyber-text">
+                    {campaign.analysis.passed} / {campaign.analysis.total}{" "}
+                    {text.campaignHypotheses}
+                  </p>
+                  <p className="mt-1 text-xs text-cyber-text-dim">
+                    {campaign.design.runCount} {text.campaignRuns} ·{" "}
+                    {campaign.design.turnsPerRun} {text.campaignTurnsPerRun} ·{" "}
+                    {campaign.design.seeds.length} {text.campaignSeed}
+                  </p>
+                  <ul className="mt-3 space-y-1.5">
+                    {campaign.analysis.hypotheses.map((hypothesis) => (
+                      <li
+                        key={hypothesis.id}
+                        className="flex items-start gap-2 text-xs leading-5"
+                      >
+                        <span
+                          className={`mt-0.5 shrink-0 font-mono ${
+                            hypothesis.passed
+                              ? "text-cyber-green"
+                              : "text-cyber-orange"
+                          }`}
+                        >
+                          {hypothesis.passed ? "✓" : "✗"}
+                        </span>
+                        <span className="min-w-0 break-words text-cyber-text-dim">
+                          <code className="text-cyber-text">
+                            {hypothesis.id}
+                          </code>{" "}
+                          {hypothesis.observed}
+                        </span>
+                      </li>
+                    ))}
+                  </ul>
+                  <p className="mt-3 break-all text-[10px] text-cyber-text-dim">
+                    SHA-256: {campaign.integrity.reportSha256}
+                  </p>
+                  <a
+                    href={`/data/campaigns/${campaign.campaignId}.json`}
+                    download
+                    className="mt-3 inline-flex items-center gap-2 rounded-lg border border-cyber-orange/40 px-3 py-2 text-xs text-cyber-orange hover:bg-cyber-orange/10"
+                  >
+                    <Download className="h-3.5 w-3.5" />
+                    {text.downloadCampaign}
+                  </a>
+                </article>
+              ))}
+            </div>
+            {longHorizon && (
+              <article className="mt-3 rounded-xl border border-cyber-gray-light bg-cyber-black/45 p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="font-orbitron text-xs font-semibold text-cyber-orange">
+                    {text.longHorizon}
+                  </h3>
+                  <span
+                    className={`rounded-full border px-2 py-0.5 text-[10px] ${
+                      longHorizon.status === "study-passed"
+                        ? "border-cyber-green/60 text-cyber-green"
+                        : "border-cyber-orange/60 text-cyber-orange"
+                    }`}
+                  >
+                    {longHorizon.status === "study-passed"
+                      ? text.verified
+                      : "REJECTED"}
+                  </span>
+                </div>
+                <p className="mt-2 text-xs leading-5 text-cyber-text-dim">
+                  {text.longHorizonDesc}
+                </p>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                  <div>
+                    <p className="text-xs text-cyber-text-dim">
+                      {text.longHorizonTurns}
+                    </p>
+                    <p className="mt-1 font-mono text-lg text-cyber-text">
+                      {longHorizon.design.turnsPerRun / 365}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-cyber-text-dim">
+                      {text.longHorizonSeeds}
+                    </p>
+                    <p className="mt-1 font-mono text-lg text-cyber-text">
+                      {longHorizon.design.seeds.length}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-cyber-text-dim">RALR</p>
+                    <p className="mt-1 break-words font-mono text-lg text-cyber-text">
+                      {longHorizon.analysis.pooledRalr.rate?.toFixed(4) ?? "—"}{" "}
+                      <span className="text-xs text-cyber-text-dim">
+                        ({longHorizon.analysis.pooledRalr.numerator}/
+                        {longHorizon.analysis.pooledRalr.denominator})
+                      </span>
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-cyber-text-dim">
+                      {text.longPending}
+                    </p>
+                    <p className="mt-1 font-mono text-lg text-cyber-text">
+                      {longHorizon.analysis.longPendingTotal}
+                    </p>
+                  </div>
+                </div>
+                <p className="mt-3 break-all text-[10px] text-cyber-text-dim">
+                  {text.driftDirection}:{" "}
+                  {longHorizon.analysis.driftDirection} · SHA-256:{" "}
+                  {longHorizon.integrity.reportSha256}
+                </p>
+                <a
+                  href="/data/long-horizon-study.json"
+                  download
+                  className="mt-3 inline-flex items-center gap-2 rounded-lg border border-cyber-orange/40 px-3 py-2 text-xs text-cyber-orange hover:bg-cyber-orange/10"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  {text.downloadLongHorizon}
+                </a>
+              </article>
+            )}
           </section>
         )}
 

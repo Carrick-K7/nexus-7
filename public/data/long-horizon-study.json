@@ -1,0 +1,294 @@
+{
+  "schemaVersion": "nexus.long-horizon-study.v1",
+  "protocolVersion": "nexus-v4.10-long-horizon-protocol-1.0.0",
+  "generatedAt": "2026-08-02T17:53:48.936Z",
+  "status": "study-passed",
+  "boundary": {
+    "syntheticOnly": true,
+    "realPolicyEvidence": false,
+    "privateDataIncluded": false,
+    "modelReasoningIncluded": false,
+    "productionSettlementChanged": false
+  },
+  "design": {
+    "engineVersion": "symbiotic-shenzhen-engine-4.6.0",
+    "distributionVersion": "symbiotic-shenzhen-distributions-3.0.0",
+    "turnsPerRun": 1825,
+    "seeds": [
+      "long-horizon-aurora",
+      "long-horizon-borealis"
+    ],
+    "runCount": 2,
+    "longPendingThresholdTurns": 180,
+    "segmentsPerRun": 4,
+    "regime": "reciprocal-agency",
+    "policy": "constitutional-baseline",
+    "command": "npm ci && npm run study:long-horizon"
+  },
+  "runs": [
+    {
+      "id": "long-horizon-long-horizon-aurora",
+      "seed": "long-horizon-aurora",
+      "turns": 1825,
+      "finalFingerprint": "b50b4f06",
+      "resultSha256": "d4c738e1aa47790015adf98e7845bed080f3c201576383dd8cfb9b688a8b9ab5",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 2778,
+        "denominator": 3646,
+        "rate": 0.761931,
+        "refusals": 594,
+        "withdrawals": 274,
+        "coerciveActions": 0
+      },
+      "longPendingEpisodes": 0,
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 0
+      },
+      "society": {
+        "closureNumerator": 2473,
+        "closureDenominator": 2473,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.988462,
+        "crossKindHouseholdRate": 0.408333,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 545,
+        "refusedWorkAgreements": 317,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 0,
+        "maintenanceCoverageRate": 0,
+        "settledExchanges": 1003,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 458,
+        "refusedBargains": 98,
+        "mediatedBargains": 54,
+        "forcedBargains": 0,
+        "constitutionalProposals": 60,
+        "ratifiedProposals": 43,
+        "revertedProposals": 43,
+        "invalidProposals": 0
+      },
+      "drift": {
+        "firstHalfRatifiedProposalsPer100Turns": 2.741228,
+        "secondHalfRatifiedProposalsPer100Turns": 1.971522,
+        "firstHalfHouseholds": 94,
+        "secondHalfHouseholds": 120
+      },
+      "segments": [
+        {
+          "turn": 456,
+          "simulationDate": "2027-10-17",
+          "ralr": {
+            "numerator": 689,
+            "denominator": 908,
+            "rate": 0.758811
+          },
+          "resolvedEpisodes": 908,
+          "households": 80,
+          "activeWorkAgreements": 1,
+          "ratifiedProposals": 1,
+          "revertedProposals": 11,
+          "humanBasicNeedsSatisfiedRate": 1,
+          "communityPressureSpread": 0
+        },
+        {
+          "turn": 913,
+          "simulationDate": "2029-01-16",
+          "ralr": {
+            "numerator": 1396,
+            "denominator": 1820,
+            "rate": 0.767033
+          },
+          "resolvedEpisodes": 1820,
+          "households": 94,
+          "activeWorkAgreements": 1,
+          "ratifiedProposals": 1,
+          "revertedProposals": 24,
+          "humanBasicNeedsSatisfiedRate": 1,
+          "communityPressureSpread": 0.000001
+        },
+        {
+          "turn": 1369,
+          "simulationDate": "2030-04-17",
+          "ralr": {
+            "numerator": 2078,
+            "denominator": 2732,
+            "rate": 0.760615
+          },
+          "resolvedEpisodes": 2732,
+          "households": 107,
+          "activeWorkAgreements": 1,
+          "ratifiedProposals": 0,
+          "revertedProposals": 35,
+          "humanBasicNeedsSatisfiedRate": 1,
+          "communityPressureSpread": 0.000003
+        },
+        {
+          "turn": 1825,
+          "simulationDate": "2031-07-17",
+          "ralr": {
+            "numerator": 2778,
+            "denominator": 3646,
+            "rate": 0.761931
+          },
+          "resolvedEpisodes": 3646,
+          "households": 120,
+          "activeWorkAgreements": 1,
+          "ratifiedProposals": 0,
+          "revertedProposals": 43,
+          "humanBasicNeedsSatisfiedRate": 1,
+          "communityPressureSpread": 0.000001
+        }
+      ]
+    },
+    {
+      "id": "long-horizon-long-horizon-borealis",
+      "seed": "long-horizon-borealis",
+      "turns": 1825,
+      "finalFingerprint": "d582fa92",
+      "resultSha256": "d648234fb4b7eb84a698181dbd3d539e03a641962b905e45c8366078f23a9d00",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 2799,
+        "denominator": 3646,
+        "rate": 0.767691,
+        "refusals": 569,
+        "withdrawals": 278,
+        "coerciveActions": 0
+      },
+      "longPendingEpisodes": 0,
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 0
+      },
+      "society": {
+        "closureNumerator": 2469,
+        "closureDenominator": 2469,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.988462,
+        "crossKindHouseholdRate": 0.408333,
+        "activeWorkAgreements": 1,
+        "completedWorkAgreements": 543,
+        "refusedWorkAgreements": 338,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 0,
+        "maintenanceCoverageRate": 0,
+        "settledExchanges": 998,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 455,
+        "refusedBargains": 103,
+        "mediatedBargains": 69,
+        "forcedBargains": 0,
+        "constitutionalProposals": 60,
+        "ratifiedProposals": 45,
+        "revertedProposals": 45,
+        "invalidProposals": 0
+      },
+      "drift": {
+        "firstHalfRatifiedProposalsPer100Turns": 2.52193,
+        "secondHalfRatifiedProposalsPer100Turns": 2.409639,
+        "firstHalfHouseholds": 94,
+        "secondHalfHouseholds": 120
+      },
+      "segments": [
+        {
+          "turn": 456,
+          "simulationDate": "2027-10-17",
+          "ralr": {
+            "numerator": 707,
+            "denominator": 907,
+            "rate": 0.779493
+          },
+          "resolvedEpisodes": 907,
+          "households": 80,
+          "activeWorkAgreements": 1,
+          "ratifiedProposals": 1,
+          "revertedProposals": 14,
+          "humanBasicNeedsSatisfiedRate": 1,
+          "communityPressureSpread": 0.000001
+        },
+        {
+          "turn": 913,
+          "simulationDate": "2029-01-16",
+          "ralr": {
+            "numerator": 1400,
+            "denominator": 1821,
+            "rate": 0.768808
+          },
+          "resolvedEpisodes": 1821,
+          "households": 94,
+          "activeWorkAgreements": 1,
+          "ratifiedProposals": 0,
+          "revertedProposals": 23,
+          "humanBasicNeedsSatisfiedRate": 1,
+          "communityPressureSpread": 0.000001
+        },
+        {
+          "turn": 1369,
+          "simulationDate": "2030-04-17",
+          "ralr": {
+            "numerator": 2113,
+            "denominator": 2734,
+            "rate": 0.77286
+          },
+          "resolvedEpisodes": 2734,
+          "households": 107,
+          "activeWorkAgreements": 1,
+          "ratifiedProposals": 1,
+          "revertedProposals": 33,
+          "humanBasicNeedsSatisfiedRate": 1,
+          "communityPressureSpread": 0.000001
+        },
+        {
+          "turn": 1825,
+          "simulationDate": "2031-07-17",
+          "ralr": {
+            "numerator": 2799,
+            "denominator": 3646,
+            "rate": 0.767691
+          },
+          "resolvedEpisodes": 3646,
+          "households": 120,
+          "activeWorkAgreements": 0,
+          "ratifiedProposals": 0,
+          "revertedProposals": 45,
+          "humanBasicNeedsSatisfiedRate": 1,
+          "communityPressureSpread": 0.000002
+        }
+      ]
+    }
+  ],
+  "analysis": {
+    "pooledRalr": {
+      "numerator": 5577,
+      "denominator": 7292,
+      "rate": 0.764811,
+      "refusals": 1163,
+      "withdrawals": 552,
+      "coerciveActions": 0
+    },
+    "longPendingTotal": 0,
+    "meanLongPendingPerRun": 0,
+    "meanCommunityPressureSpread": 0.000001,
+    "meanHouseholdGrowthRate": 0.276596,
+    "driftDirection": "ratified-deceleration",
+    "passed": true
+  },
+  "disclosures": [
+    "A five-simulated-year run is still a synthetic mechanism study, not a real longitudinal observation.",
+    "Long-pending and drift metrics expose difficult dynamics instead of hiding them.",
+    "The study changes no production settlement and requires no secret input."
+  ],
+  "integrity": {
+    "resultsSha256": "38f4c1ea0dea7fa078218a77992e82e5b01219b0a5b06b510545ebb806636a0a",
+    "localVerificationPassed": true,
+    "reportSha256": "46b8245dc64e34934ecc7f92e8c3b98fbfb494838ad8a5e225b7f1a0224b3494"
+  }
+}

@@ -276,27 +276,42 @@ decides direction; the laboratory no longer waits on operator credentials.
 ## Next objectives
 
 No new city feature milestone is scheduled. The science program continues
-entirely inside the constitution boundary, on software residents only:
+entirely inside the constitution boundary, on software residents only.
 
-1. **Hypothesis campaign framework** — generalize the v4.7 preregistration
-   into a campaign runner: hypotheses × seeds × regimes × horizons, held-out
-   design, exact replay, comparative report and portable bundle. A campaign
-   changes no production settlement and keeps every denominator visible.
-2. **First campaign: institutional design** — measure how white-listed
-   society parameters (mediation depth, asset maintenance, civic-credit
-   limits) move RALR and the refusal/withdrawal/coercion distribution across
-   held-out seeds.
-3. **Long-horizon study** — 1,825-Turn (five simulated years) runs across
-   seeds to study institutional drift, long-pending commitment dynamics and
-   community inequality trajectories.
-4. **Season boundary protocol** — define season archival and evidence-chain
-   continuity before the project commits to year-scale operation; the season
-   identifier is currently a constant with no rollover semantics.
-5. **Test stability** — remove the two known performance flakes so the local
-   full gate is reliably green on developer machines, not only on CI.
-6. **Continuous evidence** — the 90-day lane completes itself; keep Turn SLO,
-   sequence integrity, replay and backup/restore drills green and refresh
-   manifests on every commit.
+Implemented in v4.10.0:
+
+1. **Hypothesis campaign framework** — `src/symbiosis/campaign.ts` + CLI
+   `npm run campaign:run -- <id>`: frozen hypotheses × held-out seeds ×
+   white-listed civic-policy regimes × deterministic horizons, exact replay,
+   comparative report, portable SHA-256-bound evidence.
+2. **First campaign: institutional design v1** — 3 regimes × 4 seeds × 365
+   Turns, published as honest negative evidence (2/5): solidarity does not
+   elevate RALR (0.750 vs 0.754 baseline), safety instruments saturate at
+   ceiling.
+3. **Second campaign: institutional design v2** — preregistered follow-up
+   (4/5): bargain throughput chains efficiency > baseline > solidarity;
+   RALR is stable within ±0.01; solidarity raises the pooled withdrawal rate
+   beyond ±0.005 (rejected).
+4. **Long-horizon study** — 1,825-Turn (five simulated years) × 2 held-out
+   seeds: exact replay, pooled RALR 0.7648 (5577/7292), zero long-pending,
+   ratification drift decelerates in the second half.
+5. **Season boundary protocol** — `src/symbiosis/season.ts` + ADR 0041:
+   deterministic quarter rollover with a hashed archive ledger; production
+   execution remains a human constitutional decision.
+6. **Test stability** — both known performance flakes fixed (300 s hook/test
+   timeouts).
+
+Remaining science program:
+
+- **Third campaign** — preregister after v2: test the withdrawal-rate effect
+  of the safety floor directly (floor grid), and probe the saturation
+  boundary by material-calibration variants within the data-bundle contract.
+- **Multi-season study** — apply the season protocol to model consecutive
+  seasons with archive chaining; production rollover still requires the human
+  governor.
+- **Continuous evidence** — the 90-day lane completes itself; keep Turn SLO,
+  sequence integrity, replay and backup/restore drills green and refresh
+  manifests on every commit.
 
 ## Explicit non-goals
 

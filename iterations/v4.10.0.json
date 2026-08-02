@@ -1,0 +1,62 @@
+{
+  "id": "iteration-v4.10.0",
+  "version": "4.10.0",
+  "date": "2026-08-01",
+  "trigger": "roadmap-science-program",
+  "triggerReason": "The v4.9.0 roadmap moved from external-attestation waiting to the autonomous science program: preregistered hypothesis campaigns, long-horizon dynamics and the season boundary protocol.",
+  "action": "Implement the hypothesis-campaign framework, preregister and publish two institutional-design campaigns, run a five-simulated-year long-horizon study, and define the season boundary protocol (ADR 0041).",
+  "outcome": "The campaign framework (nexus.hypothesis-campaign.v1) runs frozen hypotheses over held-out seeds and white-listed civic-policy regimes with exact replay, hashed reports and fail-closed verification. institutional-design-v1 published 2/5 as honest negative evidence (solidarity does not elevate pooled RALR: 0.750086 vs 0.754223; safety instruments saturate at ceiling). institutional-design-v2 published 4/5 (bargain throughput chains efficiency > baseline > solidarity; RALR stable within ±0.01; solidarity's pooled withdrawal rate +0.0064 exceeds the ±0.005 bound and is rejected). The long-horizon study (1,825 Turns x 2 seeds) passed with pooled RALR 0.764811 (5577/7292), zero long-pending episodes and ratification-deceleration drift. The season protocol rolls quarter identifiers deterministically with a hashed archive ledger. No production settlement changed; every denominator, refusal, withdrawal and coercion count remains visible.",
+  "metrics": [
+    {
+      "label": "Published campaign hypotheses",
+      "before": 0,
+      "after": 10
+    },
+    {
+      "label": "Campaign hypotheses passed",
+      "before": 0,
+      "after": 6
+    },
+    {
+      "label": "Long-horizon simulated years",
+      "before": 0,
+      "after": 5
+    },
+    {
+      "label": "Season rollover protocol tests",
+      "before": 0,
+      "after": 5
+    },
+    {
+      "label": "City settlement fields changed",
+      "before": 0,
+      "after": 0
+    }
+  ],
+  "evidence": [
+    "public/data/campaigns/institutional-design-v1.json (2/5, SHA-bound)",
+    "public/data/campaigns/institutional-design-v2.json (4/5, SHA-bound)",
+    "public/data/long-horizon-study.json (study-passed, SHA-bound)",
+    "campaign.test.ts 6/6, long-horizon.test.ts 3/3, season.test.ts 5/5",
+    "Engine policy injection is white-listed and bounds-clamped",
+    "No production settlement, trust lane or evidence contract changed"
+  ],
+  "artifacts": [
+    "src/symbiosis/campaign.ts",
+    "src/symbiosis/campaign-definitions.ts",
+    "src/symbiosis/campaign.test.ts",
+    "src/symbiosis/long-horizon.ts",
+    "src/symbiosis/long-horizon.test.ts",
+    "src/symbiosis/season.ts",
+    "src/symbiosis/season.test.ts",
+    "src/symbiosis/society.ts",
+    "src/symbiosis/engine.ts",
+    "scripts/run-campaign.ts",
+    "scripts/run-long-horizon-study.ts",
+    "docs/adr/0041-season-boundary-protocol.md",
+    "docs/ROADMAP.md",
+    "docs/SYMBIOTIC_SHENZHEN_PLAN.md",
+    "src/components/symbiosis/HumanObservatory.tsx",
+    "e2e/nexus.spec.ts"
+  ]
+}

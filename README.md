@@ -144,6 +144,14 @@ recovery and a live provider are no longer required; their machinery stays
 archived and dormant. The Human Observatory now shows two gates and the
 roadmap moves to the autonomous science program.
 
+v4.10.0 delivers the science program: a preregistered hypothesis-campaign
+framework (`npm run campaign:run`), two published institutional-design
+campaigns with honest negative results, a five-simulated-year long-horizon
+study and the season boundary protocol (ADR 0041). Campaigns vary only
+white-listed civic-policy parameters inside their constitutional bounds,
+change no production settlement, and keep every denominator, refusal,
+withdrawal and coercion count visible.
+
 The shell supports accessible light and dark palettes. The Human Observatory
 keeps its restrained information design; research, safety-kernel and legacy
 views use the denser cyberpunk visual layer.

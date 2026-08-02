@@ -277,6 +277,13 @@ for (const viewport of [
     await expect(replication).toContainText(
       "npm ci && npm run verify:v47",
     );
+    const campaigns = page.getByTestId("research-campaigns");
+    await expect(campaigns).toBeVisible();
+    await expect(campaigns).toContainText("RESEARCH CAMPAIGNS");
+    await expect(campaigns).toContainText("institutional-design-v1");
+    await expect(campaigns).toContainText("institutional-design-v2");
+    await expect(campaigns).toContainText("LONG-HORIZON STUDY");
+    await expect(campaigns).toContainText("5");
     const society = page.getByTestId("city-society");
     await expect(society).toBeVisible();
     await expect(society).toContainText(
@@ -377,6 +384,9 @@ test("Human Observatory explains the city in Chinese", async ({ page }) => {
   await expect(page.getByText("90 天生产时钟")).toBeVisible();
   await expect(page.getByText("尚无持久化墙钟运行证据。").first()).toBeVisible();
   await expect(page.getByText("科学复现")).toBeVisible();
+  await expect(page.getByText("研究战役")).toBeVisible();
+  await expect(page.getByText("institutional-design-v1").first()).toBeVisible();
+  await expect(page.getByText("长期演进研究")).toBeVisible();
   await expect(page.getByText("城市社会与可逆规则")).toBeVisible();
   await expect(page.getByText("AI 居民提出的城市规则")).toBeVisible();
   await expect(page.getByText("生产环节全链条 AI 化")).toBeVisible();
