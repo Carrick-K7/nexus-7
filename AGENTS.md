@@ -116,8 +116,8 @@ Log 并重评门禁。不得把未提交结果写成远端证明。
 
 ## 外部边界
 
-- `93b488f` (v4.8.12) 已部署；Turn 327 绑定 exact revision；回执演练
-  8/8、客户端契约 4/4，trust 1/5 无回归，API 200、写 405，PG 原卷未替换。
+- `8d9d761` (v4.9.0) 已部署；trust 矩阵 v2 双车道：本地复现 verified、
+  90 天 pending（7.3/90）；API 200、写 405，PG 原卷未替换。
 - `3eb4afd` (v4.8.11 + handoff 文档) 已部署；Turn 324 按时且绑定 exact
   revision；390 px overflow/console/axe 0，已由 v4.8.12 接替。
 - Trust 2 车道（本地复现 verified + 90 天 pending）；DeepSeek 调用/Token/
