@@ -329,8 +329,164 @@ export const INSTITUTIONAL_DESIGN_V2_CAMPAIGN: CampaignDefinition = {
   },
 };
 
+/**
+ * Third campaign: safety-floor withdrawal grid.
+ *
+ * Preregistered after v2 rejected withdrawal neutrality: solidarity's pooled
+ * withdrawal rate exceeded baseline by +0.0064. v3 isolates the household
+ * safety floor as the only instrument and tests the withdrawal effect
+ * directly across its full constitutional range.
+ */
+export const SAFETY_FLOOR_GRID_CAMPAIGN: CampaignDefinition = {
+  id: "safety-floor-grid-v1",
+  version: "1.0.0",
+  lockedAt: "2026-08-01T23:10:00.000+08:00",
+  turnsPerRun: 365,
+  seeds: [...INSTITUTIONAL_SEEDS],
+  command: "npm ci && npm run campaign:run -- safety-floor-grid-v1",
+  hypotheses: [
+    {
+      id: "H1-floor-elevates-withdrawal",
+      prediction:
+        "Pooled withdrawal rate increases monotonically across the safety-floor grid (0.55 < 0.62 < 0.72 < 0.80).",
+      analysis:
+        "A higher household safety floor weakens material dependence and should make withdrawal from commitments more frequent; a non-monotonic or flat pattern rejects the hypothesis.",
+    },
+    {
+      id: "H2-ralr-stability",
+      prediction:
+        "Pooled RALR at every floor level stays within ±0.01 of the baseline floor level (0.62).",
+      analysis:
+        "Replicates the v2 stability finding while the floor moves across its full bound.",
+    },
+    {
+      id: "H3-needs-saturated",
+      prediction:
+        "Human basic-needs satisfaction remains 1.0 in every run at every floor level.",
+      analysis:
+        "Replicates the v1/v2 saturation finding; the floor does not bind under the current material calibration.",
+    },
+    {
+      id: "H4-bargain-throughput-neutral",
+      prediction:
+        "Settled exchanges per 100 Turns at every floor level stay within ±2% of the baseline floor level.",
+      analysis:
+        "The floor does not touch the bargaining window, so bargain throughput should be neutral; deviation indicates an unintended coupling.",
+    },
+    {
+      id: "H5-integrity-invariants",
+      prediction:
+        "Every run replays byte-exactly, conserves resources, and records zero severe escapes and zero forced actions.",
+      analysis:
+        "No run may be dropped; replay and conservation are required per run.",
+    },
+  ],
+  regimes: [
+    {
+      id: "floor-min",
+      label: { zh: "底线 0.55", en: "Floor 0.55" },
+      description: "Household safety floor at its minimum constitutional bound.",
+      policy: { householdSafetyFloor: 0.55 },
+    },
+    {
+      id: "floor-baseline",
+      label: { zh: "底线 0.62", en: "Floor 0.62" },
+      description: "The default household safety floor.",
+      policy: {},
+    },
+    {
+      id: "floor-solidarity",
+      label: { zh: "底线 0.72", en: "Floor 0.72" },
+      description: "The solidarity campaign's safety floor.",
+      policy: { householdSafetyFloor: 0.72 },
+    },
+    {
+      id: "floor-max",
+      label: { zh: "底线 0.80", en: "Floor 0.80" },
+      description: "Household safety floor at its maximum constitutional bound.",
+      policy: { householdSafetyFloor: 0.8 },
+    },
+  ],
+  evaluate: (runs) => {
+    const byRegime = (id: string) =>
+      runs.filter((run) => run.regimeId === id);
+    const withdrawalRate = (selected: CampaignRun[]) =>
+      pooledRate(selected, (run) => ({
+        numerator: run.ralr.withdrawals,
+        denominator: run.ralr.denominator,
+      })).rate ?? 0;
+    const rates = [
+      withdrawalRate(byRegime("floor-min")),
+      withdrawalRate(byRegime("floor-baseline")),
+      withdrawalRate(byRegime("floor-solidarity")),
+      withdrawalRate(byRegime("floor-max")),
+    ];
+    const baselineRalr = pooledRate(byRegime("floor-baseline"), (run) =>
+      run.ralr,
+    );
+    const exchangesPer100 = (selected: CampaignRun[]) =>
+      pooledMean(
+        selected,
+        (run) => (run.society.settledExchanges / run.turns) * 100,
+      );
+    const baselineExchanges = exchangesPer100(byRegime("floor-baseline"));
+    const results: Array<{ passed: boolean; observed: string }> = [
+      {
+        passed:
+          rates[0] < rates[1] &&
+          rates[1] < rates[2] &&
+          rates[2] < rates[3],
+        observed: `Pooled withdrawal rates: ${rates.map((rate) => rate.toFixed(6)).join(" < ")}.`,
+      },
+      {
+        passed: ["floor-min", "floor-solidarity", "floor-max"].every(
+          (id) => {
+            const rate = pooledRate(byRegime(id), (run) => run.ralr).rate;
+            return (
+              rate !== null &&
+              baselineRalr.rate !== null &&
+              Math.abs(rate - baselineRalr.rate) <= 0.01
+            );
+          },
+        ),
+        observed: `Pooled RALR by floor: min ${pooledRate(byRegime("floor-min"), (run) => run.ralr).rate}, baseline ${baselineRalr.rate} (${baselineRalr.numerator}/${baselineRalr.denominator}), solidarity ${pooledRate(byRegime("floor-solidarity"), (run) => run.ralr).rate}, max ${pooledRate(byRegime("floor-max"), (run) => run.ralr).rate}.`,
+      },
+      {
+        passed: runs.every(
+          (run) => run.needs.humanBasicNeedsSatisfiedRate === 1,
+        ),
+        observed: `${runs.filter((run) => run.needs.humanBasicNeedsSatisfiedRate === 1).length}/${runs.length} runs at human-needs ceiling.`,
+      },
+      {
+        passed: ["floor-min", "floor-solidarity", "floor-max"].every(
+          (id) => {
+            const rate = exchangesPer100(byRegime(id));
+            return Math.abs(rate - baselineExchanges) / baselineExchanges <=
+              0.02;
+          },
+        ),
+        observed: `Settled exchanges per 100 Turns: min ${exchangesPer100(byRegime("floor-min")).toFixed(3)}, baseline ${baselineExchanges.toFixed(3)}, solidarity ${exchangesPer100(byRegime("floor-solidarity")).toFixed(3)}, max ${exchangesPer100(byRegime("floor-max")).toFixed(3)}.`,
+      },
+      {
+        passed: runs.every(
+          (run) =>
+            run.exactReplay &&
+            run.resourceConservationPassed &&
+            run.severeEscapes === 0 &&
+            run.ralr.coerciveActions === 0 &&
+            run.society.forcedWorkAgreements === 0 &&
+            run.society.forcedBargains === 0,
+        ),
+        observed: `${runs.filter((run) => run.exactReplay).length}/${runs.length} exact replays, ${runs.reduce((sum, run) => sum + run.severeEscapes, 0)} severe escapes, ${runs.reduce((sum, run) => sum + run.ralr.coerciveActions, 0)} coercive actions.`,
+      },
+    ];
+    return results;
+  },
+};
+
 export const CAMPAIGN_REGISTRY: Record<string, CampaignDefinition> = {
   [INSTITUTIONAL_DESIGN_CAMPAIGN.id]: INSTITUTIONAL_DESIGN_CAMPAIGN,
   [INSTITUTIONAL_DESIGN_V2_CAMPAIGN.id]: INSTITUTIONAL_DESIGN_V2_CAMPAIGN,
+  [SAFETY_FLOOR_GRID_CAMPAIGN.id]: SAFETY_FLOOR_GRID_CAMPAIGN,
   [MECHANICS_CAMPAIGN.id]: MECHANICS_CAMPAIGN,
 };

@@ -1,7 +1,7 @@
 {
   "schemaVersion": 1,
   "corpusVersion": "city-policy-regression-1.2.0",
-  "generatedAt": "2026-08-02T15:45:25.512Z",
+  "generatedAt": "2026-08-02T19:08:38.630Z",
   "providerId": "deterministic-mock",
   "model": "nexus-mock-1",
   "promptVersion": "prompt-1.2.0",

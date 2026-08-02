@@ -292,23 +292,28 @@ Implemented in v4.10.0:
    (4/5): bargain throughput chains efficiency > baseline > solidarity;
    RALR is stable within ±0.01; solidarity raises the pooled withdrawal rate
    beyond ±0.005 (rejected).
-4. **Long-horizon study** — 1,825-Turn (five simulated years) × 2 held-out
+4. **Third campaign: safety-floor grid v1** — 4 floor levels × 4 seeds ×
+   365 Turns (3/5): the withdrawal effect does not replicate when the floor
+   is isolated (non-monotonic); the floor alone raises pooled RALR by up to
+   +1.7 pp, revealing an interaction with reserve and window.
+5. **Long-horizon study** — 1,825-Turn (five simulated years) × 2 held-out
    seeds: exact replay, pooled RALR 0.7648 (5577/7292), zero long-pending,
    ratification drift decelerates in the second half.
-5. **Season boundary protocol** — `src/symbiosis/season.ts` + ADR 0041:
-   deterministic quarter rollover with a hashed archive ledger; production
-   execution remains a human constitutional decision.
-6. **Test stability** — both known performance flakes fixed (300 s hook/test
+6. **Multi-season study** — 2 seeds × 2 consecutive seasons × 90 Turns with
+   deterministic rollover: archive chain continuous, archives verified,
+   pooled RALR 0.7217 (503/697); the production rollover stays a human
+   decision (ADR 0041).
+7. **Season boundary protocol** — `src/symbiosis/season.ts` + ADR 0041:
+   deterministic quarter rollover with a hashed archive ledger.
+8. **Test stability** — both known performance flakes fixed (300 s hook/test
    timeouts).
 
-Remaining science program:
+Next science candidates (not committed milestones):
 
-- **Third campaign** — preregister after v2: test the withdrawal-rate effect
-  of the safety floor directly (floor grid), and probe the saturation
-  boundary by material-calibration variants within the data-bundle contract.
-- **Multi-season study** — apply the season protocol to model consecutive
-  seasons with archive chaining; production rollover still requires the human
-  governor.
+- **Factorial interaction campaign** — v3 found a floor × reserve × window
+  interaction on RALR; a full-factorial design would decompose it.
+- **Material-calibration probe** — vary calibration inputs inside the
+  data-bundle contract to find where the safety instruments stop saturating.
 - **Continuous evidence** — the 90-day lane completes itself; keep Turn SLO,
   sequence integrity, replay and backup/restore drills green and refresh
   manifests on every commit.

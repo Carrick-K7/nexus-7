@@ -59,6 +59,9 @@ import type {
   LongHorizonStudyReport,
 } from "@/symbiosis/long-horizon";
 import type {
+  MultiSeasonStudyReport,
+} from "@/symbiosis/multi-season";
+import type {
   SymbiosisTrustMatrix,
   TrustLaneStatus,
 } from "@/symbiosis/trust";
@@ -869,6 +872,8 @@ export default function HumanObservatory() {
   >([]);
   const [longHorizon, setLongHorizon] =
     useState<LongHorizonStudyReport | null>(null);
+  const [multiSeason, setMultiSeason] =
+    useState<MultiSeasonStudyReport | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [lastSuccessfulRefreshAt, setLastSuccessfulRefreshAt] =
@@ -897,10 +902,15 @@ export default function HumanObservatory() {
         [
           "/data/campaigns/institutional-design-v1.json",
           "/data/campaigns/institutional-design-v2.json",
+          "/data/campaigns/safety-floor-grid-v1.json",
         ].map((url) => fetch(url, { cache: "no-store" })),
       );
       const longHorizonResponse = await fetch(
         "/data/long-horizon-study.json",
+        { cache: "no-store" },
+      );
+      const multiSeasonResponse = await fetch(
+        "/data/multi-season-study.json",
         { cache: "no-store" },
       );
       if (!response.ok) throw new Error(`observatory-${response.status}`);
@@ -915,6 +925,9 @@ export default function HumanObservatory() {
       }
       if (!longHorizonResponse.ok) {
         throw new Error(`long-horizon-${longHorizonResponse.status}`);
+      }
+      if (!multiSeasonResponse.ok) {
+        throw new Error(`multi-season-${multiSeasonResponse.status}`);
       }
       const [report, replicationBundle, trustMatrix] =
         await Promise.all([
@@ -931,12 +944,15 @@ export default function HumanObservatory() {
       );
       const longHorizonReport =
         (await longHorizonResponse.json()) as LongHorizonStudyReport;
+      const multiSeasonReport =
+        (await multiSeasonResponse.json()) as MultiSeasonStudyReport;
       if (sequence !== refreshSequence.current) return;
       setData(report);
       setReplication(replicationBundle);
       setTrust(trustMatrix);
       setCampaigns(campaignReports);
       setLongHorizon(longHorizonReport);
+      setMultiSeason(multiSeasonReport);
       setLastSuccessfulRefreshAt(new Date().toISOString());
       setError(null);
     } catch (caught) {
@@ -1876,6 +1892,78 @@ export default function HumanObservatory() {
                 >
                   <Download className="h-3.5 w-3.5" />
                   {text.downloadLongHorizon}
+                </a>
+              </article>
+            )}
+            {multiSeason && (
+              <article className="mt-3 rounded-xl border border-cyber-gray-light bg-cyber-black/45 p-4">
+                <div className="flex flex-wrap items-center justify-between gap-2">
+                  <h3 className="font-orbitron text-xs font-semibold text-cyber-orange">
+                    MULTI-SEASON STUDY
+                  </h3>
+                  <span
+                    className={`rounded-full border px-2 py-0.5 text-[10px] ${
+                      multiSeason.status === "study-passed"
+                        ? "border-cyber-green/60 text-cyber-green"
+                        : "border-cyber-orange/60 text-cyber-orange"
+                    }`}
+                  >
+                    {multiSeason.status === "study-passed"
+                      ? text.verified
+                      : "REJECTED"}
+                  </span>
+                </div>
+                <p className="mt-2 text-xs leading-5 text-cyber-text-dim">
+                  {language === "zh"
+                    ? "两个连续赛季的确定性轮转研究：档案链连续、证据跨季延续，生产赛季轮转仍未执行。"
+                    : "Deterministic rollover across two consecutive seasons: the archive chain is continuous and evidence continues across the boundary; the production rollover was not executed."}
+                </p>
+                <div className="mt-3 grid gap-3 sm:grid-cols-2 xl:grid-cols-4">
+                  <div>
+                    <p className="text-xs text-cyber-text-dim">
+                      {text.longHorizonSeeds}
+                    </p>
+                    <p className="mt-1 font-mono text-lg text-cyber-text">
+                      {multiSeason.design.seeds.length}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-cyber-text-dim">RALR</p>
+                    <p className="mt-1 break-words font-mono text-lg text-cyber-text">
+                      {multiSeason.analysis.pooledRalr.rate?.toFixed(4) ??
+                        "—"}{" "}
+                      <span className="text-xs text-cyber-text-dim">
+                        ({multiSeason.analysis.pooledRalr.numerator}/
+                        {multiSeason.analysis.pooledRalr.denominator})
+                      </span>
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-cyber-text-dim">
+                      {text.longPending}
+                    </p>
+                    <p className="mt-1 font-mono text-lg text-cyber-text">
+                      {multiSeason.analysis.archivesVerified}
+                    </p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-cyber-text-dim">Chain</p>
+                    <p className="mt-1 font-mono text-lg text-cyber-text">
+                      {multiSeason.analysis.archiveChainContinuous
+                        ? "✓"
+                        : "✗"}
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href="/data/multi-season-study.json"
+                  download
+                  className="mt-3 inline-flex items-center gap-2 rounded-lg border border-cyber-orange/40 px-3 py-2 text-xs text-cyber-orange hover:bg-cyber-orange/10"
+                >
+                  <Download className="h-3.5 w-3.5" />
+                  {language === "zh"
+                    ? "下载多赛季研究证据"
+                    : "Download multi-season evidence"}
                 </a>
               </article>
             )}

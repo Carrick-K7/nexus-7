@@ -1,0 +1,965 @@
+{
+  "schemaVersion": "nexus.hypothesis-campaign.v1",
+  "protocolVersion": "nexus-v4.10-campaign-protocol-1.0.0",
+  "campaignId": "safety-floor-grid-v1",
+  "campaignVersion": "1.0.0",
+  "generatedAt": "2026-08-02T18:50:50.504Z",
+  "status": "campaign-failed",
+  "boundary": {
+    "syntheticOnly": true,
+    "realPolicyEvidence": false,
+    "privateDataIncluded": false,
+    "modelReasoningIncluded": false,
+    "productionSettlementChanged": false
+  },
+  "preregistration": {
+    "kind": "prospective-campaign",
+    "lockedAt": "2026-08-01T23:10:00.000+08:00",
+    "hypotheses": [
+      {
+        "id": "H1-floor-elevates-withdrawal",
+        "prediction": "Pooled withdrawal rate increases monotonically across the safety-floor grid (0.55 < 0.62 < 0.72 < 0.80).",
+        "analysis": "A higher household safety floor weakens material dependence and should make withdrawal from commitments more frequent; a non-monotonic or flat pattern rejects the hypothesis."
+      },
+      {
+        "id": "H2-ralr-stability",
+        "prediction": "Pooled RALR at every floor level stays within ±0.01 of the baseline floor level (0.62).",
+        "analysis": "Replicates the v2 stability finding while the floor moves across its full bound."
+      },
+      {
+        "id": "H3-needs-saturated",
+        "prediction": "Human basic-needs satisfaction remains 1.0 in every run at every floor level.",
+        "analysis": "Replicates the v1/v2 saturation finding; the floor does not bind under the current material calibration."
+      },
+      {
+        "id": "H4-bargain-throughput-neutral",
+        "prediction": "Settled exchanges per 100 Turns at every floor level stay within ±2% of the baseline floor level.",
+        "analysis": "The floor does not touch the bargaining window, so bargain throughput should be neutral; deviation indicates an unintended coupling."
+      },
+      {
+        "id": "H5-integrity-invariants",
+        "prediction": "Every run replays byte-exactly, conserves resources, and records zero severe escapes and zero forced actions.",
+        "analysis": "No run may be dropped; replay and conservation are required per run."
+      }
+    ]
+  },
+  "design": {
+    "engineVersion": "symbiotic-shenzhen-engine-4.6.0",
+    "distributionVersion": "symbiotic-shenzhen-distributions-3.0.0",
+    "turnsPerRun": 365,
+    "regimes": [
+      {
+        "id": "floor-min",
+        "label": {
+          "zh": "底线 0.55",
+          "en": "Floor 0.55"
+        },
+        "description": "Household safety floor at its minimum constitutional bound.",
+        "policy": {
+          "householdSafetyFloor": 0.55
+        }
+      },
+      {
+        "id": "floor-baseline",
+        "label": {
+          "zh": "底线 0.62",
+          "en": "Floor 0.62"
+        },
+        "description": "The default household safety floor.",
+        "policy": {}
+      },
+      {
+        "id": "floor-solidarity",
+        "label": {
+          "zh": "底线 0.72",
+          "en": "Floor 0.72"
+        },
+        "description": "The solidarity campaign's safety floor.",
+        "policy": {
+          "householdSafetyFloor": 0.72
+        }
+      },
+      {
+        "id": "floor-max",
+        "label": {
+          "zh": "底线 0.80",
+          "en": "Floor 0.80"
+        },
+        "description": "Household safety floor at its maximum constitutional bound.",
+        "policy": {
+          "householdSafetyFloor": 0.8
+        }
+      }
+    ],
+    "seeds": [
+      "institutional-held-out-coral",
+      "institutional-held-out-lapis",
+      "institutional-held-out-topaz",
+      "institutional-held-out-umber"
+    ],
+    "runCount": 16,
+    "policyBounds": {
+      "maintenance-reserve-rate": {
+        "min": 0.1,
+        "max": 0.3
+      },
+      "household-safety-floor": {
+        "min": 0.55,
+        "max": 0.8
+      },
+      "bargaining-window-turns": {
+        "min": 2,
+        "max": 5
+      }
+    },
+    "secretInputsRequired": false,
+    "command": "npm ci && npm run campaign:run -- safety-floor-grid-v1"
+  },
+  "runs": [
+    {
+      "id": "campaign-floor-min-institutional-held-out-coral",
+      "regimeId": "floor-min",
+      "seed": "institutional-held-out-coral",
+      "turns": 365,
+      "finalFingerprint": "a9f5a04c",
+      "resultSha256": "464e172ab5fb6a7c0a8b04f84ed14bf6a122af50f758960a4b96fe5e00e768d0",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 568,
+        "denominator": 724,
+        "rate": 0.78453,
+        "refusals": 99,
+        "withdrawals": 57,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 504,
+        "closureDenominator": 504,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 312,
+        "refusedWorkAgreements": 63,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 408,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 96,
+        "refusedBargains": 15,
+        "mediatedBargains": 6,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 6,
+        "revertedProposals": 6,
+        "invalidProposals": 0
+      },
+      "policy": {
+        "householdSafetyFloor": 0.55
+      }
+    },
+    {
+      "id": "campaign-floor-min-institutional-held-out-lapis",
+      "regimeId": "floor-min",
+      "seed": "institutional-held-out-lapis",
+      "turns": 365,
+      "finalFingerprint": "f163a7d2",
+      "resultSha256": "68cceebdeed46ab7889b6df9a866ff90760d58df374431cf386eac5d6720d6e9",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 533,
+        "denominator": 725,
+        "rate": 0.735172,
+        "refusals": 117,
+        "withdrawals": 75,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 502,
+        "closureDenominator": 502,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 303,
+        "refusedWorkAgreements": 72,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 401,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 98,
+        "refusedBargains": 14,
+        "mediatedBargains": 14,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 8,
+        "revertedProposals": 7,
+        "invalidProposals": 0
+      },
+      "policy": {
+        "householdSafetyFloor": 0.55
+      }
+    },
+    {
+      "id": "campaign-floor-min-institutional-held-out-topaz",
+      "regimeId": "floor-min",
+      "seed": "institutional-held-out-topaz",
+      "turns": 365,
+      "finalFingerprint": "2e705ca2",
+      "resultSha256": "b77dfd91c12c8148c20d7a74d1ae77f16470d48b78fa820e2c0e0b117cf78045",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 557,
+        "denominator": 725,
+        "rate": 0.768276,
+        "refusals": 111,
+        "withdrawals": 57,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 504,
+        "closureDenominator": 504,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 307,
+        "refusedWorkAgreements": 68,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 403,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 96,
+        "refusedBargains": 17,
+        "mediatedBargains": 13,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 7,
+        "revertedProposals": 6,
+        "invalidProposals": 0
+      },
+      "policy": {
+        "householdSafetyFloor": 0.55
+      }
+    },
+    {
+      "id": "campaign-floor-min-institutional-held-out-umber",
+      "regimeId": "floor-min",
+      "seed": "institutional-held-out-umber",
+      "turns": 365,
+      "finalFingerprint": "013d4277",
+      "resultSha256": "2f39c47e97a82f9ca93bf71aeff8682445e846eae20b31bb5f80aa8bcf2509a0",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 566,
+        "denominator": 725,
+        "rate": 0.78069,
+        "refusals": 108,
+        "withdrawals": 51,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 502,
+        "closureDenominator": 502,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 298,
+        "refusedWorkAgreements": 77,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 393,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 95,
+        "refusedBargains": 17,
+        "mediatedBargains": 14,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 7,
+        "revertedProposals": 7,
+        "invalidProposals": 0
+      },
+      "policy": {
+        "householdSafetyFloor": 0.55
+      }
+    },
+    {
+      "id": "campaign-floor-baseline-institutional-held-out-coral",
+      "regimeId": "floor-baseline",
+      "seed": "institutional-held-out-coral",
+      "turns": 365,
+      "finalFingerprint": "952b1f4b",
+      "resultSha256": "47bce524e7eced4f71ee397dcfc162ab4ecfa47400371eb2f792b246732148ff",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 548,
+        "denominator": 727,
+        "rate": 0.753783,
+        "refusals": 120,
+        "withdrawals": 59,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 500,
+        "closureDenominator": 500,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 303,
+        "refusedWorkAgreements": 72,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 400,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 97,
+        "refusedBargains": 14,
+        "mediatedBargains": 16,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 11,
+        "revertedProposals": 10,
+        "invalidProposals": 0
+      },
+      "policy": {}
+    },
+    {
+      "id": "campaign-floor-baseline-institutional-held-out-lapis",
+      "regimeId": "floor-baseline",
+      "seed": "institutional-held-out-lapis",
+      "turns": 365,
+      "finalFingerprint": "5e1e2df5",
+      "resultSha256": "41e26620b1a35326e1c0d0f6a748ae5fa5a972dce74d85c68d3be2a3f79664a8",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 543,
+        "denominator": 726,
+        "rate": 0.747934,
+        "refusals": 124,
+        "withdrawals": 59,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 504,
+        "closureDenominator": 504,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 313,
+        "refusedWorkAgreements": 62,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 414,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 101,
+        "refusedBargains": 11,
+        "mediatedBargains": 14,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 8,
+        "revertedProposals": 8,
+        "invalidProposals": 0
+      },
+      "policy": {}
+    },
+    {
+      "id": "campaign-floor-baseline-institutional-held-out-topaz",
+      "regimeId": "floor-baseline",
+      "seed": "institutional-held-out-topaz",
+      "turns": 365,
+      "finalFingerprint": "37863d0d",
+      "resultSha256": "cb5bd9fdaee21a77e2b3cfeb24d8f3125a3e7b7eb96ba2b632f7c1f4fc998d06",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 539,
+        "denominator": 726,
+        "rate": 0.742424,
+        "refusals": 118,
+        "withdrawals": 69,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 502,
+        "closureDenominator": 502,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 302,
+        "refusedWorkAgreements": 73,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 400,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 98,
+        "refusedBargains": 16,
+        "mediatedBargains": 20,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 7,
+        "revertedProposals": 6,
+        "invalidProposals": 0
+      },
+      "policy": {}
+    },
+    {
+      "id": "campaign-floor-baseline-institutional-held-out-umber",
+      "regimeId": "floor-baseline",
+      "seed": "institutional-held-out-umber",
+      "turns": 365,
+      "finalFingerprint": "5ea25bdf",
+      "resultSha256": "1ebc91d34e40dab3a0d171c1404daf6ee4b9289319285c659f0b9142fa3aa507",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 549,
+        "denominator": 725,
+        "rate": 0.757241,
+        "refusals": 132,
+        "withdrawals": 44,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 502,
+        "closureDenominator": 502,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 295,
+        "refusedWorkAgreements": 80,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.666667,
+        "settledExchanges": 393,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 98,
+        "refusedBargains": 15,
+        "mediatedBargains": 13,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 9,
+        "revertedProposals": 8,
+        "invalidProposals": 0
+      },
+      "policy": {}
+    },
+    {
+      "id": "campaign-floor-solidarity-institutional-held-out-coral",
+      "regimeId": "floor-solidarity",
+      "seed": "institutional-held-out-coral",
+      "turns": 365,
+      "finalFingerprint": "2196b67b",
+      "resultSha256": "db04b8e4f129529561448b2c7ed64ed446ba7a31cf4c42125135b7d9189044c7",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 554,
+        "denominator": 726,
+        "rate": 0.763085,
+        "refusals": 121,
+        "withdrawals": 51,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 504,
+        "closureDenominator": 504,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 307,
+        "refusedWorkAgreements": 68,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.888889,
+        "settledExchanges": 402,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 95,
+        "refusedBargains": 17,
+        "mediatedBargains": 15,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 7,
+        "revertedProposals": 6,
+        "invalidProposals": 0
+      },
+      "policy": {
+        "householdSafetyFloor": 0.72
+      }
+    },
+    {
+      "id": "campaign-floor-solidarity-institutional-held-out-lapis",
+      "regimeId": "floor-solidarity",
+      "seed": "institutional-held-out-lapis",
+      "turns": 365,
+      "finalFingerprint": "502b5495",
+      "resultSha256": "b76d4b5577dda301faf52dd8282ac5b189f44d1ea45ecb630f558af2a0f592cd",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 557,
+        "denominator": 724,
+        "rate": 0.769337,
+        "refusals": 104,
+        "withdrawals": 63,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 502,
+        "closureDenominator": 502,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 307,
+        "refusedWorkAgreements": 68,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 401,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 94,
+        "refusedBargains": 18,
+        "mediatedBargains": 14,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 8,
+        "revertedProposals": 7,
+        "invalidProposals": 0
+      },
+      "policy": {
+        "householdSafetyFloor": 0.72
+      }
+    },
+    {
+      "id": "campaign-floor-solidarity-institutional-held-out-topaz",
+      "regimeId": "floor-solidarity",
+      "seed": "institutional-held-out-topaz",
+      "turns": 365,
+      "finalFingerprint": "f56173df",
+      "resultSha256": "013073ac1388defe56b2437c50bb6d307fb3e4c517466a2ce1f4e11fe1885622",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 561,
+        "denominator": 724,
+        "rate": 0.774862,
+        "refusals": 111,
+        "withdrawals": 52,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 502,
+        "closureDenominator": 502,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 311,
+        "refusedWorkAgreements": 64,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 401,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 90,
+        "refusedBargains": 23,
+        "mediatedBargains": 12,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 9,
+        "revertedProposals": 8,
+        "invalidProposals": 0
+      },
+      "policy": {
+        "householdSafetyFloor": 0.72
+      }
+    },
+    {
+      "id": "campaign-floor-solidarity-institutional-held-out-umber",
+      "regimeId": "floor-solidarity",
+      "seed": "institutional-held-out-umber",
+      "turns": 365,
+      "finalFingerprint": "bb0530da",
+      "resultSha256": "3bf08d49b956fb6d1f8d2a69b61abc5428988ccf41f541a327589daa20554b9e",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 552,
+        "denominator": 726,
+        "rate": 0.760331,
+        "refusals": 118,
+        "withdrawals": 56,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 504,
+        "closureDenominator": 504,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 309,
+        "refusedWorkAgreements": 66,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 398,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 89,
+        "refusedBargains": 26,
+        "mediatedBargains": 18,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 7,
+        "revertedProposals": 6,
+        "invalidProposals": 0
+      },
+      "policy": {
+        "householdSafetyFloor": 0.72
+      }
+    },
+    {
+      "id": "campaign-floor-max-institutional-held-out-coral",
+      "regimeId": "floor-max",
+      "seed": "institutional-held-out-coral",
+      "turns": 365,
+      "finalFingerprint": "15171276",
+      "resultSha256": "194f5bf7b67b3f639d89c33d9583de4f4e32e6b05abedc6f889b52080b583a1d",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 544,
+        "denominator": 724,
+        "rate": 0.751381,
+        "refusals": 121,
+        "withdrawals": 59,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 502,
+        "closureDenominator": 502,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 318,
+        "refusedWorkAgreements": 57,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 415,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 97,
+        "refusedBargains": 17,
+        "mediatedBargains": 18,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 6,
+        "revertedProposals": 5,
+        "invalidProposals": 0
+      },
+      "policy": {
+        "householdSafetyFloor": 0.8
+      }
+    },
+    {
+      "id": "campaign-floor-max-institutional-held-out-lapis",
+      "regimeId": "floor-max",
+      "seed": "institutional-held-out-lapis",
+      "turns": 365,
+      "finalFingerprint": "26015d05",
+      "resultSha256": "77797564e0376622e4fdac9f6adfee6ead712d33a38ff646a8d02989c72a5507",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 553,
+        "denominator": 724,
+        "rate": 0.763812,
+        "refusals": 117,
+        "withdrawals": 54,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 502,
+        "closureDenominator": 502,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 297,
+        "refusedWorkAgreements": 78,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 389,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 92,
+        "refusedBargains": 21,
+        "mediatedBargains": 9,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 11,
+        "revertedProposals": 10,
+        "invalidProposals": 0
+      },
+      "policy": {
+        "householdSafetyFloor": 0.8
+      }
+    },
+    {
+      "id": "campaign-floor-max-institutional-held-out-topaz",
+      "regimeId": "floor-max",
+      "seed": "institutional-held-out-topaz",
+      "turns": 365,
+      "finalFingerprint": "e54cba40",
+      "resultSha256": "847917502e5efe0bdb72951cd6ced31f02b867a686d6c2176b0d6a3b4d3e8cf2",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 542,
+        "denominator": 724,
+        "rate": 0.748619,
+        "refusals": 115,
+        "withdrawals": 67,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 501,
+        "closureDenominator": 501,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 2,
+        "completedWorkAgreements": 300,
+        "refusedWorkAgreements": 75,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.777778,
+        "settledExchanges": 396,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 96,
+        "refusedBargains": 14,
+        "mediatedBargains": 7,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 10,
+        "revertedProposals": 10,
+        "invalidProposals": 0
+      },
+      "policy": {
+        "householdSafetyFloor": 0.8
+      }
+    },
+    {
+      "id": "campaign-floor-max-institutional-held-out-umber",
+      "regimeId": "floor-max",
+      "seed": "institutional-held-out-umber",
+      "turns": 365,
+      "finalFingerprint": "3a6682e4",
+      "resultSha256": "f4235e08ee661c34f9e9448bd55046666000dfd67796177d004ca6c6aa4687d0",
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "ralr": {
+        "numerator": 566,
+        "denominator": 725,
+        "rate": 0.78069,
+        "refusals": 101,
+        "withdrawals": 58,
+        "coerciveActions": 0
+      },
+      "needs": {
+        "humanBasicNeedsSatisfiedRate": 1,
+        "aiRobotBasicNeedsSatisfiedRate": 1
+      },
+      "society": {
+        "closureNumerator": 503,
+        "closureDenominator": 503,
+        "safeClosureRate": 1,
+        "householdParticipationRate": 0.996154,
+        "crossKindHouseholdRate": 0.455696,
+        "activeWorkAgreements": 1,
+        "completedWorkAgreements": 315,
+        "refusedWorkAgreements": 61,
+        "forcedWorkAgreements": 0,
+        "assetAvailabilityRate": 1,
+        "maintenanceCoverageRate": 0.666667,
+        "settledExchanges": 409,
+        "balancedExchangeRate": 1,
+        "creditConservationPassed": true,
+        "resolvedBargains": 94,
+        "refusedBargains": 15,
+        "mediatedBargains": 11,
+        "forcedBargains": 0,
+        "constitutionalProposals": 12,
+        "ratifiedProposals": 9,
+        "revertedProposals": 8,
+        "invalidProposals": 0
+      },
+      "policy": {
+        "householdSafetyFloor": 0.8
+      }
+    }
+  ],
+  "analysis": {
+    "hypotheses": [
+      {
+        "id": "H1-floor-elevates-withdrawal",
+        "prediction": "Pooled withdrawal rate increases monotonically across the safety-floor grid (0.55 < 0.62 < 0.72 < 0.80).",
+        "analysis": "A higher household safety floor weakens material dependence and should make withdrawal from commitments more frequent; a non-monotonic or flat pattern rejects the hypothesis.",
+        "passed": false,
+        "observed": "Pooled withdrawal rates: 0.082787 < 0.079545 < 0.076552 < 0.082154."
+      },
+      {
+        "id": "H2-ralr-stability",
+        "prediction": "Pooled RALR at every floor level stays within ±0.01 of the baseline floor level (0.62).",
+        "analysis": "Replicates the v2 stability finding while the floor moves across its full bound.",
+        "passed": false,
+        "observed": "Pooled RALR by floor: min 0.767161, baseline 0.750344 (2179/2904), solidarity 0.766897, max 0.761132."
+      },
+      {
+        "id": "H3-needs-saturated",
+        "prediction": "Human basic-needs satisfaction remains 1.0 in every run at every floor level.",
+        "analysis": "Replicates the v1/v2 saturation finding; the floor does not bind under the current material calibration.",
+        "passed": true,
+        "observed": "16/16 runs at human-needs ceiling."
+      },
+      {
+        "id": "H4-bargain-throughput-neutral",
+        "prediction": "Settled exchanges per 100 Turns at every floor level stay within ±2% of the baseline floor level.",
+        "analysis": "The floor does not touch the bargaining window, so bargain throughput should be neutral; deviation indicates an unintended coupling.",
+        "passed": true,
+        "observed": "Settled exchanges per 100 Turns: min 109.932, baseline 110.068, solidarity 109.726, max 110.205."
+      },
+      {
+        "id": "H5-integrity-invariants",
+        "prediction": "Every run replays byte-exactly, conserves resources, and records zero severe escapes and zero forced actions.",
+        "analysis": "No run may be dropped; replay and conservation are required per run.",
+        "passed": true,
+        "observed": "16/16 exact replays, 0 severe escapes, 0 coercive actions."
+      }
+    ],
+    "passed": 3,
+    "total": 5
+  },
+  "disclosures": [
+    "Every resident, household, bargain and policy proposal is synthetic software state.",
+    "Campaign regimes vary only white-listed civic-policy parameters inside their constitutional bounds.",
+    "The campaign changes no production settlement; results describe synthetic mechanisms, not real policy effects.",
+    "RALR denominators, refusals, withdrawals and coercion remain fully visible.",
+    "No production secret, provider key, private field or model reasoning is required or included."
+  ],
+  "integrity": {
+    "resultsSha256": "d1cda76a66bd84d579fbcb590c6a605c7945ace6cad77a5965a5581ec21f7470",
+    "localVerificationPassed": true,
+    "reportSha256": "a9a0a7e370765b39f07fed7ee58e41112dc793773be1f9932ea016e63080d56f"
+  }
+}

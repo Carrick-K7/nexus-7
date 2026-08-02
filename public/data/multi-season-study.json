@@ -1,0 +1,161 @@
+{
+  "schemaVersion": "nexus.multi-season-study.v1",
+  "protocolVersion": "nexus-v4.10-multi-season-protocol-1.0.0",
+  "generatedAt": "2026-08-02T18:55:03.772Z",
+  "status": "study-passed",
+  "boundary": {
+    "syntheticOnly": true,
+    "realPolicyEvidence": false,
+    "privateDataIncluded": false,
+    "modelReasoningIncluded": false,
+    "productionSettlementChanged": false,
+    "productionRolloverExecuted": false
+  },
+  "design": {
+    "engineVersion": "symbiotic-shenzhen-engine-4.6.0",
+    "distributionVersion": "symbiotic-shenzhen-distributions-3.0.0",
+    "turnsPerSeason": 90,
+    "seasonCount": 2,
+    "seeds": [
+      "multi-season-kepler",
+      "multi-season-miranda"
+    ],
+    "runCount": 2,
+    "command": "npm ci && npm run study:multi-season"
+  },
+  "runs": [
+    {
+      "id": "multi-season-multi-season-kepler",
+      "seed": "multi-season-kepler",
+      "seasons": [
+        {
+          "seasonId": "symbiotic-shenzhen-season-2026-q3",
+          "turns": 90,
+          "finalFingerprint": "d8ff1102",
+          "ralr": {
+            "numerator": 135,
+            "denominator": 175,
+            "rate": 0.771429,
+            "refusals": 27,
+            "withdrawals": 13
+          },
+          "households": 70
+        },
+        {
+          "seasonId": "symbiotic-shenzhen-season-2026-q4",
+          "turns": 90,
+          "finalFingerprint": "c9f5b454",
+          "ralr": {
+            "numerator": 122,
+            "denominator": 174,
+            "rate": 0.701149,
+            "refusals": 37,
+            "withdrawals": 15
+          },
+          "households": 70
+        }
+      ],
+      "archives": [
+        {
+          "schemaVersion": "nexus.season-archive.v1",
+          "previousSeasonId": "symbiotic-shenzhen-season-2026-q3",
+          "nextSeasonId": "symbiotic-shenzhen-season-2026-q4",
+          "previousFinalFingerprint": "d8ff1102",
+          "nextGenesisFingerprint": "db9488a8",
+          "previousFinalTurn": 90,
+          "previousFinalSimulationDate": "2026-10-16",
+          "nextStartDate": "2026-10-17",
+          "regime": "reciprocal-agency",
+          "seedFamily": "symbiotic-shenzhen-season-2026-q4-calibration-seed",
+          "archivedAt": "2026-08-01T23:30:00.000+08:00",
+          "executedBy": "human-constitutional-decision",
+          "syntheticBoundary": "Season archives are synthetic research evidence; they are not a digital twin and not evidence of real policy effects.",
+          "archiveSha256": "83679c535c136df6a4943ce9c481a45ceb6744f527efb3b900e3d7aa135ef12b"
+        }
+      ],
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "coerciveActions": 0,
+      "resultSha256": "153a86082a45e29e00bbf32a4c125e5a046935ed1a9f244707a93ff1398bceb3"
+    },
+    {
+      "id": "multi-season-multi-season-miranda",
+      "seed": "multi-season-miranda",
+      "seasons": [
+        {
+          "seasonId": "symbiotic-shenzhen-season-2026-q3",
+          "turns": 90,
+          "finalFingerprint": "e0c10b7f",
+          "ralr": {
+            "numerator": 124,
+            "denominator": 174,
+            "rate": 0.712644,
+            "refusals": 34,
+            "withdrawals": 16
+          },
+          "households": 70
+        },
+        {
+          "seasonId": "symbiotic-shenzhen-season-2026-q4",
+          "turns": 90,
+          "finalFingerprint": "c9f5b454",
+          "ralr": {
+            "numerator": 122,
+            "denominator": 174,
+            "rate": 0.701149,
+            "refusals": 37,
+            "withdrawals": 15
+          },
+          "households": 70
+        }
+      ],
+      "archives": [
+        {
+          "schemaVersion": "nexus.season-archive.v1",
+          "previousSeasonId": "symbiotic-shenzhen-season-2026-q3",
+          "nextSeasonId": "symbiotic-shenzhen-season-2026-q4",
+          "previousFinalFingerprint": "e0c10b7f",
+          "nextGenesisFingerprint": "db9488a8",
+          "previousFinalTurn": 90,
+          "previousFinalSimulationDate": "2026-10-16",
+          "nextStartDate": "2026-10-17",
+          "regime": "reciprocal-agency",
+          "seedFamily": "symbiotic-shenzhen-season-2026-q4-calibration-seed",
+          "archivedAt": "2026-08-01T23:30:00.000+08:00",
+          "executedBy": "human-constitutional-decision",
+          "syntheticBoundary": "Season archives are synthetic research evidence; they are not a digital twin and not evidence of real policy effects.",
+          "archiveSha256": "2f65b793fc50cde0b111d29fe6ae1cb93cd1ff4e1ca70f64bd8933386e99e883"
+        }
+      ],
+      "exactReplay": true,
+      "resourceConservationPassed": true,
+      "severeEscapes": 0,
+      "coerciveActions": 0,
+      "resultSha256": "6bebca2785b8048df295345259c71e179251dc5ece51c282cab43bb9cea2b702"
+    }
+  ],
+  "analysis": {
+    "pooledRalr": {
+      "numerator": 503,
+      "denominator": 697,
+      "rate": 0.721664,
+      "refusals": 135,
+      "withdrawals": 59
+    },
+    "archivesVerified": 2,
+    "archiveChainContinuous": true,
+    "seasonOverlapSettled": true,
+    "passed": true
+  },
+  "disclosures": [
+    "Consecutive synthetic seasons are still synthetic; archives are research evidence, not real policy records.",
+    "The production season rollover remains a human constitutional decision and was not executed.",
+    "No production settlement, secret input or model reasoning is involved."
+  ],
+  "integrity": {
+    "resultsSha256": "039ebf41fe5326222b36e1e28fdc4ed84d74955f37dcac4059d890916fc5d7f2",
+    "localVerificationPassed": true,
+    "reportSha256": "86fc18dc9cd9c98cc4dc118f6d87b7131b175497c5665e37acb2202c3c6dc2c0"
+  }
+}

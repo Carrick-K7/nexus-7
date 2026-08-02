@@ -1,0 +1,53 @@
+{
+  "id": "iteration-v4.10.1",
+  "version": "4.10.1",
+  "date": "2026-08-01",
+  "trigger": "roadmap-completion",
+  "triggerReason": "The roadmap's remaining science program: the third campaign (safety-floor withdrawal grid) and the multi-season study were still open after v4.10.0.",
+  "action": "Preregister and run the safety-floor grid campaign across the full constitutional floor range, implement the multi-season study with archive chaining, and project both into the Human Observatory.",
+  "outcome": "safety-floor-grid-v1 published 3/5: the v2 withdrawal-rate finding does not replicate when the floor is isolated (rates 0.0828/0.0795/0.0766/0.0822, non-monotonic), needs remain saturated at ceiling, bargain throughput stays neutral within ±2%, and the floor alone raises pooled RALR by up to +1.7 pp (min 0.7672, baseline 0.7503) revealing an interaction with reserve and window. The multi-season study passed: two seeds x two consecutive seasons x 90 Turns, every archive verified, the fingerprint chain continuous, pooled RALR 0.7217 (503/697), and the production rollover explicitly not executed. All roadmap items are now implemented; the next science candidates (factorial interaction campaign, material-calibration probe) are uncommitted proposals.",
+  "metrics": [
+    {
+      "label": "Published campaign hypotheses total",
+      "before": 10,
+      "after": 15
+    },
+    {
+      "label": "Campaign hypotheses passed",
+      "before": 6,
+      "after": 9
+    },
+    {
+      "label": "Multi-season runs with verified archives",
+      "before": 0,
+      "after": 2
+    },
+    {
+      "label": "Roadmap items remaining",
+      "before": 2,
+      "after": 0
+    },
+    {
+      "label": "City settlement fields changed",
+      "before": 0,
+      "after": 0
+    }
+  ],
+  "evidence": [
+    "public/data/campaigns/safety-floor-grid-v1.json (3/5, SHA-bound)",
+    "public/data/multi-season-study.json (study-passed, SHA-bound)",
+    "multi-season.test.ts 3/3; campaign/long-horizon/season suites stay green",
+    "v4.7 scientific inputs (engine.ts, society.ts) byte-exact; v47 gate green",
+    "E2E + axe green with the new campaign cards"
+  ],
+  "artifacts": [
+    "src/symbiosis/campaign-definitions.ts",
+    "src/symbiosis/multi-season.ts",
+    "src/symbiosis/multi-season.test.ts",
+    "scripts/run-multi-season-study.ts",
+    "src/components/symbiosis/HumanObservatory.tsx",
+    "e2e/nexus.spec.ts",
+    "docs/ROADMAP.md",
+    "AGENTS.md"
+  ]
+}

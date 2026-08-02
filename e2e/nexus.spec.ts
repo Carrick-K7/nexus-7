@@ -282,7 +282,9 @@ for (const viewport of [
     await expect(campaigns).toContainText("RESEARCH CAMPAIGNS");
     await expect(campaigns).toContainText("institutional-design-v1");
     await expect(campaigns).toContainText("institutional-design-v2");
+    await expect(campaigns).toContainText("safety-floor-grid-v1");
     await expect(campaigns).toContainText("LONG-HORIZON STUDY");
+    await expect(campaigns).toContainText("MULTI-SEASON STUDY");
     await expect(campaigns).toContainText("5");
     const society = page.getByTestId("city-society");
     await expect(society).toBeVisible();
