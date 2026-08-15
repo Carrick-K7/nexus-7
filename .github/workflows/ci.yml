@@ -9,14 +9,13 @@ concurrency:
   group: nexus-7-${{ github.ref }}
   cancel-in-progress: false
 
+permissions:
+  contents: read
+
 jobs:
-  quality:
+  verify-and-deploy:
     runs-on: ubuntu-latest
-    timeout-minutes: 35
-    permissions:
-      contents: read
-      id-token: write
-      attestations: write
+    timeout-minutes: 50
     services:
       postgres:
         image: postgres:17
@@ -138,39 +137,6 @@ jobs:
       - name: Bind closed-loop certification to evidence manifest
         run: npm run verify:closure
 
-      - name: Upload verification evidence
-        uses: actions/upload-artifact@v7
-        with:
-          name: nexus-verification-evidence
-          include-hidden-files: true
-          path: |
-            public/data/ci-evidence.json
-            public/data/v1-readiness.json
-            public/data/v1-1-stress.json
-            .artifacts/deployment-controller-conformance.json
-            .artifacts/operational-acceptance.json
-            .artifacts/city-model-acceptance.json
-            .artifacts/diagnosis-acceptance.json
-            .artifacts/planning-acceptance.json
-            .artifacts/outcome-learning-acceptance.json
-            .artifacts/participation-acceptance.json
-            .artifacts/closed-loop-certification.json
-            public/data/model-regression.json
-            public/data/v4-7-replication-bundle.json
-            .artifacts/isolated-evaluation.json
-
-      - name: Attest evidence provenance
-        if: github.event_name == 'push'
-        uses: actions/attest@v4
-        with:
-          subject-path: public/data/ci-evidence.json
-
-      - name: Attest portable replication bundle
-        if: github.event_name == 'push'
-        uses: actions/attest@v4
-        with:
-          subject-path: public/data/v4-7-replication-bundle.json
-
       - name: Build immutable production release
         if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
@@ -190,30 +156,8 @@ jobs:
           tar -C release -czf nexus-production.tar.gz .
           tar -tzf nexus-production.tar.gz >/dev/null
 
-      - name: Upload immutable production release
-        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-        uses: actions/upload-artifact@v4
-        with:
-          name: nexus-production-${{ github.sha }}
-          path: nexus-production.tar.gz
-          if-no-files-found: error
-          retention-days: 7
-
-  deploy:
-    name: Deploy Production
-    needs: quality
-    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
-    permissions:
-      contents: read
-    steps:
-      - name: Download immutable production release
-        uses: actions/download-artifact@v4
-        with:
-          name: nexus-production-${{ github.sha }}
-
       - name: Deploy through restricted SSH command
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         env:
           DEPLOY_HOST: ${{ secrets.DEPLOY_HOST }}
           DEPLOY_USER: ${{ secrets.DEPLOY_USER }}
@@ -238,6 +182,7 @@ jobs:
             "deploy $REVISION" < nexus-production.tar.gz
 
       - name: Smoke test production
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
         run: |
           set -euo pipefail
           curl --fail --silent --show-error --location \
