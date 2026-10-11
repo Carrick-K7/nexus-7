@@ -1,0 +1,19 @@
+{
+  "archiveSha256": "4c72e55d59ba5b54fc49bd52b2c8f88e345628accec8672b6ae9abf9de224255",
+  "files": {
+    "LICENSE": "35bdd8a44339719441900fb50fbefc5e2dca1ca662cbaed7a687de842c8b70f2",
+    "LOCAL-SECURITY.md": "1d12f96807dc88645bea923578b7214d48af38e33338786b36792c648331dcff",
+    "README.md": "947b0fc3cc12eaaa070207126213fbdf9ab2bf8cd13dcc6e4007b36b79309866",
+    "SECURITY.patch": "345abc9d0a7a18324fcfd8d8081771a96c21d5f52927f34b9dbc6846f0339a2a",
+    "UPSTREAM.json": "064fe04d654b932a5374134ac1adb5cf7802962b3666f7dab38d674e68309ccc",
+    "index.js": "332ea07c7b006361aad12aa994ca75dc1db8e8382b884909e2f38f10b85c88a4",
+    "lib/assert-depth.js": "20642e4be21253e8269e42511d61f076fcac2903c27c94f7b1194f182d6b36dd",
+    "lib/compile.js": "0527119921a3117bfbb7a3a86d400bcaf26c3988628688301ee17c5cc0003719",
+    "lib/constants.js": "c18ac5adb57308f1ce42a28552da3a31f5d83709743ebd9a636336813a744d4b",
+    "lib/expand.js": "bdcde9b36e94d248c5035ab8f98f4a20189c973fa44ee68cd576ba7ebf28022b",
+    "lib/parse.js": "e5785862edf7deb86ea583bafc88089fdd06dce265b61eaf2daf411a129be7b8",
+    "lib/stringify.js": "056ab10d759e5d2ca81fc888b122acf450c692b5e409dc19a41aca06aba8f2ef",
+    "lib/utils.js": "b5a7596aa67730412b3c029ef09e84e6b67b8e445cffd35d1d295549c89066c7",
+    "package.json": "3afac4dcefa74af9e31db9b189b4445269e169ea27f8ff3530038c22749625f1"
+  }
+}

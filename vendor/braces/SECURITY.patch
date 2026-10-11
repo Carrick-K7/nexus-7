@@ -1,0 +1,117 @@
+--- /dev/null
++++ b/lib/assert-depth.js
+@@ -0,0 +1,14 @@
++'use strict';
++module.exports = ast => {
++  const pending = [[ast, 0, false]];
++  const seen = new WeakSet();
++  while (pending.length) {
++    const [node, depth, exit] = pending.pop();
++    if (exit) { seen.delete(node); continue; }
++    if (depth > 128) throw new SyntaxError('Brace AST exceeds safe depth of 128');
++    if (seen.has(node)) throw new SyntaxError('Brace AST must be an acyclic tree');
++    seen.add(node);
++    pending.push([node, depth, true]);
++    if (node.nodes) for (const child of node.nodes) pending.push([child, depth + 1, false]);
++  }
++};
+--- a/lib/compile.js
++++ b/lib/compile.js
+@@ -4,6 +4,7 @@
+ const utils = require('./utils');
+ 
+ const compile = (ast, options = {}) => {
++  require('./assert-depth')(ast);
+   const walk = (node, parent = {}) => {
+     const invalidBlock = utils.isInvalidBrace(parent);
+     const invalidNode = node.invalid === true && options.escapeInvalid === true;
+--- a/lib/expand.js
++++ b/lib/expand.js
+@@ -31,6 +31,7 @@
+ };
+ 
+ const expand = (ast, options = {}) => {
++  require('./assert-depth')(ast);
+   const rangeLimit = options.rangeLimit === undefined ? 1000 : options.rangeLimit;
+ 
+   const walk = (node, parent = {}) => {
+--- a/lib/parse.js
++++ b/lib/parse.js
+@@ -143,6 +143,9 @@
+      */
+ 
+     if (value === CHAR_LEFT_PARENTHESES) {
++      if (stack.length > 128) {
++        throw new SyntaxError('Brace AST exceeds safe depth of 128');
++      }
+       block = push({ type: 'paren', nodes: [] });
+       stack.push(block);
+       push({ type: 'text', value });
+@@ -195,6 +198,9 @@
+      */
+ 
+     if (value === CHAR_LEFT_CURLY_BRACE) {
++      if (stack.length > 128) {
++        throw new SyntaxError('Brace AST exceeds safe depth of 128');
++      }
+       depth++;
+ 
+       const dollar = prev.value && prev.value.slice(-1) === '$' || block.dollar === true;
+--- a/lib/stringify.js
++++ b/lib/stringify.js
+@@ -3,6 +3,7 @@
+ const utils = require('./utils');
+ 
+ module.exports = (ast, options = {}) => {
++  require('./assert-depth')(ast);
+   const stringify = (node, parent = {}) => {
+     const invalidBlock = options.escapeInvalid && utils.isInvalidBrace(parent);
+     const invalidNode = node.invalid === true && options.escapeInvalid === true;
+--- a/package.json
++++ b/package.json
+@@ -1,7 +1,17 @@
+ {
+-  "name": "braces",
+-  "description": "Bash-like brace expansion, implemented in JavaScript. Safer than other brace expansion libs, with complete support for the Bash 4.3 braces specification, without sacrificing speed.",
+-  "version": "3.0.3",
++  "name": "@carrick-local/braces",
++  "description": "Private local security fork of braces 3.0.3 with explicit parser and AST depth guards; not an upstream release.",
++  "version": "3.0.3-carrick.1",
++  "private": true,
++  "carrickSecurityPatch": {
++    "upstreamPackage": "braces",
++    "upstreamVersion": "3.0.3",
++    "advisory": "GHSA-vfj7-8cjw-p6xm",
++    "reference": "https://github.com/micromatch/braces/pull/88",
++    "referenceCommit": "a795ee83ecd011131b2d618fe754ac5a8e124dae",
++    "referenceMerged": false,
++    "notice": "LOCAL-SECURITY.md"
++  },
+   "homepage": "https://github.com/micromatch/braces",
+   "author": "Jon Schlinkert (https://github.com/jonschlinkert)",
+   "contributors": [
+@@ -11,14 +21,21 @@
+     "hemanth.hm (http://h3manth.com)",
+     "Jon Schlinkert (http://twitter.com/jonschlinkert)"
+   ],
+-  "repository": "micromatch/braces",
++  "repository": {
++    "type": "git",
++    "url": "git+https://github.com/Carrick-K7/nexus-7.git",
++    "directory": "vendor"
++  },
+   "bugs": {
+-    "url": "https://github.com/micromatch/braces/issues"
++    "url": "https://github.com/Carrick-K7/nexus-7/issues"
+   },
+   "license": "MIT",
+   "files": [
+     "index.js",
+-    "lib"
++    "lib",
++    "LOCAL-SECURITY.md",
++    "UPSTREAM.json",
++    "SECURITY.patch"
+   ],
+   "main": "index.js",
+   "engines": {

@@ -12,6 +12,13 @@ systemd, PostgreSQL container, backup, and monitoring definitions remain in
 The host backup command serializes concurrent runs and verifies both local and
 offsite copies before migration or release activation begins.
 
+GitHub Actions supplies `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY`, and
+pinned `DEPLOY_KNOWN_HOSTS`. The optional `DEPLOY_PORT` secret selects a canonical
+decimal SSH port from 1 through 65535; unset or empty retains port 22. For a
+non-default port, pin the host key under `[DEPLOY_HOST]:DEPLOY_PORT` (for example,
+`[deployment.example.com]:2222`). Host-side SSH restrictions remain owned by Ops;
+changing the port must not disable strict host-key checking.
+
 The deployment-control and human-promotion rules below govern NEXUS experiments
 that act on external environments. They are separate from delivery of this
 application's reviewed `main` revision to its production host.
@@ -20,6 +27,18 @@ application's reviewed `main` revision to its production host.
 > maintained in [`V4_OPERATIONS.md`](V4_OPERATIONS.md). v4 is all-synthetic and
 > requires a separate `worker:symbiosis` process; it does not require a live
 > model provider.
+
+## Development dependency security maintenance
+
+The dev-only `braces` dependency is a private, source-patched fork of 3.0.3,
+not an upstream fixed release. See [its maintenance notice](../vendor/braces/LOCAL-SECURITY.md)
+for GHSA-vfj7-8cjw-p6xm, the unmerged PR88 reference, exact source patch,
+upstream SRI, per-file hashes, deterministic reproduction and depth boundaries.
+The application runtime does not depend on this fork. Full and production-only
+audits remain required; audit identity alone is not proof of fork security.
+`npm run check` and CI additionally verify the actual installed bytes and run
+bounded security/normal-syntax differential tests. No Next lint rules are removed.
+Carrick maintains this fork until a reviewed upstream fix passes the same gates.
 
 ## Identity
 
