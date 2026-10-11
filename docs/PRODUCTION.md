@@ -39,6 +39,9 @@ audits remain required; audit identity alone is not proof of fork security.
 `npm run check` and CI additionally verify the actual installed bytes and run
 bounded security/normal-syntax differential tests. No Next lint rules are removed.
 Carrick maintains this fork until a reviewed upstream fix passes the same gates.
+Regenerate and validate the lock with the CI toolchain (Node 22.23.3 / npm 10.9.9
+for this repair); retain cross-platform optional and bundled dependency records.
+A successful newer-npm install alone does not establish CI lock compatibility.
 
 ## Identity
 
