@@ -1249,7 +1249,7 @@ export const useNexusStore = create<NexusStore>()(
         speed: 1,
       },
 
-      activeView: "symbiosis",
+      activeView: "research",
       setActiveView: (activeView) => set({ activeView }),
     }),
     {

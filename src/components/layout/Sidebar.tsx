@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef } from "react";
 import {
   ActivitySquare,
   Atom,
@@ -48,7 +49,7 @@ import {
 } from "@/stores/nexus-store";
 
 const primaryItems = [
-  { id: "symbiosis", labelKey: "symbiosisLens", icon: MapPinned },
+  { id: "research", labelKey: "researchStation", icon: Microscope },
   { id: "evolution", labelKey: "evolutionLog", icon: GitCommit },
   { id: "verification", labelKey: "verificationNav", icon: BadgeCheck },
   { id: "operations", labelKey: "operationsNav", icon: ActivitySquare },
@@ -63,6 +64,7 @@ const researchItems = [
 ] as const;
 
 const legacyItems = [
+  { id: "symbiosis", labelKey: "symbiosisLens", icon: MapPinned },
   { id: "dashboard", labelKey: "dashboard", icon: LayoutDashboard },
   { id: "neural", labelKey: "neural", icon: Brain },
   { id: "trading", labelKey: "trading", icon: LineChart },
@@ -88,12 +90,16 @@ interface SidebarProps {
   mobileOpen: boolean;
   onClose: () => void;
   themeReady: boolean;
+  selectedView?: string;
+  onSelectView?: (view: string) => void;
 }
 
 export default function Sidebar({
   mobileOpen,
   onClose,
   themeReady,
+  selectedView,
+  onSelectView,
 }: SidebarProps) {
   const {
     activeView,
@@ -103,6 +109,19 @@ export default function Sidebar({
     language,
   } = useNexusStore();
   const { t } = useTranslation();
+  const closeButton = useRef<HTMLButtonElement>(null);
+  const drawer = useRef<HTMLElement>(null);
+  useEffect(() => {
+    if (!mobileOpen) return;
+    const previous = document.activeElement;
+    // The opening commit can still report the drawer as hidden. Move focus only
+    // after the browser has applied its visible state, without scrolling the page.
+    const frame = window.requestAnimationFrame(() => closeButton.current?.focus({ preventScroll: true }));
+    return () => {
+      window.cancelAnimationFrame(frame);
+      if (previous instanceof HTMLElement && previous.isConnected) previous.focus({ preventScroll: true });
+    };
+  }, [mobileOpen]);
 
   const renderItems = (
     items: ReadonlyArray<{
@@ -113,15 +132,16 @@ export default function Sidebar({
   ) =>
     items.map((item) => {
       const Icon = item.icon;
-      const isActive = activeView === item.id;
+      const isActive = (selectedView ?? activeView) === item.id;
       return (
         <motion.button
           key={item.id}
           type="button"
           onClick={() => {
-            setActiveView(item.id);
+            (onSelectView ?? setActiveView)(item.id);
             onClose();
           }}
+          aria-current={isActive ? "page" : undefined}
           whileHover={{ x: 4 }}
           whileTap={{ scale: 0.98 }}
           className={`flex w-full items-center gap-3 rounded-lg px-4 py-3 text-left transition-all ${
@@ -143,8 +163,21 @@ export default function Sidebar({
 
   return (
     <aside
+      id="main-navigation"
+      ref={drawer}
+      onKeyDown={(event) => {
+        if (!mobileOpen) return;
+        if (event.key === "Escape") { event.stopPropagation(); onClose(); }
+        if (event.key !== "Tab") return;
+        const controls = Array.from(drawer.current?.querySelectorAll<HTMLElement>("a[href],button:not([disabled]),summary") ?? []).filter((node) => node.getClientRects().length > 0);
+        const first = controls[0];
+        const last = controls.at(-1);
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last?.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first?.focus(); }
+      }}
+      aria-label={language === "zh" ? "主导航" : "Main navigation"}
       className={`fixed left-0 top-0 z-50 flex h-full w-64 flex-col border-r border-cyber-blue/20 bg-cyber-darker/97 transition-transform duration-300 lg:translate-x-0 ${
-        mobileOpen ? "translate-x-0" : "-translate-x-full"
+        mobileOpen ? "visible translate-x-0" : "invisible -translate-x-full lg:visible"
       }`}
     >
       <div className="border-b border-cyber-blue/20 p-5">
@@ -153,17 +186,18 @@ export default function Sidebar({
             <Zap className="h-6 w-6 text-white" />
           </div>
           <div className="min-w-0">
-            <h1 className="font-orbitron text-lg font-bold text-cyber-blue">
+            <p className="font-orbitron text-lg font-bold text-cyber-blue">
               NEXUS-7
-            </h1>
-            <p className="truncate text-xs text-cyber-text-dim">
-              {language === "zh" ? "深圳共生城市" : "Shenzhen Symbiosis City"}
+            </p>
+            <p className="text-xs leading-relaxed text-cyber-text-dim [overflow-wrap:anywhere]">
+              {language === "zh" ? "反例驱动研究站" : "Counterexample-driven research station"}
             </p>
           </div>
           <button
             type="button"
+            ref={closeButton}
             onClick={onClose}
-            aria-label="Close navigation"
+            aria-label={language === "zh" ? "关闭导航" : "Close navigation"}
             className="ml-auto rounded-lg p-2 text-cyber-text-dim hover:bg-cyber-gray hover:text-cyber-text lg:hidden"
           >
             <X className="h-5 w-5" />
@@ -173,9 +207,13 @@ export default function Sidebar({
 
       <nav className="flex-1 space-y-2 overflow-y-auto p-4">
         <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-cyber-text-dim">
-          {language === "zh" ? "城市观测" : "City observation"}
+          {language === "zh" ? "研究与可核验证据" : "Research & inspectable evidence"}
         </p>
         {renderItems(primaryItems)}
+        <a href="/archive/city" aria-current={(selectedView ?? activeView) === "city-archive" ? "page" : undefined} className="flex min-h-11 items-center gap-3 rounded-lg px-4 py-3 text-sm text-cyber-text-dim hover:bg-cyber-gray/50 hover:text-cyber-text">
+          <MapPinned className="h-5 w-5 shrink-0" aria-hidden="true" />
+          {language === "zh" ? "历史城市档案" : "Historical city archive"}
+        </a>
 
         <details open className="group pt-2">
           <summary className="cursor-pointer rounded-lg px-3 py-2 text-xs font-semibold uppercase tracking-wider text-cyber-text-dim hover:bg-cyber-gray/40">
@@ -186,14 +224,14 @@ export default function Sidebar({
           </div>
         </details>
 
-        <details open className="group">
+        <details data-testid="legacy-navigation" className="group">
           <summary className="cursor-pointer rounded-lg px-3 py-2 text-xs font-semibold uppercase tracking-wider text-cyber-text-dim hover:bg-cyber-gray/40">
             {language === "zh" ? "兼容演示模块" : "Legacy demo modules"}
           </summary>
           <p className="px-3 py-2 text-[11px] leading-4 text-cyber-text-dim">
             {language === "zh"
-              ? "这些模块不改变正在运行的共生城市。"
-              : "These modules do not mutate the live symbiosis city."}
+              ? "保留旧观测与演示入口；历史停机与档案状态请查看城市档案。演示不改变共生城市。"
+              : "Older observation and demo views remain available. See the archive for capture and stop evidence. Demos do not mutate the symbiosis city."}
           </p>
           <div className="space-y-1 border-l border-cyber-gray-light pl-2">
             {renderItems(legacyItems)}

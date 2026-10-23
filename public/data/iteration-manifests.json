@@ -1,5 +1,40 @@
 [
   {
+    "id": "iteration-v5.0.0",
+    "version": "5.0.0",
+    "date": "2026-10-23",
+    "trigger": "enhancement",
+    "triggerReason": "The human project owner explicitly requested deployment of the bounded counterexample research station and evaluation, archival and retirement of the old continuous city programme. This is a project-specific human request, not autonomous deployment authority or a vote by simulated residents.",
+    "action": "Prepare the research-first home and shareable /research view, a static /archive/city entry, the persistent bounded research worker, and a separate local root operator-delegated start-once helper. Retain the closed JSON-AST reducer and conditional-hypothesis grammars, private core evaluation receipts, budget reservations, fenced leases and memory/PostgreSQL contracts. Preserve the legacy scientific engines, source archive and original evidence; do not enable external models, arbitrary source execution, city writes or deployment control in the researcher.",
+    "outcome": "Implementation and owner-authorized cutover preparation only; this source manifest is not proof that v5.0.0 is deployed. The supplied static retirement manifest records the city stopped at 2026-10-23T13:31:05.580Z, final Turn 2317, fingerprint 83da794c, original revision afed7d82c5a7b738b3cc780c9f8aa3b9e36f16da and a still-pending 89.35/90-day observation result. Original source is retained by archive-city-v4.10.1-20261023 and the raw public snapshot hashes are preserved. A research ledger write is not a city mutation: public observation remains read-only while separately authorized worker results persist. Initial operator authority is local-root/operator-delegated, not OIDC or a third-party signature; retries cannot reset spent quota or resume a paused study. Natural unknown-defect discovery, open-ended engineering and mathematical proof remain unclaimed. Final local gates and production completion are separate evidence: CI must bind the committed exact SHA, and actual public health plus real worker progress must verify the running release. No future commit SHA or successful production state is asserted here.",
+    "metrics": [],
+    "evidence": [
+      "docs/adr/0043-research-station-production-cutover.md records the owner's scoped cutover decision and remaining production completion criteria.",
+      "docs/RESEARCH_STATION.md and ADR 0042 describe the implemented bounded symbolic kernel and its scientific, authority and persistence limits.",
+      "The 2026-10-23 local uncommitted release-check attempt passed 880/880 unit and real-PostgreSQL cases in 101 files with zero skips, including root-file/operator contracts; its initial browser failures were retained and repaired. This is scoped local evidence, not a declaration that every final gate or deployment has completed.",
+      "A separate isolated test used real root-private permit files and separate CLI processes to verify idempotence, restart, pause preservation and checksum PostgreSQL restore. Its permit was explicitly synthetic test authority, not a production operator approval.",
+      "A fresh isolated development-authorization fixture produced 24 real worker episodes in 24 separate CLI processes, with 485/800 calls spent, zero reserved calls and zero external model calls/cost. The populated real-API browser suite passed 10/10 before final manifest freeze; successful GET data were not mocked. Fixture results are not live production evidence.",
+      "public/data/city-archive.json and its four unchanged raw public snapshots record retirement without converting the old pending 90-day gate into a pass.",
+      "Current-release v4.7 compatibility reproduced all 12 runs exactly and all 7 hypotheses with no scientific input mismatch. Package/lock/verifier metadata drift is declared; the original replication bundle and original v4.10.1 causal wording remain untouched."
+    ],
+    "artifacts": [
+      "docs/RESEARCH_STATION.md",
+      "docs/adr/0042-counterexample-research-station.md",
+      "docs/adr/0043-research-station-production-cutover.md",
+      "src/research",
+      "src/workers/research.ts",
+      "scripts/run-research-worker.ts",
+      "scripts/authorize-research.ts",
+      "src/components/research",
+      "src/components/archive",
+      "src/app/api/research",
+      "public/data/city-archive.json",
+      "public/archives/city-v4.10.1-20261023",
+      "e2e/research.spec.ts"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v4.10.1",
     "version": "4.10.1",
     "date": "2026-08-01",
@@ -2444,6 +2479,50 @@
       "docs/adr/0001-deterministic-simulation-core.md"
     ],
     "source": "manifest"
+  },
+  {
+    "id": "afed7d82",
+    "version": "unreleased",
+    "date": "2026-10-11",
+    "trigger": "bug",
+    "triggerReason": "fix: complete optional dependency lock for CI npm 10",
+    "action": "fix: complete optional dependency lock for CI npm 10",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "819aed77",
+    "version": "unreleased",
+    "date": "2026-10-11",
+    "trigger": "bug",
+    "triggerReason": "fix: secure Nexus dependency gates and deploy over restricted SSH",
+    "action": "fix: secure Nexus dependency gates and deploy over restricted SSH",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "e1cc5ca8",
+    "version": "unreleased",
+    "date": "2026-08-15",
+    "trigger": "bug",
+    "triggerReason": "fix: refresh audited dependency resolutions",
+    "action": "fix: refresh audited dependency resolutions",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
+  },
+  {
+    "id": "d57147f1",
+    "version": "unreleased",
+    "date": "2026-08-15",
+    "trigger": "observation",
+    "triggerReason": "ci: keep Nexus verification artifacts job-local",
+    "action": "ci: keep Nexus verification artifacts job-local",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
   },
   {
     "id": "6d22a8d4",

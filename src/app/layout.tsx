@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NEXUS-7 | Shenzhen Symbiosis City Observatory",
+  title: "NEXUS-7 | Counterexample-driven Research Station · 反例驱动研究站",
   description:
-    "An observatory for a simulated city of humans, AI, and robots.",
+    "A human-readable, read-only research station: questions, counterexamples, bounded experiments, budgets, and historical city evidence. 只读研究、反例与历史城市证据。",
 };
 
 export default function RootLayout({

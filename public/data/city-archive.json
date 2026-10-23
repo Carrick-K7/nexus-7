@@ -1,0 +1,60 @@
+{
+  "schemaVersion": "nexus.city-archive.v1",
+  "state": "archived",
+  "capturedAt": "2026-10-23T13:33:47.739Z",
+  "stoppedAt": "2026-10-23T13:31:05.580Z",
+  "releaseRevision": "afed7d82c5a7b738b3cc780c9f8aa3b9e36f16da",
+  "turn": 2317,
+  "simulationDate": "2032-11-20",
+  "fingerprint": "83da794c",
+  "reason": {
+    "en": "The owner retired continuous city settlement to focus on the counterexample research station. Original source, state and failed evidence remain preserved. Retirement does not complete the old 90-day gate.",
+    "zh": "项目所有者决定停止城市持续结算，转向反例驱动研究站。原代码、状态与失败证据保留；退役不等于旧90天门禁完成。"
+  },
+  "trustSummary": {
+    "observedDays": 89.35,
+    "requiredDays": 90,
+    "status": "pending"
+  },
+  "artifacts": [
+    {
+      "label": {
+        "en": "Frozen city overview",
+        "zh": "冻结城市概览"
+      },
+      "href": "/archives/city-v4.10.1-20261023/overview.json",
+      "sha256": "c6ade0790c3846b26b5bb8cebe0a21a733086f619f499831fc95d8981b821be1"
+    },
+    {
+      "label": {
+        "en": "Original trust result",
+        "zh": "原始信任门禁结果"
+      },
+      "href": "/archives/city-v4.10.1-20261023/trust.json",
+      "sha256": "da39e8df9787a8a1f92c92fe3e570cd6b56435ac04674d4db9d17e077879edd1"
+    },
+    {
+      "label": {
+        "en": "Frozen public world snapshot",
+        "zh": "冻结公开世界快照"
+      },
+      "href": "/archives/city-v4.10.1-20261023/snapshot.json",
+      "sha256": "b6e706068caad3662aa0d1672a218f715b615f5d909e83363945b45a5b0cdb37"
+    },
+    {
+      "label": {
+        "en": "Original city report",
+        "zh": "原始城市报告"
+      },
+      "href": "/archives/city-v4.10.1-20261023/report.json",
+      "sha256": "3125d4fda3eec6953428de58770729b31a51812378fafd9b01c16bec5b85813d"
+    },
+    {
+      "label": {
+        "en": "Exact archived source revision",
+        "zh": "精确归档源码版本"
+      },
+      "href": "https://github.com/Carrick-K7/nexus-7/tree/afed7d82c5a7b738b3cc780c9f8aa3b9e36f16da"
+    }
+  ]
+}

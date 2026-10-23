@@ -1,5 +1,12 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+// Legacy regression entry is explicit; the real home page now opens research.
+async function openLegacyNavigation(page: Page) {
+  const legacy = page.getByTestId("legacy-navigation");
+  if (await legacy.getAttribute("open") === null) await legacy.locator(":scope > summary").click();
+  await expect(legacy).toHaveAttribute("open", "");
+}
 
 test.beforeEach(async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
@@ -225,7 +232,7 @@ for (const viewport of [
       .get("/api/observatory/v2/trust")
       .then((response) => response.json());
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto("/?view=symbiosis");
     await expect(
       page.getByRole("heading", {
         name: "SHENZHEN SYMBIOSIS CITY · HUMAN OBSERVATORY",
@@ -359,7 +366,7 @@ test("mobile populated city-rule evidence stays inside its scroll container", as
   );
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   const society = page.getByTestId("city-society");
   await expect(society).toContainText(
     "symbiotic-shenzhen-season-2026-q3-constitutional-proposal-001",
@@ -371,7 +378,7 @@ test("mobile populated city-rule evidence stays inside its scroll container", as
 });
 
 test("Human Observatory explains the city in Chinese", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page.getByRole("button", { name: "Change language" }).click();
   await page.getByRole("button", { name: "中文" }).click();
   await expect(
@@ -403,7 +410,7 @@ test("Human Observatory marks retained data stale when live refresh fails", asyn
   page,
 }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await expect(
     page.getByRole("heading", {
       name: "SHENZHEN SYMBIOSIS CITY · HUMAN OBSERVATORY",
@@ -449,7 +456,7 @@ test("redundant status labels stay hidden and both color themes remain accessibl
   page,
 }) => {
   test.slow();
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
 
   const shell = page.locator("[data-surface]").first();
   await expect(shell).toHaveAttribute("data-surface", "observatory");
@@ -487,6 +494,7 @@ test("redundant status labels stay hidden and both color themes remain accessibl
     .analyze();
   expect(lightObservatoryAccessibility.violations).toEqual([]);
 
+  await openLegacyNavigation(page);
   await page.getByRole("button", { name: "Dashboard" }).click();
   await expect(shell).toHaveAttribute("data-surface", "cyberpunk");
   await expect(shell).toHaveClass(/cyberpunk-shell/);
@@ -558,7 +566,8 @@ test("desktop shell, agent details, and charts remain stable", async ({ page }) 
     }
   });
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
+  await openLegacyNavigation(page);
   await page.getByRole("button", { name: "Dashboard" }).click();
   await expect(page.getByRole("heading", { name: "CITY OVERVIEW" })).toBeVisible();
   await page.getByRole("button", { name: "10x", exact: true }).click();
@@ -577,7 +586,8 @@ test("desktop shell, agent details, and charts remain stable", async ({ page }) 
 test("simulation can pause, step, replay, reset, and continue across views", async ({ page }) => {
   test.slow();
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
+  await openLegacyNavigation(page);
   await page.getByRole("button", { name: "Dashboard" }).click();
 
   const tick = page.getByTestId("simulation-tick");
@@ -611,6 +621,7 @@ test("simulation can pause, step, replay, reset, and continue across views", asy
   await page.getByRole("button", { name: "AI Agents" }).click();
   await page.getByRole("button", { name: "Resume simulation" }).click();
   await page.waitForTimeout(1_200);
+  await openLegacyNavigation(page);
   await page.getByRole("button", { name: "Dashboard" }).click();
   await expect(tick).not.toHaveText(`Tick ${pausedTick + 1}`);
 
@@ -657,8 +668,9 @@ test("all primary views render without the application error boundary", async ({
     ["About", "ABOUT NEXUS"],
   ] as const;
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
 
+  await openLegacyNavigation(page);
   for (const [navigationLabel, heading] of views) {
     await page.getByRole("button", { name: navigationLabel, exact: true }).click();
     await expect(page.getByRole("heading", { name: heading, exact: true }).first()).toBeVisible();
@@ -671,8 +683,9 @@ test("all primary views render without the application error boundary", async ({
 });
 
 test("terminal, ARIA, language, and persistence work", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
 
+  await openLegacyNavigation(page);
   await page.getByRole("button", { name: "Terminal" }).click();
   const terminalInput = page.locator("main input");
   await terminalInput.fill("help");
@@ -698,6 +711,7 @@ test("terminal, ARIA, language, and persistence work", async ({ page }) => {
   await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
 
   await page.reload();
+  await openLegacyNavigation(page);
   await expect(page.getByRole("button", { name: "仪表盘" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Change language" })).toContainText("ZH");
   await expect(page.locator("html")).toHaveAttribute("lang", "zh-CN");
@@ -706,7 +720,8 @@ test("terminal, ARIA, language, and persistence work", async ({ page }) => {
 test("observer reconstructs traces and compares counterfactual runs", async ({ page }) => {
   test.slow();
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
+  await openLegacyNavigation(page);
   await page.getByRole("button", { name: "Dashboard" }).click();
   await page.getByRole("button", { name: "10x", exact: true }).click();
   await page.waitForTimeout(2_200);
@@ -751,7 +766,7 @@ test("observer traces the coherent city ontology into a persisted synthetic inci
 }) => {
   test.slow();
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page.getByRole("button", { name: "Observer", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "COHERENT CITY MODEL" }),
@@ -777,7 +792,7 @@ test("observer runs the durable incident-to-lesson reference loop without manual
 }) => {
   test.slow();
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page
     .getByRole("button", { name: "Observer", exact: true })
     .click();
@@ -818,7 +833,7 @@ test("causal explorer preserves alternatives and replays frozen counterfactuals"
 }) => {
   test.slow();
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page.getByRole("button", { name: "Observer", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "CAUSAL EXPLORER" }),
@@ -857,7 +872,7 @@ test("planning workbench compares no-action, approves evidence, and stages safel
     "x-nexus-principal-type": "human",
   });
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page.getByRole("button", { name: "Observer", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "PLANNING WORKBENCH" }),
@@ -898,7 +913,7 @@ test("outcome learning revises delayed benefit and invalidates unsafe memory", a
     "x-nexus-principal-type": "human",
   });
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page.getByRole("button", { name: "Observer", exact: true }).click();
   await page
     .getByRole("button", { name: "Prepare sustained-outcome portfolio" })
@@ -1073,7 +1088,7 @@ test("participatory governance applies deliberation and makes an appeal change r
     id: string;
   };
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page
     .getByRole("button", { name: "Governance Evidence", exact: true })
     .click();
@@ -1209,7 +1224,8 @@ test("participatory governance applies deliberation and makes an appeal change r
 });
 
 test("narrative modules declare their sandbox boundary", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
+  await openLegacyNavigation(page);
 
   for (const view of ["Terminal", "Quantum", "Satellite", "Hacker"]) {
     await page.getByRole("button", { name: view, exact: true }).click();
@@ -1222,7 +1238,7 @@ test("narrative modules declare their sandbox boundary", async ({ page }) => {
 test("server experiment runs persist, branch, enforce roles, and export reports", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page.getByRole("button", { name: "Experiments", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "EXPERIMENT PLATFORM" }),
@@ -1276,7 +1292,7 @@ test("controlled iteration evaluates, approves, canaries, and promotes a policy 
   expect(sourceResponse.ok()).toBe(true);
   const source = (await sourceResponse.json()) as { id: string };
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page.getByRole("button", { name: "Iteration Lab", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "CONTROLLED ITERATION LAB" }),
@@ -1328,7 +1344,7 @@ test("canary SLO drill raises an alert and automatically rolls back", async ({
   expect(sourceResponse.ok()).toBe(true);
   const source = (await sourceResponse.json()) as { id: string };
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page.getByRole("button", { name: "Iteration Lab", exact: true }).click();
   await page.getByLabel("Source run").selectOption(source.id);
   await page.getByRole("button", { name: "Generate improvement" }).click();
@@ -1352,7 +1368,7 @@ test("canary SLO drill raises an alert and automatically rolls back", async ({
 test("verification center proves the v1 north-star thresholds", async ({
   page,
 }) => {
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page.getByRole("button", { name: "Verification", exact: true }).click();
   await expect(
     page.getByRole("heading", { name: "VERIFIED AUTONOMY" }),
@@ -1423,7 +1439,7 @@ test("code releases require exact artifacts and signed external evidence", async
   expect(sourceResponse.ok()).toBe(true);
   const source = (await sourceResponse.json()) as { id: string };
 
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page.getByRole("button", { name: "Iteration Lab", exact: true }).click();
   await page.getByLabel("Source run").selectOption(source.id);
   await page.getByLabel("Change scope").selectOption("code");
@@ -1455,7 +1471,7 @@ test("mobile observer, verification, and operations views have no WCAG A/AA viol
   test.slow();
 
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
   await page.getByRole("button", { name: "Open navigation" }).click();
   await page.getByRole("button", { name: "Observer" }).click();
   await expect(
@@ -1505,7 +1521,7 @@ test("mobile observer, verification, and operations views have no WCAG A/AA viol
 
 test("mobile shell uses a drawer without horizontal overflow", async ({ page }) => {
   await page.setViewportSize({ width: 390, height: 844 });
-  await page.goto("/");
+  await page.goto("/?view=symbiosis");
 
   await expect(
     page.getByRole("heading", {
@@ -1514,6 +1530,7 @@ test("mobile shell uses a drawer without horizontal overflow", async ({ page }) 
   ).toBeVisible();
   await expect(page.getByRole("button", { name: "Open navigation" })).toBeVisible();
   await page.getByRole("button", { name: "Open navigation" }).click();
+  await openLegacyNavigation(page);
   await expect(page.getByRole("button", { name: "Dashboard" })).toBeVisible();
   await page.getByRole("button", { name: "Neural Net" }).click();
   await expect(page.getByRole("heading", { name: "NEURAL NETWORK" })).toBeVisible();
@@ -1532,7 +1549,7 @@ for (const viewport of [
 ]) {
   test(`${viewport.name} dashboard has no WCAG A/AA violations`, async ({ page }) => {
     await page.setViewportSize(viewport);
-    await page.goto("/");
+    await page.goto("/?view=dashboard");
     await page.waitForTimeout(1_000);
 
     const results = await new AxeBuilder({ page })

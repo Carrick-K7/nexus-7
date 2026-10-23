@@ -3,6 +3,8 @@ export const translations = {
     // Navigation
     dashboard: "Dashboard",
     symbiosisLens: "Human Observatory",
+    researchStation: "Research Station",
+    researchObservation: "Research observation",
     neural: "Neural Net",
     trading: "Trading",
     missions: "Missions",
@@ -979,6 +981,8 @@ export const translations = {
     // 导航
     dashboard: "仪表盘",
     symbiosisLens: "人类观测台",
+    researchStation: "研究站",
+    researchObservation: "研究观测",
     neural: "神经网络",
     trading: "交易",
     missions: "任务",

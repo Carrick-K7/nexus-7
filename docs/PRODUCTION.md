@@ -4,13 +4,49 @@
 
 Pushes to `main` pass the full CI gate, build one immutable application
 artifact, and deploy it automatically through the repository-specific
-restricted SSH command. The host creates a database backup, applies migrations,
-atomically switches `/srv/carrick/nexus-7/current`, restarts Web and worker, and
-rolls application files back when health verification fails. Shared Caddy,
-systemd, PostgreSQL container, backup, and monitoring definitions remain in
+restricted SSH command. The v5 publisher validates the full manifest and exact
+revision, stops both possible NEXUS writers and Web, applies migrations, switches
+`/srv/carrick/nexus-7/current`, and starts only the manifest-selected worker. A
+research release must pass PostgreSQL/exact-SHA HTTP readiness and actual Web/worker
+`is-active` checks. A root-owned retirement marker prevents the old city from
+restarting during deployment, rollback or boot. If writer quiescence fails, pointer
+rollback is refused rather than switching under a writer. These checks do not prove
+long-term health; actual research progress must be observed separately.
+This is not zero downtime or a database rollback. Shared Caddy, systemd,
+PostgreSQL, backup and monitoring definitions remain owned by
 `Carrick-K7/carrick-ops`.
-The host backup command serializes concurrent runs and verifies both local and
-offsite copies before migration or release activation begins.
+
+The 2026-10-19 read-only audit found no pre-migration backup gate in that installed
+helper. A daily backup timer is a separate mechanism; exit zero and a COMPLETE
+marker do not prove complete coverage, successful off-host transfer or a fresh
+restore. The earlier wording that every release verified both copies before
+migration was stronger than the installed implementation. Preserve the known
+Ops remediation pause; application development does not authorize resuming it.
+See [the audit and evidence limits](<AI_SELF_EVOLUTION_PLAN.md>).
+
+Current production is OrangeVPS. PostgreSQL is the existing standalone
+`carrick-postgres` container on loopback port 55433, with volume `carrick-pg-data`.
+The old Tencent volume is cold-retained data, not the active database. Preserve
+both; never recreate either to make an obsolete deployment recipe appear valid.
+
+The research station is not deployed by merely adding its worker script. It requires
+PostgreSQL, exact release binding, an explicitly enabled `nexus7-research.service`
+and a bounded authorization. The public observer cannot authorize work. A separate
+root operator may consume one owner-only, release/scope/policy/nonce-bound permit
+through `scripts/start-production.sh authorize-research --permit <private-file>`;
+this records operator-delegated authority with a system executor, never a fake
+human/OIDC principal. Worker startup never invokes this helper. Study completion
+or 800-call/40-episode exhaustion does not reset its quota.
+
+The dedicated worker has no Docker/sudo/publisher/model credentials. Systemd
+LoadCredential supplies only the existing NEXUS database password; the password
+file is owner-only and is not printed or bundled. Read-only release ACLs, one-core
+CPU quota, 512MiB memory-high/768MiB max and a 64-task bound are part of the scoped
+Ops installation. The ledger is persisted; research instruments do not modify
+cities, deployment or configuration and make no live-model calls. This remains
+trusted-module/JSON-DSL isolation, not protection from arbitrary malicious code
+holding raw application SQL privileges. See [the operating contract](<RESEARCH_STATION.md>)
+and [owner-authorized cutover](<adr/0043-research-station-production-cutover.md>).
 
 GitHub Actions supplies `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY`, and
 pinned `DEPLOY_KNOWN_HOSTS`. The optional `DEPLOY_PORT` secret selects a canonical

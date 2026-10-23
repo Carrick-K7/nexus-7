@@ -3,7 +3,14 @@
 This index separates current authority, retained safety-kernel contracts,
 historical decisions and generated evidence.
 
-## Current v4 authority
+## Research station (current product; release claims require live evidence)
+
+- [Research contract](<RESEARCH_STATION.md>) — bounded symbolic agenda, tool synthesis, private evaluation receipts, persistence and explicit limits.
+- [ADR 0042](<adr/0042-counterexample-research-station.md>) — separate research context; no implicit production or live-model authority.
+- [ADR 0043](<adr/0043-research-station-production-cutover.md>) — owner-authorized cutover, archival, one-shot operator delegation and rollback boundaries.
+- [Audit and long-term direction](<AI_SELF_EVOLUTION_PLAN.md>) — time-stamped findings and a proposed roadmap, not completed milestones.
+
+## Retained v4 experiment authority and original evidence
 
 - `SYMBIOSIS_CONSTITUTION.md` — permanent autonomous experiment constitution;
 - `SYMBIOTIC_SHENZHEN_PLAN.md` — product boundary and post-v4 priorities;

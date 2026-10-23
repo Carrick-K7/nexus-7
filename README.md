@@ -1,7 +1,10 @@
 # NEXUS-7
 
-NEXUS-7 is an observable, reproducible experiment in human–AI–robot
-coexistence. It runs a simulated Shenzhen with three resident kinds:
+NEXUS-7 is a bounded counterexample-driven computational research station.
+The human-readable research entry is `/` or `/research`; `/archive/city` retains
+the original synthetic city as a dated, read-only specimen. The continuous city
+writer was retired by the owner on 2026-10-23, without deleting its source or data.
+That historical Shenzhen model contains three resident kinds:
 
 - 200 humans;
 - 36 AI;
@@ -11,16 +14,47 @@ Humans are modeled as humans, not as a fourth “synthetic human” species. The
 current season is still fully software-run and contains no real participant,
 identity, private diary or resident login.
 
-The active production release is **v4.8.11 — Release Evidence Identity
-Closure**. It closes the generated-output inventory and pre-attestation claim
-gaps without changing city settlement.
+The retained city product line is **v4.10.1**, frozen at revision `afed7d82…`,
+Turn 2317 and fingerprint `83da794c`. Its 90-day gate was still pending when
+captured. **v5.0.0** changes the default product to the research station; actual
+publication is established by `/api/research/v1/health` reporting the exact
+release revision and PostgreSQL, plus real worker progress—not this README.
 The v2 closed-loop autonomy laboratory remains its safety kernel for evidence,
 release approval, rollback and recovery. Human administrators in that control
 plane operate the software; they do not participate in the simulated city.
 
-## What runs
+## Research station — bounded autonomy, observable evidence
 
-One deterministic engine owns all city changes. Each simulated day settles an
+The new isolated research context runs a persistent evidence-driven agenda,
+confirms counterexamples, searches a finite grammar for reusable reduction tools,
+and independently evaluates exact inputs, outputs and healthy controls. It uses
+the existing memory/PostgreSQL lifecycle contract; the public Research Station
+view is read-only. Its ordinary-language briefing explains current work, evidence,
+changes of view, budget and uncertainty. It refreshes by GET, not by starting jobs.
+A separate operator authorizes one bounded study; the worker cannot approve itself.
+The ledger is persisted, but instruments have no city-write, deployment or paid-model capability.
+
+This is **bounded symbolic research and conditional induction**, not an open-ended
+LLM engineer. It can derive new input/outcome conditions, freeze them before an
+independent falsifier, preserve counterexamples and revise a refuted proposal.
+Known audit seeds, generated challenges and naturally novel discoveries remain
+separate. Protocol follow-ups are not counted as new hypotheses; only actual
+persisted data-derived programs are. A scheduler-step observation window is not
+a scripted workflow or a count of statistically independent scientific samples.
+
+```sh
+npm ci --include=dev
+npm run research:study
+```
+
+The local reference study retains failed attempts and source-bound evidence.
+It does not edit city history or publish a release. See the
+[research contract](<docs/RESEARCH_STATION.md>) and
+[architecture decision](<docs/adr/0042-counterexample-research-station.md>).
+
+## Historical city mechanism (retained for replay, not continuously advancing)
+
+One deterministic engine owns all city changes in the archived model. Each simulated day settles an
 atomic Turn containing:
 
 - resource production, transfer and consumption;

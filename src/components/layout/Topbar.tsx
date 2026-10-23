@@ -20,11 +20,15 @@ import { useTranslation } from '@/hooks/useTranslation';
 interface TopbarProps {
   onOpenMenu: () => void;
   themeReady: boolean;
+  selectedView?: string;
+  menuOpen?: boolean;
 }
 
 export default function Topbar({
   onOpenMenu,
   themeReady,
+  selectedView,
+  menuOpen = false,
 }: TopbarProps) {
   const {
     gameTime,
@@ -46,7 +50,10 @@ export default function Topbar({
   const [showLangMenu, setShowLangMenu] = useState(false);
 
   const unreadCount = notifications.filter(n => !n.read).length;
-  const observingSymbiosis = activeView === "symbiosis";
+  const view = selectedView ?? activeView;
+  const observingResearch = view === "research";
+  const observingArchive = view === "city-archive";
+  const observing = view === "symbiosis" || observingResearch || observingArchive;
 
   const formatTime = (hour: number, minute: number) => {
     return `${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`;
@@ -67,16 +74,22 @@ export default function Topbar({
         <button
           type="button"
           onClick={onOpenMenu}
-          aria-label="Open navigation"
+          aria-label={language === "zh" ? "打开导航" : "Open navigation"}
+          aria-expanded={menuOpen}
+          aria-controls="main-navigation"
           className="rounded-lg p-2 text-cyber-text-dim hover:bg-cyber-gray hover:text-cyber-text lg:hidden"
         >
           <Menu className="h-5 w-5" />
         </button>
-        {observingSymbiosis ? (
-          <div className="hidden items-center gap-2 text-sm text-cyber-text-dim sm:flex">
-            <Eye className="h-4 w-4 text-cyber-green" />
+        {observing ? (
+          <div className={`${observingResearch ? "flex" : "hidden sm:flex"} min-w-0 items-center gap-2 text-xs text-cyber-text-dim sm:text-sm`}>
+            <Eye className="h-4 w-4 shrink-0 text-cyber-green" aria-hidden="true" />
             <span>
-              {language === "zh" ? "活动城市观测" : "Live city observation"}
+              {observingResearch
+                ? t("researchObservation")
+                : observingArchive
+                  ? language === "zh" ? "只读历史档案" : "Read-only historical archive"
+                  : language === "zh" ? "历史城市观测 · 只读" : "Historical city observation · Read-only"}
             </span>
           </div>
         ) : <div className="relative hidden 2xl:block">
@@ -92,7 +105,7 @@ export default function Topbar({
       </div>
 
       <div className="flex items-center gap-2 sm:gap-3 xl:gap-5">
-        {!observingSymbiosis && <div className="hidden items-center gap-3 text-sm md:flex">
+        {!observing && <div className="hidden items-center gap-3 text-sm md:flex">
           <div className="flex items-center gap-2 text-cyber-text-dim">
             <Clock className="w-4 h-4" />
             <span className="font-mono text-cyber-blue">{formatTime(gameTime.hour, gameTime.minute)}</span>
@@ -128,7 +141,7 @@ export default function Topbar({
           </div>
         </div>}
 
-        {!observingSymbiosis && <div className="hidden items-center gap-4 xl:flex">
+        {!observing && <div className="hidden items-center gap-4 xl:flex">
           <div className="flex items-center gap-2 px-3 py-1.5 bg-cyber-green/10 border border-cyber-green/30 rounded">
             <div className="w-2 h-2 rounded-full bg-cyber-green animate-pulse" />
             <span className="text-xs text-cyber-green font-medium">
@@ -137,7 +150,7 @@ export default function Topbar({
           </div>
         </div>}
 
-        {!observingSymbiosis && <div className="relative">
+        {!observing && <div className="relative">
           <motion.button
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
@@ -232,7 +245,10 @@ export default function Topbar({
           <motion.button
             whileHover={{ scale: 1.05 }}
             onClick={() => setShowLangMenu(!showLangMenu)}
+            type="button"
             aria-label="Change language"
+            aria-expanded={showLangMenu}
+            aria-controls="topbar-language-options"
             className="flex items-center gap-2 px-3 py-2 rounded-lg bg-cyber-gray hover:bg-cyber-gray-light transition-colors"
           >
             <Globe className="w-4 h-4 text-cyber-text-dim" />
@@ -241,6 +257,7 @@ export default function Topbar({
 
           {showLangMenu && (
             <motion.div
+              id="topbar-language-options"
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               className="absolute right-0 top-12 w-32 bg-cyber-dark border border-cyber-blue/30 rounded-xl shadow-xl overflow-hidden"
