@@ -1,7 +1,8 @@
 // @vitest-environment node
 
-import { constants } from "node:fs";
+import { constants, type Stats } from "node:fs";
 import * as fs from "node:fs/promises";
+import path from "node:path";
 import { randomUUID } from "node:crypto";
 import type { Pool } from "pg";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
@@ -34,6 +35,22 @@ const actualRoot = typeof process.geteuid === "function" && process.geteuid() ==
 const originalExitCode = process.exitCode;
 // Explicit isolated-test URL only. Never use a production connection fallback.
 const testDatabaseUrl = process.env.TEST_DATABASE_URL;
+
+/** Test-only scratch selection; it never changes the production permit verifier. */
+async function operatorTestParent(): Promise<string> {
+  const parent = process.env.NEXUS_OPERATOR_TEST_PARENT ?? "/root";
+  if (!["/root", "/workspace"].includes(parent) || !path.isAbsolute(parent) || path.resolve(parent) !== parent) {
+    throw new Error("Invalid operator test parent");
+  }
+  for (const ancestor of ["/", parent]) {
+    const stats = await fs.lstat(ancestor);
+    if (!stats.isDirectory() || stats.isSymbolicLink() || stats.uid !== 0 || (stats.mode & 0o7022) !== 0) {
+      throw new Error("Invalid operator test parent");
+    }
+  }
+  if (await fs.realpath(parent) !== parent) throw new Error("Invalid operator test parent");
+  return parent;
+}
 
 function permit(overrides: Partial<OperatorResearchPermit> = {}): OperatorResearchPermit {
   const value: OperatorResearchPermit = {
@@ -238,10 +255,40 @@ describe("root-private operator permit verifier", () => {
     vi.stubEnv(key, ""); expect(() => validateOperatorPermit(permit())).toThrow(ExperimentPermissionError);
   });
 
+  it.each(["/tmp", "/", "workspace", "/workspace/", "/workspace/../root", "/workspace/child", "/root/child", ""])(
+    "rejects nonallowlisted test scratch %j before filesystem access", async (parent) => {
+      vi.stubEnv("NEXUS_OPERATOR_TEST_PARENT", parent);
+      const lstat = vi.spyOn(fs, "lstat");
+      await expect(operatorTestParent()).rejects.toThrow("Invalid operator test parent");
+      expect(lstat).not.toHaveBeenCalled();
+    });
+
+  it.each([
+    { uid: 1001 }, { mode: 0o777 }, { mode: 0o2755 },
+    { isDirectory: () => false }, { isSymbolicLink: () => true },
+  ])("rejects unsafe scratch parent metadata %j", async (patch) => {
+    vi.stubEnv("NEXUS_OPERATOR_TEST_PARENT", "/workspace");
+    const safe = { uid: 0, mode: 0o755, isDirectory: () => true, isSymbolicLink: () => false };
+    vi.spyOn(fs, "lstat").mockImplementation(async (target) => ({ ...safe, ...(target === "/workspace" ? patch : {}) }) as Stats);
+    await expect(operatorTestParent()).rejects.toThrow("Invalid operator test parent");
+  });
+
+  it("rejects an unsafe filesystem root or redirected canonical scratch", async () => {
+    vi.stubEnv("NEXUS_OPERATOR_TEST_PARENT", "/workspace");
+    const safe = { uid: 0, mode: 0o755, isDirectory: () => true, isSymbolicLink: () => false } as Stats;
+    const lstat = vi.spyOn(fs, "lstat").mockResolvedValue({ ...safe, uid: 1001 });
+    await expect(operatorTestParent()).rejects.toThrow("Invalid operator test parent");
+    lstat.mockResolvedValue(safe);
+    vi.spyOn(fs, "realpath").mockResolvedValue("/tmp/redirected-test-scratch");
+    await expect(operatorTestParent()).rejects.toThrow("Invalid operator test parent");
+  });
+
   it.skipIf(!actualRoot)("checks real Linux root files, mode and both symlink positions", async () => {
     // A disposable root-private test directory, never the deployment permit directory.
-    const directory = await fs.mkdtemp("/root/.nexus-operator-unit-");
-    expect(directory).toMatch(/^\/root\/\.nexus-operator-unit-[a-zA-Z0-9]+$/);
+    const parent = await operatorTestParent();
+    const directory = await fs.mkdtemp(`${parent}/.nexus-operator-unit-`);
+    expect(directory).toMatch(/^\/(?:root|workspace)\/\.nexus-operator-unit-[a-zA-Z0-9]+$/);
+    expect(path.dirname(directory)).toBe(parent);
     try {
       await fs.chmod(directory, 0o700);
       const path = `${directory}/permit.json`;
@@ -261,8 +308,12 @@ describe("root-private operator permit verifier", () => {
       await fs.link(path, `${directory}/hardlinked.json`);
       await expect(verifyOperatorAuthorizationFile(path)).rejects.toThrow();
     } finally {
-      // Guard the exact mkdtemp target before recursive deletion.
-      if (!/^\/root\/\.nexus-operator-unit-[a-zA-Z0-9]+$/.test(directory)) throw new Error("Invalid cleanup target");
+      // Revalidate the exact, root-owned mkdtemp target before recursive deletion.
+      if (!/^\/(?:root|workspace)\/\.nexus-operator-unit-[a-zA-Z0-9]+$/.test(directory) ||
+        path.dirname(directory) !== parent || path.resolve(directory) !== directory ||
+        await operatorTestParent() !== parent || await fs.realpath(directory) !== directory) throw new Error("Invalid cleanup target");
+      const stats = await fs.lstat(directory);
+      if (!stats.isDirectory() || stats.isSymbolicLink() || stats.uid !== 0) throw new Error("Invalid cleanup target");
       await fs.rm(directory, { recursive: true });
     }
   });
