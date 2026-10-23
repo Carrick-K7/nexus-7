@@ -36,7 +36,8 @@ fi
 case "$mode" in
   web) exec npm run start -- -H "${HOSTNAME:-127.0.0.1}" -p "${PORT:-3220}" ;;
   worker) exec npm run worker:symbiosis -- "$@" ;;
-  research) exec npm run worker:research -- "$@" ;;
+  # The dedicated worker has no user-home/global npm toolchain in its sandbox.
+  research) exec node --import tsx "$release_root/scripts/run-research-worker.ts" "$@" ;;
   authorize-research) exec node --import tsx "$release_root/scripts/authorize-research.ts" "$@" ;;
   migrate) exec npm run db:migrate ;;
 esac
