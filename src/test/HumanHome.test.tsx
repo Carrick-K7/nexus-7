@@ -5,7 +5,7 @@ import HumanHome from "@/components/human/HumanHome";
 import Home from "@/app/page";
 import HumanPage from "@/app/human/page";
 import { measuredPair } from "@/components/human/format";
-import { briefRule, conceptualRule, originalIdea } from "@/components/human/rules";
+import { briefRule, compactCondition, compactRule, conceptualRule, originalIdea } from "@/components/human/rules";
 import { HUMAN_ENDPOINT } from "@/components/human/useReadOnlySnapshot";
 import type { HumanEvaluation, HumanOverview, HumanRule } from "@/research/human-contracts";
 
@@ -71,41 +71,49 @@ afterEach(() => {
 });
 
 describe("HumanHome — explicit unit reference fakes, not live research evidence", () => {
-  it("offers an independent Chinese, light, plain-language first reading with real projected limits", async () => {
+  it("shows a Chinese light dashboard with the actual state and four projected metrics", async () => {
     const fetcher = vi.fn(async () => response(referenceFake()));
     vi.stubGlobal("fetch", fetcher);
     render(<HumanHome />);
     await loaded();
-    expect(screen.getByTestId("human-intro")).toHaveTextContent("这里记录一个程序做过的小实验");
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/^这一轮已经停止$/);
-    expect(screen.getByTestId("human-progress")).toHaveTextContent("已做 5 / 5 步，按预先上限结束");
-    expect(screen.getByTestId("human-status")).toHaveTextContent("一步是处理一个任务");
-    expect(screen.getByTestId("human-status")).toHaveTextContent("不是模型的钱花完");
-    expect(screen.getByTestId("human-status")).toHaveTextContent("不是故障，也不会自动续跑");
-    expect(screen.getByTestId("human-status")).toHaveTextContent("待办不代表还会运行");
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(/^研究概览$/);
+    expect(screen.getByTestId("human-state")).toHaveTextContent(/^本轮结束$/);
+    expect(screen.getByTestId("human-progress")).toHaveTextContent(/^5 \/ 5$/);
+    expect(screen.getByTestId("human-status")).toHaveTextContent("达到回合上限");
+    expect(screen.getByTestId("human-measurements")).toHaveTextContent(/^17$/);
+    expect(screen.getByTestId("human-tools")).toHaveTextContent(/^1$/);
+    expect(screen.getByTestId("human-hypotheses")).toHaveTextContent(/^2$/);
     expect(screen.getByTestId("human-home")).toHaveAttribute("data-theme", "light");
     expect(document.documentElement).toHaveAttribute("lang", "zh-CN");
     expect(screen.queryByTestId("explicit-legacy-shell")).not.toBeInTheDocument();
     expect(screen.queryByRole("complementary")).not.toBeInTheDocument();
-    expect(within(screen.getByRole("banner")).getByRole("link", { name: "技术记录" })).toHaveAttribute("href", "/research");
+    const header = within(screen.getByRole("banner"));
+    expect(header.getByRole("link", { name: "NEXUS-7" })).toHaveAttribute("href", "/");
+    expect(header.getByRole("link", { name: "概览" })).toHaveAttribute("aria-current", "page");
+    expect(header.getByRole("link", { name: "研究记录" })).toHaveAttribute("href", "/research");
+    expect(header.getByRole("link", { name: "城市档案" })).toHaveAttribute("href", "/archive/city");
     expect(fetcher).toHaveBeenCalledWith(HUMAN_ENDPOINT, expect.objectContaining({ method: "GET", cache: "no-store", signal: expect.any(AbortSignal) }));
   });
 
-  it("offers a pure, bilingual example anchor without another request, and keeps errors prominent", async () => {
+  it("omits old introductions and tutorials in both languages without hiding read errors", async () => {
     const fetcher = vi.fn().mockResolvedValueOnce(response(referenceFake())).mockResolvedValueOnce(response({}, 503));
     vi.stubGlobal("fetch", fetcher);
     render(<HumanHome />);
     await loaded();
-    const jump = screen.getByRole("link", { name: "先看一个实际例子" });
-    expect(jump).toHaveAttribute("href", "#human-story-heading");
-    expect(screen.getByRole("heading", { name: "把同一组数字换顺序相加" })).toHaveAttribute("tabindex", "-1");
-    fireEvent.click(jump);
-    expect(fetcher).toHaveBeenCalledTimes(1);
-    fireEvent.click(screen.getByRole("button", { name: "EN" }));
-    expect(screen.getByRole("link", { name: "See an actual example first" })).toHaveAttribute("href", "#human-story-heading");
-    fireEvent.click(screen.getByRole("button", { name: "Read the records again" }));
-    await screen.findByRole("alert");
+    expect(screen.getByRole("heading", { name: "求和顺序与计算精度" })).toBeInTheDocument();
+    expect(screen.queryByTestId("human-intro")).not.toBeInTheDocument();
     expect(screen.queryByTestId("human-story-jump")).not.toBeInTheDocument();
+    expect(screen.queryByTestId("human-roles")).not.toBeInTheDocument();
+    expect(screen.getByTestId("human-home").textContent).not.toMatch(/给人看的|这里记录一个程序|先看一个实际例子|看懂一次尝试|先做一个小实验|这对我有什么用|开发助手|你可以只读到这里|不是故障|不是模型的钱花完|符合这些条件/);
+    expect(screen.getByTestId("human-story-details")).not.toHaveAttribute("open");
+    expect(screen.getByTestId("human-technical")).not.toHaveAttribute("open");
+    expect(screen.getByTestId("human-home").querySelector("pre")).toBeNull();
+    fireEvent.click(screen.getByRole("button", { name: "EN" }));
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Research overview");
+    expect(screen.getByTestId("human-home").textContent).not.toMatch(/For people|This page records a program|See an actual example|Understand one attempt|What can this do for me|You can stop reading here/);
+    expect(fetcher).toHaveBeenCalledTimes(1);
+    fireEvent.click(screen.getByRole("button", { name: "Read the records again" }));
+    expect(await screen.findByRole("alert")).toHaveTextContent("Showing the last successful records");
     expect(screen.getByTestId("human-read-time")).toHaveAttribute("datetime", readAt);
   });
 
@@ -119,50 +127,51 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     render(<HumanHome />);
     await loaded();
     const text = screen.getByTestId("human-revised-idea");
-    expect(text).toHaveTextContent("非零数的大小相差多悬殊");
-    expect(text).toHaveTextContent("最小的数有多小");
-    expect(text).toHaveTextContent(op === "and" ? "两项条件同时满足时" : "满足其中一种条件时");
-    expect(text).toHaveTextContent(op === "and" ? "预计两次结果不同" : "预计两次结果相同");
-    expect(text).toHaveTextContent("具体门槛在下面");
-    expect(text).not.toHaveTextContent("21413824.5");
+    expect(text).toHaveTextContent("非零数数量级跨度>2.5");
+    expect(text).toHaveTextContent("最小值≤-21,413,824.5");
+    expect(text).toHaveTextContent(op === "and" ? " 且 " : " 或 ");
+    expect(text).toHaveTextContent(op === "and" ? "预测不同" : "预测相同");
     expect(text).not.toHaveTextContent("符合这些条件");
     fireEvent.click(screen.getByRole("button", { name: "EN" }));
-    expect(text).toHaveTextContent("how widely the nonzero numbers differ in size");
-    expect(text).toHaveTextContent(op === "and" ? "When both conditions are met" : "When either condition is met");
-    expect(text).toHaveTextContent("The exact cutoffs are below");
+    expect(text).toHaveTextContent("Nonzero order-of-magnitude span >2.5");
+    expect(text).toHaveTextContent(op === "and" ? " AND " : " OR ");
+    expect(text).toHaveTextContent("Minimum ≤-21,413,824.5");
+    expect(text).toHaveTextContent(op === "and" ? "predicts different results" : "predicts equal results");
   });
 
-  it("tells the actual attempt → contradiction → revision, keeps unequal outputs distinct, and defers raw evidence", async () => {
+  it("shows recorded results and exact hypothesis conditions while deferring raw evidence", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => response(referenceFake())));
     render(<HumanHome />);
     await loaded();
     const headings = within(screen.getByTestId("human-story")).getAllByRole("heading", { level: 3 }).map((h) => h.textContent);
-    expect(headings).toEqual(["先做一个小实验", "原来的想法", "找到不符合的例子", "修改猜测", "暂时结论"]);
+    expect(headings).toEqual(["原假设", "修订假设"]);
     expect(screen.getByTestId("human-result-original")).toHaveTextContent(/^0\.6000000000000001$/);
     expect(screen.getByTestId("human-result-reordered")).toHaveTextContent(/^0\.6$/);
-    expect(screen.getByTestId("human-original-idea")).toHaveTextContent("最多有 3 个数");
-    expect(screen.getByTestId("human-revised-idea")).toHaveTextContent("只有两个数，或者这一组全是整数时");
-    expect(screen.getByTestId("human-story-conclusion")).toHaveTextContent("这次测试没找到反例");
-    expect(screen.getByTestId("human-story-conclusion")).toHaveTextContent("还不是证明");
+    expect(screen.getByTestId("human-original-idea")).toHaveTextContent("数量≤3：预测相同");
+    expect(screen.getByTestId("human-revised-idea")).toHaveTextContent("(数量≤2 或 全部为整数)：预测相同");
+    expect(screen.getByTestId("human-original-conclusion")).toHaveTextContent(/^已否证$/);
+    expect(screen.getByTestId("human-story-conclusion")).toHaveTextContent(/^未检出反例$/);
+    expect(screen.getByTestId("human-story-conclusion")).not.toHaveTextContent(/已证明|认证|通过/);
     expect(screen.queryByText("reference-fake-initial-program")).not.toBeInTheDocument();
     expect(screen.getByTestId("human-home").textContent).not.toMatch(/DSL|AST|oracle|fenced lease|programDigest|survived-budget|仪器|回执/);
     await openDetails("human-story-details");
     expect(screen.getByTestId("human-exact-input")).toHaveTextContent("0.1");
     expect(screen.getByTestId("human-exact-original")).toHaveTextContent("0.6000000000000001");
     expect(screen.getByTestId("human-story-details")).toHaveTextContent("reference-fake-initial-program");
+    await openDetails("human-technical");
+    expect(screen.getByTestId("human-technical")).toHaveTextContent("有限测试未检出反例不等于证明");
   });
 
-  it("explains the known size-or-count original idea without exposing its huge threshold by default", async () => {
+  it("shows the actual size-or-count threshold rather than a vague original-idea sentence", async () => {
     const fake = referenceFake();
     fake.story!.initial.rule = { expectedEqual: true, condition: { op: "or",
       left: { op: "gt", feature: "min", threshold: -21413824.5 }, right: { op: "lte", feature: "length", threshold: 2.5 } } };
     vi.stubGlobal("fetch", vi.fn(async () => response(fake)));
     render(<HumanHome />);
     await loaded();
-    expect(screen.getByTestId("human-original-idea")).toHaveTextContent("原先按数字大小或数量");
-    expect(screen.getByTestId("human-original-idea")).toHaveTextContent("这组数字符合它当时的条件");
-    expect(screen.getByTestId("human-home")).not.toHaveTextContent("21413824.5");
-    expect(screen.getByTestId("human-revised-idea")).toHaveTextContent("只有两个数，或者这一组全是整数时");
+    expect(screen.getByTestId("human-original-idea")).toHaveTextContent("(最小值>-21,413,824.5 或 数量≤2)：预测相同");
+    expect(screen.getByTestId("human-original-idea")).not.toHaveTextContent("符合它当时的条件");
+    expect(screen.getByTestId("human-revised-idea")).toHaveTextContent("数量≤2 或 全部为整数");
     await openDetails("human-story-details");
     expect(screen.getByTestId("human-story-details")).toHaveTextContent("-21413824.5");
   });
@@ -213,8 +222,10 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     render(<HumanHome />);
     await loaded();
     await openDetails("human-story-details");
-    expect(screen.getByTestId("human-story-details")).toHaveTextContent("24 次计算，其中 13 次符合条件，11 次在条件外");
-    expect(screen.getByTestId("human-story-details")).toHaveTextContent("32 次计算，其中 16 次符合条件，16 次在条件外");
+    const tests = within(screen.getByRole("region", { name: "修订假设 · 测试记录" }));
+    expect(tests.getByRole("heading", { name: "F · 反例测试" }).parentElement?.parentElement).toHaveTextContent("测量24条件内13条件外11配额24");
+    expect(tests.getByRole("heading", { name: "T · 保留测试" }).parentElement?.parentElement).toHaveTextContent("测量32条件内16条件外16配额32");
+    expect(screen.getByRole("region", { name: "原假设 · 测试记录" })).toHaveTextContent("已否证");
   });
 
   it("does not reuse the known revision sentence for another condition or prediction", async () => {
@@ -224,9 +235,9 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     vi.stubGlobal("fetch", vi.fn(async () => response(fake)));
     render(<HumanHome />);
     await loaded();
-    expect(screen.getByTestId("human-revised-idea")).toHaveTextContent("至少有 5 个数");
-    expect(screen.getByTestId("human-revised-idea")).toHaveTextContent("结果不同");
-    expect(screen.getByTestId("human-revised-idea")).not.toHaveTextContent("这一组全是整数");
+    expect(screen.getByTestId("human-revised-idea")).toHaveTextContent("数量≥5");
+    expect(screen.getByTestId("human-revised-idea")).toHaveTextContent("预测不同");
+    expect(screen.getByTestId("human-revised-idea")).not.toHaveTextContent("全部为整数");
   });
 
   it("retains a historical refutation even after a later test without a counterexample", async () => {
@@ -236,9 +247,13 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     vi.stubGlobal("fetch", vi.fn(async () => response(fake)));
     render(<HumanHome />);
     await loaded();
-    expect(screen.getByTestId("human-story-conclusion")).toHaveTextContent("修改后的想法也找到了不符合的例子");
-    expect(screen.getByTestId("human-story-conclusion")).not.toHaveTextContent("这次测试没找到反例");
-    expect(screen.getByTestId("human-story-conclusion")).toHaveTextContent("原来的反例仍然保留");
+    expect(screen.getByTestId("human-story-conclusion")).toHaveTextContent(/^已否证$/);
+    expect(screen.getByTestId("human-story-conclusion")).not.toHaveTextContent("未检出反例");
+    expect(screen.getByTestId("human-original-conclusion")).toHaveTextContent(/^已否证$/);
+    expect(screen.getByTestId("human-result-original")).toHaveTextContent("0.6000000000000001");
+    await openDetails("human-story-details");
+    expect(screen.getByTestId("human-story-details")).toHaveTextContent("原反例保留");
+    expect(screen.getByRole("region", { name: "修订假设 · 测试记录" })).toHaveTextContent("T · 保留测试未检出反例");
   });
 
   it.each(["pending", "inconclusive"] as const)("does not upgrade a %s revision to a proof", async (status) => {
@@ -248,21 +263,42 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     vi.stubGlobal("fetch", vi.fn(async () => response(fake)));
     render(<HumanHome />);
     await loaded();
-    expect(screen.getByTestId("human-story-conclusion")).toHaveTextContent(status === "pending" ? "还没有测试结果" : "还不足以下结论");
+    expect(screen.getByTestId("human-story-conclusion")).toHaveTextContent(status === "pending" ? "待检验" : "无结论");
   });
 
   it("uses the recorded model cost/calls, separates local computation, and admits unmeasured resources", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => response(referenceFake())));
     render(<HumanHome />);
     await loaded();
-    expect(screen.getByTestId("human-measurements")).toHaveTextContent("17 次");
+    expect(screen.getByTestId("human-measurements")).toHaveTextContent(/^17$/);
     expect(screen.getByTestId("human-model-calls")).toHaveTextContent("3 次");
     expect(screen.getByTestId("human-model-cost")).toHaveTextContent("0.125 美元");
-    expect(screen.getByTestId("human-usage")).toHaveTextContent("不是 DeepSeek");
-    expect(screen.getByTestId("human-usage")).toHaveTextContent("不包括服务器租金");
-    expect(screen.getByTestId("human-usage")).toHaveTextContent("未测量");
-    expect(screen.getByTestId("human-roles")).toHaveTextContent("城市模拟已经冻结");
-    expect(screen.getByTestId("human-roles")).toHaveTextContent("网站里的实验程序");
+    expect(screen.getByTestId("human-metrics")).toHaveTextContent("本地测量");
+    expect(screen.getByTestId("human-usage")).toHaveTextContent("模型调用");
+    await openDetails("human-technical");
+    expect(screen.getByTestId("human-technical")).toHaveTextContent("本地测量不是模型调用");
+    expect(screen.getByTestId("human-technical")).toHaveTextContent("模型费用不含服务器租金及开发对话费用");
+    expect(screen.getByTestId("human-technical")).toHaveTextContent("CPU / 内存：未测量");
+  });
+
+  it("projects changed inventory and resource data without mixing spent, reserved, and limits", async () => {
+    const fake = referenceFake();
+    Object.assign(fake.study!, { measurements: 29, reserved: 11, measurementLimit: 95, steps: 7, stepLimit: 7, modelCalls: 0, modelCostUsd: 0 });
+    fake.study!.counts = { tools: 6, hypotheses: 9, lessons: 12 };
+    fake.source.stationRevision = 1234;
+    vi.stubGlobal("fetch", vi.fn(async () => response(fake)));
+    render(<HumanHome />);
+    await loaded();
+    expect(screen.getByTestId("human-progress")).toHaveTextContent(/^7 \/ 7$/);
+    expect(screen.getByTestId("human-measurements")).toHaveTextContent(/^29$/);
+    expect(screen.getByTestId("human-tools")).toHaveTextContent(/^6$/);
+    expect(screen.getByTestId("human-hypotheses")).toHaveTextContent(/^9$/);
+    expect(screen.getByTestId("human-model-calls")).toHaveTextContent(/^0 次$/);
+    expect(screen.getByTestId("human-model-cost")).toHaveTextContent(/^0 美元$/);
+    await openDetails("human-technical");
+    expect(screen.getByTestId("human-measurement-budget")).toHaveTextContent(/^29 · 预占 11 · 上限 95$/);
+    expect(screen.getByTestId("human-technical")).toHaveTextContent("账本版本1,234");
+    expect(screen.getByTestId("human-technical")).toHaveTextContent("未绑定部署版本");
   });
 
   it("distinguishes Beijing experiment time from read time, and supports EN and grouped theme controls", async () => {
@@ -276,7 +312,7 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     expect(screen.getByRole("group", { name: "语言" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "EN" }));
     expect(document.documentElement).toHaveAttribute("lang", "en");
-    expect(screen.getByTestId("human-intro")).toHaveTextContent("This page records a program's small experiments");
+    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("Research overview");
     expect(screen.getByRole("group", { name: "Appearance" })).toBeInTheDocument();
     fireEvent.click(screen.getByRole("button", { name: "Dark" }));
     expect(screen.getByTestId("human-home")).toHaveAttribute("data-theme", "dark");
@@ -291,14 +327,15 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     vi.stubGlobal("fetch", vi.fn(async () => response(fake)));
     render(<HumanHome />);
     await loaded();
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("记录允许继续实验");
-    expect(screen.getByTestId("human-status")).toHaveTextContent("不知道它此刻是否真的在算");
-    expect(screen.getByTestId("human-status")).not.toHaveTextContent("这一轮已经停止");
+    expect(screen.getByTestId("human-state")).toHaveTextContent(/^已授权$/);
+    expect(screen.getByTestId("human-status")).not.toHaveTextContent(/正在计算|正在运行|本轮结束/);
+    await openDetails("human-technical");
+    expect(screen.getByTestId("human-technical")).toHaveTextContent("已授权不代表进程此刻正在计算");
   });
 
   it.each([
-    ["paused", "human-paused", "已暂停"], ["idle", "agenda-empty", "这一轮已经停止"],
-    ["unknown", "unknown", "暂时不知道是否在工作"], ["budget-exhausted", "oracle-budget", "这一轮已经停止"],
+    ["paused", "human-paused", "已暂停"], ["idle", "agenda-empty", "空闲"],
+    ["unknown", "unknown", "状态未知"], ["budget-exhausted", "oracle-budget", "本轮结束"],
   ] as const)("reads %s / %s without inventing activity", async (state, stopReason, title) => {
     const fake = referenceFake();
     Object.assign(fake.study!, { state, stopReason, stepLimit: 20 });
@@ -306,11 +343,14 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     vi.stubGlobal("fetch", vi.fn(async () => response(fake)));
     render(<HumanHome />);
     await loaded();
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent(title);
+    expect(screen.getByTestId("human-state")).toHaveTextContent(title);
     if (stopReason === "oracle-budget") {
-      expect(screen.getByTestId("human-progress")).toHaveTextContent("100 / 100 次本地计算");
-      expect(screen.getByTestId("human-status")).toHaveTextContent("本地计算次数上限停止");
-      expect(screen.getByTestId("human-status")).not.toHaveTextContent("这里到步数上限停止");
+      expect(screen.getByTestId("human-progress")).toHaveTextContent("5 / 20");
+      expect(screen.getByTestId("human-measurements")).toHaveTextContent(/^100$/);
+      expect(screen.getByTestId("human-status")).toHaveTextContent("达到本地测量上限");
+      expect(screen.getByTestId("human-status")).not.toHaveTextContent("达到回合上限");
+      await openDetails("human-technical");
+      expect(screen.getByTestId("human-measurement-budget")).toHaveTextContent("100 · 预占 0 · 上限 100");
     }
   });
 
@@ -321,10 +361,15 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     vi.stubGlobal("fetch", vi.fn(async () => response(fake)));
     render(<HumanHome />);
     await loaded();
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("还没有实验记录");
-    expect(screen.getByTestId("human-story")).toHaveTextContent("不能提供真实例子");
-    expect(screen.getByTestId("human-usage")).toHaveTextContent("未知不等于零");
+    expect(screen.getByTestId("human-state")).toHaveTextContent("状态未知");
+    expect(screen.getByTestId("human-status")).toHaveTextContent("暂无研究记录");
+    expect(screen.getByTestId("human-story")).toHaveTextContent("暂无研究记录");
+    expect(screen.getByTestId("human-usage")).toHaveTextContent("资源数据未知");
+    expect(screen.getByTestId("human-metrics").querySelectorAll("dd")).toHaveLength(4);
+    for (const value of screen.getByTestId("human-metrics").querySelectorAll("dd")) expect(value).toHaveTextContent(/^未记录$/);
     expect(screen.queryByTestId("human-model-calls")).not.toBeInTheDocument();
+    await openDetails("human-technical");
+    expect(screen.getByTestId("human-technical")).toHaveTextContent("账本版本未记录");
   });
 
   it("declines an unsupported story rather than filling it with static decimal examples", async () => {
@@ -341,7 +386,7 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     vi.stubGlobal("fetch", vi.fn(async () => response({ error: "explicit-reference-fake-http-error" }, status)));
     render(<HumanHome />);
     await screen.findByRole("alert");
-    expect(screen.getByRole("heading", { level: 1 })).toHaveTextContent("暂时不知道是否在工作");
+    expect(screen.getByTestId("human-state")).toHaveTextContent("状态未知");
     expect(screen.queryByTestId("human-read-time")).not.toBeInTheDocument();
     expect(screen.queryByTestId("human-progress")).not.toBeInTheDocument();
     expect(screen.queryByTestId("human-model-calls")).not.toBeInTheDocument();
@@ -526,5 +571,26 @@ describe("Human number/rule display — presentation, never a repeated experimen
   it("defers giant and tiny thresholds instead of copying the known rule's story", () => {
     expect(briefRule({ expectedEqual: true, condition: { feature: "max", op: "lte", threshold: 9e8 } }, "zh")).toBeNull();
     expect(briefRule({ expectedEqual: true, condition: { feature: "min", op: "gt", threshold: 1e-200 } }, "zh")).toBeNull();
+  });
+  it.each([
+    [{ feature: "length", op: "lte", threshold: 2.5 }, "数量≤2", "Count ≤2"],
+    [{ feature: "length", op: "gt", threshold: 2 }, "数量≥3", "Count ≥3"],
+    [{ feature: "nonIntegerCount", op: "lte", threshold: 0.5 }, "全部为整数", "All integers"],
+    [{ feature: "nonIntegerCount", op: "gt", threshold: 0.5 }, "非整数数量≥1", "Non-integer count ≥1"],
+    [{ feature: "nonIntegerCount", op: "lte", threshold: -0.5 }, "非整数数量≤-1", "Non-integer count ≤-1"],
+    [{ feature: "min", op: "gt", threshold: -21413824.5 }, "最小值>-21,413,824.5", "Minimum >-21,413,824.5"],
+    [{ feature: "max", op: "lte", threshold: 9e8 }, "最大值≤900,000,000", "Maximum ≤900,000,000"],
+    [{ feature: "maxAbs", op: "lte", threshold: 1.25 }, "最大绝对值≤1.25", "Maximum absolute value ≤1.25"],
+    [{ feature: "nonZeroOrderSpan", op: "gt", threshold: 2.5 }, "非零数数量级跨度>2.5", "Nonzero order-of-magnitude span >2.5"],
+    [{ feature: "min", op: "gt", threshold: 1e-200 }, "最小值>1e-200", "Minimum >1e-200"],
+    [{ feature: "length", op: "gt", threshold: 1e300 }, "数量>1e+300", "Count >1e+300"],
+  ] as const)("renders exact compact predicates for %o", (condition, zh, en) => {
+    expect(compactCondition(condition, "zh")).toBe(zh);
+    expect(compactCondition(condition, "en")).toBe(en);
+  });
+  it.each(["and", "or"] as const)("keeps compact %s scope and predictions explicit", (op) => {
+    const condition = { op, left: { feature: "min", op: "gt", threshold: -12.5 }, right: { feature: "length", op: "lte", threshold: 2.5 } } as const;
+    expect(compactRule({ condition, expectedEqual: true }, "zh")).toBe(`(最小值>-12.5 ${op === "and" ? "且" : "或"} 数量≤2)：预测相同`);
+    expect(compactRule({ condition, expectedEqual: false }, "en")).toBe(`(Minimum >-12.5 ${op === "and" ? "AND" : "OR"} Count ≤2): predicts different results`);
   });
 });

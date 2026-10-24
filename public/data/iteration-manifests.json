@@ -1,5 +1,26 @@
 [
   {
+    "id": "iteration-v5.1.1",
+    "version": "5.1.1",
+    "date": "2026-10-24",
+    "trigger": "enhancement",
+    "triggerReason": "The owner requested a normal page rather than a page filled with introductions and prompts.",
+    "action": "Replace the guided reading layout with a concise project overview: status, key figures, recorded calculation results and hypothesis comparison. Remove the 'For people' label, introductory sections, step-by-step tutorial and repeated reminders. Retain read-only data, error states and expandable evidence.",
+    "outcome": "A presentation-only revision using the existing human API and stored study. No new research, authority, budget, model calls or historical changes are introduced. This source record does not certify deployment; exact CI and live verification establish publication.",
+    "metrics": [],
+    "evidence": [
+      "Existing data contracts and the completed production study remain unchanged.",
+      "UI tests preserve data, error, read-only and interpretation boundaries while checking removal of the old tutorial and introductory copy."
+    ],
+    "artifacts": [
+      "src/components/human",
+      "src/test/HumanHome.test.tsx",
+      "e2e/human.spec.ts",
+      "docs/HUMAN_READING.md"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v5.1.0",
     "version": "5.1.0",
     "date": "2026-10-24",
@@ -2507,6 +2528,17 @@
       "docs/adr/0001-deterministic-simulation-core.md"
     ],
     "source": "manifest"
+  },
+  {
+    "id": "b9e448bf",
+    "version": "unreleased",
+    "date": "2026-10-24",
+    "trigger": "enhancement",
+    "triggerReason": "feat: add a plain-language human reading page backed by real evidence",
+    "action": "feat: add a plain-language human reading page backed by real evidence",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
   },
   {
     "id": "4fb9404e",

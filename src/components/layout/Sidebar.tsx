@@ -209,7 +209,7 @@ export default function Sidebar({
       <nav className="flex-1 space-y-2 overflow-y-auto p-4">
         <Link href="/human" prefetch={false} data-testid="human-guide-link" className="flex min-h-11 items-center gap-3 rounded-lg border border-cyber-blue/30 px-4 py-3 text-sm font-semibold text-cyber-blue focus-visible:outline-2 focus-visible:outline-offset-4">
           <Info className="h-5 w-5 shrink-0" aria-hidden="true" />
-          {language === "zh" ? "看懂 NEXUS" : "NEXUS, in plain language"}
+          {language === "zh" ? "研究概览" : "Research overview"}
         </Link>
         <p className="px-3 pb-1 text-[10px] font-semibold uppercase tracking-[0.2em] text-cyber-text-dim">
           {language === "zh" ? "研究与可核验证据" : "Research & inspectable evidence"}

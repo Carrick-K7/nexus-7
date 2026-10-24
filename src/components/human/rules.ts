@@ -29,6 +29,38 @@ export function conditionText(condition: HumanCondition, language: HumanLanguage
   return `${atomText(condition.left, language)}${join}${atomText(condition.right, language)}`;
 }
 
+/** Exact, compact presentation of a validated predicate; never re-evaluates its input. */
+export function compactCondition(condition: HumanCondition, language: HumanLanguage): string {
+  const zh = language === "zh";
+  const numeric = (value: number) => Math.abs(value) >= 0.001 && Math.abs(value) < 1e21
+    ? value.toLocaleString(zh ? "zh-CN" : "en-US", { maximumSignificantDigits: 21 }) : String(value);
+  const atom = ({ feature, op, threshold }: HumanAtom) => {
+    const integerFeature = feature === "length" || feature === "nonIntegerCount";
+    // Counts are integers. Never round a continuous feature or an unsafe integer bound.
+    const integerBound = Math.floor(threshold) + (op === "gt" ? 1 : 0);
+    const simplifyCount = integerFeature && Number.isSafeInteger(integerBound);
+    const value = simplifyCount ? integerBound : threshold;
+    if (feature === "nonIntegerCount" && op === "lte" && value === 0) return zh ? "全部为整数" : "All integers";
+    const label = {
+      length: zh ? "数量" : "Count", nonIntegerCount: zh ? "非整数数量" : "Non-integer count",
+      min: zh ? "最小值" : "Minimum", max: zh ? "最大值" : "Maximum",
+      maxAbs: zh ? "最大绝对值" : "Maximum absolute value", nonZeroOrderSpan: zh ? "非零数数量级跨度" : "Nonzero order-of-magnitude span",
+    }[feature];
+    const operator = op === "lte" ? "≤" : simplifyCount ? "≥" : ">";
+    return `${label}${zh ? "" : " "}${operator}${numeric(value)}`;
+  };
+  if ("feature" in condition) return atom(condition);
+  const join = zh ? condition.op === "and" ? " 且 " : " 或 " : condition.op === "and" ? " AND " : " OR ";
+  return `${atom(condition.left)}${join}${atom(condition.right)}`;
+}
+
+export function compactRule(rule: HumanRule, language: HumanLanguage): string {
+  const condition = compactCondition(rule.condition, language);
+  const scoped = "feature" in rule.condition ? condition : `(${condition})`;
+  return language === "zh" ? `${scoped}：预测${rule.expectedEqual ? "相同" : "不同"}`
+    : `${scoped}: predicts ${rule.expectedEqual ? "equal" : "different"} results`;
+}
+
 /** Conceptual reading of the known original rule shape; no production threshold is hardcoded. */
 export function originalIdea(rule: HumanRule, language: HumanLanguage): string | null {
   const condition = rule.condition;

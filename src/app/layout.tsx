@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NEXUS-7｜看懂它在做什么",
+  title: "NEXUS-7 · 研究概览",
   description:
-    "用真实例子看懂这个自动实验程序做过什么、改了什么想法、为什么停止。Plain-language records of small computer experiments, their mistakes and their limits.",
+    "研究状态、实验结果与历史记录。Research status, experiment results and records.",
 };
 
 export default function RootLayout({
