@@ -5,6 +5,7 @@ historical decisions and generated evidence.
 
 ## Research station (current product; release claims require live evidence)
 
+- [Human reading contract](<HUMAN_READING.md>) — plain-language default entry, a real concrete story, honest stopped/unknown states and progressively disclosed evidence.
 - [Research contract](<RESEARCH_STATION.md>) — bounded symbolic agenda, tool synthesis, private evaluation receipts, persistence and explicit limits.
 - [ADR 0042](<adr/0042-counterexample-research-station.md>) — separate research context; no implicit production or live-model authority.
 - [ADR 0043](<adr/0043-research-station-production-cutover.md>) — owner-authorized cutover, archival, one-shot operator delegation and rollback boundaries.

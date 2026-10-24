@@ -57,13 +57,16 @@ The public projection hides no failed experiment and does not create a study as 
 
 ```text
 GET  /api/research/v1/overview
+GET  /api/research/v1/human       concise facts for the human-facing page; never starts work
 GET  /api/research/v1/health      service/PG/exact-release readiness, not worker heartbeat
 POST /api/research/v1/control     authenticated operator plane only
 ```
 
 Overview writes return 405. Public-observer control writes return 405 independently of the public proxy. Control accepts only `start`, `pause`, `resume`; there is no public or arbitrary execute command. Start is idempotent for the same frozen configuration and conflicts with a different one. No user message, resident identity, private diary or model reasoning enters the city.
 
-The **Research Station / 研究站** is the default `/` and shareable `/research` entry. It is anonymous/read-only in public-observer mode. Ordinary-language briefing connects current questions, why they were queued, actual outcomes, budgets and remaining uncertainty to the underlying records. Visible pages refresh with non-overlapping GET every 30 seconds; failures retain the last real snapshot. Reading time, server projection time and last experiment time are distinct; `running` is a ledger state, never a proved daemon heartbeat. The page displays actual persisted data and an honest unauthorized/empty state, not a fixture. It does not reuse Evolution Log commits as research evidence.
+The default `/` and shareable `/human` page are a separate, Chinese-first plain-language reading path. They explain what the programme is and is not, whether work has stopped, one evidence-bound attempt/counterexample/revision story, practical limits and the difference between local tests and paid model calls. The concise human API is a pure projection: it reuses actual records and validates their bindings, but never calls an instrument or runs new research. Unknown sources, missing references and malformed data do not become a fabricated story. See [the human reading contract](<HUMAN_READING.md>).
+
+The detailed **Research Station / 研究站** remains at `/research`. It is anonymous/read-only in public-observer mode. Ordinary-language briefing connects current questions, why they were queued, actual outcomes, budgets and remaining uncertainty to the underlying records. Visible pages refresh with non-overlapping GET every 30 seconds; failures retain the last real snapshot. Reading time, server projection time and last experiment time are distinct; `running` is a ledger state, never a proved daemon heartbeat. The page displays actual persisted data and an honest unauthorized/empty state, not a fixture. It does not reuse Evolution Log commits as research evidence.
 
 `/archive/city` reads only a static retirement manifest and raw public snapshots. The old city is not the default product, but its exact source and records remain research specimens. Missing/incomplete archive data never becomes a fabricated successful retirement. Legacy query-selected views remain available explicitly; research/archive observation does not advance the client-side legacy simulation.
 

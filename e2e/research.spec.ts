@@ -7,7 +7,7 @@ const ENDPOINT = "/api/research/v1/overview";
 
 // These tests read the real Next API. They do not seed a station, invoke a
 // worker, or intercept successful responses to pretend research has happened.
-async function openResearch(page: Page, path = "/"): Promise<ResearchOverview> {
+async function openResearch(page: Page, path = "/research"): Promise<ResearchOverview> {
   const responsePromise = page.waitForResponse((response) => new URL(response.url()).pathname === ENDPOINT && response.request().method() === "GET");
   await page.goto(path);
   await expect(page.getByRole("heading", { name: "Research Station · Bounded symbolic research" })).toBeVisible();
@@ -269,6 +269,8 @@ test("shareable research and unknown-view routes select research, with legacy na
   await expect(page.getByTestId("legacy-navigation")).not.toHaveAttribute("open", "");
   await expect(page.locator("aside").getByRole("button", { name: "Research Station", exact: true })).toHaveAttribute("aria-current", "page");
   await expect(page.locator("aside").getByRole("link", { name: "Historical city archive" })).toHaveAttribute("href", "/archive/city");
+  await expect(page.getByTestId("human-guide-link")).toHaveAttribute("href", "/human");
+  await expect(page.getByRole("group", { name: "Color theme" })).toBeVisible();
   await openResearch(page, "/?view=unknown");
   await page.getByTestId("legacy-navigation").locator(":scope > summary").focus();
   await page.keyboard.press("Enter");
@@ -335,7 +337,7 @@ test("explicit missing archive failure fake never creates or advances a city", a
 test("explicit initial 503 route fake is an error, not a successful empty station", async ({ page }) => {
   await page.setViewportSize({ width: 1440, height: 1000 });
   await page.route(`**${ENDPOINT}`, (route) => route.fulfill({ status: 503, contentType: "application/json", body: JSON.stringify({ error: "explicit-browser-reference-fake-initial-outage" }) }));
-  await page.goto("/");
+  await page.goto("/research");
   await expect(page.getByTestId("research-freshness").getByRole("alert")).toContainText("No result has been invented");
   await expect(page.getByTestId("research-empty")).toHaveCount(0);
   await expect(page.getByTestId("research-state")).toHaveCount(0);

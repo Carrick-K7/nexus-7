@@ -1,7 +1,10 @@
 # NEXUS-7
 
 NEXUS-7 is a bounded counterexample-driven computational research station.
-The human-readable research entry is `/` or `/research`; `/archive/city` retains
+Start with the plain-language, Chinese-first page at `/` or `/human`: what this
+programme is, whether it has stopped, and one real story of a guess being tested
+and corrected. The detailed technical workbench remains at `/research`.
+See [the human reading contract](<docs/HUMAN_READING.md>). `/archive/city` retains
 the original synthetic city as a dated, read-only specimen. The continuous city
 writer was retired by the owner on 2026-10-23, without deleting its source or data.
 That historical Shenzhen model contains three resident kinds:

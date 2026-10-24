@@ -6,7 +6,8 @@ import ResearchShell from "@/components/research/ResearchShell";
 import CityArchive from "@/components/archive/CityArchive";
 import { hasCompletedCityArchive, parseCityArchive, type CityArchiveManifest } from "@/components/archive/city-archive-contract";
 
-const { useCitySimulationMock } = vi.hoisted(() => ({ useCitySimulationMock: vi.fn() }));
+const { useCitySimulationMock, pushRoute } = vi.hoisted(() => ({ useCitySimulationMock: vi.fn(), pushRoute: vi.fn() }));
+vi.mock("next/navigation", () => ({ useRouter: () => ({ push: pushRoute }) }));
 vi.mock("@/hooks/useCitySimulation", () => ({ useCitySimulation: useCitySimulationMock }));
 vi.mock("@/components/layout/BackgroundEffects", () => ({ default: () => null }));
 import Sidebar from "@/components/layout/Sidebar";
@@ -210,6 +211,7 @@ beforeEach(() => {
   window.history.replaceState(null, "", "/");
   vi.spyOn(document, "visibilityState", "get").mockReturnValue("visible");
   useCitySimulationMock.mockClear();
+  pushRoute.mockClear();
 });
 
 afterEach(() => {
@@ -898,6 +900,16 @@ describe("Research Station shell", () => {
     expect(await screen.findByTestId("research-empty")).toBeInTheDocument();
     expect(useCitySimulationMock).toHaveBeenCalledWith(false);
     expect(useCitySimulationMock).not.toHaveBeenCalledWith(true);
+  });
+
+  it("navigates technical research to its dedicated URL rather than the human home", async () => {
+    window.history.replaceState(null, "", "/?view=unknown");
+    vi.stubGlobal("fetch", vi.fn(async () => response(referenceFakeOverview(false))));
+    render(<ResearchShell />);
+    await screen.findByTestId("research-empty");
+    fireEvent.click(screen.getByRole("button", { name: /^Research Station$/ }));
+    expect(pushRoute).toHaveBeenCalledWith("/research");
+    expect(pushRoute).not.toHaveBeenCalledWith("/");
   });
 
   it("honors an explicit legacy query rather than faking the old home default", () => {

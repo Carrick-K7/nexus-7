@@ -1,6 +1,7 @@
 "use client";
 
 import { useLayoutEffect, useState, useSyncExternalStore } from "react";
+import { useRouter } from "next/navigation";
 import { useNexusStore } from "@/stores/nexus-store";
 import { useCitySimulation } from "@/hooks/useCitySimulation";
 import Sidebar from "@/components/layout/Sidebar";
@@ -88,6 +89,7 @@ function queryView() {
 /** The shared shell never advances the city while reading research or archives. */
 export default function ResearchShell({ fixedView }: { fixedView?: "research" | "city-archive" }) {
   const { activeView, setActiveView, language, theme } = useNexusStore();
+  const router = useRouter();
   const [mobileNavOpen, setMobileNavOpen] = useState(false);
   const locationView = useSyncExternalStore(subscribeToLocation, queryView, () => null);
   const requestedView = fixedView ?? locationView ?? activeView;
@@ -100,9 +102,12 @@ export default function ResearchShell({ fixedView }: { fixedView?: "research" | 
   const selectView = (view: string) => {
     setActiveView(view);
     if (fixedView) {
-      if (view !== fixedView) window.location.assign(view === "research" ? "/research" : `/?view=${encodeURIComponent(view)}`);
+      if (view !== fixedView) router.push(view === "research" ? "/research" : `/?view=${encodeURIComponent(view)}`);
+    } else if (view === "research") {
+      // The bare home URL is now the human reading page, not this technical shell.
+      router.push("/research");
     } else {
-      window.history.replaceState(null, "", view === "research" ? "/" : `/?view=${encodeURIComponent(view)}`);
+      window.history.replaceState(null, "", `/?view=${encodeURIComponent(view)}`);
       window.dispatchEvent(new PopStateEvent("popstate"));
     }
   };

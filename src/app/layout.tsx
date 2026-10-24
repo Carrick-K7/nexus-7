@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "NEXUS-7 | Counterexample-driven Research Station · 反例驱动研究站",
+  title: "NEXUS-7｜看懂它在做什么",
   description:
-    "A human-readable, read-only research station: questions, counterexamples, bounded experiments, budgets, and historical city evidence. 只读研究、反例与历史城市证据。",
+    "用真实例子看懂这个自动实验程序做过什么、改了什么想法、为什么停止。Plain-language records of small computer experiments, their mistakes and their limits.",
 };
 
 export default function RootLayout({

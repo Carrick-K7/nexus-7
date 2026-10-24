@@ -1,0 +1,27 @@
+{
+  "id": "iteration-v5.1.0",
+  "version": "5.1.0",
+  "date": "2026-10-24",
+  "trigger": "enhancement",
+  "triggerReason": "The human project owner repeatedly could not understand the technical dashboard and explicitly requested a dedicated, genuinely understandable page. Passing engineering checks had not made the explanation clear enough.",
+  "action": "Make a separate Chinese-first, ordinary-language page at / and /human. Explain what the programme is, whether this study has stopped, one real attempt-counterexample-revision story, current practical limits and the difference between internal measurements and model costs. Keep /research as the technical workbench and /archive/city as the retained history. Add a pure read-only human facts projection with evidence binding and fail-closed missing/unknown states; do not change the research kernel, authorization, budget or completed study.",
+  "outcome": "Implementation record, not a production deployment certificate. The page is designed around the reader's six ordinary questions instead of internal terminology, source hashes or many KPI cards. A concrete story is available only when the persisted source, proposal, counterexample and later evaluation records match; no static demonstration is passed off as live data. Finished-step limits are distinguished from monetary cost, and a successful data read is not claimed as a live thinking agent. Release readiness and the unchanged production ledger still require the actual local/CI/browser and post-deployment evidence; no future SHA or full test success is asserted here.",
+  "metrics": [],
+  "evidence": [
+    "docs/HUMAN_READING.md defines the reader-first explanation, factual limits and progressive evidence disclosure.",
+    "The new human data projection and browser parser have dedicated synthetic-reference and corruption tests; successful pages are validated with actual read-only API responses rather than a mocked success.",
+    "The pre-change production snapshot records the already-ended study; this UI-only feature does not grant more work, restart a study, invoke models or increase budgets.",
+    "The existing city archive and original scientific evidence remain unchanged. Actual deployment identity must come from the exact release health and CI evidence, not this source manifest."
+  ],
+  "artifacts": [
+    "docs/HUMAN_READING.md",
+    "src/components/human",
+    "src/app/human/page.tsx",
+    "src/app/page.tsx",
+    "src/research/human-contracts.ts",
+    "src/research/human-overview.ts",
+    "src/app/api/research/v1/human/route.ts",
+    "src/test/HumanHome.test.tsx",
+    "e2e/human.spec.ts"
+  ]
+}
