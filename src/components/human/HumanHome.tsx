@@ -101,8 +101,6 @@ export default function HumanHome() {
         <summary>{c.more}</summary>
         {technicalOpen && <div className={styles.detailBody}>
           <dl className={styles.metadata}>
-            <div><dt>{c.usageBoundary}</dt><dd>{c.localNote} {c.costNote} {c.resources}</dd></div>
-            <div><dt>{c.evidenceBoundary}</dt><dd>{c.moreNote} {c.sourceNote} {c.runningNote}</dd></div>
             {study && <>
               <div><dt>{c.localCalls}</dt><dd data-testid="human-measurement-budget">{count(study.measurements, language)} · {c.reserved} {count(study.reserved, language)} · {c.limit} {count(study.measurementLimit, language)}</dd></div>
               <div><dt>{c.pendingQuestions}</dt><dd>{count(study.pendingQuestions, language)}</dd></div>
@@ -113,7 +111,6 @@ export default function HumanHome() {
               <div><dt>{c.release}</dt><dd>{snapshot.source.releaseRevision ?? c.unbound}</dd></div>
             </>}
           </dl>
-          <p className={styles.muted}>{c.refreshHelp}</p>
           {snapshot && <div><h2>{c.statusDetails}</h2><pre className={styles.exact}>{JSON.stringify({ source: snapshot.source, study: snapshot.study, storyAvailability: snapshot.storyAvailability }, null, 2)}</pre></div>}
           <nav className={styles.evidenceLinks} aria-label={c.source}>
             <a href="/research">{c.technical}</a><a href="/api/research/v1/human">{c.rawData}</a><a href="/api/research/v1/overview">{c.rawEvidence}</a>

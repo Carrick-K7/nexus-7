@@ -76,7 +76,9 @@ async function assertProjection(page: Page, snapshot: HumanOverview) {
     await expect(page.getByTestId("human-exact-original")).toHaveText(String(story.counterexample.original));
     await expect(page.getByTestId("human-exact-reordered")).toHaveText(String(story.counterexample.reordered));
     await expect(page.getByTestId("human-exact-input")).toHaveText(JSON.stringify(story.counterexample.input, null, 2));
-    await expect(details).toContainText("原反例保留");
+    await expect(details).not.toContainText("原反例保留");
+    await expect(details).not.toContainText("页面不重做实验");
+    await expect(details).not.toContainText("条件外不作预测");
     for (const [key, label] of [["initial", "原假设"], ["revised", "修订假设"]] as const) {
       const evaluations = details.getByRole("region", { name: `${label} · 测试记录` });
       for (const evaluation of story[key].evaluations) {
@@ -188,9 +190,11 @@ for (const viewport of [
     await expect(details).toHaveAttribute("open", "");
     await expect(details.getByRole("link", { name: "Research records", exact: true })).toHaveAttribute("href", "/research");
     await expect(details.getByRole("link", { name: "Raw data (JSON)", exact: true })).toHaveAttribute("href", ENDPOINT);
-    await expect(details).toContainText("Local measurements are not model calls");
-    await expect(details).toContainText("CPU / memory: not measured");
-    await expect(details).toContainText("No counterexample in finite tests is not proof");
+    await expect(details).not.toContainText("Local measurements are not model calls");
+    await expect(details).not.toContainText("No counterexample in finite tests is not proof");
+    await expect(details).not.toContainText("Resource definitions");
+    await expect(details).not.toContainText("Evidence limits");
+    await expect(details).not.toContainText("Read-only GET");
     if (snapshot.study) await expect(page.getByTestId("human-measurement-budget")).toHaveText(`${snapshot.study.measurements.toLocaleString("en-US")} · Reserved ${snapshot.study.reserved.toLocaleString("en-US")} · Limit ${snapshot.study.measurementLimit.toLocaleString("en-US")}`);
     await assertFits(page);
     await assertAccessible(page);

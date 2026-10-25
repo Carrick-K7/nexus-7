@@ -117,6 +117,21 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     expect(screen.getByTestId("human-read-time")).toHaveAttribute("datetime", readAt);
   });
 
+  it.each(["zh", "en"] as const)("removes explanatory copy from both expanded details in %s", async (language) => {
+    vi.stubGlobal("fetch", vi.fn(async () => response(referenceFake())));
+    render(<HumanHome />);
+    await loaded();
+    if (language === "en") fireEvent.click(screen.getByRole("button", { name: "EN" }));
+    await openDetails("human-story-details");
+    await openDetails("human-technical");
+    const page = screen.getByTestId("human-home");
+    expect(page.textContent).not.toMatch(/本地测量不是模型调用|有限测试未检出反例不等于证明|不计自然新发现|页面不重做实验|条件外不作预测|后续测试不撤销|不代表进程|不是研究进程心跳|不含服务器租金|只读 GET|资源口径|证据范围|Local measurements are not model calls|No counterexample in finite tests is not proof|not natural new discoveries|does not repeat experiments|No prediction outside|do not erase refutations|does not confirm an active|not a research process heartbeat|excludes server rent|Read-only GET|Resource definitions|Evidence limits/);
+    expect(screen.getByTestId("human-original-conclusion")).toHaveTextContent(language === "zh" ? "已否证" : "Refuted");
+    expect(screen.getByTestId("human-story-conclusion")).toHaveTextContent(language === "zh" ? "未检出反例" : "No counterexample found");
+    expect(screen.getByTestId("human-exact-original")).toHaveTextContent("0.6000000000000001");
+    expect(screen.getByTestId("human-measurement-budget")).toHaveTextContent(language === "zh" ? "17 · 预占 0 · 上限 100" : "17 · Reserved 0 · Limit 100");
+  });
+
   it.each(["and", "or"] as const)("explains a less-simple revised %s condition using its real features and connective", async (op) => {
     const fake = referenceFake();
     fake.story!.revised.rule = { expectedEqual: op === "or", condition: { op,
@@ -159,7 +174,7 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     expect(screen.getByTestId("human-exact-original")).toHaveTextContent("0.6000000000000001");
     expect(screen.getByTestId("human-story-details")).toHaveTextContent("reference-fake-initial-program");
     await openDetails("human-technical");
-    expect(screen.getByTestId("human-technical")).toHaveTextContent("有限测试未检出反例不等于证明");
+    expect(screen.getByTestId("human-measurement-budget")).toHaveTextContent("17 · 预占 0 · 上限 100");
   });
 
   it("shows the actual size-or-count threshold rather than a vague original-idea sentence", async () => {
@@ -201,7 +216,7 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     await loaded();
     expect(screen.getByTestId("human-result-original")).toHaveTextContent("极小的正数（结果一）");
     expect(screen.getByTestId("human-result-reordered")).toHaveTextContent("极小的正数（结果二）");
-    expect(screen.getByTestId("human-compact-numbers")).toHaveTextContent("两次结果不同");
+    expect(screen.getByTestId("human-compact-numbers")).toHaveTextContent("查看完整值");
     expect(screen.getByTestId("human-home").textContent).not.toContain("0".repeat(50));
     fireEvent.click(screen.getByRole("button", { name: "EN" }));
     expect(screen.getByTestId("human-result-original")).toHaveTextContent("Very small positive value (result 1)");
@@ -252,7 +267,7 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     expect(screen.getByTestId("human-original-conclusion")).toHaveTextContent(/^已否证$/);
     expect(screen.getByTestId("human-result-original")).toHaveTextContent("0.6000000000000001");
     await openDetails("human-story-details");
-    expect(screen.getByTestId("human-story-details")).toHaveTextContent("原反例保留");
+    expect(screen.getByRole("region", { name: "原假设 · 测试记录" })).toHaveTextContent("已否证");
     expect(screen.getByRole("region", { name: "修订假设 · 测试记录" })).toHaveTextContent("T · 保留测试未检出反例");
   });
 
@@ -266,7 +281,7 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     expect(screen.getByTestId("human-story-conclusion")).toHaveTextContent(status === "pending" ? "待检验" : "无结论");
   });
 
-  it("uses the recorded model cost/calls, separates local computation, and admits unmeasured resources", async () => {
+  it("uses distinct recorded measurements, model calls and model cost", async () => {
     vi.stubGlobal("fetch", vi.fn(async () => response(referenceFake())));
     render(<HumanHome />);
     await loaded();
@@ -276,9 +291,8 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     expect(screen.getByTestId("human-metrics")).toHaveTextContent("本地测量");
     expect(screen.getByTestId("human-usage")).toHaveTextContent("模型调用");
     await openDetails("human-technical");
-    expect(screen.getByTestId("human-technical")).toHaveTextContent("本地测量不是模型调用");
-    expect(screen.getByTestId("human-technical")).toHaveTextContent("模型费用不含服务器租金及开发对话费用");
-    expect(screen.getByTestId("human-technical")).toHaveTextContent("CPU / 内存：未测量");
+    expect(screen.getByTestId("human-measurement-budget")).toHaveTextContent("17 · 预占 0 · 上限 100");
+    expect(screen.getByTestId("human-technical")).not.toHaveTextContent(/资源口径|CPU \/ 内存|不是模型调用|不含服务器/);
   });
 
   it("projects changed inventory and resource data without mixing spent, reserved, and limits", async () => {
@@ -330,7 +344,8 @@ describe("HumanHome — explicit unit reference fakes, not live research evidenc
     expect(screen.getByTestId("human-state")).toHaveTextContent(/^已授权$/);
     expect(screen.getByTestId("human-status")).not.toHaveTextContent(/正在计算|正在运行|本轮结束/);
     await openDetails("human-technical");
-    expect(screen.getByTestId("human-technical")).toHaveTextContent("已授权不代表进程此刻正在计算");
+    expect(screen.getByTestId("human-technical")).toHaveTextContent('"state": "running"');
+    expect(screen.getByTestId("human-technical")).not.toHaveTextContent("已授权不代表");
   });
 
   it.each([

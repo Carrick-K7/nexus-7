@@ -1,5 +1,27 @@
 [
   {
+    "id": "iteration-v5.1.2",
+    "version": "5.1.2",
+    "date": "2026-10-25",
+    "trigger": "enhancement",
+    "triggerReason": "The owner requested actual deletion of defensive and explanatory copy, including text hidden in expanded details.",
+    "action": "Delete the explanatory paragraphs and their Chinese/English strings from the overview and both detail panels. Retain recorded values, statuses, conditions, test results and source links. Add regression checks with both detail panels open.",
+    "outcome": "Presentation-only removal; no changes to research, authority, budgets, historical records or result semantics. Deployment is established separately by CI and the exact live revision.",
+    "metrics": [],
+    "evidence": [
+      "The removal regression checks the rendered page after expanding both detail panels in Chinese and English.",
+      "Existing data, historical refutation, unknown/error and read-only behavior remain covered."
+    ],
+    "artifacts": [
+      "src/components/human/HumanHome.tsx",
+      "src/components/human/HumanStory.tsx",
+      "src/components/human/copy.ts",
+      "src/test/HumanHome.test.tsx",
+      "e2e/human.spec.ts"
+    ],
+    "source": "manifest"
+  },
+  {
     "id": "iteration-v5.1.1",
     "version": "5.1.1",
     "date": "2026-10-24",
@@ -2528,6 +2550,17 @@
       "docs/adr/0001-deterministic-simulation-core.md"
     ],
     "source": "manifest"
+  },
+  {
+    "id": "ffa04462",
+    "version": "unreleased",
+    "date": "2026-10-24",
+    "trigger": "observation",
+    "triggerReason": "refactor: replace the guided page with a concise research overview",
+    "action": "refactor: replace the guided page with a concise research overview",
+    "outcome": "See git log",
+    "metrics": [],
+    "source": "git"
   },
   {
     "id": "b9e448bf",

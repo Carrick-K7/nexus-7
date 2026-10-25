@@ -22,7 +22,6 @@ function StoryDetails({ story, language, detailsRef }: { story: Story; language:
   return <details ref={detailsRef} className={styles.details} data-testid="human-story-details" onToggle={(event) => setOpen(event.currentTarget.open)}>
     <summary>{c.exact}</summary>
     {open && <div className={styles.detailBody}>
-      <p className={styles.muted}>{c.exactNote} {c.conditionScope} {c.retained}</p>
       <div><h3>{c.inputs}</h3><pre className={styles.exact} data-testid="human-exact-input">{JSON.stringify(story.counterexample.input, null, 2)}</pre></div>
       <div><h3>{c.exactResults}</h3><dl className={styles.metadata}>
         <div><dt>{c.firstSum}</dt><dd data-testid="human-exact-original">{String(story.counterexample.original)}</dd></div>
@@ -70,7 +69,6 @@ export default function HumanStory({ snapshot, language }: { snapshot: HumanOver
       <dl className={styles.calculation}><dt>{c.secondSum}</dt><dd data-testid="human-result-reordered">{second}</dd></dl>
     </div>
     {compactNumbers && <div className={styles.compactNumbers} data-testid="human-compact-numbers">
-      <p>{c.compactNumbers}</p>
       <button type="button" className={styles.refresh} onClick={() => {
         if (detailsRef.current) {
           detailsRef.current.open = true;
